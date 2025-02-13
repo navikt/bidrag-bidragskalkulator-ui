@@ -10,7 +10,7 @@ metadata:
 spec:
   ingresses:
     - https://bidragskalkulator-v2.intern.dev.nav.no
-  image: bidrag-bidragskalkulator-v2
+  image: {{ image }}
   port: 3000
   accessPolicy:
     outbound:
