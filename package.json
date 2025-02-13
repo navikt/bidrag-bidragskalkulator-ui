@@ -2,6 +2,7 @@
   "name": "bidragskalkulator",
   "private": true,
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
