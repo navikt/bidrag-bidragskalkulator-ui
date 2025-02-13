@@ -1,2 +1,2 @@
 @import "tailwindcss";
-@import "@navikt/ds-css";
+@import "@navikt/ds-css" layer(components);

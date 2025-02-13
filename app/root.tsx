@@ -37,7 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           className="flex-1"
           as="main"
           id="maincontent"
-          width="xl"
+          width="md"
           gutters
         >
           {children}
