@@ -14,9 +14,12 @@ spec:
   port: 3000
   accessPolicy:
     outbound:
+      rules:
+      - application: nav-dekoratoren
+        namespace: personbruker
       external:
         - host: www.nav.no
-        - host: dekoratoren.dev.nav.no
+        
   liveness:
     path: "/api/internal/isalive"
     initialDelay: 15
