@@ -30,4 +30,4 @@ jobs:
         env:
           CLUSTER: dev-gcp
           IMAGE: ${{ steps.docker-push.outputs.image }}
-          RESOURCE: nais.yml
+          RESOURCE: .nais/naiserator.yml
