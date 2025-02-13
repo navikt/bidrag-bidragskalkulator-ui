@@ -1,3 +1,5 @@
+import { fetchDecoratorHtml } from "@navikt/nav-dekoratoren-moduler/ssr";
+import parse from "html-react-parser";
 import {
   isRouteErrorResponse,
   Links,
@@ -5,25 +7,20 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
 
-export const links: Route.LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  },
-];
+export const links: Route.LinksFunction = () => [];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { decoratorFragments } = useLoaderData<typeof loader>();
+
+  useInjectDecoratorScript(decoratorFragments.DECORATOR_SCRIPTS);
+
   return (
     <html lang="nb-NO">
       <head>
@@ -31,14 +28,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        {parse(decoratorFragments.DECORATOR_HEAD_ASSETS, { trim: true })}
       </head>
       <body>
+        {parse(decoratorFragments.DECORATOR_HEADER, { trim: true })}
         {children}
+        {parse(decoratorFragments.DECORATOR_FOOTER, { trim: true })}
         <ScrollRestoration />
         <Scripts />
       </body>
     </html>
   );
+}
+
+export async function loader() {
+  const decoratorFragments = await fetchDecoratorHtml({
+    env: "dev",
+    params: { language: "nb", context: "privatperson" },
+  });
+
+  return {
+    decoratorFragments,
+  };
 }
 
 export default function App() {
