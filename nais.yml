@@ -1,0 +1,14 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+
+metadata:
+  labels:
+    team: bidrag
+  name: bidragskalkulator-v2
+  namespace: bidrag
+
+spec:
+  ingresses:
+    - https://bidragskalkulator-v2.intern.dev.nav.no
+  image: bidragskalkulator-v2
+  port: 3000
