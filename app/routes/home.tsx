@@ -1,4 +1,4 @@
-import { BodyShort, GuidePanel, Page } from "@navikt/ds-react";
+import { BodyShort, GuidePanel, Heading, List, Page } from "@navikt/ds-react";
 import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
@@ -15,8 +15,10 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <Page.Block>
-      <h1>Bidragskalkulator</h1>
-      <GuidePanel poster className="max-w-xl mx-auto">
+      <Heading size="xlarge" level="1" spacing align="center" className="mt-6">
+        Bidragskalkulator
+      </Heading>
+      <GuidePanel poster>
         <div className="space-y-4">
           <BodyShort>
             Bidragskalkulatoren er et verktøy som hjelper deg å beregne
@@ -26,15 +28,14 @@ export default function Home() {
           <BodyShort>
             For å beregne bidraget trenger du informasjon om:
           </BodyShort>
-          <ul className="list-disc list-inside space-y-2">
-            <li>Inntekten til begge foreldrene</li>
-            <li>Samværsordningen mellom foreldre og barn</li>
-            <li>Andre barn som bor fast hos en av foreldrene</li>
-            <li>Eventuelle særlige utgifter til barnet</li>
-          </ul>
+          <List>
+            <List.Item>Inntekten til begge foreldrene</List.Item>
+            <List.Item>Samværsordningen mellom foreldre og barn</List.Item>
+            <List.Item>Andre barn som bor fast hos en av foreldrene</List.Item>
+            <List.Item>Eventuelle særlige utgifter til barnet</List.Item>
+          </List>
         </div>
       </GuidePanel>
-      <BodyShort>Tjenesten er under utvikling.</BodyShort>
     </Page.Block>
   );
 }

@@ -1,0 +1,23 @@
+version: 2
+updates:
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "10:05"
+      timezone: "Europe/Oslo"
+  # Maintain dependencies for docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "10:05"
+      timezone: "Europe/Oslo"
+  # Maintain dependencies for npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "10:05"
+      timezone: "Europe/Oslo"
