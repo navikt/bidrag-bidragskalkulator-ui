@@ -10,11 +10,10 @@ import {
   useLoaderData,
 } from "react-router";
 
+import { Page } from "@navikt/ds-react";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
-
-export const links: Route.LinksFunction = () => [];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { decoratorFragments } = useLoaderData<typeof loader>();
@@ -30,9 +29,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
         {parse(decoratorFragments.DECORATOR_HEAD_ASSETS, { trim: true })}
       </head>
-      <body>
+      <body className="flex flex-col min-h-screen">
         {parse(decoratorFragments.DECORATOR_HEADER, { trim: true })}
-        {children}
+        <Page.Block
+          className="flex-1"
+          as="main"
+          id="maincontent"
+          width="xl"
+          gutters
+        >
+          {children}
+        </Page.Block>
         {parse(decoratorFragments.DECORATOR_FOOTER, { trim: true })}
         <ScrollRestoration />
         <Scripts />

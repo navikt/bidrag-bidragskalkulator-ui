@@ -1,13 +1,28 @@
+import { BodyShort, Page } from "@navikt/ds-react";
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Bidragskalkulator" },
+    {
+      name: "description",
+      content:
+        "Bidragskalkulatoren hjelper deg å regne ut hvor stort et barnebidrag er.",
+    },
   ];
 }
 
 export default function Home() {
-  return <Welcome />;
+  return (
+    <Page.Block>
+      <h1>Bidragskalkulator</h1>
+      <div className="space-y">
+        <BodyShort>
+          Bidragskalkulatoren hjelper deg å regne ut hvor stort et barnebidrag
+          er.
+        </BodyShort>
+        <BodyShort>Tjenesten er under utvikling.</BodyShort>
+      </div>
+    </Page.Block>
+  );
 }
