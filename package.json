@@ -19,12 +19,15 @@
     "@navikt/nav-dekoratoren-moduler": "^3.2.2",
     "@react-router/node": "^7.1.5",
     "@react-router/serve": "^7.1.5",
+    "@rvf/react": "^7.0.2",
+    "@rvf/react-router": "^7.0.2",
+    "@rvf/zod": "^7.0.1",
     "html-react-parser": "^5.2.2",
     "isbot": "^5.1.17",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.54.2",
-    "react-router": "^7.1.5"
+    "react-router": "^7.1.5",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@react-router/dev": "^7.1.5",
