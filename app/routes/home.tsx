@@ -7,9 +7,36 @@ import {
   Select,
   TextField,
 } from "@navikt/ds-react";
-import { useRef, useState } from "react";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import {
+  isValidationErrorResponse,
+  useFieldArray,
+  useForm,
+  validationError,
+} from "@rvf/react-router";
+import { withZod } from "@rvf/zod";
+import { useRef } from "react";
+import { useActionData, type ActionFunctionArgs } from "react-router";
+import { z } from "zod";
 import type { Route } from "./+types/home";
+
+const FormSchema = z.object({
+  barn: z
+    .array(
+      z.object({
+        alder: z.coerce.number().min(0, "Alder må være et positivt tall"),
+        samværsgrad: z.coerce.number().min(0, "Samværsgrad er påkrevd"),
+      })
+    )
+    .min(1, "Minst ett barn må legges til"),
+  inntektForelder1: z.coerce
+    .number()
+    .min(0, "Inntekt må være et positivt tall"),
+  inntektForelder2: z.coerce
+    .number()
+    .min(0, "Inntekt må være et positivt tall"),
+});
+
+const validator = withZod(FormSchema);
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -22,60 +49,55 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-type Child = {
-  age: string;
-  timeWithParent1: string;
-};
+export async function action({ request }: ActionFunctionArgs) {
+  const result = await validator.validate(await request.formData());
+  if (result.error) {
+    return validationError(result.error, result.submittedData);
+  }
+  try {
+    const response = await fetch(
+      "https://bidragskalkulator-api.dev.nav.cloud.nais.io/v1/beregning/enkel",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(result.data),
+      }
+    );
 
-type FormData = {
-  children: Child[];
-  incomeParent1: string;
-  incomeParent2: string;
-};
+    if (!response.ok) {
+      throw new Error("Failed to calculate child support");
+    }
+
+    const json = await response.json();
+    return { resultat: json.resultat };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: "Det oppstod en feil under beregningen. Vennligst prøv igjen.",
+    };
+  }
+}
 
 export default function Barnebidragskalkulator() {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
+  const actionData = useActionData<typeof action>();
+  const form = useForm({
+    validator,
+    method: "post",
     defaultValues: {
-      children: [{ age: "", timeWithParent1: "" }],
-      incomeParent1: "",
-      incomeParent2: "",
+      barn: [{ alder: "", samværsgrad: "" }],
+      inntektForelder1: "",
+      inntektForelder2: "",
     },
   });
+  const barnFields = useFieldArray(form.scope("barn"));
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "children",
-  });
-
-  const [result, setResult] = useState<number | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
-
-  const onSubmit = (data: FormData) => {
-    // TODO: Implement the actual calculation
-    // This is a simplified calculation and should be replaced with the actual formula
-    const baseAmount = 1000;
-    let totalSupport = 0;
-
-    data.children.forEach((child) => {
-      const ageMultiplier = Number.parseInt(child.age) > 10 ? 1.5 : 1;
-      const timeRatio = Number.parseInt(child.timeWithParent1) / 100;
-      const incomeRatio =
-        Number.parseInt(data.incomeParent1) /
-        (Number.parseInt(data.incomeParent1) +
-          Number.parseInt(data.incomeParent2));
-
-      const childSupport =
-        baseAmount * ageMultiplier * (1 - timeRatio) * incomeRatio;
-      totalSupport += childSupport;
-    });
-
-    setResult(Math.round(totalSupport));
-    resultRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  };
+  const harResultat =
+    actionData &&
+    !isValidationErrorResponse(actionData) &&
+    actionData?.resultat !== undefined;
 
   return (
     <div className="max-w-2xl mx-auto p-4 mt-8">
@@ -104,56 +126,40 @@ export default function Barnebidragskalkulator() {
         </BodyLong>
       </GuidePanel>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
-        {fields.map((field, index) => (
-          <div key={field.id} className="border p-4 rounded-md space-y-4">
+      <form {...form.getFormProps()} className="space-y-4 mt-6">
+        {barnFields.map((key, item, index) => (
+          <div key={key} className="border p-4 rounded-md space-y-4">
             <Heading size="small" level="2">
               Barn {index + 1}
             </Heading>
             <div className="flex gap-4">
-              <Controller
-                name={`children.${index}.age`}
-                control={control}
-                rules={{
-                  required: "Alder er påkrevd",
-                  min: { value: 0, message: "Alder må være et positivt tall" },
-                }}
-                render={({ field }) => (
-                  <TextField
-                    label="Barnets alder"
-                    {...field}
-                    className="flex-1"
-                    type="number"
-                    error={errors.children?.[index]?.age?.message}
-                  />
-                )}
+              <TextField
+                {...item.field("alder").getInputProps()}
+                label="Barnets alder"
+                className="flex-1"
+                type="number"
+                error={item.field("alder").error()}
               />
-              <Controller
-                name={`children.${index}.timeWithParent1`}
-                control={control}
-                rules={{ required: "Tid hos forelder 1 er påkrevd" }}
-                render={({ field }) => (
-                  <Select
-                    label="Tid hos forelder 1"
-                    className="flex-1"
-                    {...field}
-                    error={errors.children?.[index]?.timeWithParent1?.message}
-                  >
-                    <option value="">Velg prosent</option>
-                    <option value="0">0% (bor ikke hos forelder 1)</option>
-                    <option value="25">25% (ca. annenhver helg)</option>
-                    <option value="50">50% (delt bosted)</option>
-                    <option value="75">75% (utvidet samvær)</option>
-                    <option value="100">100% (bor fast hos forelder 1)</option>
-                  </Select>
-                )}
-              />
+
+              <Select
+                className="flex-1"
+                {...item.field("samværsgrad").getInputProps()}
+                label="Tid hos forelder 1"
+                error={item.field("samværsgrad").error()}
+              >
+                <option value="">Velg prosent</option>
+                <option value="0">0% (bor ikke hos forelder 1)</option>
+                <option value="25">25% (ca. annenhver helg)</option>
+                <option value="50">50% (delt bosted)</option>
+                <option value="75">75% (utvidet samvær)</option>
+                <option value="100">100% (bor fast hos forelder 1)</option>
+              </Select>
             </div>
-            {fields.length > 1 && (
+            {barnFields.length() > 1 && (
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => remove(index)}
+                onClick={() => barnFields.remove(index)}
               >
                 Fjern barn
               </Button>
@@ -163,47 +169,29 @@ export default function Barnebidragskalkulator() {
         <Button
           type="button"
           variant="secondary"
-          onClick={() => append({ age: "", timeWithParent1: "" })}
+          onClick={() => barnFields.push({ alder: "", samværsgrad: "" })}
         >
           Legg til barn
         </Button>
         <div className="flex flex-col md:flex-row gap-4">
-          <Controller
-            name="incomeParent1"
-            control={control}
-            rules={{
-              required: "Inntekt for forelder 1 er påkrevd",
-              min: { value: 0, message: "Inntekt må være et positivt tall" },
-            }}
-            render={({ field }) => (
-              <TextField
-                label="Inntekt forelder 1 (kr/år)"
-                {...field}
-                type="number"
-                error={errors.incomeParent1?.message}
-              />
-            )}
+          <TextField
+            {...form.field("inntektForelder1").getInputProps()}
+            label="Inntekt forelder 1 (kr/år)"
+            type="number"
+            error={form.field("inntektForelder1").error()}
           />
-          <Controller
-            name="incomeParent2"
-            control={control}
-            rules={{
-              required: "Inntekt for forelder 2 er påkrevd",
-              min: { value: 0, message: "Inntekt må være et positivt tall" },
-            }}
-            render={({ field }) => (
-              <TextField
-                label="Inntekt forelder 2 (kr/år)"
-                {...field}
-                type="number"
-                error={errors.incomeParent2?.message}
-              />
-            )}
+          <TextField
+            {...form.field("inntektForelder2").getInputProps()}
+            label="Inntekt forelder 2 (kr/år)"
+            type="number"
+            error={form.field("inntektForelder2").error()}
           />
         </div>
-        <Button type="submit">Beregn barnebidrag</Button>
+        <Button type="submit" loading={form.formState.isSubmitting}>
+          Beregn barnebidrag
+        </Button>
       </form>
-      {result !== null && (
+      {harResultat && (
         <div className="mt-6" ref={resultRef}>
           <Alert variant="info">
             <Heading size="small" spacing>
@@ -212,13 +200,7 @@ export default function Barnebidragskalkulator() {
             <BodyLong spacing>
               Basert på den oppgitte informasjonen er det beregnede
               barnebidraget:
-              <strong> {result} kr per måned</strong>
-            </BodyLong>
-            <BodyLong spacing>
-              <strong>
-                Dette tallet stemmer ikke per i dag, da selve beregningen ikke
-                er implementert enda.
-              </strong>
+              <strong> {actionData.resultat} kr per måned</strong>
             </BodyLong>
             <Button
               variant="secondary"
@@ -226,6 +208,16 @@ export default function Barnebidragskalkulator() {
             >
               Opprett privat avtale
             </Button>
+          </Alert>
+        </div>
+      )}
+      {isValidationErrorResponse(actionData) && (
+        <div className="mt-6">
+          <Alert variant="error">
+            <Heading size="small" spacing>
+              Feil under beregning
+            </Heading>
+            <BodyLong>{actionData.fieldErrors.root}</BodyLong>
           </Alert>
         </div>
       )}
