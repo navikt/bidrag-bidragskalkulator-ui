@@ -78,7 +78,7 @@ export default function Barnebidragskalkulator() {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-4 mt-8">
+    <div className="max-w-2xl mx-auto p-4 mt-8">
       <Heading size="xlarge" level="1" spacing align="center">
         Barnebidragskalkulator
       </Heading>
@@ -110,41 +110,45 @@ export default function Barnebidragskalkulator() {
             <Heading size="small" level="2">
               Barn {index + 1}
             </Heading>
-            <Controller
-              name={`children.${index}.age`}
-              control={control}
-              rules={{
-                required: "Alder er påkrevd",
-                min: { value: 0, message: "Alder må være et positivt tall" },
-              }}
-              render={({ field }) => (
-                <TextField
-                  label="Barnets alder"
-                  {...field}
-                  type="number"
-                  error={errors.children?.[index]?.age?.message}
-                />
-              )}
-            />
-            <Controller
-              name={`children.${index}.timeWithParent1`}
-              control={control}
-              rules={{ required: "Tid hos forelder 1 er påkrevd" }}
-              render={({ field }) => (
-                <Select
-                  label="Tid hos forelder 1"
-                  {...field}
-                  error={errors.children?.[index]?.timeWithParent1?.message}
-                >
-                  <option value="">Velg prosent</option>
-                  <option value="0">0% (bor ikke hos forelder 1)</option>
-                  <option value="25">25% (ca. annenhver helg)</option>
-                  <option value="50">50% (delt bosted)</option>
-                  <option value="75">75% (utvidet samvær)</option>
-                  <option value="100">100% (bor fast hos forelder 1)</option>
-                </Select>
-              )}
-            />
+            <div className="flex gap-4">
+              <Controller
+                name={`children.${index}.age`}
+                control={control}
+                rules={{
+                  required: "Alder er påkrevd",
+                  min: { value: 0, message: "Alder må være et positivt tall" },
+                }}
+                render={({ field }) => (
+                  <TextField
+                    label="Barnets alder"
+                    {...field}
+                    className="flex-1"
+                    type="number"
+                    error={errors.children?.[index]?.age?.message}
+                  />
+                )}
+              />
+              <Controller
+                name={`children.${index}.timeWithParent1`}
+                control={control}
+                rules={{ required: "Tid hos forelder 1 er påkrevd" }}
+                render={({ field }) => (
+                  <Select
+                    label="Tid hos forelder 1"
+                    className="flex-1"
+                    {...field}
+                    error={errors.children?.[index]?.timeWithParent1?.message}
+                  >
+                    <option value="">Velg prosent</option>
+                    <option value="0">0% (bor ikke hos forelder 1)</option>
+                    <option value="25">25% (ca. annenhver helg)</option>
+                    <option value="50">50% (delt bosted)</option>
+                    <option value="75">75% (utvidet samvær)</option>
+                    <option value="100">100% (bor fast hos forelder 1)</option>
+                  </Select>
+                )}
+              />
+            </div>
             {fields.length > 1 && (
               <Button
                 type="button"
@@ -163,38 +167,40 @@ export default function Barnebidragskalkulator() {
         >
           Legg til barn
         </Button>
-        <Controller
-          name="incomeParent1"
-          control={control}
-          rules={{
-            required: "Inntekt for forelder 1 er påkrevd",
-            min: { value: 0, message: "Inntekt må være et positivt tall" },
-          }}
-          render={({ field }) => (
-            <TextField
-              label="Inntekt forelder 1 (kr/år)"
-              {...field}
-              type="number"
-              error={errors.incomeParent1?.message}
-            />
-          )}
-        />
-        <Controller
-          name="incomeParent2"
-          control={control}
-          rules={{
-            required: "Inntekt for forelder 2 er påkrevd",
-            min: { value: 0, message: "Inntekt må være et positivt tall" },
-          }}
-          render={({ field }) => (
-            <TextField
-              label="Inntekt forelder 2 (kr/år)"
-              {...field}
-              type="number"
-              error={errors.incomeParent2?.message}
-            />
-          )}
-        />
+        <div className="flex flex-col md:flex-row gap-4">
+          <Controller
+            name="incomeParent1"
+            control={control}
+            rules={{
+              required: "Inntekt for forelder 1 er påkrevd",
+              min: { value: 0, message: "Inntekt må være et positivt tall" },
+            }}
+            render={({ field }) => (
+              <TextField
+                label="Inntekt forelder 1 (kr/år)"
+                {...field}
+                type="number"
+                error={errors.incomeParent1?.message}
+              />
+            )}
+          />
+          <Controller
+            name="incomeParent2"
+            control={control}
+            rules={{
+              required: "Inntekt for forelder 2 er påkrevd",
+              min: { value: 0, message: "Inntekt må være et positivt tall" },
+            }}
+            render={({ field }) => (
+              <TextField
+                label="Inntekt forelder 2 (kr/år)"
+                {...field}
+                type="number"
+                error={errors.incomeParent2?.message}
+              />
+            )}
+          />
+        </div>
         <Button type="submit">Beregn barnebidrag</Button>
       </form>
       {result !== null && (

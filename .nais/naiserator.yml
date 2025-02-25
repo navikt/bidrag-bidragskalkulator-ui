@@ -3,7 +3,7 @@ kind: Application
 
 metadata:
   labels:
-    team: bidrag
+    team: bidrag  
   name: bidrag-bidragskalkulator-v2
   namespace: bidrag
 
