@@ -9,14 +9,18 @@ metadata:
 
 spec:
   ingresses:
-    - https://bidragskalkulator-v2.intern.dev.nav.no
+    - {{ ingress }}
   image: {{ image }}
   port: 3000
+  env:
+    SERVER_URL: {{SERVER_URL}}
   accessPolicy:
     outbound:
       rules:
       - application: nav-dekoratoren
         namespace: personbruker
+      - application: bidrag-bidragskalkulator-api
+        namespace: bidrag
       external:
         - host: www.nav.no
         

@@ -17,6 +17,7 @@ import { withZod } from "@rvf/zod";
 import { useRef } from "react";
 import { useActionData, type ActionFunctionArgs } from "react-router";
 import { z } from "zod";
+import { env } from "~/config/env.server";
 import type { Route } from "./+types/home";
 
 const FormSchema = z.object({
@@ -51,20 +52,18 @@ export function meta({}: Route.MetaArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const result = await validator.validate(await request.formData());
+  const { SERVER_URL } = env;
   if (result.error) {
     return validationError(result.error, result.submittedData);
   }
   try {
-    const response = await fetch(
-      "https://bidragskalkulator-api.dev.nav.cloud.nais.io/v1/beregning/enkel",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(result.data),
-      }
-    );
+    const response = await fetch(`${SERVER_URL}/v1/beregning/enkel`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(result.data),
+    });
 
     if (!response.ok) {
       throw new Error("Failed to calculate child support");
