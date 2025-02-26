@@ -17,6 +17,8 @@ spec:
       rules:
       - application: nav-dekoratoren
         namespace: personbruker
+      - application: bidrag-bidragskalkulator-api
+        namespace: bidrag
       external:
         - host: www.nav.no
         
