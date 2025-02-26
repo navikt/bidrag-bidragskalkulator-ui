@@ -13,7 +13,8 @@ spec:
   image: {{ image }}
   port: 3000
   env:
-    SERVER_URL: {{SERVER_URL}}
+    - name: SERVER_URL
+      value: {{SERVER_URL}}
   accessPolicy:
     outbound:
       rules:
