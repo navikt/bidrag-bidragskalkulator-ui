@@ -31,3 +31,4 @@ jobs:
           CLUSTER: dev-gcp
           IMAGE: ${{ steps.docker-push.outputs.image }}
           RESOURCE: .nais/naiserator.yml
+          VARS: .nais/dev.json

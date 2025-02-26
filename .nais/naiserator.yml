@@ -9,9 +9,11 @@ metadata:
 
 spec:
   ingresses:
-    - https://bidragskalkulator-v2.intern.dev.nav.no
+    - {{ ingress }}
   image: {{ image }}
   port: 3000
+  env:
+    SERVER_URL: {{SERVER_URL}}
   accessPolicy:
     outbound:
       rules:
