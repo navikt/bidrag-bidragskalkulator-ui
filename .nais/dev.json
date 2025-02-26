@@ -1,4 +1,4 @@
 {
-  "SERVER_URL": "https://bidrag-bidragskalkulator-api.dev.nav.cloud.nais.io",
+  "SERVER_URL": "http://bidrag-bidragskalkulator-api",
   "ingress": "https://bidragskalkulator-v2.intern.dev.nav.no"
 }
