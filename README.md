@@ -18,12 +18,22 @@ Installer avhengigheter:
 npm install
 ```
 
+Kopiér .env.example til .env og sett SERVER_URL til URLen du ønsker. Det kan være localhost:8080 om du vil koble til serveren lokalt, eller https://bidragskalkulator-api.dev.nav.cloud.nais.io om du vil koble til serveren i dev-miljøet.
+
+```bash
+cp .env.example .env
+```
+
 Kjør lokalt:
 
 ```bash
 npm run dev
 # Kjører på http://localhost:5173
 ```
+
+### Server
+
+Om du ønsker å kjøre server lokalt, kan du følge instruksene her: https://github.com/navikt/bidrag-bidragskalkulator-api
 
 <details>
 <summary>Docker</summary>
