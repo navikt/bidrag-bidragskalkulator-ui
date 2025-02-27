@@ -123,6 +123,11 @@ export default function Barnebidragskalkulator() {
           bidraget kan variere basert på flere faktorer og bør avtales mellom
           foreldrene eller fastsettes av Nav.
         </BodyLong>
+        <BodyLong spacing className="mt-4">
+          <Button variant="secondary" as="a" href="/form" className="mr-2">
+            Prøv vår nye flertrinns-skjema demo
+          </Button>
+        </BodyLong>
       </GuidePanel>
 
       <form {...form.getFormProps()} className="space-y-4 mt-6">
