@@ -4,15 +4,10 @@ import { useScopedForm } from "./MultiStepFormProvider";
 
 export default function Step2() {
   const form = useScopedForm("inntektOgBarn");
-  const handleSubmit = () => {
-    console.log("submit step 2");
-    form.submit();
-  };
+  
   return (
     <form
-      {...form.getFormProps({
-        onSubmit: handleSubmit,
-      })}
+      {...form.getFormProps()}
     >
       <VStack gap="4">
         <Heading size="medium" level="2">

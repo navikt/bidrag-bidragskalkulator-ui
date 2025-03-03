@@ -31,7 +31,6 @@ export default function Step1() {
 
               <Select
                 {...item.field("samværsgrad").getInputProps()}
-                value={item.field("samværsgrad").value()}
                 className="flex-1"
                 label="Tid hos forelder 1"
                 error={item.field("samværsgrad").error()}

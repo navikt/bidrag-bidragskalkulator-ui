@@ -1,5 +1,4 @@
 import { Alert, FormSummary, Heading, VStack } from "@navikt/ds-react";
-import { useState } from "react";
 import FormNavigation from "./FormNavigation";
 import {
   useFullForm,
@@ -10,31 +9,14 @@ import { samværsgrad } from "./samværsgrad";
 export default function Step3() {
   const form = useFullForm();
   const formData = form.value();
-  const [validationError, setValidationError] = useState<string | null>(null);
+  const formValidation = validateFormForSubmission(formData);
 
-  const handleSubmit = () => {
-    const validation = validateFormForSubmission(formData);
-
-    if (!validation.success) {
-      setValidationError(
-        "Vennligst fyll ut alle påkrevde felt før du sender inn skjemaet."
-      );
-      return;
-    }
-
-    setValidationError(null);
-    console.log("submit step 3", formData);
-    form.submit();
-    // Here you would typically send the data to a server
-    alert("Skjema sendt inn!");
-  };
+  const validationError = !formValidation.success
+    ? "Vennligst fyll ut alle påkrevde felt før du sender inn skjemaet."
+    : null;
 
   return (
-    <form
-      {...form.getFormProps({
-        onSubmit: handleSubmit,
-      })}
-    >
+    <form {...form.getFormProps()}>
       <VStack gap="4">
         <Heading size="medium" level="2">
           Oppsummering
@@ -64,7 +46,7 @@ export default function Step3() {
                         {barn.samværsgrad === ""
                           ? "-"
                           : samværsgrad.find(
-                              (s) => s.value === Number(barn.samværsgrad)
+                              (s) => s.value === barn.samværsgrad
                             )?.label}
                       </FormSummary.Value>
                     </FormSummary.Answer>
@@ -91,7 +73,7 @@ export default function Step3() {
           </FormSummary.Answers>
         </FormSummary>
 
-        <FormNavigation onSubmit={handleSubmit} submitDisabled={false} />
+        <FormNavigation submitDisabled={false} />
       </VStack>
     </form>
   );
