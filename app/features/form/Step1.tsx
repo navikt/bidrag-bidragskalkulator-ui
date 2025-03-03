@@ -1,79 +1,85 @@
-import { Heading, TextField, VStack } from "@navikt/ds-react";
-import { useForm } from "@rvf/react-router";
-import { withZod } from "@rvf/zod";
-import { z } from "zod";
+import { Button, Heading, Select, TextField, VStack } from "@navikt/ds-react";
+import { useFieldArray } from "@rvf/react-router";
 import FormNavigation from "./FormNavigation";
-import { useMultiStepForm } from "./MultiStepFormProvider";
-
-// Define validation schema for Step 1
-const Step1Schema = z.object({
-  firstName: z.string().min(1, "Fornavn er påkrevd"),
-  lastName: z.string().min(1, "Etternavn er påkrevd"),
-  email: z.string().email("Ugyldig e-postadresse").min(1, "E-post er påkrevd"),
-});
-
-const validator = withZod(Step1Schema);
+import { useScopedForm } from "./MultiStepFormProvider";
+import { samværsgrad } from "./samværsgrad";
 
 export default function Step1() {
-  const { formData, updateFormData } = useMultiStepForm();
+  const form = useScopedForm("inntektOgBarn");
 
-  // Initialize form with RVF
-  const form = useForm({
-    validator,
-    defaultValues: {
-      firstName: formData.firstName || "",
-      lastName: formData.lastName || "",
-      email: formData.email || "",
-    },
-  });
-
-  // Handle form submission
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    const formData = new FormData(event.target as HTMLFormElement);
-    const firstName = formData.get("firstName") as string;
-    const lastName = formData.get("lastName") as string;
-    const email = formData.get("email") as string;
-
-    updateFormData({
-      firstName,
-      lastName,
-      email,
-    });
-  };
+  const barnFields = useFieldArray(form.scope("barn"));
 
   return (
-    <form {...form.getFormProps()} onSubmit={handleSubmit}>
+    <form {...form.getFormProps()}>
       <VStack gap="4">
         <Heading size="medium" level="2">
-          Personlig informasjon
+          Barn og inntekt
         </Heading>
+        {barnFields.map((key, item, index) => (
+          <div key={key} className="border p-4 rounded-md space-y-4">
+            <Heading size="small" level="2">
+              Barn {index + 1}
+            </Heading>
+            <div className="flex gap-4">
+              <TextField
+                {...item.field("alder").getInputProps()}
+                label="Barnets alder"
+                className="flex-1"
+                type="number"
+                error={item.field("alder").error()}
+              />
 
-        <TextField
-          {...form.field("firstName").getInputProps()}
-          label="Fornavn"
-          description="Skriv inn ditt fornavn"
-          error={form.field("firstName").error()}
-          required
-        />
-
-        <TextField
-          {...form.field("lastName").getInputProps()}
-          label="Etternavn"
-          description="Skriv inn ditt etternavn"
-          error={form.field("lastName").error()}
-          required
-        />
-
-        <TextField
-          {...form.field("email").getInputProps()}
-          label="E-post"
-          description="Skriv inn din e-postadresse"
-          type="email"
-          error={form.field("email").error()}
-          required
-        />
-
+              <Select
+                {...item.field("samværsgrad").getInputProps()}
+                value={item.field("samværsgrad").value()}
+                className="flex-1"
+                label="Tid hos forelder 1"
+                error={item.field("samværsgrad").error()}
+              >
+                <option value="">Velg prosent</option>
+                {samværsgrad.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </Select>
+              {barnFields.length() > 1 && (
+                <div className="flex items-end">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => barnFields.remove(index)}
+                  >
+                    Fjern barn
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+        <div className="flex justify-start">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => barnFields.push({ alder: "", samværsgrad: "" })}
+          >
+            Legg til barn
+          </Button>
+        </div>
+        <div className="flex flex-col md:flex-row gap-4">
+          <TextField
+            {...form.field("inntektForelder1").getInputProps()}
+            label="Inntekt forelder 1 (kr/år)"
+            type="number"
+            error={form.field("inntektForelder1").error()}
+          />
+          <TextField
+            {...form.field("inntektForelder2").getInputProps()}
+            label="Inntekt forelder 2 (kr/år)"
+            type="number"
+            error={form.field("inntektForelder2").error()}
+          />
+        </div>
         <FormNavigation />
       </VStack>
     </form>

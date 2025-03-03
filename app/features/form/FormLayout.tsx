@@ -1,23 +1,9 @@
 import { Box, FormProgress, VStack } from "@navikt/ds-react";
-import { Outlet, useNavigate } from "react-router";
-import { useMultiStepForm } from "./MultiStepFormProvider";
-
-// Define the steps for our form
-export const formSteps = [
-  { path: "/skjema/barn-og-inntekt", label: "Barn og inntekt" },
-  { path: "/skjema/utgifter", label: "Utgifter" },
-  { path: "/skjema/annet", label: "Annet" },
-];
+import { Outlet } from "react-router";
+import { formSteps, useStepNavigation } from "./steps";
 
 export default function FormLayout() {
-  const { currentStep, setCurrentStep } = useMultiStepForm();
-  const navigate = useNavigate();
-
-  // Handle step change
-  const handleStepChange = (step: number) => {
-    setCurrentStep(step);
-    navigate(formSteps[step - 1].path);
-  };
+  const { currentStep, handleStepChange } = useStepNavigation();
 
   return (
     <VStack gap="8" className="my-8">

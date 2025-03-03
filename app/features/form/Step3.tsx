@@ -1,133 +1,97 @@
-import {
-  Checkbox,
-  FormSummary,
-  Heading,
-  Textarea,
-  VStack,
-} from "@navikt/ds-react";
-import { useForm } from "@rvf/react-router";
-import { withZod } from "@rvf/zod";
-import { z } from "zod";
+import { Alert, FormSummary, Heading, VStack } from "@navikt/ds-react";
+import { useState } from "react";
 import FormNavigation from "./FormNavigation";
-import { useMultiStepForm } from "./MultiStepFormProvider";
-
-// Define validation schema for Step 3
-const Step3Schema = z.object({
-  comments: z.string().optional(),
-  agreeToTerms: z.boolean().refine((val) => val === true, {
-    message: "Du må godta vilkårene for å fortsette",
-  }),
-});
-
-const validator = withZod(Step3Schema);
+import {
+  useFullForm,
+  validateFormForSubmission,
+} from "./MultiStepFormProvider";
+import { samværsgrad } from "./samværsgrad";
 
 export default function Step3() {
-  const { formData, updateFormData, resetForm } = useMultiStepForm();
+  const form = useFullForm();
+  const formData = form.value();
+  const [validationError, setValidationError] = useState<string | null>(null);
 
-  // Initialize form with RVF
-  const form = useForm({
-    validator,
-    defaultValues: {
-      comments: formData.comments || "",
-      agreeToTerms: formData.agreeToTerms || false,
-    },
-  });
+  const handleSubmit = () => {
+    const validation = validateFormForSubmission(formData);
 
-  // Handle form submission
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    const formData = new FormData(event.target as HTMLFormElement);
-    const comments = formData.get("comments") as string;
-    // Check if the checkbox is checked
-    const agreeToTermsValue = formData.get("agreeToTerms");
-    const agreeToTerms =
-      agreeToTermsValue === "on" || agreeToTermsValue === "true";
+    if (!validation.success) {
+      setValidationError(
+        "Vennligst fyll ut alle påkrevde felt før du sender inn skjemaet."
+      );
+      return;
+    }
 
-    updateFormData({
-      comments,
-      agreeToTerms,
-    });
-
-    // In a real application, you would submit the form data to an API here
-    console.log("Form submitted:", formData);
-
-    // Reset the form after submission
-    setTimeout(() => {
-      alert("Skjema sendt inn!");
-      resetForm();
-    }, 500);
-  };
-
-  // Function for the submit button
-  const handleFinalSubmit = () => {
-    // This will be called when the user clicks the submit button
-    // The actual form submission is handled by the form's onSubmit handler
+    setValidationError(null);
+    console.log("submit step 3", formData);
+    form.submit();
+    // Here you would typically send the data to a server
+    alert("Skjema sendt inn!");
   };
 
   return (
-    <form {...form.getFormProps()} onSubmit={handleSubmit}>
-      <VStack gap="6">
+    <form
+      {...form.getFormProps({
+        onSubmit: handleSubmit,
+      })}
+    >
+      <VStack gap="4">
         <Heading size="medium" level="2">
-          Oppsummering og innsending
+          Oppsummering
         </Heading>
 
+        {validationError && <Alert variant="error">{validationError}</Alert>}
+
         <FormSummary>
           <FormSummary.Header>
-            <FormSummary.Heading level="3">
-              Personlig informasjon
-            </FormSummary.Heading>
+            <FormSummary.Heading level="3">Barn og inntekt</FormSummary.Heading>
           </FormSummary.Header>
           <FormSummary.Answers>
+            {formData.inntektOgBarn.barn?.map((barn, index) => (
+              <FormSummary.Answer key={index}>
+                <FormSummary.Label>Barn {index + 1}</FormSummary.Label>
+                <FormSummary.Value>
+                  <FormSummary.Answers>
+                    <FormSummary.Answer>
+                      <FormSummary.Label>Alder</FormSummary.Label>
+                      <FormSummary.Value>
+                        {barn.alder === "" ? "-" : barn.alder}
+                      </FormSummary.Value>
+                    </FormSummary.Answer>
+                    <FormSummary.Answer>
+                      <FormSummary.Label>Samværsgrad</FormSummary.Label>
+                      <FormSummary.Value>
+                        {barn.samværsgrad === ""
+                          ? "-"
+                          : samværsgrad.find(
+                              (s) => s.value === Number(barn.samværsgrad)
+                            )?.label}
+                      </FormSummary.Value>
+                    </FormSummary.Answer>
+                  </FormSummary.Answers>
+                </FormSummary.Value>
+              </FormSummary.Answer>
+            ))}
             <FormSummary.Answer>
-              <FormSummary.Label>Navn</FormSummary.Label>
+              <FormSummary.Label>Inntekt, forelder 1</FormSummary.Label>
               <FormSummary.Value>
-                {formData.firstName} {formData.lastName}
+                {formData.inntektOgBarn.inntektForelder1 === ""
+                  ? "-"
+                  : formData.inntektOgBarn.inntektForelder1}
               </FormSummary.Value>
             </FormSummary.Answer>
             <FormSummary.Answer>
-              <FormSummary.Label>E-post</FormSummary.Label>
-              <FormSummary.Value>{formData.email}</FormSummary.Value>
+              <FormSummary.Label>Inntekt, forelder 2</FormSummary.Label>
+              <FormSummary.Value>
+                {formData.inntektOgBarn.inntektForelder2 === ""
+                  ? "-"
+                  : formData.inntektOgBarn.inntektForelder2}
+              </FormSummary.Value>
             </FormSummary.Answer>
           </FormSummary.Answers>
         </FormSummary>
 
-        <FormSummary>
-          <FormSummary.Header>
-            <FormSummary.Heading level="3">
-              Adresseinformasjon
-            </FormSummary.Heading>
-          </FormSummary.Header>
-          <FormSummary.Answers>
-            <FormSummary.Answer>
-              <FormSummary.Label>Adresse</FormSummary.Label>
-              <FormSummary.Value>{formData.address}</FormSummary.Value>
-            </FormSummary.Answer>
-            <FormSummary.Answer>
-              <FormSummary.Label>Postnummer og sted</FormSummary.Label>
-              <FormSummary.Value>
-                {formData.postalCode} {formData.city}
-              </FormSummary.Value>
-            </FormSummary.Answer>
-          </FormSummary.Answers>
-        </FormSummary>
-
-        <Textarea
-          {...form.field("comments").getInputProps()}
-          label="Kommentarer eller tilleggsinformasjon"
-          description="Legg til eventuelle kommentarer eller tilleggsinformasjon"
-          error={form.field("comments").error()}
-          maxLength={500}
-        />
-
-        <Checkbox
-          {...form.field("agreeToTerms").getInputProps()}
-          error={form.field("agreeToTerms").error() ? true : undefined}
-        >
-          Jeg bekrefter at informasjonen over er korrekt og samtykker til
-          behandling av mine personopplysninger
-        </Checkbox>
-
-        <FormNavigation onSubmit={handleFinalSubmit} submitDisabled={false} />
+        <FormNavigation onSubmit={handleSubmit} submitDisabled={false} />
       </VStack>
     </form>
   );

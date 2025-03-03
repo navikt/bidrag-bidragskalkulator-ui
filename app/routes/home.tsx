@@ -14,8 +14,7 @@ import {
   validationError,
 } from "@rvf/react-router";
 import { withZod } from "@rvf/zod";
-import { useRef } from "react";
-import { useActionData, type ActionFunctionArgs } from "react-router";
+import { href, useActionData, type ActionFunctionArgs } from "react-router";
 import { z } from "zod";
 import { env } from "~/config/env.server";
 import type { Route } from "./+types/home";
@@ -92,12 +91,6 @@ export default function Barnebidragskalkulator() {
   });
   const barnFields = useFieldArray(form.scope("barn"));
 
-  const resultRef = useRef<HTMLDivElement>(null);
-  const harResultat =
-    actionData &&
-    !isValidationErrorResponse(actionData) &&
-    actionData?.resultat !== undefined;
-
   return (
     <div className="max-w-2xl mx-auto p-4 mt-8">
       <Heading size="xlarge" level="1" spacing align="center">
@@ -124,7 +117,12 @@ export default function Barnebidragskalkulator() {
           foreldrene eller fastsettes av Nav.
         </BodyLong>
         <BodyLong spacing className="mt-4">
-          <Button variant="secondary" as="a" href="/form" className="mr-2">
+          <Button
+            variant="secondary"
+            as="a"
+            href={href("/skjema/barn-og-inntekt")}
+            className="mr-2"
+          >
             Prøv vår nye flertrinns-skjema demo
           </Button>
         </BodyLong>
@@ -195,26 +193,6 @@ export default function Barnebidragskalkulator() {
           Beregn barnebidrag
         </Button>
       </form>
-      {harResultat && (
-        <div className="mt-6" ref={resultRef}>
-          <Alert variant="info">
-            <Heading size="small" spacing>
-              Beregnet barnebidrag
-            </Heading>
-            <BodyLong spacing>
-              Basert på den oppgitte informasjonen er det beregnede
-              barnebidraget:
-              <strong> {actionData.resultat} kr per måned</strong>
-            </BodyLong>
-            <Button
-              variant="secondary"
-              onClick={() => alert("Funksjon for å opprette privat avtale")}
-            >
-              Opprett privat avtale
-            </Button>
-          </Alert>
-        </div>
-      )}
       {isValidationErrorResponse(actionData) && (
         <div className="mt-6">
           <Alert variant="error">
