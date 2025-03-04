@@ -140,9 +140,11 @@ export default function Barnebidragskalkulator() {
       <form {...form.getFormProps()} className="space-y-4 mt-6">
         {barnFields.map((key, item, index) => (
           <div key={key} className="border p-4 rounded-md space-y-4">
-            <Heading size="small" level="2">
-              Barn {index + 1}
-            </Heading>
+            {barnFields.length() > 1 && (
+              <Heading size="small" level="2">
+                Barn {index + 1}
+              </Heading>
+            )}
             <div className="flex gap-4">
               <TextField
                 {...item.field("alder").getInputProps()}
@@ -161,13 +163,6 @@ export default function Barnebidragskalkulator() {
               onChange={(e) => {
                 item.field("samværsgrad").setValue(e.target.value);
               }}
-              markers={[
-                { value: 0, label: "0 %" },
-                { value: 25, label: "25 %" },
-                { value: 50, label: "50 %" },
-                { value: 75, label: "75 %" },
-                { value: 100, label: "100 %" },
-              ]}
               markerLabels={[
                 "Ingen netter hos deg",
                 "Delt bosted",
@@ -178,6 +173,7 @@ export default function Barnebidragskalkulator() {
               <Button
                 type="button"
                 variant="secondary"
+                size="small"
                 onClick={() => barnFields.remove(index)}
               >
                 Fjern barn
@@ -188,6 +184,7 @@ export default function Barnebidragskalkulator() {
         <Button
           type="button"
           variant="secondary"
+          size="small"
           onClick={() => barnFields.push({ alder: "", samværsgrad: "" })}
         >
           Legg til barn

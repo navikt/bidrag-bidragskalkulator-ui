@@ -73,27 +73,6 @@ type SliderProps = React.InputHTMLAttributes<HTMLInputElement> & {
  *
  * Denne komponenten støtter merkede verdier (markers) for å indikere spesifikke punkter
  * på skalaen, samt tilpassede markerLabels for å beskrive hva disse punktene betyr.
- *
- * @param {string} props.label - Teksten som beskriver hva brukeren skal velge med slideren.
- * @param {number} [props.min=0] - Minimumsverdien for slideren.
- * @param {number} [props.max=100] - Maksimumsverdien for slideren.
- * @param {number} [props.step=1] - Mulige inkrementelle hopp mellom min og max.
- * @param {string} [props.id] - Valgfri ID for å knytte label til input.
- * @param {Object[]} [props.markers] - Valgfrie definerte markører for å vise viktige stoppunkter på slideren.
- * @param {number} props.markers[].value - Verdien på markørens posisjon.
- * @param {string} props.markers[].label - En beskrivende tekst for markøren.
- * @param {string[]} [props.markerLabels] - Valgfrie tekstbeskrivelser for å forklare ulike nivåer på slideren.
- * @param {string} [props.className] - Valgfri CSS-klasse for ytterligere styling.
- * @returns {JSX.Element} En JSX-komponent som inneholder en interaktiv slider med tilhørende label.
- *
- * @description
- * Denne komponenten er laget med fokus på tilgjengelighet ved å knytte label med input via ID.
- * Både markører og markerLabels hjelper brukeren til å forstå ulike stoppunkter og utvalgte intervaller.
- * OnChange-hendelsen kan brukes for å fange opp endringer i sliderens verdi,
- * mens klassenavnet (className) gjør det enkelt å justere utseendet videre.
- *
- * Komponentens utforming er inspirert av standard HTML <input type="range" />
- * men med tilpassede stiler for å gi en bedre, universelt utformet opplevelse.
  */
 
 export function Slider({
@@ -112,7 +91,7 @@ export function Slider({
   const markersId = `${id}-markers`;
   return (
     <div className="my-4">
-      <Label htmlFor={id}>{label}</Label>
+      <Label htmlFor={id} className="block mb-2">{label}</Label>
       <input
         className={cn(
           `block 
@@ -127,8 +106,10 @@ export function Slider({
           [&::-moz-range-track]:rounded-full
           [&::-webkit-slider-runnable-track]:bg-gray-200 
           [&::-moz-range-track]:bg-gray-200
+
           [&::-webkit-slider-thumb]:appearance-none 
           [&::-moz-range-thumb]:appearance-none
+          [&::-webkit-slider-thumb]:shadow-none
           [&::-webkit-slider-thumb]:h-5 
           [&::-moz-range-thumb]:h-5
           [&::-webkit-slider-thumb]:w-5 
