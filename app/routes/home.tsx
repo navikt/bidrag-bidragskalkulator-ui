@@ -1,12 +1,15 @@
 import {
   Alert,
   BodyLong,
+  BodyShort,
   Button,
   GuidePanel,
   Heading,
-  Select,
+  Label,
+  List,
   TextField,
 } from "@navikt/ds-react";
+import { ListItem } from "@navikt/ds-react/List";
 import {
   isValidationErrorResponse,
   useFieldArray,
@@ -14,8 +17,9 @@ import {
   validationError,
 } from "@rvf/react-router";
 import { withZod } from "@rvf/zod";
-import { href, useActionData, type ActionFunctionArgs } from "react-router";
+import { useActionData, type ActionFunctionArgs } from "react-router";
 import { z } from "zod";
+import { Slider } from "~/components/ui/slider";
 import { env } from "~/config/env.server";
 import type { Route } from "./+types/home";
 
@@ -37,6 +41,24 @@ const FormSchema = z.object({
 });
 
 const validator = withZod(FormSchema);
+
+// Helper function to get description for samværsgrad
+function getSamværsgradDescription(value: number): string {
+  switch (value) {
+    case 0:
+      return "Ingen netter hos deg";
+    case 25:
+      return "Ca. annenhver helg";
+    case 50:
+      return "Delt bosted";
+    case 75:
+      return "Utvidet samvær";
+    case 100:
+      return "Alle netter hos deg";
+    default:
+      return "";
+  }
+}
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -105,26 +127,15 @@ export default function Barnebidragskalkulator() {
           Denne kalkulatoren gir deg en estimert beregning av barnebidrag basert
           på:
         </BodyLong>
-        <ul>
-          <li>Alder på hvert barn</li>
-          <li>Tid barna tilbringer hos hver forelder</li>
-          <li>Inntekten til begge foreldre</li>
-        </ul>
+        <List>
+          <ListItem>Alder på hvert barn</ListItem>
+          <ListItem>Tid barna tilbringer hos deg</ListItem>
+          <ListItem>Inntekten til både deg og den andre forelderen</ListItem>
+        </List>
         <BodyLong spacing>
-          Du kan legge til flere barn for å beregne samlet barnebidrag. Vær
-          oppmerksom på at dette er en forenklet beregning. Det endelige
+          Vær oppmerksom på at dette er en forenklet beregning. Det endelige
           bidraget kan variere basert på flere faktorer og bør avtales mellom
           foreldrene eller fastsettes av Nav.
-        </BodyLong>
-        <BodyLong spacing className="mt-4">
-          <Button
-            variant="secondary"
-            as="a"
-            href={href("/skjema/barn-og-inntekt")}
-            className="mr-2"
-          >
-            Prøv vår nye flertrinns-skjema demo
-          </Button>
         </BodyLong>
       </GuidePanel>
 
@@ -142,21 +153,70 @@ export default function Barnebidragskalkulator() {
                 type="number"
                 error={item.field("alder").error()}
               />
-
-              <Select
-                className="flex-1"
-                {...item.field("samværsgrad").getInputProps()}
-                label="Tid hos forelder 1"
-                error={item.field("samværsgrad").error()}
-              >
-                <option value="">Velg prosent</option>
-                <option value="0">0% (bor ikke hos forelder 1)</option>
-                <option value="25">25% (ca. annenhver helg)</option>
-                <option value="50">50% (delt bosted)</option>
-                <option value="75">75% (utvidet samvær)</option>
-                <option value="100">100% (bor fast hos forelder 1)</option>
-              </Select>
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor={`samvaersgrad-${key}`}>
+                Hvor mange netter tilbringer barnet hos deg?
+              </Label>
+              {item.field("samværsgrad").error() && (
+                <BodyShort size="small" className="text-red-500">
+                  {item.field("samværsgrad").error()}
+                </BodyShort>
+              )}
+              <div className="mb-1">
+                <span className="text-sm font-medium">
+                  {item.field("samværsgrad").value() === ""
+                    ? "Velg samværsgrad"
+                    : `${item
+                        .field("samværsgrad")
+                        .value()}% - ${getSamværsgradDescription(
+                        Number(item.field("samværsgrad").value())
+                      )}`}
+                </span>
+              </div>
+              <Slider
+                id={`samvaersgrad-${key}`}
+                value={[
+                  item.field("samværsgrad").value() === ""
+                    ? 0
+                    : Number(item.field("samværsgrad").value()),
+                ]}
+                onValueChange={(values) => {
+                  item.field("samværsgrad").setValue(values[0].toString());
+                }}
+                max={100}
+                step={25}
+                className="py-6"
+              />
+              <div className="flex justify-between w-full text-xs text-gray-600 -mt-2">
+                <div className="text-center">
+                  <div className="h-3 border-l border-gray-400 mx-auto mb-1 w-0"></div>
+                  <span>0%</span>
+                </div>
+                <div className="text-center">
+                  <div className="h-3 border-l border-gray-400 mx-auto mb-1 w-0"></div>
+                  <span>25%</span>
+                </div>
+                <div className="text-center">
+                  <div className="h-3 border-l border-gray-400 mx-auto mb-1 w-0"></div>
+                  <span>50%</span>
+                </div>
+                <div className="text-center">
+                  <div className="h-3 border-l border-gray-400 mx-auto mb-1 w-0"></div>
+                  <span>75%</span>
+                </div>
+                <div className="text-center">
+                  <div className="h-3 border-l border-gray-400 mx-auto mb-1 w-0"></div>
+                  <span>100%</span>
+                </div>
+              </div>
+              <div className="flex justify-between w-full text-xs text-gray-600 mt-1">
+                <span>Ingen netter hos deg</span>
+                <span>Alle netter hos deg</span>
+              </div>
+            </div>
+
             {barnFields.length() > 1 && (
               <Button
                 type="button"
@@ -178,13 +238,13 @@ export default function Barnebidragskalkulator() {
         <div className="flex flex-col md:flex-row gap-4">
           <TextField
             {...form.field("inntektForelder1").getInputProps()}
-            label="Inntekt forelder 1 (kr/år)"
+            label="Hva er inntekten din (kr/år)?"
             type="number"
             error={form.field("inntektForelder1").error()}
           />
           <TextField
             {...form.field("inntektForelder2").getInputProps()}
-            label="Inntekt forelder 2 (kr/år)"
+            label="Hva er inntekten til den andre forelderen (kr/år)?"
             type="number"
             error={form.field("inntektForelder2").error()}
           />
