@@ -1,61 +1,111 @@
-import * as React from "react"
-import * as SliderPrimitive from "@radix-ui/react-slider"
+import { Label, useId } from "@navikt/ds-react";
+import { cn } from "~/lib/utils";
 
-import { cn } from "~/lib/utils"
+type SliderProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  label: string;
+  min?: number;
+  max?: number;
+  step?: number;
+  markers?: { value: number; label: string }[];
+  markerLabels?: string[];
+};
 
-function Slider({
+export function Slider({
+  min,
+  max,
+  step,
+  label,
+  markers,
+  id: eksternId,
   className,
-  defaultValue,
-  value,
-  min = 0,
-  max = 100,
+  markerLabels,
   ...props
-}: React.ComponentProps<typeof SliderPrimitive.Root>) {
-  const _values = React.useMemo(
-    () =>
-      Array.isArray(value)
-        ? value
-        : Array.isArray(defaultValue)
-          ? defaultValue
-          : [min, max],
-    [value, defaultValue, min, max]
-  )
-
+}: SliderProps) {
+  const generatedId = `${useId()}-slider`;
+  const id = eksternId ?? generatedId;
+  const markersId = `${id}-markers`;
   return (
-    <SliderPrimitive.Root
-      data-slot="slider"
-      defaultValue={defaultValue}
-      value={value}
-      min={min}
-      max={max}
-      className={cn(
-        "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col",
-        className
-      )}
-      {...props}
-    >
-      <SliderPrimitive.Track
-        data-slot="slider-track"
+    <div className="my-4">
+      <Label htmlFor={id}>{label}</Label>
+      <input
         className={cn(
-          "bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5"
+          `block 
+          w-full 
+          focus:outline-none 
+          
+          [&::-webkit-slider-runnable-track]:appearance-none 
+          [&::-moz-range-track]:appearance-none
+          [&::-webkit-slider-runnable-track]:h-2 
+          [&::-moz-range-track]:h-2
+          [&::-webkit-slider-runnable-track]:rounded-full 
+          [&::-moz-range-track]:rounded-full
+          [&::-webkit-slider-runnable-track]:bg-gray-200 
+          [&::-moz-range-track]:bg-gray-200
+          [&::-webkit-slider-thumb]:appearance-none 
+          [&::-moz-range-thumb]:appearance-none
+          [&::-webkit-slider-thumb]:h-5 
+          [&::-moz-range-thumb]:h-5
+          [&::-webkit-slider-thumb]:w-5 
+          [&::-moz-range-thumb]:w-5
+          [&::-webkit-slider-thumb]:rounded-full 
+          [&::-moz-range-thumb]:rounded-full
+          [&::-webkit-slider-thumb]:bg-blue-500 
+          [&::-moz-range-thumb]:bg-blue-500
+          [&::-webkit-slider-thumb]:relative 
+          [&::-moz-range-thumb]:relative 
+          [&::-webkit-slider-thumb]:top-[-50%] 
+          [&::-moz-range-thumb]:top-[-50%] 
+          [&::-webkit-slider-thumb]:cursor-pointer
+          [&::-moz-range-thumb]:cursor-pointer
+          [&::-webkit-slider-thumb]:border-none
+          [&::-moz-range-thumb]:border-none
+          focus:[&::-webkit-slider-thumb]:bg-blue-900 
+          focus:[&::-moz-range-thumb]:bg-blue-900
+          focus:[&::-webkit-slider-thumb]:outline-2 
+          focus:[&::-moz-range-thumb]:outline-2
+          focus:[&::-webkit-slider-thumb]:outline-blue-900
+          focus:[&::-moz-range-thumb]:outline-blue-900
+          active:[&::-webkit-slider-thumb]:bg-blue-300
+          active:[&::-moz-range-thumb]:bg-blue-300
+          active:[&::-webkit-slider-thumb]:outline-blue-300
+          active:[&::-moz-range-thumb]:outline-blue-300
+          `,
+          className
         )}
+        type="range"
+        id={id}
+        {...props}
+        min={min}
+        max={max}
+        step={step}
+        list={markers ? markersId : undefined}
+      />
+      {markers && (
+        <datalist id={markersId}>
+          {markers.map((marker) => (
+            <option
+              key={marker.value}
+              value={marker.value}
+              label={marker.label}
+            />
+          ))}
+        </datalist>
+      )}
+      <div
+        className="flex justify-between w-full text-sm text-gray-600 mt-1 text-center"
+        aria-hidden="true"
       >
-        <SliderPrimitive.Range
-          data-slot="slider-range"
-          className={cn(
-            "bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
-          )}
-        />
-      </SliderPrimitive.Track>
-      {Array.from({ length: _values.length }, (_, index) => (
-        <SliderPrimitive.Thumb
-          data-slot="slider-thumb"
-          key={index}
-          className="border-primary bg-background ring-ring/50 block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
-        />
-      ))}
-    </SliderPrimitive.Root>
-  )
+        {markers?.map((marker) => (
+          <span key={marker.value}>{marker.label}</span>
+        ))}
+      </div>
+      {markerLabels && (
+        <div className="flex justify-between w-full text-xs text-gray-600 mt-1">
+          {markerLabels.map((label) => (
+            <span key={label}>{label}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
-
-export { Slider }

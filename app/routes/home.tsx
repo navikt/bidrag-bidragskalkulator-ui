@@ -1,11 +1,9 @@
 import {
   Alert,
   BodyLong,
-  BodyShort,
   Button,
   GuidePanel,
   Heading,
-  Label,
   List,
   TextField,
 } from "@navikt/ds-react";
@@ -149,74 +147,33 @@ export default function Barnebidragskalkulator() {
               <TextField
                 {...item.field("alder").getInputProps()}
                 label="Barnets alder"
-                className="flex-1"
                 type="number"
                 error={item.field("alder").error()}
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor={`samvaersgrad-${key}`}>
-                Hvor mange netter tilbringer barnet hos deg?
-              </Label>
-              {item.field("samværsgrad").error() && (
-                <BodyShort size="small" className="text-red-500">
-                  {item.field("samværsgrad").error()}
-                </BodyShort>
-              )}
-              <div className="mb-1">
-                <span className="text-sm font-medium">
-                  {item.field("samværsgrad").value() === ""
-                    ? "Velg samværsgrad"
-                    : `${item
-                        .field("samværsgrad")
-                        .value()}% - ${getSamværsgradDescription(
-                        Number(item.field("samværsgrad").value())
-                      )}`}
-                </span>
-              </div>
-              <Slider
-                id={`samvaersgrad-${key}`}
-                value={[
-                  item.field("samværsgrad").value() === ""
-                    ? 0
-                    : Number(item.field("samværsgrad").value()),
-                ]}
-                onValueChange={(values) => {
-                  item.field("samværsgrad").setValue(values[0].toString());
-                }}
-                max={100}
-                step={25}
-                className="py-6"
-              />
-              <div className="flex justify-between w-full text-xs text-gray-600 -mt-2">
-                <div className="text-center">
-                  <div className="h-3 border-l border-gray-400 mx-auto mb-1 w-0"></div>
-                  <span>0%</span>
-                </div>
-                <div className="text-center">
-                  <div className="h-3 border-l border-gray-400 mx-auto mb-1 w-0"></div>
-                  <span>25%</span>
-                </div>
-                <div className="text-center">
-                  <div className="h-3 border-l border-gray-400 mx-auto mb-1 w-0"></div>
-                  <span>50%</span>
-                </div>
-                <div className="text-center">
-                  <div className="h-3 border-l border-gray-400 mx-auto mb-1 w-0"></div>
-                  <span>75%</span>
-                </div>
-                <div className="text-center">
-                  <div className="h-3 border-l border-gray-400 mx-auto mb-1 w-0"></div>
-                  <span>100%</span>
-                </div>
-              </div>
-              <div className="flex justify-between w-full text-xs text-gray-600 mt-1">
-                <span>Ingen netter hos deg</span>
-                <span>Alle netter hos deg</span>
-              </div>
-            </div>
-
+            <Slider
+              label="Hvor mye vil barnet bo sammen med deg?"
+              min={0}
+              max={100}
+              step={25}
+              value={item.field("samværsgrad").value()}
+              onChange={(e) => {
+                item.field("samværsgrad").setValue(e.target.value);
+              }}
+              markers={[
+                { value: 0, label: "0 %" },
+                { value: 25, label: "25 %" },
+                { value: 50, label: "50 %" },
+                { value: 75, label: "75 %" },
+                { value: 100, label: "100 %" },
+              ]}
+              markerLabels={[
+                "Ingen netter hos deg",
+                "Delt bosted",
+                "Alle netter hos deg",
+              ]}
+            />
             {barnFields.length() > 1 && (
               <Button
                 type="button"
