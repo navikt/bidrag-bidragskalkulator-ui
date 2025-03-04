@@ -2,13 +2,99 @@ import { Label, useId } from "@navikt/ds-react";
 import { cn } from "~/lib/utils";
 
 type SliderProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  /**
+   * En beskrivende tekst som indikerer formålet med denne skyveknappen.
+   */
   label: string;
+
+  /**
+   * Den laveste tillatte verdien for skyveknappen.
+   */
   min?: number;
+
+  /**
+   * Den høyeste tillatte verdien for skyveknappen.
+   */
   max?: number;
+
+  /**
+   * Steglengden eller intervallene mellom minimums- og maksimumsverdien.
+   */
   step?: number;
-  markers?: { value: number; label: string }[];
+
+  /**
+   * Et valgfritt sett med markører som definerer faste referansepunkter langs skyveknappens spor.
+   * Hver markør inneholder en numerisk verdi og en tilhørende beskrivende tekst.
+   */
+  markers?: {
+    /**
+     * Numerisk indikator for hvor på skyveknappen markøren skal plasseres.
+     */
+    value: number;
+    /**
+     * En beskrivende tekst for markørens verdi.
+     */
+    label: string;
+  }[];
+
+  /**
+   * En valgfri liste med beskrivelser som korresponderer til ulike posisjoner på skyveknappen.
+   */
   markerLabels?: string[];
 };
+
+/**
+ * Denne Slider-komponenten gir en brukervennlig skyveknapp for å velge en verdi innenfor et gitt intervall.
+ *
+ * @component
+ *
+ * ```tsx
+ * <Slider
+ *   label="Hvor mange prosent ønsker du?"
+ *   min={0}
+ *   max={100}
+ *   step={10}
+ *   value={50}
+ *   onChange={(e) => console.log(e.target.value)}
+ *   markers={[
+ *     { value: 0, label: "0 %" },
+ *     { value: 25, label: "25 %" },
+ *     { value: 50, label: "50 %" },
+ *     { value: 75, label: "75 %" },
+ *     { value: 100, label: "100 %" },
+ *   ]}
+ *   markerLabels={[
+ *     "Ingen netter",
+ *     "Delt",
+ *     "Alle netter",
+ *   ]}
+ * />
+ * ```
+ *
+ * Denne komponenten støtter merkede verdier (markers) for å indikere spesifikke punkter
+ * på skalaen, samt tilpassede markerLabels for å beskrive hva disse punktene betyr.
+ *
+ * @param {string} props.label - Teksten som beskriver hva brukeren skal velge med slideren.
+ * @param {number} [props.min=0] - Minimumsverdien for slideren.
+ * @param {number} [props.max=100] - Maksimumsverdien for slideren.
+ * @param {number} [props.step=1] - Mulige inkrementelle hopp mellom min og max.
+ * @param {string} [props.id] - Valgfri ID for å knytte label til input.
+ * @param {Object[]} [props.markers] - Valgfrie definerte markører for å vise viktige stoppunkter på slideren.
+ * @param {number} props.markers[].value - Verdien på markørens posisjon.
+ * @param {string} props.markers[].label - En beskrivende tekst for markøren.
+ * @param {string[]} [props.markerLabels] - Valgfrie tekstbeskrivelser for å forklare ulike nivåer på slideren.
+ * @param {string} [props.className] - Valgfri CSS-klasse for ytterligere styling.
+ * @returns {JSX.Element} En JSX-komponent som inneholder en interaktiv slider med tilhørende label.
+ *
+ * @description
+ * Denne komponenten er laget med fokus på tilgjengelighet ved å knytte label med input via ID.
+ * Både markører og markerLabels hjelper brukeren til å forstå ulike stoppunkter og utvalgte intervaller.
+ * OnChange-hendelsen kan brukes for å fange opp endringer i sliderens verdi,
+ * mens klassenavnet (className) gjør det enkelt å justere utseendet videre.
+ *
+ * Komponentens utforming er inspirert av standard HTML <input type="range" />
+ * men med tilpassede stiler for å gi en bedre, universelt utformet opplevelse.
+ */
 
 export function Slider({
   min,
@@ -32,7 +118,7 @@ export function Slider({
           `block 
           w-full 
           focus:outline-none 
-          
+
           [&::-webkit-slider-runnable-track]:appearance-none 
           [&::-moz-range-track]:appearance-none
           [&::-webkit-slider-runnable-track]:h-2 
