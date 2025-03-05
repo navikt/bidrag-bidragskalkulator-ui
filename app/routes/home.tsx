@@ -197,18 +197,20 @@ export default function Barnebidragskalkulator() {
         >
           Legg til barn
         </Button>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-col gap-4">
           <TextField
             {...form.field("inntektForelder1").getInputProps()}
             label="Hva er inntekten din?"
             type="number"
             error={form.field("inntektForelder1").error()}
+            className="max-w-sm"
           />
           <TextField
             {...form.field("inntektForelder2").getInputProps()}
             label="Hva er inntekten til den andre forelderen?"
             type="number"
             error={form.field("inntektForelder2").error()}
+            className="max-w-sm"
           />
         </div>
         <Button type="submit" loading={form.formState.isSubmitting}>
@@ -242,9 +244,25 @@ export default function Barnebidragskalkulator() {
               Du skal motta {actionData.resultat} kroner i barnebidrag per
               måned.
             </Heading>
-            <BodyLong>
+            <BodyLong spacing>
               Dette er en estimering og kan variere basert på flere faktorer.
             </BodyLong>
+            <div className="flex justify-end gap-4">
+              <Button
+                as="a"
+                href="https://www.nav.no/fyllut/nav550060?sub=paper"
+                variant="primary"
+              >
+                Lag privat avtale
+              </Button>
+              <Button
+                as="a"
+                href="https://www.nav.no/start/soknad-barnebidrag-bidragsmottaker"
+                variant="secondary"
+              >
+                Søk Nav om fastsetting
+              </Button>
+            </div>
           </Alert>
         </div>
       )}
