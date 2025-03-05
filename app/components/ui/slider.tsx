@@ -31,8 +31,6 @@ type SliderProps = React.InputHTMLAttributes<HTMLInputElement> & {
 /**
  * Denne Slider-komponenten gir en brukervennlig slider for å velge en verdi innenfor et gitt intervall.
  *
- * @component
- *
  * ```tsx
  * <Slider
  *   label="Hvor mange prosent ønsker du?"

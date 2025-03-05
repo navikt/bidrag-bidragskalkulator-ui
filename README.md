@@ -33,7 +33,8 @@ npm run dev
 
 ### Server
 
-Om du ønsker å kjøre server lokalt, kan du følge instruksene her: https://github.com/navikt/bidrag-bidragskalkulator-api
+For å kunne kalkulere lokalt, må du også kjøre serveren lokalt.
+For å kjøre serveren lokalt, kan du følge instruksene her: https://github.com/navikt/bidrag-bidragskalkulator-api
 
 <details>
 <summary>Docker</summary>
