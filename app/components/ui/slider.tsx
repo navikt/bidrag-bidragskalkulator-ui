@@ -3,17 +3,17 @@ import { cn } from "~/lib/utils";
 
 type SliderProps = React.InputHTMLAttributes<HTMLInputElement> & {
   /**
-   * En beskrivende tekst som indikerer formålet med denne skyveknappen.
+   * En beskrivende tekst som indikerer formålet med denne slideren.
    */
   label: string;
 
   /**
-   * Den laveste tillatte verdien for skyveknappen.
+   * Den laveste tillatte verdien for slideren.
    */
   min?: number;
 
   /**
-   * Den høyeste tillatte verdien for skyveknappen.
+   * Den høyeste tillatte verdien for slideren.
    */
   max?: number;
 
@@ -23,28 +23,13 @@ type SliderProps = React.InputHTMLAttributes<HTMLInputElement> & {
   step?: number;
 
   /**
-   * Et valgfritt sett med markører som definerer faste referansepunkter langs skyveknappens spor.
-   * Hver markør inneholder en numerisk verdi og en tilhørende beskrivende tekst.
-   */
-  markers?: {
-    /**
-     * Numerisk indikator for hvor på skyveknappen markøren skal plasseres.
-     */
-    value: number;
-    /**
-     * En beskrivende tekst for markørens verdi.
-     */
-    label: string;
-  }[];
-
-  /**
-   * En valgfri liste med beskrivelser som korresponderer til ulike posisjoner på skyveknappen.
+   * En valgfri liste med beskrivelser som korresponderer til ulike posisjoner på slideren.
    */
   markerLabels?: string[];
 };
 
 /**
- * Denne Slider-komponenten gir en brukervennlig skyveknapp for å velge en verdi innenfor et gitt intervall.
+ * Denne Slider-komponenten gir en brukervennlig slider for å velge en verdi innenfor et gitt intervall.
  *
  * @component
  *
@@ -56,13 +41,6 @@ type SliderProps = React.InputHTMLAttributes<HTMLInputElement> & {
  *   step={10}
  *   value={50}
  *   onChange={(e) => console.log(e.target.value)}
- *   markers={[
- *     { value: 0, label: "0 %" },
- *     { value: 25, label: "25 %" },
- *     { value: 50, label: "50 %" },
- *     { value: 75, label: "75 %" },
- *     { value: 100, label: "100 %" },
- *   ]}
  *   markerLabels={[
  *     "Ingen netter",
  *     "Delt",
@@ -70,9 +48,6 @@ type SliderProps = React.InputHTMLAttributes<HTMLInputElement> & {
  *   ]}
  * />
  * ```
- *
- * Denne komponenten støtter merkede verdier (markers) for å indikere spesifikke punkter
- * på skalaen, samt tilpassede markerLabels for å beskrive hva disse punktene betyr.
  */
 
 export function Slider({
@@ -80,7 +55,6 @@ export function Slider({
   max,
   step,
   label,
-  markers,
   id: eksternId,
   className,
   markerLabels,
@@ -88,10 +62,11 @@ export function Slider({
 }: SliderProps) {
   const generatedId = `${useId()}-slider`;
   const id = eksternId ?? generatedId;
-  const markersId = `${id}-markers`;
   return (
     <div className="my-4">
-      <Label htmlFor={id} className="block mb-2">{label}</Label>
+      <Label htmlFor={id} className="block mb-2">
+        {label}
+      </Label>
       <input
         className={cn(
           `block 
@@ -145,27 +120,7 @@ export function Slider({
         min={min}
         max={max}
         step={step}
-        list={markers ? markersId : undefined}
       />
-      {markers && (
-        <datalist id={markersId}>
-          {markers.map((marker) => (
-            <option
-              key={marker.value}
-              value={marker.value}
-              label={marker.label}
-            />
-          ))}
-        </datalist>
-      )}
-      <div
-        className="flex justify-between w-full text-sm text-gray-600 mt-1 text-center"
-        aria-hidden="true"
-      >
-        {markers?.map((marker) => (
-          <span key={marker.value}>{marker.label}</span>
-        ))}
-      </div>
       {markerLabels && (
         <div className="flex justify-between w-full text-xs text-gray-600 mt-1">
           {markerLabels.map((label) => (
