@@ -4,6 +4,7 @@ import {
   Button,
   GuidePanel,
   Heading,
+  Link,
   List,
   TextField,
 } from "@navikt/ds-react";
@@ -15,6 +16,7 @@ import {
   validationError,
 } from "@rvf/react-router";
 import { withZod } from "@rvf/zod";
+import { useRef } from "react";
 import { useActionData, type ActionFunctionArgs } from "react-router";
 import { z } from "zod";
 import { Slider } from "~/components/ui/slider";
@@ -121,8 +123,15 @@ export default function Barnebidragskalkulator() {
       inntektForelder1: "",
       inntektForelder2: "",
     },
+    onSubmitSuccess: () => {
+      resultatRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    },
   });
   const barnFields = useFieldArray(form.scope("barn"));
+  const resultatRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="max-w-xl mx-auto p-4 mt-8">
@@ -238,14 +247,20 @@ export default function Barnebidragskalkulator() {
         </div>
       )}
       {actionData && "resultat" in actionData && (
-        <div className="mt-6">
+        <div className="mt-6" ref={resultatRef}>
           <Alert variant="info">
             <Heading size="small" spacing>
               Du skal motta {actionData.resultat} kroner i barnebidrag per
               måned.
             </Heading>
             <BodyLong spacing>
-              Dette er en estimering og kan variere basert på flere faktorer.
+              Dette er en estimering og kan variere basert på flere faktorer,
+              som vi for enkelhets skyld har utelatt i denne kalkulatoren. Om du
+              ønsker en mer presis kalkulering, kan du bruke{" "}
+              <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
+                en annen bidragskalkulator
+              </Link>
+              .
             </BodyLong>
             <div className="flex justify-end gap-4">
               <Button
