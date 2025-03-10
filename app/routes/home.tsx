@@ -88,13 +88,53 @@ export async function action({ request }: ActionFunctionArgs) {
   if (result.error) {
     return validationError(result.error, result.submittedData);
   }
+
+  function kalkulerSamværsklasse(samværsgrad: number) {
+    if (samværsgrad >= 90) {
+      return "SAMVÆRSKLASSE_1";
+    }
+    if (samværsgrad >= 80) {
+      return "SAMVÆRSKLASSE_2";
+    }
+    if (samværsgrad >= 70) {
+      return "SAMVÆRSKLASSE_3";
+    }
+    if (samværsgrad >= 60) {
+      return "SAMVÆRSKLASSE_4";
+    }
+    if (samværsgrad === 50) {
+      return "DELT_BOSTED";
+    }
+    if (samværsgrad >= 40) {
+      return "SAMVÆRSKLASSE_4";
+    }
+    if (samværsgrad >= 30) {
+      return "SAMVÆRSKLASSE_3";
+    }
+    if (samværsgrad >= 20) {
+      return "SAMVÆRSKLASSE_2";
+    }
+    if (samværsgrad >= 10) {
+      return "SAMVÆRSKLASSE_1";
+    }
+    return "SAMVÆRSKLASSE_1";
+  }
+
+  const requestData = {
+    ...result.data,
+    barn: result.data.barn.map((barn) => ({
+      alder: barn.alder,
+      samværsklasse: kalkulerSamværsklasse(barn.samværsgrad),
+    })),
+  };
+
   try {
     const response = await fetch(`${env.SERVER_URL}/v1/beregning/enkel`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(result.data),
+      body: JSON.stringify(requestData),
     });
     const json = await response.json();
 
@@ -124,10 +164,7 @@ export default function Barnebidragskalkulator() {
       inntektForelder2: "",
     },
     onSubmitSuccess: () => {
-      resultatRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
+      resultatRef.current?.scrollIntoView({ behavior: "smooth" });
     },
   });
   const barnFields = useFieldArray(form.scope("barn"));
