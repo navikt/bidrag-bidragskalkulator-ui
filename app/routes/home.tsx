@@ -89,37 +89,6 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(result.error, result.submittedData);
   }
 
-  function kalkulerSamværsklasse(samværsgrad: number) {
-    if (samværsgrad >= 90) {
-      return "SAMVÆRSKLASSE_1";
-    }
-    if (samværsgrad >= 80) {
-      return "SAMVÆRSKLASSE_2";
-    }
-    if (samværsgrad >= 70) {
-      return "SAMVÆRSKLASSE_3";
-    }
-    if (samværsgrad >= 60) {
-      return "SAMVÆRSKLASSE_4";
-    }
-    if (samværsgrad === 50) {
-      return "DELT_BOSTED";
-    }
-    if (samværsgrad >= 40) {
-      return "SAMVÆRSKLASSE_4";
-    }
-    if (samværsgrad >= 30) {
-      return "SAMVÆRSKLASSE_3";
-    }
-    if (samværsgrad >= 20) {
-      return "SAMVÆRSKLASSE_2";
-    }
-    if (samværsgrad >= 10) {
-      return "SAMVÆRSKLASSE_1";
-    }
-    return "SAMVÆRSKLASSE_1";
-  }
-
   const requestData = {
     ...result.data,
     barn: result.data.barn.map((barn) => ({
@@ -320,4 +289,39 @@ export default function Barnebidragskalkulator() {
       )}
     </div>
   );
+}
+
+type Samværsklasse =
+  | "SAMVÆRSKLASSE_1"
+  | "SAMVÆRSKLASSE_2"
+  | "SAMVÆRSKLASSE_3"
+  | "SAMVÆRSKLASSE_4"
+  | "DELT_BOSTED";
+
+function kalkulerSamværsklasse(samværsgrad: number): Samværsklasse {
+  if (samværsgrad >= 90) {
+    return "SAMVÆRSKLASSE_1";
+  }
+  if (samværsgrad >= 80) {
+    return "SAMVÆRSKLASSE_2";
+  }
+  if (samværsgrad >= 70) {
+    return "SAMVÆRSKLASSE_3";
+  }
+  if (samværsgrad >= 60) {
+    return "SAMVÆRSKLASSE_4";
+  }
+  if (samværsgrad < 60 && samværsgrad >= 40) {
+    return "DELT_BOSTED";
+  }
+  if (samværsgrad >= 30) {
+    return "SAMVÆRSKLASSE_4";
+  }
+  if (samværsgrad >= 20) {
+    return "SAMVÆRSKLASSE_3";
+  }
+  if (samværsgrad >= 10) {
+    return "SAMVÆRSKLASSE_2";
+  }
+  return "SAMVÆRSKLASSE_1";
 }
