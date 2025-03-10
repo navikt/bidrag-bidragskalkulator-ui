@@ -71,6 +71,15 @@ const validator = withZod(
   })
 );
 
+const responseSchema = z.object({
+  resultater: z.array(
+    z.object({
+      sum: z.number(),
+      barnetsAlder: z.number(),
+    })
+  ),
+});
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Barnebidragskalkulator" },
@@ -98,22 +107,33 @@ export async function action({ request }: ActionFunctionArgs) {
   };
 
   try {
-    const response = await fetch(`${env.SERVER_URL}/v1/beregning/enkel`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestData),
-    });
-    const json = await response.json();
+    const response = await fetch(
+      `${env.SERVER_URL}/api/v1/beregning/barnebidrag`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      }
+    );
 
     if (!response.ok) {
       return {
         error: "Det oppstod en feil under beregningen. Vennligst prøv igjen.",
       };
     }
+    const json = await response.json();
+    const parsed = responseSchema.safeParse(json);
 
-    return { resultat: json.resultat };
+    if (!parsed.success) {
+      return {
+        error:
+          "Vi mottok et ugyldig svar fra beregningsmotoren. Vennligst prøv igjen.",
+      };
+    }
+
+    return parsed.data;
   } catch (error) {
     console.error(error);
     return {
@@ -138,6 +158,11 @@ export default function Barnebidragskalkulator() {
   });
   const barnFields = useFieldArray(form.scope("barn"));
   const resultatRef = useRef<HTMLDivElement>(null);
+
+  const totalSum =
+    actionData && "resultater" in actionData
+      ? actionData.resultater.reduce((sum, neste) => sum + neste.sum, 0)
+      : undefined;
 
   return (
     <div className="max-w-xl mx-auto p-4 mt-8">
@@ -252,12 +277,12 @@ export default function Barnebidragskalkulator() {
           </Alert>
         </div>
       )}
-      {actionData && "resultat" in actionData && (
+      {actionData && "resultater" in actionData && (
         <div className="mt-6" ref={resultatRef}>
           <Alert variant="info">
             <Heading size="small" spacing>
-              Du skal motta {actionData.resultat} kroner i barnebidrag per
-              måned.
+              Du skal {totalSum && totalSum > 0 ? "motta" : "betale"} {totalSum}{" "}
+              kroner i barnebidrag per måned.
             </Heading>
             <BodyLong spacing>
               Dette er en estimering og kan variere basert på flere faktorer,
