@@ -103,6 +103,11 @@ export async function action({ request }: ActionFunctionArgs) {
     barn: result.data.barn.map((barn) => ({
       alder: barn.alder,
       samværsklasse: kalkulerSamværsklasse(barn.samværsgrad),
+      bidragstype: kalkulerBidragstype(
+        result.data.inntektForelder1,
+        result.data.inntektForelder2,
+        barn.samværsgrad
+      ),
     })),
   };
 
@@ -148,7 +153,7 @@ export default function Barnebidragskalkulator() {
     validator,
     method: "post",
     defaultValues: {
-      barn: [{ alder: "", samværsgrad: "" }],
+      barn: [{ alder: "", samværsgrad: "15" }],
       inntektForelder1: "",
       inntektForelder2: "",
     },
@@ -208,14 +213,20 @@ export default function Barnebidragskalkulator() {
             </div>
 
             <Slider
-              {...item.field("samværsgrad").getInputProps()}
+              {...item.field("samværsgrad").getControlProps()}
               label="Hvor mye vil barnet bo sammen med deg?"
+              description="Estimér hvor mange netter barnet vil bo sammen med deg i snitt per måned"
+              min={0}
+              max={30}
               step={1}
-              markerLabels={[
-                "Ingen netter hos deg",
-                "Delt bosted",
-                "Alle netter hos deg",
+              list={[
+                { label: "Ingen netter hos deg", value: 0 },
+                { label: "Halvparten av tiden", value: 15 },
+                { label: "Alle netter hos deg", value: 30 },
               ]}
+              valueDescription={lagSamværsgradbeskrivelse(
+                Number(item.field("samværsgrad").value())
+              )}
             />
             {barnFields.length() > 1 && (
               <Button
@@ -233,7 +244,7 @@ export default function Barnebidragskalkulator() {
           type="button"
           variant="secondary"
           size="small"
-          onClick={() => barnFields.push({ alder: "", samværsgrad: "" })}
+          onClick={() => barnFields.push({ alder: "", samværsgrad: "15" })}
         >
           Legg til barn
         </Button>
@@ -320,33 +331,35 @@ type Samværsklasse =
   | "SAMVÆRSKLASSE_1"
   | "SAMVÆRSKLASSE_2"
   | "SAMVÆRSKLASSE_3"
-  | "SAMVÆRSKLASSE_4"
-  | "DELT_BOSTED";
+  | "SAMVÆRSKLASSE_4";
 
 function kalkulerSamværsklasse(samværsgrad: number): Samværsklasse {
-  if (samværsgrad >= 90) {
+  if (samværsgrad <= 3 || samværsgrad >= 27) {
     return "SAMVÆRSKLASSE_1";
   }
-  if (samværsgrad >= 80) {
+  if (samværsgrad <= 8 || samværsgrad >= 22) {
     return "SAMVÆRSKLASSE_2";
   }
-  if (samværsgrad >= 70) {
+  if (samværsgrad <= 13 || samværsgrad >= 17) {
     return "SAMVÆRSKLASSE_3";
   }
-  if (samværsgrad >= 60) {
-    return "SAMVÆRSKLASSE_4";
+  return "SAMVÆRSKLASSE_4"; // TODO: Nå returnerer vi ikke delt bosted
+}
+
+function lagSamværsgradbeskrivelse(samværsgrad: number): string {
+  if (samværsgrad === 1) {
+    return "1 natt";
   }
-  if (samværsgrad < 60 && samværsgrad >= 40) {
-    return "DELT_BOSTED";
+  return `${samværsgrad} netter`;
+}
+
+function kalkulerBidragstype(
+  inntektForelder1: number,
+  inntektForelder2: number,
+  samværsgrad: number
+): "MOTTAKER" | "PLIKTIG" {
+  if (samværsgrad >= 15) {
+    return "MOTTAKER";
   }
-  if (samværsgrad >= 30) {
-    return "SAMVÆRSKLASSE_4";
-  }
-  if (samværsgrad >= 20) {
-    return "SAMVÆRSKLASSE_3";
-  }
-  if (samværsgrad >= 10) {
-    return "SAMVÆRSKLASSE_2";
-  }
-  return "SAMVÆRSKLASSE_1";
+  return "PLIKTIG";
 }

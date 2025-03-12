@@ -1,2 +1,5 @@
 @import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
 @import "@navikt/ds-css" layer(components);
