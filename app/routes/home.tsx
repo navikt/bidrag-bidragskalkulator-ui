@@ -103,6 +103,11 @@ export async function action({ request }: ActionFunctionArgs) {
     barn: result.data.barn.map((barn) => ({
       alder: barn.alder,
       samværsklasse: kalkulerSamværsklasse(barn.samværsgrad),
+      bidragstype: kalkulerBidragstype(
+        result.data.inntektForelder1,
+        result.data.inntektForelder2,
+        barn.samværsgrad
+      ),
     })),
   };
 
@@ -346,4 +351,15 @@ function lagSamværsgradbeskrivelse(samværsgrad: number): string {
     return "1 natt";
   }
   return `${samværsgrad} netter`;
+}
+
+function kalkulerBidragstype(
+  inntektForelder1: number,
+  inntektForelder2: number,
+  samværsgrad: number
+): "MOTTAKER" | "PLIKTIG" {
+  if (samværsgrad >= 15) {
+    return "MOTTAKER";
+  }
+  return "PLIKTIG";
 }
