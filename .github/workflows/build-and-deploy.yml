@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  build:
-    name: build
+  deploy-dev:
+    name: Deploy to dev
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -25,15 +25,6 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
-  deploy-dev:
-    name: Deploy to dev
-    needs: [build]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-      packages: write
-    steps:
       - name: Deploy to nais
         uses: nais/deploy/actions/deploy@v2
         env:
@@ -43,13 +34,24 @@ jobs:
           VARS: .nais/dev.json
   deploy-prod:
     name: Deploy to prod
-    needs: [build, deploy-dev]
+    needs: [deploy-dev]
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
       packages: write
     steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Build and push docker image to GAR
+        uses: nais/docker-build-push@main
+        id: docker-push
+        with:
+          team: bidrag
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
       - name: Deploy to nais
         uses: nais/deploy/actions/deploy@v2
         env:
