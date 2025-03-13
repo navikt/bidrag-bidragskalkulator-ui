@@ -25,6 +25,15 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
+  deploy-dev:
+    name: Deploy to dev
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    steps:
       - name: Deploy to nais
         uses: nais/deploy/actions/deploy@v2
         env:
@@ -32,3 +41,19 @@ jobs:
           IMAGE: ${{ steps.docker-push.outputs.image }}
           RESOURCE: .nais/naiserator.yml
           VARS: .nais/dev.json
+  deploy-prod:
+    name: Deploy to prod
+    needs: [build, deploy-dev]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    steps:
+      - name: Deploy to nais
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod-gcp
+          IMAGE: ${{ steps.docker-push.outputs.image }}
+          RESOURCE: .nais/naiserator.yml
+          VARS: .nais/prod.json
