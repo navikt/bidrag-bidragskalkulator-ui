@@ -1,4 +1,7 @@
-import { fetchDecoratorHtml } from "@navikt/nav-dekoratoren-moduler/ssr";
+import {
+  buildCspHeader,
+  fetchDecoratorHtml,
+} from "@navikt/nav-dekoratoren-moduler/ssr";
 import parse from "html-react-parser";
 import {
   isRouteErrorResponse,
@@ -13,6 +16,7 @@ import {
 import { Page } from "@navikt/ds-react";
 import type { Route } from "./+types/root";
 import "./app.css";
+import { env } from "./config/env.server";
 import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
 import { NotFound } from "./features/feilhåndtering/404";
 import { InternalServerError } from "./features/feilhåndtering/500";
@@ -52,13 +56,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export async function loader() {
   const decoratorFragments = await fetchDecoratorHtml({
-    env: "dev",
+    env: env.ENVIRONMENT,
     params: { language: "nb", context: "privatperson" },
   });
 
   return {
     decoratorFragments,
   };
+}
+
+export async function headers() {
+  return buildCspHeader({}, { env: env.ENVIRONMENT });
 }
 
 export default function App() {
