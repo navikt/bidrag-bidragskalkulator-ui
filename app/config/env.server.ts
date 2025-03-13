@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const envSchema = z.object({
   SERVER_URL: z.string().url(),
+  ENVIRONMENT: z.enum(["dev", "prod"]),
 });
 
 const envParse = envSchema.safeParse(process.env);
