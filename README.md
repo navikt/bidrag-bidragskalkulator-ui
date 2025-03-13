@@ -7,9 +7,10 @@ Kalkulatoren er under aktiv utvikling, så det er ikke sikkert at alt fungerer s
 ## Deployments
 
 Man deployer automatisk til dev-miljøet når man merger en pull request til main-branchen.
-Det er enda ikke mulig å deployere til prod-miljøet.
 
-**Dev-miljøet finner du på https://bidragskalkulator-v2.intern.dev.nav.no**
+**Dev-miljøet finner du på https://bidragskalkulator-v2.ekstern.dev.nav.no/barnebidragskalkulator**
+
+**Prod-miljøet finner du på https://www.nav.no/barnebidragskalkulator**
 
 ## Lokal utvikling
 
@@ -18,7 +19,7 @@ Installer avhengigheter:
 npm install
 ```
 
-Kopiér .env.example til .env og sett SERVER_URL til URLen du ønsker. Det kan være localhost:8080 om du vil koble til serveren lokalt, eller https://bidragskalkulator-api.dev.nav.cloud.nais.io om du vil koble til serveren i dev-miljøet.
+Kopiér .env.example til .env og sett SERVER_URL til URLen du ønsker. Det kan være localhost:8080 om du vil koble til serveren lokalt.
 
 ```bash
 cp .env.example .env

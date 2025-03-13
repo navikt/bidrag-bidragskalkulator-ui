@@ -15,6 +15,8 @@ spec:
   env:
     - name: SERVER_URL
       value: {{SERVER_URL}}
+    - name: ENVIRONMENT
+      value: {{ENVIRONMENT}}
   accessPolicy:
     outbound:
       rules:
