@@ -5,10 +5,8 @@ import {
   GuidePanel,
   Heading,
   Link,
-  List,
   TextField,
 } from "@navikt/ds-react";
-import { ListItem } from "@navikt/ds-react/List";
 import {
   isValidationErrorResponse,
   useFieldArray,
@@ -21,6 +19,7 @@ import { useActionData, type ActionFunctionArgs } from "react-router";
 import { z } from "zod";
 import { Slider } from "~/components/ui/slider";
 import { env } from "~/config/env.server";
+import { formatterSum } from "~/utils/tall";
 import type { Route } from "./+types/home";
 
 const validator = withZod(
@@ -177,21 +176,25 @@ export default function Barnebidragskalkulator() {
 
       <GuidePanel poster>
         <Heading spacing size="small">
-          Hva kan du forvente av barnebidragskalkulatoren?
+          Hva kan du bruke barnebidragskalkulatoren til?
         </Heading>
         <BodyLong spacing>
-          Denne kalkulatoren gir deg en estimert beregning av barnebidrag basert
-          på:
+          Barnebidraget avtaler du med den andre forelderen eller søker Nav om
+          hjelp til å fastsette.
         </BodyLong>
-        <List>
-          <ListItem>Alder på hvert barn</ListItem>
-          <ListItem>Tid barna tilbringer hos deg</ListItem>
-          <ListItem>Inntekten til både deg og den andre forelderen</ListItem>
-        </List>
         <BodyLong spacing>
-          Vær oppmerksom på at dette er en forenklet beregning. Det endelige
-          bidraget kan variere basert på flere faktorer og bør avtales mellom
-          foreldrene eller fastsettes av Nav.
+          Denne kalkulatoren hjelper deg å regne ut hva du skal betale eller
+          motta i barnebidrag. Du fyller inn noen få opplysninger, og får et
+          forenklet forslag til barnebidrag.
+        </BodyLong>
+        <BodyLong>
+          Forslaget er basert på noen få opplysninger, som gjør det enkelt å få
+          en omtrentlig sum. Om du ønsker en mer presis kalkulering, kan du
+          bruke den{" "}
+          <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
+            gamle bidragskalkulatoren
+          </Link>{" "}
+          for å legge inn flere opplysninger og få en riktigere sum.
         </BodyLong>
       </GuidePanel>
 
@@ -221,7 +224,7 @@ export default function Barnebidragskalkulator() {
               step={1}
               list={[
                 { label: "Ingen netter hos deg", value: 0 },
-                { label: "Halvparten av tiden", value: 15 },
+                { label: "Halvparten av tiden hos deg", value: 15 },
                 { label: "Alle netter hos deg", value: 30 },
               ]}
               valueDescription={lagSamværsgradbeskrivelse(
@@ -265,7 +268,7 @@ export default function Barnebidragskalkulator() {
           />
         </div>
         <Button type="submit" loading={form.formState.isSubmitting}>
-          Beregn barnebidrag
+          Beregn barnebidraget
         </Button>
       </form>
       {isValidationErrorResponse(actionData) && (
@@ -292,17 +295,28 @@ export default function Barnebidragskalkulator() {
         <div className="mt-6" ref={resultatRef}>
           <Alert variant="info">
             <Heading size="small" spacing>
-              Du skal {totalSum && totalSum > 0 ? "motta" : "betale"} {totalSum}{" "}
-              kroner i barnebidrag per måned.
+              Bidraget er {formatterSum(totalSum)} i måneden.
             </Heading>
+            {totalSum === 0 && (
+              <BodyLong spacing>
+                Dette betyr at du ikke skal betale noe i barnebidrag. Det kan
+                være fordi dere har delt samvær likt mellom dere, ofte i
+                kombinasjon at differansen mellom inntektene deres er lav.
+              </BodyLong>
+            )}
             <BodyLong spacing>
-              Dette er en estimering og kan variere basert på flere faktorer,
-              som vi for enkelhets skyld har utelatt i denne kalkulatoren. Om du
-              ønsker en mer presis kalkulering, kan du bruke{" "}
+              For å gjøre det enkelt å komme frem til en omtrentlig sum, er
+              kalkuleringen basert på få opplysninger. Det er mange andre
+              faktorer som kan påvirke hva man har rett eller plikt til. Du kan
+              bruke den{" "}
               <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
-                en annen bidragskalkulator
-              </Link>
-              .
+                gamle bidragskalkulatoren
+              </Link>{" "}
+              for å legge inn flere opplysninger og få en riktigere sum.
+            </BodyLong>
+            <BodyLong spacing>
+              Barnebidraget avtaler du med den andre forelderen eller søker Nav
+              om hjelp til å fastsette.
             </BodyLong>
             <div className="flex justify-end gap-4">
               <Button
@@ -331,7 +345,8 @@ type Samværsklasse =
   | "SAMVÆRSKLASSE_1"
   | "SAMVÆRSKLASSE_2"
   | "SAMVÆRSKLASSE_3"
-  | "SAMVÆRSKLASSE_4";
+  | "SAMVÆRSKLASSE_4"
+  | "DELT_BOSTED";
 
 function kalkulerSamværsklasse(samværsgrad: number): Samværsklasse {
   if (samværsgrad <= 3 || samværsgrad >= 27) {
@@ -343,7 +358,10 @@ function kalkulerSamværsklasse(samværsgrad: number): Samværsklasse {
   if (samværsgrad <= 13 || samværsgrad >= 17) {
     return "SAMVÆRSKLASSE_3";
   }
-  return "SAMVÆRSKLASSE_4"; // TODO: Nå returnerer vi ikke delt bosted
+  if (samværsgrad === 15) {
+    return "DELT_BOSTED";
+  }
+  return "SAMVÆRSKLASSE_4";
 }
 
 function lagSamværsgradbeskrivelse(samværsgrad: number): string {
