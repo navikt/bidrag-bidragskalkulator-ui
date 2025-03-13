@@ -19,7 +19,7 @@ jobs:
           persist-credentials: false
       - name: Build and push docker image to GAR
         uses: nais/docker-build-push@main
-        id: docker-push
+        id: docker-push-dev
         with:
           team: bidrag
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
@@ -29,9 +29,9 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
-          IMAGE: ${{ steps.docker-push.outputs.image }}
+          IMAGE: ${{ steps.docker-push-dev.outputs.image }}
           RESOURCE: .nais/naiserator.yml
-          VARS: dev.json
+          VARS: .nais/dev.json
   deploy-prod:
     name: Deploy to prod
     needs: [deploy-dev]
@@ -46,7 +46,7 @@ jobs:
           persist-credentials: false
       - name: Build and push docker image to GAR
         uses: nais/docker-build-push@main
-        id: docker-push
+        id: docker-push-prod
         with:
           team: bidrag
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
@@ -56,6 +56,6 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: prod-gcp
-          IMAGE: ${{ steps.docker-push.outputs.image }}
+          IMAGE: ${{ steps.docker-push-prod.outputs.image }}
           RESOURCE: .nais/naiserator.yml
-          VARS: prod.json
+          VARS: .nais/prod.json
