@@ -31,7 +31,7 @@ jobs:
           CLUSTER: dev-gcp
           IMAGE: ${{ steps.docker-push.outputs.image }}
           RESOURCE: .nais/naiserator.yml
-          VARS: .nais/dev.json
+          VARS: dev.json
   deploy-prod:
     name: Deploy to prod
     needs: [deploy-dev]
@@ -58,4 +58,4 @@ jobs:
           CLUSTER: prod-gcp
           IMAGE: ${{ steps.docker-push.outputs.image }}
           RESOURCE: .nais/naiserator.yml
-          VARS: .nais/prod.json
+          VARS: prod.json
