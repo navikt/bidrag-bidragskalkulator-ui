@@ -19,6 +19,8 @@ import { useActionData, type ActionFunctionArgs } from "react-router";
 import { z } from "zod";
 import { Slider } from "~/components/ui/slider";
 import { env } from "~/config/env.server";
+import { useDebounceCallback } from "~/hooks/useDebounceCallback";
+import { sporHendelse } from "~/utils/analytics";
 import { formatterSum } from "~/utils/tall";
 import type { Route } from "./+types/home";
 
@@ -158,6 +160,18 @@ export default function Barnebidragskalkulator() {
     },
     onSubmitSuccess: () => {
       resultatRef.current?.scrollIntoView({ behavior: "smooth" });
+      sporHendelse("skjema fullført");
+    },
+    onInvalidSubmit: () => {
+      sporHendelse("skjema validering feilet", {
+        førsteFeil:
+          document.activeElement instanceof HTMLInputElement
+            ? document.activeElement.name
+            : null,
+      });
+    },
+    onSubmitFailure: (error) => {
+      sporHendelse("skjema innsending feilet", { feil: String(error) });
     },
   });
   const barnFields = useFieldArray(form.scope("barn"));
@@ -167,6 +181,12 @@ export default function Barnebidragskalkulator() {
     actionData && "resultater" in actionData
       ? actionData.resultater.reduce((sum, neste) => sum + neste.sum, 0)
       : undefined;
+
+  const sporSamværsgrad = useDebounceCallback((value: string) => {
+    sporHendelse("samværsgrad justert", {
+      samværsgrad: value,
+    });
+  }, 4000);
 
   return (
     <div className="max-w-xl mx-auto p-4 mt-8">
@@ -217,6 +237,10 @@ export default function Barnebidragskalkulator() {
 
             <Slider
               {...item.field("samværsgrad").getControlProps()}
+              onChange={(value) => {
+                item.field("samværsgrad").onChange(value);
+                sporSamværsgrad(value);
+              }}
               label="Hvor mye vil barnet bo sammen med deg?"
               description="Estimér hvor mange netter barnet vil bo sammen med deg i snitt per måned"
               min={0}
