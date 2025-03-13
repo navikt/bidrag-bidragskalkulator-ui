@@ -4,6 +4,7 @@ import {
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 import parse from "html-react-parser";
 import {
+  data,
   isRouteErrorResponse,
   Links,
   Meta,
@@ -55,18 +56,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export async function loader() {
-  const decoratorFragments = await fetchDecoratorHtml({
-    env: env.ENVIRONMENT,
-    params: { language: "nb", context: "privatperson" },
-  });
+  const [decoratorFragments, cspHeader] = await Promise.all([
+    fetchDecoratorHtml({
+      env: env.ENVIRONMENT,
+      params: { language: "nb", context: "privatperson" },
+    }),
+    buildCspHeader({}, { env: env.ENVIRONMENT }),
+  ]);
 
-  return {
-    decoratorFragments,
-  };
-}
-
-export async function headers() {
-  return buildCspHeader({}, { env: env.ENVIRONMENT });
+  return data(
+    {
+      decoratorFragments,
+    },
+    {
+      headers: {
+        "Content-Security-Policy": cspHeader,
+      },
+    }
+  );
 }
 
 export default function App() {
