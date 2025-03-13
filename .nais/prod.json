@@ -1,4 +1,5 @@
 {
   "SERVER_URL": "http://bidrag-bidragskalkulator-api",
+  "BASE_PATH": "/barnebidragskalkulator",
   "ingress": "https://www.nav.no/barnebidragskalkulator"
 }
