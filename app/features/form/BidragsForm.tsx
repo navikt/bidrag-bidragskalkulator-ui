@@ -2,11 +2,14 @@ import { Button } from "@navikt/ds-react";
 import { useFieldArray, useForm } from "@rvf/react-router";
 import { useRef } from "react";
 import { sporHendelse } from "~/utils/analytics";
+import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { BarnForm } from "./BarnForm";
 import { FormattertTallTextField } from "./FormattertTallTextField";
-import { validator } from "./validator";
+import { getValidatorWithLanguage } from "./validator";
 
 export function BidragsForm() {
+  const { t, språk } = useOversettelse();
+  const validator = getValidatorWithLanguage(språk);
   const form = useForm({
     validator,
     submitSource: "state",
@@ -54,27 +57,50 @@ export function BidragsForm() {
         size="small"
         onClick={() => barnFields.push({ alder: "", samværsgrad: "15" })}
       >
-        Legg til barn
+        {t(tekster.leggTilBarn)}
       </Button>
 
       <div className="flex flex-col gap-4">
         <FormattertTallTextField
           {...form.field("inntektForelder1").getControlProps()}
-          label="Hva er inntekten din?"
+          label={t(tekster.hvaErInntektenDin)}
           error={form.field("inntektForelder1").error()}
           className="max-w-sm"
         />
         <FormattertTallTextField
           {...form.field("inntektForelder2").getControlProps()}
-          label="Hva er inntekten til den andre forelderen?"
+          label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
           error={form.field("inntektForelder2").error()}
           className="max-w-sm"
         />
       </div>
 
       <Button type="submit" loading={form.formState.isSubmitting}>
-        Beregn barnebidraget
+        {t(tekster.beregnBarnebidraget)}
       </Button>
     </form>
   );
 }
+
+const tekster = definerTekster({
+  leggTilBarn: {
+    nb: "Legg til barn",
+    en: "Add child",
+    nn: "Legg til barn",
+  },
+  hvaErInntektenDin: {
+    nb: "Hva er inntekten din?",
+    en: "What is your income?",
+    nn: "Kva er inntekta di?",
+  },
+  hvaErInntektenTilDenAndreForelderen: {
+    nb: "Hva er inntekten til den andre forelderen?",
+    en: "What is the other parent's income?",
+    nn: "Kva er inntekta til den andre forelderen?",
+  },
+  beregnBarnebidraget: {
+    nb: "Beregn barnebidraget",
+    en: "Calculate child support",
+    nn: "Beregn fostringstilskotet",
+  },
+});

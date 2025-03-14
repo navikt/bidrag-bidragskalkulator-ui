@@ -1,32 +1,42 @@
 import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import { isValidationErrorResponse } from "@rvf/react-router";
 import { useRef } from "react";
-import type { ActionFunctionArgs } from "react-router";
+import type { ActionFunctionArgs, MetaArgs } from "react-router";
 import { useActionData } from "react-router";
 import { handleFormSubmission } from "~/features/form/api.server";
 import { BidragsForm } from "~/features/form/BidragsForm";
 import { IntroPanel } from "~/features/form/IntroPanel";
 import { ResultDisplay } from "~/features/form/ResultDisplay";
 import type { FormResponse } from "~/features/form/validator";
+import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
-export function meta() {
+export function meta({ matches }: MetaArgs) {
+  const rootData = matches.find((match) => match.pathname === "/")?.data as {
+    språk: Språk;
+  };
+
+  const språk = rootData?.språk ?? Språk.NorwegianBokmål;
+
   return [
-    { title: "Barnebidragskalkulator" },
+    { title: oversett(språk, tekster.meta.tittel) },
     {
       name: "description",
-      content:
-        "Barnebidragskalkulatoren hjelper deg å regne ut hvor stort et barnebidrag er.",
+      content: oversett(språk, tekster.meta.beskrivelse),
     },
   ];
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  return handleFormSubmission(await request.formData());
+  return handleFormSubmission(
+    await request.formData(),
+    request.headers.get("Cookie")
+  );
 }
 
 export default function Barnebidragskalkulator() {
   const actionData = useActionData<typeof action>();
   const resultatRef = useRef<HTMLDivElement>(null);
+  const { t } = useOversettelse();
 
   const getResultData = () => {
     if (!actionData || isValidationErrorResponse(actionData)) {
@@ -39,7 +49,7 @@ export default function Barnebidragskalkulator() {
   return (
     <div className="max-w-xl mx-auto p-4 mt-8">
       <Heading size="xlarge" level="1" spacing align="center">
-        Barnebidragskalkulator
+        {t(tekster.overskrift)}
       </Heading>
 
       <IntroPanel />
@@ -58,3 +68,23 @@ export default function Barnebidragskalkulator() {
     </div>
   );
 }
+
+const tekster = definerTekster({
+  meta: {
+    tittel: {
+      nb: "Barnebidragskalkulator",
+      en: "Child support calculator",
+      nn: "Fostringstilskotkalkulator",
+    },
+    beskrivelse: {
+      nb: "Barnebidragskalkulatoren hjelper deg å regne ut hvor stort et barnebidrag er.",
+      en: "The child support calculator helps you calculate how much child support you are entitled to.",
+      nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut hvor stort eit fostringstilskot er.",
+    },
+  },
+  overskrift: {
+    nb: "Barnebidragskalkulator",
+    en: "Child support calculator",
+    nn: "Fostringstilskotskalkulator",
+  },
+});

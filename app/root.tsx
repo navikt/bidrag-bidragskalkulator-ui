@@ -16,7 +16,6 @@ import {
 } from "react-router";
 
 import { Page } from "@navikt/ds-react";
-import { setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { env } from "./config/env.server";
@@ -27,12 +26,6 @@ import { hentSpråkFraCookie, OversettelseProvider, Språk } from "./utils/i18n"
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { decoratorFragments, språk } = useLoaderData<typeof loader>();
-  setAvailableLanguages(
-    Object.values(Språk).map((språk) => ({
-      locale: språk,
-      handleInApp: true,
-    }))
-  );
 
   useInjectDecoratorScript(decoratorFragments.DECORATOR_SCRIPTS);
 
@@ -71,7 +64,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const [decoratorFragments, cspHeader] = await Promise.all([
     fetchDecoratorHtml({
       env: env.ENVIRONMENT,
-      params: { language: språk, context: "privatperson" },
+      params: {
+        language: språk,
+        context: "privatperson",
+        availableLanguages: Object.values(Språk).map((språk) => ({
+          locale: språk,
+          handleInApp: true,
+        })),
+      },
     }),
     buildCspHeader({}, { env: env.ENVIRONMENT }),
   ]);

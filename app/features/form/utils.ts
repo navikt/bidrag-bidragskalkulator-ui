@@ -25,16 +25,6 @@ export function kalkulerSamværsklasse(samværsgrad: number): Samværsklasse {
 }
 
 /**
- * Genererer en tekstlig beskrivelse av samværsgraden
- */
-export function lagSamværsgradbeskrivelse(samværsgrad: number): string {
-  if (samværsgrad === 1) {
-    return "1 natt";
-  }
-  return `${samværsgrad} netter`;
-}
-
-/**
  * Avgjør om forelderen er mottaker eller pliktig basert på samværsgrad
  */
 export function kalkulerBidragstype(

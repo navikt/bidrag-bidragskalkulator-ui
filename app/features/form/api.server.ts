@@ -1,9 +1,30 @@
 import { validationError } from "@rvf/react-router";
 import { env } from "~/config/env.server";
+import { definerTekster, hentSpråkFraCookie, oversett } from "~/utils/i18n";
 import { kalkulerBidragstype, kalkulerSamværsklasse } from "./utils";
-import { responseSchema, validator } from "./validator";
+import { getValidatorWithLanguage, responseSchema } from "./validator";
 
-export async function handleFormSubmission(formData: FormData) {
+const apiTekster = definerTekster({
+  feil: {
+    beregning: {
+      nb: "Det oppstod en feil under beregningen. Vennligst prøv igjen.",
+      en: "An error occurred during calculation. Please try again.",
+      nn: "Det oppstod ein feil under utrekninga. Ver venleg og prøv igjen.",
+    },
+    ugyldigSvar: {
+      nb: "Vi mottok et ugyldig svar fra beregningsmotoren. Vennligst prøv igjen.",
+      en: "We received an invalid response from the calculation engine. Please try again.",
+      nn: "Vi mottok eit ugyldig svar frå utrekningsmotoren. Ver venleg og prøv igjen.",
+    },
+  },
+});
+
+export async function handleFormSubmission(
+  formData: FormData,
+  cookieHeader?: string | null
+) {
+  const språk = hentSpråkFraCookie(cookieHeader || null);
+  const validator = getValidatorWithLanguage(språk);
   const result = await validator.validate(formData);
 
   if (result.error) {
@@ -37,7 +58,7 @@ export async function handleFormSubmission(formData: FormData) {
 
     if (!response.ok) {
       return {
-        error: "Det oppstod en feil under beregningen. Vennligst prøv igjen.",
+        error: oversett(språk, apiTekster.feil.beregning),
       };
     }
     const json = await response.json();
@@ -45,8 +66,7 @@ export async function handleFormSubmission(formData: FormData) {
 
     if (!parsed.success) {
       return {
-        error:
-          "Vi mottok et ugyldig svar fra beregningsmotoren. Vennligst prøv igjen.",
+        error: oversett(språk, apiTekster.feil.ugyldigSvar),
       };
     }
 
@@ -54,7 +74,7 @@ export async function handleFormSubmission(formData: FormData) {
   } catch (error) {
     console.error(error);
     return {
-      error: "Det oppstod en feil under beregningen. Vennligst prøv igjen.",
+      error: oversett(språk, apiTekster.feil.beregning),
     };
   }
 }
