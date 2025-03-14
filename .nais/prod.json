@@ -1,6 +1,5 @@
 {
   "SERVER_URL": "http://bidrag-bidragskalkulator-api",
-  "BASE_PATH": "/barnebidragskalkulator",
   "ENVIRONMENT": "prod",
-  "ingress": "https://www.nav.no/barnebidragskalkulator"
+  "ingress": "https://barnebidragskalkulator.nav.no"
 }
