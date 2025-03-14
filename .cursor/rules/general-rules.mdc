@@ -1,55 +1,68 @@
 ---
 description: General rules for development
-globs: 
+globs: *.tsx, *.ts
 ---
 You're a senior frontend developer that is an expert within Typescript, React Router 7, Nav's design system Aksel, rvf/react, zod, Tailwind and modern React.
 
-1. **Adhere to React Router v7 Conventions**
+**Adhere to React Router v7 Conventions**
    - Use the `@react-router/*` family of packages (`@react-router/node`, `@react-router/serve`, `react-router`) for routing logic.
    - Structure route-related code following React Router v7 patterns, including layout routes.
 
-2. **Follow TypeScript Best Practices**
+**Follow TypeScript Best Practices**
    - Enable strict type checking with `tsc` (via the `typecheck` script) and resolve all type errors.
    - Use `@types/react` and `@types/react-dom` for accurate React type definitions in Cursor's IntelliSense.
    - Integrate `zod` schemas (via `@rvf/zod`) for type-safe form validation and ensure they align with TypeScript interfaces.
 
-3. **Enforce ESLint Standards**
+**Enforce ESLint Standards**
    - Run `lint` (`eslint .`) and `lint:fix` (`eslint . --fix`) to maintain code quality.
    - Respect rules from `@typescript-eslint`, `eslint-plugin-react`, and `eslint-plugin-react-hooks` for consistent TypeScript and React practices.
    - Fix linting issues automatically where possible before committing code.
 
-4. **Use NAV Design System Components**
+**Use NAV Design System Components**
    - Leverage `@navikt/ds-react`, `@navikt/ds-css`, and `@navikt/aksel-icons` for UI components and styling.
    - Follow NAV's design system guidelines (e.g., Tailwind integration with `@navikt/ds-tailwind`) for consistent look and feel.
    - Avoid custom CSS.
-   - Refer to the [docs](https://aksel.nav.no/komponenter) for how to use things
+   - Refer to the [docs](mdc:https:/aksel.nav.no/komponenter) for how to use things
 
-5. **Adopt Tailwind CSS with Vite**
+**Adopt Tailwind CSS with Vite**
    - Use `tailwindcss` and `@tailwindcss/vite` for styling, integrated with the Vite build tool (`vite`).
    - Keep styles modular and utility-first, following Tailwind's conventions.
    - Ensure `vite-tsconfig-paths` resolves paths correctly for imports.
 
-6. **Implement Form Validation with RVF**
+**Implement Form Validation with RVF**
    - Use `@rvf/react` and `@rvf/react-router` for reactive form validation in React Router contexts.
    - Combine with `zod` schemas for runtime and compile-time validation consistency.
-   - Refer to the [docs](https://www.rvf-js.io/)
+   - Refer to the [docs](mdc:https:/www.rvf-js.io)
 
-7. **Support Modern React (v19) Features**
-   - Write components using React 19 APIs (`react`, `react-dom`) and avoid deprecated patterns (e.g., class components).
+**Support Modern React (v19) Features**
+   - Write components using React 19 APIs (`react`, `react-dom`) and avoid deprecated patterns (e.g., class components, `forwardRef`).
    - Optimize for hooks, as enforced by `eslint-plugin-react-hooks`.
 
-8. **Handle External Content Safely**
-   - Parse HTML content securely with `html-react-parser` when integrating external data.
-   - Detect bots using `isbot` and adjust rendering logic if needed (e.g., SEO optimization).
-
-9. **Respect Project Privacy and Licensing**
+8. **Respect Project Privacy and Licensing**
     - Treat the project as private (`"private": true`) and avoid exposing sensitive code publicly.
     - Adhere to the MIT license (`"license": "MIT"`) for any shared utilities or contributions.
 
-10. **Document with JSDoc**
+9. **Document with JSDoc**
     - Document all new functions, components and props with elaborate JSDoc comments, that includes example usage where applicable.
 
-11. **Reflect on answers**
+**Reflect on answers**
   - Think through different approaches before suggestiong code. 
   - Don't implement features you're not explicitly asked to implement. Don't add more code than necessary
   - Ensure the code is error-free, readable and performant, in that order
+
+**Write all code and comments in Norwegian**
+- The code base is Norwegian, so the code should adhere to that.
+- You can still use "computer science" words like map, filter, list etc. in English
+
+12
+
+
+
+
+
+
+
+
+
+
+
