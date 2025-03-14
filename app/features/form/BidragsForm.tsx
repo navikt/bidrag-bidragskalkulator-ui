@@ -1,13 +1,15 @@
-import { Button, TextField } from "@navikt/ds-react";
+import { Button } from "@navikt/ds-react";
 import { useFieldArray, useForm } from "@rvf/react-router";
 import { useRef } from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { BarnForm } from "./BarnForm";
+import { FormattertTallTextField } from "./FormattertTallTextField";
 import { validator } from "./validator";
 
 export function BidragsForm() {
   const form = useForm({
     validator,
+    submitSource: "state",
     method: "post",
     defaultValues: {
       barn: [{ alder: "", samværsgrad: "15" }],
@@ -56,17 +58,15 @@ export function BidragsForm() {
       </Button>
 
       <div className="flex flex-col gap-4">
-        <TextField
-          {...form.field("inntektForelder1").getInputProps()}
+        <FormattertTallTextField
+          {...form.field("inntektForelder1").getControlProps()}
           label="Hva er inntekten din?"
-          type="number"
           error={form.field("inntektForelder1").error()}
           className="max-w-sm"
         />
-        <TextField
-          {...form.field("inntektForelder2").getInputProps()}
+        <FormattertTallTextField
+          {...form.field("inntektForelder2").getControlProps()}
           label="Hva er inntekten til den andre forelderen?"
-          type="number"
           error={form.field("inntektForelder2").error()}
           className="max-w-sm"
         />

@@ -1,8 +1,9 @@
-import { Button, Heading, TextField } from "@navikt/ds-react";
+import { Button, Heading } from "@navikt/ds-react";
 import type { FormApi } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { useDebounceCallback } from "~/hooks/useDebounceCallback";
 import { sporHendelse } from "~/utils/analytics";
+import { FormattertTallTextField } from "./FormattertTallTextField";
 import { lagSamværsgradbeskrivelse } from "./utils";
 
 type BarnFormProps = {
@@ -27,10 +28,9 @@ export function BarnForm({ item, index, canRemove, onRemove }: BarnFormProps) {
         </Heading>
       )}
       <div className="flex gap-4">
-        <TextField
-          {...item.field("alder").getInputProps()}
+        <FormattertTallTextField
+          {...item.field("alder").getControlProps()}
           label="Barnets alder"
-          type="number"
           error={item.field("alder").error()}
         />
       </div>
