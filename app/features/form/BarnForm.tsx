@@ -1,11 +1,12 @@
 import { Button, Heading, TextField } from "@navikt/ds-react";
+import type { FormApi } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { useDebounceCallback } from "~/hooks/useDebounceCallback";
 import { sporHendelse } from "~/utils/analytics";
 import { lagSamværsgradbeskrivelse } from "./utils";
 
 type BarnFormProps = {
-  item: any; // Using any here as we don't have the full FieldArrayItem type
+  item: FormApi<{ alder: string; samværsgrad: string }>;
   index: number;
   canRemove: boolean;
   onRemove: () => void;
