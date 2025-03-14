@@ -115,7 +115,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   if (isRouteErrorResponse(error)) {
     return <NotFound />;
-  } else if (import.meta.env.DEV && error && error instanceof Error) {
+  } else if (env.ENVIRONMENT === "dev" && error && error instanceof Error) {
     stack = error.stack;
   }
 
