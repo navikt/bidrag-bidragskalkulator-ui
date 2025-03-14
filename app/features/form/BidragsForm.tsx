@@ -5,11 +5,11 @@ import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { BarnForm } from "./BarnForm";
 import { FormattertTallTextField } from "./FormattertTallTextField";
-import { getValidatorWithLanguage } from "./validator";
+import { lagValidatorMedSpråk } from "./validator";
 
 export function BidragsForm() {
   const { t, språk } = useOversettelse();
-  const validator = getValidatorWithLanguage(språk);
+  const validator = lagValidatorMedSpråk(språk);
   const form = useForm({
     validator,
     submitSource: "state",

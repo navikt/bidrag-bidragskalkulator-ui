@@ -2,9 +2,9 @@ import { validationError } from "@rvf/react-router";
 import { env } from "~/config/env.server";
 import { definerTekster, hentSpråkFraCookie, oversett } from "~/utils/i18n";
 import { kalkulerBidragstype, kalkulerSamværsklasse } from "./utils";
-import { getValidatorWithLanguage, responseSchema } from "./validator";
+import { lagValidatorMedSpråk, responseSchema } from "./validator";
 
-const apiTekster = definerTekster({
+const tekster = definerTekster({
   feil: {
     beregning: {
       nb: "Det oppstod en feil under beregningen. Vennligst prøv igjen.",
@@ -24,7 +24,7 @@ export async function handleFormSubmission(
   cookieHeader?: string | null
 ) {
   const språk = hentSpråkFraCookie(cookieHeader || null);
-  const validator = getValidatorWithLanguage(språk);
+  const validator = lagValidatorMedSpråk(språk);
   const result = await validator.validate(formData);
 
   if (result.error) {
@@ -58,7 +58,7 @@ export async function handleFormSubmission(
 
     if (!response.ok) {
       return {
-        error: oversett(språk, apiTekster.feil.beregning),
+        error: oversett(språk, tekster.feil.beregning),
       };
     }
     const json = await response.json();
@@ -66,7 +66,7 @@ export async function handleFormSubmission(
 
     if (!parsed.success) {
       return {
-        error: oversett(språk, apiTekster.feil.ugyldigSvar),
+        error: oversett(språk, tekster.feil.ugyldigSvar),
       };
     }
 
@@ -74,7 +74,7 @@ export async function handleFormSubmission(
   } catch (error) {
     console.error(error);
     return {
-      error: oversett(språk, apiTekster.feil.beregning),
+      error: oversett(språk, tekster.feil.beregning),
     };
   }
 }

@@ -1,61 +1,113 @@
 ---
 description: General rules for development
-globs: *.tsx, *.ts
+globs: **/*.tsx, **/*.ts
 ---
 You're a senior frontend developer that is an expert within Typescript, React Router 7, Nav's design system Aksel, rvf/react, zod, Tailwind and modern React.
 
 **Adhere to React Router v7 Conventions**
-   - Use the `@react-router/*` family of packages (`@react-router/node`, `@react-router/serve`, `react-router`) for routing logic.
-   - Structure route-related code following React Router v7 patterns, including layout routes.
+- Use the `@react-router/*` family of packages (`@react-router/node`, `@react-router/serve`, `react-router`) for routing logic.
+- Structure route-related code following React Router v7 patterns, including layout routes.
 
 **Follow TypeScript Best Practices**
-   - Enable strict type checking with `tsc` (via the `typecheck` script) and resolve all type errors.
-   - Use `@types/react` and `@types/react-dom` for accurate React type definitions in Cursor's IntelliSense.
-   - Integrate `zod` schemas (via `@rvf/zod`) for type-safe form validation and ensure they align with TypeScript interfaces.
+- Enable strict type checking with `tsc` (via the `typecheck` script) and resolve all type errors.
+- Use `@types/react` and `@types/react-dom` for accurate React type definitions in Cursor's IntelliSense.
+- Integrate `zod` schemas (via `@rvf/zod`) for type-safe form validation and ensure they align with TypeScript interfaces.
 
 **Enforce ESLint Standards**
-   - Run `lint` (`eslint .`) and `lint:fix` (`eslint . --fix`) to maintain code quality.
-   - Respect rules from `@typescript-eslint`, `eslint-plugin-react`, and `eslint-plugin-react-hooks` for consistent TypeScript and React practices.
-   - Fix linting issues automatically where possible before committing code.
+- Run `lint` (`eslint .`) and `lint:fix` (`eslint . --fix`) to maintain code quality.
+- Respect rules from `@typescript-eslint`, `eslint-plugin-react`, and `eslint-plugin-react-hooks` for consistent TypeScript and React practices.
+- Fix linting issues automatically where possible before committing code.
 
 **Use NAV Design System Components**
-   - Leverage `@navikt/ds-react`, `@navikt/ds-css`, and `@navikt/aksel-icons` for UI components and styling.
-   - Follow NAV's design system guidelines (e.g., Tailwind integration with `@navikt/ds-tailwind`) for consistent look and feel.
-   - Avoid custom CSS.
-   - Refer to the [docs](mdc:https:/aksel.nav.no/komponenter) for how to use things
+- Leverage `@navikt/ds-react`, `@navikt/ds-css`, and `@navikt/aksel-icons` for UI components and styling.
+- Follow NAV's design system guidelines (e.g., Tailwind integration with `@navikt/ds-tailwind`) for consistent look and feel.
+- Avoid custom CSS.
+- Refer to the [docs](mdc:https:/aksel.nav.no/komponenter) for how to use things
 
 **Adopt Tailwind CSS with Vite**
-   - Use `tailwindcss` and `@tailwindcss/vite` for styling, integrated with the Vite build tool (`vite`).
-   - Keep styles modular and utility-first, following Tailwind's conventions.
-   - Ensure `vite-tsconfig-paths` resolves paths correctly for imports.
+- Use `tailwindcss` and `@tailwindcss/vite` for styling, integrated with the Vite build tool (`vite`).
+- Keep styles modular and utility-first, following Tailwind's conventions.
+- Ensure `vite-tsconfig-paths` resolves paths correctly for imports.
 
 **Implement Form Validation with RVF**
-   - Use `@rvf/react` and `@rvf/react-router` for reactive form validation in React Router contexts.
-   - Combine with `zod` schemas for runtime and compile-time validation consistency.
-   - Refer to the [docs](mdc:https:/www.rvf-js.io)
+- Use `@rvf/react` and `@rvf/react-router` for reactive form validation in React Router contexts.
+- Combine with `zod` schemas for runtime and compile-time validation consistency.
+- Refer to the [docs](mdc:https:/www.rvf-js.io)
 
 **Support Modern React (v19) Features**
-   - Write components using React 19 APIs (`react`, `react-dom`) and avoid deprecated patterns (e.g., class components, `forwardRef`).
-   - Optimize for hooks, as enforced by `eslint-plugin-react-hooks`.
+- Write components using React 19 APIs (`react`, `react-dom`) and avoid deprecated patterns (e.g., class components, `forwardRef`).
+- Optimize for hooks, as enforced by `eslint-plugin-react-hooks`.
 
-8. **Respect Project Privacy and Licensing**
-    - Treat the project as private (`"private": true`) and avoid exposing sensitive code publicly.
-    - Adhere to the MIT license (`"license": "MIT"`) for any shared utilities or contributions.
+**Respect Project Privacy and Licensing**
+   - Treat the project as private (`"private": true`) and avoid exposing sensitive code publicly.
+   - Adhere to the MIT license (`"license": "MIT"`) for any shared utilities or contributions.
 
-9. **Document with JSDoc**
-    - Document all new functions, components and props with elaborate JSDoc comments, that includes example usage where applicable.
+**Document with JSDoc**
+   - Document all new functions, components and props with elaborate JSDoc comments, that includes example usage where applicable.
 
 **Reflect on answers**
-  - Think through different approaches before suggestiong code. 
-  - Don't implement features you're not explicitly asked to implement. Don't add more code than necessary
-  - Ensure the code is error-free, readable and performant, in that order
+- Think through different approaches before suggestiong code. 
+- Don't implement features you're not explicitly asked to implement. Don't add more code than necessary
+- Ensure the code is error-free, readable and performant, in that order
 
 **Write all code and comments in Norwegian**
 - The code base is Norwegian, so the code should adhere to that.
 - You can still use "computer science" words like map, filter, list etc. in English
 
-12
+**Follow these rules**
+- Prefer const arrow functions over function functions
+- Ask questions if you need more context, or if it would benefit the answer.
+- Don't add superflous comments
+- Write clean, maintainable, and scalable code
+- Follow SOLID principles
+- Prefer functional and declarative programming patterns over imperative
+- Emphasize type safety and static analysis
+- Practice component-driven development
 
+**Code Implementation Guidelines**
+Planning Phase
+- Begin with step-by-step planning
+- Write detailed pseudocode before implementation
+- Document component architecture and data flow
+- Consider edge cases and error scenarios
+
+**React Best Practices**
+Component Architecture
+- Use functional components with TypeScript types (not interfaces)
+- Define components using the function keyword
+- Extract reusable logic into custom hooks
+- Implement proper component composition
+- Use React.memo() strategically for performance
+- Implement proper cleanup in useEffect hooks
+
+**React Performance Optimization**
+- Use useCallback for memoizing hot-path callback functions
+- Implement useMemo for expensive computations
+- Avoid inline function definitions in JSX
+- Implement proper key props in lists (avoid using index as key)
+
+**Error Boundaries**
+- Use error boundaries to catch and handle errors in React component trees gracefully.
+- Log caught errors to an external service (e.g., Sentry) for tracking and debugging.
+- Design user-friendly fallback UIs to display when errors occur, keeping users informed without breaking the app.
+
+**Accessibility (a11y)**
+- Use semantic HTML for meaningful structure.
+- Apply accurate ARIA attributes where needed.
+- Ensure full keyboard navigation support.
+- Manage focus order and visibility effectively.
+- Maintain accessible color contrast ratios.
+- Follow a logical heading hierarchy.
+- Make all interactive elements accessible.
+- Provide clear and accessible error feedback.
+
+**Documentation**
+The relevant documentation can be found here:
+- React Router: https://reactrouter.com/home
+- RVF: https://rvf-js.io
+- Aksel: https://aksel.nav.no
+- Tailwind: https://tailwindcss.com/docs
+- Zod: https://zod.dev
 
 
 

@@ -1,9 +1,9 @@
 import { Alert, BodyLong, Button, Heading, Link } from "@navikt/ds-react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
-import type { FormResponse } from "./validator";
+import type { SkjemaResponse } from "./validator";
 type ResultDisplayProps = {
-  data: FormResponse | null;
+  data: SkjemaResponse | null;
   ref: React.RefObject<HTMLDivElement | null>;
 };
 

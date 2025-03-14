@@ -2,8 +2,7 @@ import { withZod } from "@rvf/zod";
 import { z } from "zod";
 import { definerTekster, oversett, Språk } from "~/utils/i18n";
 
-// Define translations for all validation messages
-const validatorTekster = definerTekster({
+const tekster = definerTekster({
   feilmeldinger: {
     alder: {
       påkrevd: {
@@ -71,98 +70,62 @@ const validatorTekster = definerTekster({
   },
 });
 
-// Function to create zod schema with dynamic translations
-export function createFormSchema(språk: Språk) {
+export function lagSkjemaSchema(språk: Språk) {
   return z.object({
     barn: z
       .array(
         z.object({
           alder: z
             .string()
-            .nonempty(
-              oversett(språk, validatorTekster.feilmeldinger.alder.påkrevd)
-            )
+            .nonempty(oversett(språk, tekster.feilmeldinger.alder.påkrevd))
             .pipe(
               z.coerce
                 .number()
-                .min(
-                  0,
-                  oversett(språk, validatorTekster.feilmeldinger.alder.positivt)
-                )
+                .min(0, oversett(språk, tekster.feilmeldinger.alder.positivt))
                 .step(1, {
-                  message: oversett(
-                    språk,
-                    validatorTekster.feilmeldinger.alder.heleÅr
-                  ),
+                  message: oversett(språk, tekster.feilmeldinger.alder.heleÅr),
                 })
             ),
           samværsgrad: z
             .string()
-            .nonempty(
-              oversett(språk, validatorTekster.feilmeldinger.samvær.påkrevd)
-            )
+            .nonempty(oversett(språk, tekster.feilmeldinger.samvær.påkrevd))
             .pipe(
               z.coerce
                 .number()
-                .min(
-                  0,
-                  oversett(språk, validatorTekster.feilmeldinger.samvær.minimum)
-                )
+                .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
                 .max(
                   100,
-                  oversett(
-                    språk,
-                    validatorTekster.feilmeldinger.samvær.maksimum
-                  )
+                  oversett(språk, tekster.feilmeldinger.samvær.maksimum)
                 )
             ),
         })
       )
-      .min(1, oversett(språk, validatorTekster.feilmeldinger.barn.minimum))
-      .max(10, oversett(språk, validatorTekster.feilmeldinger.barn.maksimum)),
+      .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
+      .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
     inntektForelder1: z
       .string()
-      .nonempty(oversett(språk, validatorTekster.feilmeldinger.inntekt.påkrevd))
+      .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
       .pipe(
         z.coerce
           .number()
-          .min(
-            0,
-            oversett(språk, validatorTekster.feilmeldinger.inntekt.positivt)
-          )
-          .step(
-            1,
-            oversett(språk, validatorTekster.feilmeldinger.inntekt.heleKroner)
-          )
+          .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
+          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner))
       ),
     inntektForelder2: z
       .string()
-      .nonempty(oversett(språk, validatorTekster.feilmeldinger.inntekt.påkrevd))
+      .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
       .pipe(
         z.coerce
           .number()
-          .min(
-            0,
-            oversett(språk, validatorTekster.feilmeldinger.inntekt.positivt)
-          )
-          .step(
-            1,
-            oversett(språk, validatorTekster.feilmeldinger.inntekt.heleKroner)
-          )
+          .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
+          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner))
       ),
   });
 }
 
-// Default schema using Norwegian Bokmål
-const defaultFormSchema = createFormSchema(Språk.NorwegianBokmål);
-
-// Export translator helper for validation
-export function getValidatorWithLanguage(språk: Språk) {
-  return withZod(createFormSchema(språk));
+export function lagValidatorMedSpråk(språk: Språk) {
+  return withZod(lagSkjemaSchema(språk));
 }
-
-// Default validator using Norwegian Bokmål
-export const validator = withZod(defaultFormSchema);
 
 export const responseSchema = z.object({
   resultater: z.array(
@@ -173,5 +136,4 @@ export const responseSchema = z.object({
   ),
 });
 
-export type FormValues = z.infer<typeof defaultFormSchema>;
-export type FormResponse = z.infer<typeof responseSchema> | { error: string };
+export type SkjemaResponse = z.infer<typeof responseSchema> | { error: string };

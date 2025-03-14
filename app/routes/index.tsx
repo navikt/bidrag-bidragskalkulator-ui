@@ -7,7 +7,7 @@ import { handleFormSubmission } from "~/features/form/api.server";
 import { BidragsForm } from "~/features/form/BidragsForm";
 import { IntroPanel } from "~/features/form/IntroPanel";
 import { ResultDisplay } from "~/features/form/ResultDisplay";
-import type { FormResponse } from "~/features/form/validator";
+import type { SkjemaResponse } from "~/features/form/validator";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
 export function meta({ matches }: MetaArgs) {
@@ -43,7 +43,7 @@ export default function Barnebidragskalkulator() {
       return null;
     }
 
-    return actionData as FormResponse;
+    return actionData as SkjemaResponse;
   };
 
   return (
