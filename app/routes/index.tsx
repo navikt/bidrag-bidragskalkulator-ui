@@ -8,9 +8,8 @@ import { BidragsForm } from "~/features/form/BidragsForm";
 import { IntroPanel } from "~/features/form/IntroPanel";
 import { ResultDisplay } from "~/features/form/ResultDisplay";
 import type { FormResponse } from "~/features/form/validator";
-import type { Route } from "./+types/home";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Barnebidragskalkulator" },
     {
