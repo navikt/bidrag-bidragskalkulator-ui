@@ -23,7 +23,7 @@ type OversettelseProviderProps = {
 export const OversettelseProvider = (props: OversettelseProviderProps) => {
   const [interntSpråk, setInterntSpråk] = useState(props.språk);
   onLanguageSelect(({ locale }) => {
-    if (locale in Språk) {
+    if (Object.values(Språk).includes(locale as Språk)) {
       setInterntSpråk(locale as Språk);
     } else {
       setInterntSpråk(Språk.NorwegianBokmål);
@@ -79,6 +79,22 @@ export function useOversettelse() {
     t: (tekst: OversettelseObject) => tekst[språk] as string,
     språk,
   };
+}
+
+/**
+ * Oversetter en tekst til et gitt språk.
+ * 
+ * Skal kun brukes i meta() funksjonen eller andre steder man ikke kan bruke useOversettelse.
+ *
+ * @example
+ * ```tsx
+ * const tekst = { nb: "Hei", en: "Hello", nn: "Hallo" };
+ * const oversettet = oversett(Språk.NorwegianBokmål, tekst);
+ * ```
+ 
+ */
+export function oversett(språk: Språk, tekst: OversettelseObject) {
+  return tekst[språk] as string;
 }
 
 export function hentSpråkFraCookie(cookieHeader: string | null) {
