@@ -1,7 +1,3 @@
-import { getAmplitudeInstance } from "@navikt/nav-dekoratoren-moduler";
-
-const logger = getAmplitudeInstance("barnebidragskalkulator");
-
 type EventType =
   | "skjema validering feilet"
   | "skjema innsending feilet"
@@ -21,9 +17,29 @@ type EventType =
  * @param data Optional data du kan sende med
  * @returns Promise<void>
  */
-export function sporHendelse(event: EventType, data?: Record<string, unknown>) {
+export async function sporHendelse(
+  event: EventType,
+  data?: Record<string, unknown>
+) {
   if (process.env.NODE_ENV === "development") {
     console.info(`[DEV] hendelse sporet: ${event}`, data);
+    return;
   }
-  return logger(event, data);
+
+  return window.umami ? window.umami.track(event, data) : Promise.resolve();
+}
+
+type AnalyticsProps = {
+  umamiWebsiteId: string;
+};
+
+export function Analytics({ umamiWebsiteId }: AnalyticsProps) {
+  return (
+    <script
+      defer
+      src="https://cdn.nav.no/team-researchops/sporing/sporing.js"
+      data-host-url="https://umami.nav.no"
+      data-website-id={umamiWebsiteId}
+    />
+  );
 }
