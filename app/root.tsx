@@ -96,6 +96,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         "Cross-Origin-Embedder-Policy": "credentialless",
         "Cross-Origin-Resource-Policy": "same-origin",
         "X-Permitted-Cross-Domain-Policies": "none",
+        "X-Content-Type-Options": "nosniff",
 
         // Andre headers
         "Cache-Control": "max-age=60, stale-while-revalidate=86400",
