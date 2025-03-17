@@ -1,4 +1,5 @@
-import { Alert, BodyLong, Button, Heading, Link } from "@navikt/ds-react";
+import { Alert, BodyLong, Button, Heading, Link, List } from "@navikt/ds-react";
+import { ListItem } from "@navikt/ds-react/List";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import type { SkjemaResponse } from "./validator";
@@ -37,7 +38,21 @@ export const ResultDisplay = ({ data, ref }: ResultDisplayProps) => {
         {totalSum === 0 && <BodyLong spacing>{t(tekster.nullBidrag)}</BodyLong>}
         <BodyLong spacing>{t(tekster.innhold1)}</BodyLong>
         <BodyLong spacing>{t(tekster.innhold2)}</BodyLong>
+        <List>
+          {data.resultater.map((resultat, index) => (
+            <ListItem key={index}>
+              {t(
+                tekster.underholdskostnadPerBarn(
+                  resultat.barnetsAlder,
+                  resultat.underholdskostnad
+                )
+              )}
+            </ListItem>
+          ))}
+        </List>
         <BodyLong spacing>{t(tekster.innhold3)}</BodyLong>
+        <BodyLong spacing>{t(tekster.innhold4)}</BodyLong>
+        <BodyLong spacing>{t(tekster.innhold5)}</BodyLong>
         <div className="flex justify-end gap-4">
           <Button
             as="a"
@@ -81,11 +96,41 @@ const tekster = definerTekster({
     nn: "Fostringstilskotet avtaler du med den andre forelderen eller søkjer Nav om hjelp til å fastsettje.",
   },
   innhold2: {
+    nb: `Det viktigste grunnlaget for beregningen er hva et barn koster – også kjent som underholdskostnader. Disse summene hentes fra SIFOs referansebudsjetter, og oppdateres hvert år. Kostnaden i deres tilfelle er:`,
+    en: `The most important basis for the calculation is what a child costs – also known as child support costs. These amounts are taken from SIFOs reference budgets and are updated annually. The cost in their case is:`,
+    nn: `Det viktigaste grunnlaget for beregningen er kva eit barn kostar – også kjent som underholdskostnadar. Disse summane hentes frå SIFOs referansebudsjettar, og oppdateres kvart år. Kostnaden i deires tilfelle er:`,
+  },
+  underholdskostnadPerBarn: (alder, kostnad) => ({
+    nb: (
+      <>
+        {alder}-åringen koster{" "}
+        <strong>{formatterSum(kostnad as number)}</strong> kroner i måneden.
+      </>
+    ),
+    en: (
+      <>
+        The {alder}-year-old costs{" "}
+        <strong>{formatterSum(kostnad as number)}</strong> NOK per month.
+      </>
+    ),
+    nn: (
+      <>
+        {alder}-åringen kostar{" "}
+        <strong>{formatterSum(kostnad as number)}</strong> kroner i måneden.
+      </>
+    ),
+  }),
+  innhold3: {
+    nb: "Dette er summen som skal deles mellom deg og den andre forelderen. Hvordan det splittes opp, avhenger av inntekt og samvær, i tillegg til en rekke andre forhold.",
+    en: "This is the amount that should be divided between you and the other parent. How it is split depends on income and custody, in addition to a number of other factors.",
+    nn: "Dette er summen som skal delast mellom deg og den andre forelderen. Kvifor det splittast, avheng av inntekt og samvær, i tillegg til ein rekkje andre forhold.",
+  },
+  innhold4: {
     nb: "Forslaget er basert på noen få opplysninger, som gjør det enkelt å få en omtrentlig sum.",
     en: "The proposal is based on a few pieces of information, making it easy to get an approximate sum.",
     nn: "Forslaget er basert på nokon få opplysningar, som gjør det enkelt å få ein omtrentleg sum.",
   },
-  innhold3: {
+  innhold5: {
     nb: (
       <>
         Om du ønsker en mer presis kalkulering, kan du bruke den{" "}

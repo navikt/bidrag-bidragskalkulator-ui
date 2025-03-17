@@ -132,6 +132,7 @@ export const responseSchema = z.object({
     z.object({
       sum: z.number(),
       barnetsAlder: z.number(),
+      underholdskostnad: z.number(),
     })
   ),
 });
