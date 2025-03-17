@@ -33,7 +33,14 @@ type AnalyticsProps = {
   umamiWebsiteId: string;
 };
 
+/**
+ * Setter inn analytics-script (om umamiWebsiteId er satt)
+ */
 export function Analytics({ umamiWebsiteId }: AnalyticsProps) {
+  if (!umamiWebsiteId) {
+    return null;
+  }
+
   return (
     <script
       defer
