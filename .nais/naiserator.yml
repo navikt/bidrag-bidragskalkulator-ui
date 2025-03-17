@@ -17,6 +17,8 @@ spec:
       value: {{SERVER_URL}}
     - name: ENVIRONMENT
       value: {{ENVIRONMENT}}
+    - name: UMAMI_WEBSITE_ID
+      value: {{UMAMI_WEBSITE_ID}}
   accessPolicy:
     outbound:
       rules:

@@ -1,5 +1,6 @@
 {
   "SERVER_URL": "http://bidrag-bidragskalkulator-api",
   "ENVIRONMENT": "prod",
+  "UMAMI_WEBSITE_ID": "",
   "ingress": "https://barnebidragskalkulator-beta.nav.no"
 }
