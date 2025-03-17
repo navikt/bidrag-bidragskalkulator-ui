@@ -23,10 +23,11 @@ import { env } from "./config/env.server";
 import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
 import { NotFound } from "./features/feilhåndtering/404";
 import { InternalServerError } from "./features/feilhåndtering/500";
+import { Analytics } from "./utils/analytics";
 import { hentSpråkFraCookie, OversettelseProvider, Språk } from "./utils/i18n";
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { decoratorFragments, språk } = useLoaderData<typeof loader>();
+  const { decoratorFragments, språk, umamiWebsiteId } = useLoaderData<typeof loader>();
 
   useInjectDecoratorScript(decoratorFragments.DECORATOR_SCRIPTS);
 
@@ -38,6 +39,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
         {parse(decoratorFragments.DECORATOR_HEAD_ASSETS, { trim: true })}
+        <Analytics umamiWebsiteId={umamiWebsiteId} />
       </head>
       <body className="flex flex-col min-h-screen">
         {parse(decoratorFragments.DECORATOR_HEADER, { trim: true })}
@@ -75,7 +77,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
     }),
     buildCspHeader(
-      { "script-src-elem": ["'self'"], "connect-src": ["'self'"] },
+      {
+        "script-src-elem": ["'self'", "https://umami.nav.no"],
+        "connect-src": ["'self'", "https://umami.nav.no"],
+      },
       { env: env.ENVIRONMENT }
     ),
   ]);
@@ -84,6 +89,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     {
       decoratorFragments,
       språk,
+      umamiWebsiteId: env.UMAMI_WEBSITE_ID,
     },
     {
       headers: {
