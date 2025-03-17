@@ -12,6 +12,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  type HeadersArgs,
   type LoaderFunctionArgs,
 } from "react-router";
 
@@ -73,7 +74,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
         })),
       },
     }),
-    buildCspHeader({}, { env: env.ENVIRONMENT }),
+    buildCspHeader(
+      { "script-src-elem": ["'self'"], "connect-src": ["'self'"] },
+      { env: env.ENVIRONMENT }
+    ),
   ]);
 
   return data(
@@ -105,6 +109,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
   );
 }
+
+export const headers = ({ loaderHeaders }: HeadersArgs) => {
+  return loaderHeaders;
+};
 
 export default function App() {
   return <Outlet />;
