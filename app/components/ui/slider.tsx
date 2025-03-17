@@ -63,6 +63,7 @@ function Slider({
         onValueChange={handleChange}
         {...props}
         id={id}
+        aria-labelledby={id}
       >
         <SliderPrimitive.Track
           data-slot="slider-track"
