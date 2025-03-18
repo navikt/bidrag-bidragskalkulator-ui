@@ -10,7 +10,7 @@ Man deployer automatisk til dev- og prod-miljøene når man merger en pull reque
 
 **Dev-miljøet finner du på https://bidragskalkulator-v2.ekstern.dev.nav.no**
 
-**Prod-miljøet finner du på https://barnebidragskalkulator-beta.nav.no**
+**Prod-miljøet finner du på https://barnebidragskalkulator.nav.no**
 
 ## Lokal utvikling
 
