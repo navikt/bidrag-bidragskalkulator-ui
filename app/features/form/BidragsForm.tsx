@@ -8,7 +8,7 @@ import { FormattertTallTextField } from "./FormattertTallTextField";
 import { lagValidatorMedSpråk } from "./validator";
 
 type BidragsFormProps = {
-  resultatRef: RefObject<HTMLDivElement>;
+  resultatRef: RefObject<HTMLDivElement | null>;
 };
 
 export function BidragsForm({ resultatRef }: BidragsFormProps) {
