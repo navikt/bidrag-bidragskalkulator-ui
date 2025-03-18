@@ -27,7 +27,8 @@ import { Analytics } from "./utils/analytics";
 import { hentSpråkFraCookie, OversettelseProvider, Språk } from "./utils/i18n";
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { decoratorFragments, språk, umamiWebsiteId } = useLoaderData<typeof loader>();
+  const { decoratorFragments, språk, umamiWebsiteId } =
+    useLoaderData<typeof loader>();
 
   useInjectDecoratorScript(decoratorFragments.DECORATOR_SCRIPTS);
 
@@ -74,6 +75,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
           locale: språk,
           handleInApp: true,
         })),
+        breadcrumbs: [
+          {
+            title: "Barnebidrag",
+            url: "https://www.nav.no/barnebidrag",
+          },
+          {
+            title: "Barnebidragskalkulator",
+            url: "https://barnebidragskalkulator.nav.no",
+          },
+        ],
       },
     }),
     buildCspHeader(
