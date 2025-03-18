@@ -17,9 +17,9 @@ export function IntroPanel() {
 
 const tekster = definerTekster({
   overskrift: {
-    nb: "Hva kan du bruke barnebidragskalkulatoren til?",
+    nb: <>Hva kan du bruke barnebidrags&shy;kalkulatoren til?</>,
     en: "What can the child support calculator be used for?",
-    nn: "Kva kan du bruke fostringstilskotkalkulatoren til?",
+    nn: <>Kva kan du bruke fostringstilskots&shy;kalkulatoren til?</>,
   },
   innhold1: {
     nb: "Barnebidraget avtaler du med den andre forelderen eller søker Nav om hjelp til å fastsette.",
@@ -34,9 +34,9 @@ const tekster = definerTekster({
   innhold3: {
     nb: (
       <>
-        Om du ønsker en mer presis kalkulering, kan du bruke den{" "}
+        Om du ønsker en mer presis kalkulering, kan du bruke{" "}
         <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
-          gamle bidragskalkulatoren
+          den gamle bidragskalkulatoren
         </Link>{" "}
         til å legge inn flere opplysninger og få en riktigere sum.
       </>
@@ -54,7 +54,7 @@ const tekster = definerTekster({
       <>
         Om du ynskjer ein meir presis kalkulering, kan du bruke den{" "}
         <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
-          gamle bidragskalkulatoren
+          gamle tilskotskalkulatoren
         </Link>{" "}
         til å leggje inn fleire opplysningar og få ein riktigare sum.
       </>
