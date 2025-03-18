@@ -54,7 +54,7 @@ export default function Barnebidragskalkulator() {
 
       <IntroPanel />
 
-      <BidragsForm />
+      <BidragsForm resultatRef={resultatRef} />
 
       {isValidationErrorResponse(actionData) && (
         <div className="mt-6">

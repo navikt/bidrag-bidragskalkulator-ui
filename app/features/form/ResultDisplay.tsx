@@ -110,7 +110,7 @@ const tekster = definerTekster({
     en: (
       <>
         The {alder}-year-old costs{" "}
-        <strong>{formatterSum(kostnad as number)}</strong> NOK per month.
+        <strong>{formatterSum(kostnad as number)}</strong> per month.
       </>
     ),
     nn: (

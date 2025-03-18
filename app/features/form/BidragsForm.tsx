@@ -1,13 +1,17 @@
 import { Button } from "@navikt/ds-react";
 import { useFieldArray, useForm } from "@rvf/react-router";
-import { useRef } from "react";
+import { type RefObject } from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { BarnForm } from "./BarnForm";
 import { FormattertTallTextField } from "./FormattertTallTextField";
 import { lagValidatorMedSpråk } from "./validator";
 
-export function BidragsForm() {
+type BidragsFormProps = {
+  resultatRef: RefObject<HTMLDivElement>;
+};
+
+export function BidragsForm({ resultatRef }: BidragsFormProps) {
   const { t, språk } = useOversettelse();
   const validator = lagValidatorMedSpråk(språk);
   const form = useForm({
@@ -20,7 +24,10 @@ export function BidragsForm() {
       inntektForelder2: "",
     },
     onSubmitSuccess: () => {
-      resultatRef.current?.scrollIntoView({ behavior: "smooth" });
+      resultatRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
       sporHendelse("skjema fullført");
     },
     onInvalidSubmit: () => {
@@ -37,7 +44,6 @@ export function BidragsForm() {
   });
 
   const barnFields = useFieldArray(form.scope("barn"));
-  const resultatRef = useRef<HTMLDivElement>(null);
 
   return (
     <form {...form.getFormProps()} className="space-y-4 mt-6">
@@ -106,14 +112,14 @@ const tekster = definerTekster({
     nn: "Legg til barn",
   },
   hvaErInntektenDin: {
-    nb: "Hva er inntekten din?",
-    en: "What is your income?",
-    nn: "Kva er inntekta di?",
+    nb: "Hva er inntekten din per år?",
+    en: "What is your annual income?",
+    nn: "Kva er inntekta di per år?",
   },
   hvaErInntektenTilDenAndreForelderen: {
-    nb: "Hva er inntekten til den andre forelderen?",
-    en: "What is the other parent's income?",
-    nn: "Kva er inntekta til den andre forelderen?",
+    nb: "Hva er inntekten til den andre forelderen per år?",
+    en: "What is the other parent's annual income?",
+    nn: "Kva er inntekta til den andre forelderen per år?",
   },
   beregnBarnebidraget: {
     nb: "Beregn barnebidraget",
