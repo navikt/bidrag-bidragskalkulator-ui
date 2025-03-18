@@ -1,14 +1,15 @@
 import { TextField, type TextFieldProps } from "@navikt/ds-react";
-import { type ChangeEvent } from "react";
+import { type ChangeEvent, type Ref, type RefObject } from "react";
 
 export type FormattertTallTextFieldProps = Omit<TextFieldProps, "onChange"> & {
   onChange: (value: string) => void;
+  ref?: Ref<HTMLInputElement | null>;
 };
 
 /**
  * FormattertTallTextField er en komponent som formaterer et tall med tusenvis
- * og komma som desimaltegn. onChange-callbacken blir kalt med den uformatterte verdien. 
- * 
+ * og komma som desimaltegn. onChange-callbacken blir kalt med den uformatterte verdien.
+ *
  * Ellers fungerer det som et vanlig TextField.
  *
  * ```tsx

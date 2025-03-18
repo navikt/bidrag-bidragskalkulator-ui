@@ -47,7 +47,17 @@ export function BidragsForm() {
           item={item}
           index={index}
           canRemove={barnFields.length() > 1}
-          onRemove={() => barnFields.remove(index)}
+          onRemove={() => {
+            barnFields.remove(index);
+            setTimeout(() => {
+              // Dette er den gamle lengden – den blir ikke oppdatert av en eller annen grunn
+              const antallBarnFørSletting = barnFields.length();
+              if (antallBarnFørSletting > 1) {
+                const sisteIndex = antallBarnFørSletting - 2;
+                finnFokuserbartInputPåBarn(sisteIndex)?.focus();
+              }
+            }, 0);
+          }}
         />
       ))}
 
@@ -55,7 +65,14 @@ export function BidragsForm() {
         type="button"
         variant="secondary"
         size="small"
-        onClick={() => barnFields.push({ alder: "", samværsgrad: "15" })}
+        onClick={() => {
+          barnFields.push({ alder: "", samværsgrad: "15" });
+
+          setTimeout(() => {
+            const nyttBarnIndex = barnFields.length();
+            finnFokuserbartInputPåBarn(nyttBarnIndex)?.focus();
+          }, 0);
+        }}
       >
         {t(tekster.leggTilBarn)}
       </Button>
@@ -104,3 +121,12 @@ const tekster = definerTekster({
     nn: "Beregn fostringstilskotet",
   },
 });
+
+// Dette er en hjelpefunksjon for å finne det første fokuserbare input-elementet på et barn
+// Man burde egentlig brukt refs til det, men jeg klarer ikke å forstå hvordan man skal få det til med
+// react-validated-form
+const finnFokuserbartInputPåBarn = (index: number) => {
+  return document.querySelector(
+    `input[name="barn[${index}].alder"]`
+  ) as HTMLInputElement;
+};

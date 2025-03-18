@@ -25,7 +25,7 @@ export function BarnForm({ item, index, canRemove, onRemove }: BarnFormProps) {
     samværsgrad === 1 ? t(tekster.enNatt) : t(tekster.netter(samværsgrad));
 
   return (
-    <div className="border p-4 rounded-md space-y-4">
+    <div className="border p-4 rounded-md space-y-4 focus:outline-none focus-visible:outline-1">
       {canRemove && (
         <Heading size="small" level="2">
           {t(tekster.barn)} {index + 1}
