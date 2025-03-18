@@ -1,5 +1,4 @@
-import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import { z } from "zod";
 import { parseCookie } from "./cookie";
 
@@ -21,16 +20,8 @@ type OversettelseProviderProps = {
  * Hent inn språket fra "decorator-language"-cookien.
  */
 export const OversettelseProvider = (props: OversettelseProviderProps) => {
-  const [interntSpråk, setInterntSpråk] = useState(props.språk);
-  onLanguageSelect(({ locale }) => {
-    if (Object.values(Språk).includes(locale as Språk)) {
-      setInterntSpråk(locale as Språk);
-    } else {
-      setInterntSpråk(Språk.NorwegianBokmål);
-    }
-  });
   return (
-    <OversettelseContext.Provider value={interntSpråk}>
+    <OversettelseContext.Provider value={props.språk}>
       {props.children}
     </OversettelseContext.Provider>
   );

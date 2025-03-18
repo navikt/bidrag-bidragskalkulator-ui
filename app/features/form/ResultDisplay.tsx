@@ -110,7 +110,7 @@ const tekster = definerTekster({
     en: (
       <>
         The {alder}-year-old costs{" "}
-        <strong>{formatterSum(kostnad as number)}</strong> NOK per month.
+        <strong>{formatterSum(kostnad as number)}</strong> per month.
       </>
     ),
     nn: (
@@ -133,18 +133,18 @@ const tekster = definerTekster({
   innhold5: {
     nb: (
       <>
-        Om du ønsker en mer presis kalkulering, kan du bruke den{" "}
+        Om du ønsker en mer presis kalkulering, kan du bruke{" "}
         <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
-          gammel bidragskalkulatoren
+          den gamle bidragskalkulatoren
         </Link>{" "}
         til å legge inn flere opplysninger og få en riktigere sum.
       </>
     ),
     nn: (
       <>
-        Om du ynskjer ein meir presis kalkulering, kan du bruke den{" "}
+        Om du ynskjer ein meir presis kalkulering, kan du bruke{" "}
         <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
-          gamle bidragskalkulatoren
+          den gamle bidragskalkulatoren
         </Link>{" "}
         til å leggje inn fleire opplysningar og få ein riktigare sum.
       </>

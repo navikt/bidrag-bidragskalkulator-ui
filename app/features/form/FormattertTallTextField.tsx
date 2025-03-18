@@ -1,5 +1,5 @@
 import { TextField, type TextFieldProps } from "@navikt/ds-react";
-import { type ChangeEvent, type Ref, type RefObject } from "react";
+import { type ChangeEvent, type Ref } from "react";
 
 export type FormattertTallTextFieldProps = Omit<TextFieldProps, "onChange"> & {
   onChange: (value: string) => void;
@@ -56,9 +56,9 @@ const formatterTall = (verdi: string | number | undefined): string => {
   const heltall = deler[0];
   const desimaler = deler.length > 1 ? deler[1] : "";
 
-  const formattedHeltall = heltall.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  const formattertHeltall = heltall.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
-  return desimaler ? `${formattedHeltall},${desimaler}` : formattedHeltall;
+  return desimaler ? `${formattertHeltall},${desimaler}` : formattertHeltall;
 };
 
 const avformatterTall = (verdi: string): string => {

@@ -1,10 +1,9 @@
-import { Button, Heading } from "@navikt/ds-react";
+import { Button, Heading, TextField } from "@navikt/ds-react";
 import type { FormApi } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { useDebounceCallback } from "~/hooks/useDebounceCallback";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { FormattertTallTextField } from "./FormattertTallTextField";
 type BarnFormProps = {
   item: FormApi<{ alder: string; samværsgrad: string }>;
   index: number;
@@ -32,10 +31,13 @@ export function BarnForm({ item, index, canRemove, onRemove }: BarnFormProps) {
         </Heading>
       )}
       <div className="flex gap-4">
-        <FormattertTallTextField
-          {...item.field("alder").getControlProps()}
+        <TextField
+          {...item.field("alder").getInputProps()}
           label={t(tekster.barnetsAlder)}
           error={item.field("alder").error()}
+          inputMode="numeric"
+          autoComplete="off"
+          htmlSize={3}
         />
       </div>
 

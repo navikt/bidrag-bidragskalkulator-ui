@@ -54,7 +54,7 @@ export default function Barnebidragskalkulator() {
 
       <IntroPanel />
 
-      <BidragsForm />
+      <BidragsForm resultatRef={resultatRef} />
 
       {isValidationErrorResponse(actionData) && (
         <div className="mt-6">
@@ -74,7 +74,7 @@ const tekster = definerTekster({
     tittel: {
       nb: "Barnebidragskalkulator",
       en: "Child support calculator",
-      nn: "Fostringstilskotkalkulator",
+      nn: "Fostringstilskotskalkulator",
     },
     beskrivelse: {
       nb: "Barnebidragskalkulatoren hjelper deg å regne ut hvor stort et barnebidrag er.",
@@ -83,8 +83,8 @@ const tekster = definerTekster({
     },
   },
   overskrift: {
-    nb: "Barnebidragskalkulator",
+    nb: <>Barnebidrags&shy;kalkulator</>,
     en: "Child support calculator",
-    nn: "Fostringstilskotskalkulator",
+    nn: <>Fostringstilskots&shy;kalkulator</>,
   },
 });

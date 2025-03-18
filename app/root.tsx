@@ -17,6 +17,8 @@ import {
 } from "react-router";
 
 import { Page } from "@navikt/ds-react";
+import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
+import { useState } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { env } from "./config/env.server";
@@ -26,14 +28,26 @@ import { InternalServerError } from "./features/feilhåndtering/500";
 import { Analytics } from "./utils/analytics";
 import { hentSpråkFraCookie, OversettelseProvider, Språk } from "./utils/i18n";
 
-export function Layout({ children }: { children: React.ReactNode }) {
+type LayoutProps = {
+  children: React.ReactNode;
+};
+export function Layout({ children }: LayoutProps) {
   const { decoratorFragments, språk, umamiWebsiteId } =
     useLoaderData<typeof loader>();
 
+  const [interntSpråk, setInterntSpråk] = useState(språk);
+
   useInjectDecoratorScript(decoratorFragments.DECORATOR_SCRIPTS);
+  onLanguageSelect(({ locale }) => {
+    if (Object.values(Språk).includes(locale as Språk)) {
+      setInterntSpråk(locale as Språk);
+    } else {
+      setInterntSpråk(Språk.NorwegianBokmål);
+    }
+  });
 
   return (
-    <html lang={språk}>
+    <html lang={interntSpråk}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -44,7 +58,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body className="flex flex-col min-h-screen">
         {parse(decoratorFragments.DECORATOR_HEADER, { trim: true })}
-        <OversettelseProvider språk={språk}>
+        <OversettelseProvider språk={interntSpråk}>
           <Page.Block
             className="flex-1"
             as="main"
