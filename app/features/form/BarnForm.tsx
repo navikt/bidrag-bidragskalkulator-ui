@@ -35,6 +35,9 @@ export function BarnForm({ item, index, canRemove, onRemove }: BarnFormProps) {
           {...item.field("alder").getInputProps()}
           label={t(tekster.barnetsAlder)}
           error={item.field("alder").error()}
+          inputMode="numeric"
+          autoComplete="off"
+          htmlSize={3}
         />
       </div>
 
