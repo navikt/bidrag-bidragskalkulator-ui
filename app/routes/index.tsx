@@ -47,25 +47,30 @@ export default function Barnebidragskalkulator() {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-4 mt-8">
-      <Heading size="xlarge" level="1" spacing align="center">
-        {t(tekster.overskrift)}
-      </Heading>
+    <>
+      <div className="max-w-xl mx-auto p-4 mt-8">
+        <Heading size="xlarge" level="1" spacing align="center">
+          {t(tekster.overskrift)}
+        </Heading>
 
-      <IntroPanel />
+        <IntroPanel />
 
-      <BidragsForm resultatRef={resultatRef} />
+        <BidragsForm resultatRef={resultatRef} />
 
-      {isValidationErrorResponse(actionData) && (
-        <div className="mt-6">
-          <Alert variant="error">
-            <BodyLong>{actionData.fieldErrors.root}</BodyLong>
-          </Alert>
+        {isValidationErrorResponse(actionData) && (
+          <div className="mt-6">
+            <Alert variant="error">
+              <BodyLong>{actionData.fieldErrors.root}</BodyLong>
+            </Alert>
+          </div>
+        )}
+      </div>
+      {actionData && (
+        <div className="max-w-3xl mx-auto p-4 mt-8">
+          <ResultDisplay data={getResultData()} ref={resultatRef} />
         </div>
       )}
-
-      <ResultDisplay data={getResultData()} ref={resultatRef} />
-    </div>
+    </>
   );
 }
 
