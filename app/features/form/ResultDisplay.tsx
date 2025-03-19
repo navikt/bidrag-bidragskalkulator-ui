@@ -66,7 +66,6 @@ export const ResultDisplay = ({ data, ref }: ResultDisplayProps) => {
             {t(tekster.søkNavOmFastsetting)}
           </Button>
         </div>
-        <BodyLong spacing>{t(tekster.omtrentligSum)}</BodyLong>
         <BodyLong spacing>{t(tekster.callToActionGammelKalkulator)}</BodyLong>
         <ExpansionCard aria-labelledby="detaljer" size="small">
           <ExpansionCardHeader>
@@ -158,37 +157,37 @@ const tekster = definerTekster({
       nn: "Dette er summen som skal delast mellom deg og den andre forelderen. Kvifor det splittast, avheng av inntekt og samvær, i tillegg til ein rekkje andre forhold.",
     },
   },
-  omtrentligSum: {
-    nb: "Forslaget er basert på noen få opplysninger, som gjør det enkelt å få en omtrentlig sum.",
-    en: "The proposal is based on a few pieces of information, making it easy to get an approximate sum.",
-    nn: "Forslaget er basert på nokon få opplysningar, som gjør det enkelt å få ein omtrentleg sum.",
-  },
   callToActionGammelKalkulator: {
     nb: (
       <>
-        Om du ønsker en mer presis kalkulering, kan du bruke{" "}
+        Forslaget er basert på noen få opplysninger, som gjør det enkelt å få en
+        omtrentlig sum. Om du ønsker en mer presis kalkulering, kan du bruke{" "}
         <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
           den gamle bidragskalkulatoren
         </Link>{" "}
         til å legge inn flere opplysninger og få en riktigere sum.
       </>
     ),
-    nn: (
-      <>
-        Om du ynskjer ein meir presis kalkulering, kan du bruke{" "}
-        <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
-          den gamle bidragskalkulatoren
-        </Link>{" "}
-        til å leggje inn fleire opplysningar og få ein riktigare sum.
-      </>
-    ),
     en: (
       <>
-        If you want a more precise calculation, you can use the{" "}
+        The proposal is based on a few pieces of information, making it easy to
+        get an approximate sum. If you want a more precise calculation, you can
+        use the{" "}
         <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
           old child support calculator
         </Link>{" "}
         to enter more information and get a more accurate sum.
+      </>
+    ),
+    nn: (
+      <>
+        Forslaget er basert på nokon få opplysningar, som gjør det enkelt å få
+        ein omtrentleg sum. Om du ynskjer ein meir presis kalkulering, kan du
+        bruke{" "}
+        <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
+          den gamle bidragskalkulatoren
+        </Link>{" "}
+        til å leggje inn fleire opplysningar og få ein riktigare sum.
       </>
     ),
   },
