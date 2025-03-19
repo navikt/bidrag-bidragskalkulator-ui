@@ -63,7 +63,7 @@ export function Layout({ children }: LayoutProps) {
             className="flex-1"
             as="main"
             id="maincontent"
-            width="md"
+            width="xl"
             gutters
           >
             {children}
