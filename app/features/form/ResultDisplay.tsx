@@ -40,13 +40,20 @@ export const ResultDisplay = ({ data, ref }: ResultDisplayProps) => {
     );
   }
 
-  const totalSum = data.resultater.reduce((sum, neste) => sum + neste.sum, 0);
+  const totalSum = data.resultater.reduce((sum, neste) => {
+    if (neste.bidragstype === "PLIKTIG") {
+      return sum + neste.sum;
+    }
+    return sum - neste.sum;
+  }, 0);
 
   return (
     <div ref={ref} tabIndex={-1}>
       <Alert variant="info">
         <Heading size="small" spacing>
-          {t(tekster.overskrift(totalSum))}
+          {totalSum > 0
+            ? t(tekster.overskrift.betale(Math.abs(totalSum)))
+            : t(tekster.overskrift.motta(Math.abs(totalSum)))}
         </Heading>
         {totalSum === 0 && <BodyLong spacing>{t(tekster.nullBidrag)}</BodyLong>}
         <BodyLong spacing>{t(tekster.hvordanAvtale)}</BodyLong>
@@ -92,6 +99,32 @@ export const ResultDisplay = ({ data, ref }: ResultDisplayProps) => {
             <BodyLong spacing>
               {t(tekster.detaljer.underholdskostnadSplitt)}
             </BodyLong>
+            {data.resultater.length > 1 && (
+              <>
+                <BodyLong spacing>
+                  {t(tekster.detaljer.utregningPerBarn)}
+                </BodyLong>
+                <List>
+                  {data.resultater.map((resultat, index) => (
+                    <ListItem key={index}>
+                      {resultat.bidragstype === "MOTTAKER"
+                        ? t(
+                            tekster.detaljer.motta(
+                              resultat.barnetsAlder,
+                              resultat.underholdskostnad
+                            )
+                          )
+                        : t(
+                            tekster.detaljer.betale(
+                              resultat.barnetsAlder,
+                              resultat.underholdskostnad
+                            )
+                          )}
+                    </ListItem>
+                  ))}
+                </List>
+              </>
+            )}
           </ExpansionCardContent>
         </ExpansionCard>
       </Alert>
@@ -105,11 +138,30 @@ const tekster = definerTekster({
     en: "Something went wrong during the calculation",
     nn: "Nokon gjekk feil under rekningen",
   },
-  overskrift: (sum) => ({
-    nb: `Bidraget er ${formatterSum(sum as number)} i måneden.`,
-    en: `The child support is ${formatterSum(sum as number)} per month.`,
-    nn: `Fostringstilskotet er ${formatterSum(sum as number)} per måned.`,
-  }),
+  overskrift: {
+    betale: (sum) => ({
+      nb: `Du skal betale ${formatterSum(
+        sum as number
+      )} i barnebidrag per måned.`,
+      en: `You should pay ${formatterSum(
+        sum as number
+      )} in child support per month.`,
+      nn: `Du skal betale ${formatterSum(
+        sum as number
+      )} i fostringstilskot per måned.`,
+    }),
+    motta: (sum) => ({
+      nb: `Du skal motta ${formatterSum(
+        sum as number
+      )} i barnebidrag per måned.`,
+      en: `You should receive ${formatterSum(
+        sum as number
+      )} in child support per month.`,
+      nn: `Du skal motta ${formatterSum(
+        sum as number
+      )} i fostringstilskot per måned.`,
+    }),
+  },
   nullBidrag: {
     nb: "Det betyr at du ikke skal betale noe i barnebidrag. Det kan være fordi dere har delt samvær likt mellom dere, ofte i kombinasjon at differansen mellom inntektene deres er lav.",
     en: "This means that you should not pay any child support. This may be because you and the other parent have shared custody equally, often in combination with a low difference in income.",
@@ -156,6 +208,33 @@ const tekster = definerTekster({
       en: "This is the amount that should be divided between you and the other parent. How it is split depends on income and custody, in addition to a number of other factors.",
       nn: "Dette er summen som skal delast mellom deg og den andre forelderen. Kvifor det splittast, avheng av inntekt og samvær, i tillegg til ein rekkje andre forhold.",
     },
+    utregningPerBarn: {
+      nb: "Barnebidraget over er en summering av hva du skal betale eller motta per måned for hvert av barna. Per barn ser beregningen slik ut:",
+      en: "The child support above is a summary of what you should pay or receive per month for each of the children. For each child, the calculation looks like this:",
+      nn: "Barnebidraget over er ein summering av kva du skal betale eller motta per månad for kvar av barna. For kvar av barna ser beregningen slik ut:",
+    },
+    motta: (alder, kostnad) => ({
+      nb: `For ${alder}-åringen skal du motta ${formatterSum(
+        kostnad as number
+      )} i barnebidrag per måned.`,
+      en: `For the ${alder}-year-old, you should receive ${formatterSum(
+        kostnad as number
+      )} in child support per month.`,
+      nn: `For ${alder}-åringen skal du motta ${formatterSum(
+        kostnad as number
+      )} i fostringstilskot per måned.`,
+    }),
+    betale: (alder, kostnad) => ({
+      nb: `For ${alder}-åringen skal du betale ${formatterSum(
+        kostnad as number
+      )} i barnebidrag per måned.`,
+      en: `For the ${alder}-year-old, you should pay ${formatterSum(
+        kostnad as number
+      )} in child support per month.`,
+      nn: `For ${alder}-åringen skal du betale ${formatterSum(
+        kostnad as number
+      )} i fostringstilskot per måned.`,
+    }),
   },
   callToActionGammelKalkulator: {
     nb: (
