@@ -108,7 +108,7 @@ function Slider({
         </div>
       )}
       {valueDescription && <BodyShort>{valueDescription}</BodyShort>}
-      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {error && <ErrorMessage aria-live="assertive">{error}</ErrorMessage>}
     </div>
   );
 }
