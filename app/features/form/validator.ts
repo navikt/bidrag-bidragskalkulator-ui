@@ -15,6 +15,11 @@ const tekster = definerTekster({
         en: "Age must be a positive number",
         nn: "Alder må vere eit positivt tal",
       },
+      maksimum: {
+        nb: "Alder må være høyst 25 år",
+        en: "Age must be at most 25 years",
+        nn: "Alder må vere høyst 25 år",
+      },
       heleÅr: {
         nb: "Oppgi alder i hele år",
         en: "Enter age in whole years",
@@ -36,6 +41,28 @@ const tekster = definerTekster({
         nb: "Samværsgrad må være høyst 100",
         en: "Visitation degree must be at most 100",
         nn: "Samværsgrad må vere høgst 100",
+      },
+      minimumHosForelder1: {
+        nb: "Barnet kan ikke være mer hos deg enn den andre forelderen om barnet bor hos deg",
+        en: "The child cannot stay with you more than the other parent if the child lives with you",
+        nn: "Barnet kan ikkje være mer hos deg enn den andre forelderen om barnet bur hos deg",
+      },
+      maksimumHosForelder2: {
+        nb: "Barnet kan ikke være mer hos deg enn den andre forelderen om barnet bor hos den andre forelderen",
+        en: "The child cannot stay with you more than the other parent if the child lives with the other parent",
+        nn: "Barnet kan ikkje være mer hos deg enn den andre forelderen om barnet bur hos den andre forelderen",
+      },
+    },
+    bostatus: {
+      påkrevd: {
+        nb: "Bosted må oppgis",
+        en: "Bostatus is required",
+        nn: "Bosted må oppgis",
+      },
+      ugyldig: {
+        nb: "Ugyldig verdi",
+        en: "Invalid value",
+        nn: "Ugyldig verdi",
       },
     },
     barn: {
@@ -74,31 +101,82 @@ export function lagSkjemaSchema(språk: Språk) {
   return z.object({
     barn: z
       .array(
-        z.object({
-          alder: z
-            .string()
-            .nonempty(oversett(språk, tekster.feilmeldinger.alder.påkrevd))
-            .pipe(
-              z.coerce
-                .number()
-                .min(0, oversett(språk, tekster.feilmeldinger.alder.positivt))
-                .step(1, {
-                  message: oversett(språk, tekster.feilmeldinger.alder.heleÅr),
+        z
+          .object({
+            alder: z
+              .string()
+              .nonempty(oversett(språk, tekster.feilmeldinger.alder.påkrevd))
+              .pipe(
+                z.coerce
+                  .number()
+                  .min(0, oversett(språk, tekster.feilmeldinger.alder.positivt))
+                  .max(25, {
+                    message: oversett(
+                      språk,
+                      tekster.feilmeldinger.alder.maksimum
+                    ),
+                  })
+                  .step(1, {
+                    message: oversett(
+                      språk,
+                      tekster.feilmeldinger.alder.heleÅr
+                    ),
+                  })
+              ),
+            bostatus: z
+              .string()
+              .nonempty(oversett(språk, tekster.feilmeldinger.bostatus.påkrevd))
+              .pipe(
+                z.enum(["HOS_FORELDER_1", "DELT_BOSTED", "HOS_FORELDER_2"], {
+                  message: oversett(
+                    språk,
+                    tekster.feilmeldinger.bostatus.ugyldig
+                  ),
                 })
-            ),
-          samværsgrad: z
-            .string()
-            .nonempty(oversett(språk, tekster.feilmeldinger.samvær.påkrevd))
-            .pipe(
-              z.coerce
-                .number()
-                .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
-                .max(
-                  100,
-                  oversett(språk, tekster.feilmeldinger.samvær.maksimum)
-                )
-            ),
-        })
+              ),
+            samværsgrad: z
+              .string()
+              .nonempty(oversett(språk, tekster.feilmeldinger.samvær.påkrevd))
+              .pipe(
+                z.coerce
+                  .number()
+                  .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
+                  .max(
+                    30,
+                    oversett(språk, tekster.feilmeldinger.samvær.maksimum)
+                  )
+              ),
+          })
+          .refine(
+            ({ bostatus, samværsgrad }) => {
+              if (bostatus === "HOS_FORELDER_1" && samværsgrad < 15) {
+                return false;
+              }
+              return true;
+            },
+            {
+              message: oversett(
+                språk,
+                tekster.feilmeldinger.samvær.minimumHosForelder1
+              ),
+              path: ["samværsgrad"],
+            }
+          )
+          .refine(
+            ({ bostatus, samværsgrad }) => {
+              if (bostatus === "HOS_FORELDER_2" && samværsgrad > 15) {
+                return false;
+              }
+              return true;
+            },
+            {
+              message: oversett(
+                språk,
+                tekster.feilmeldinger.samvær.maksimumHosForelder2
+              ),
+              path: ["samværsgrad"],
+            }
+          )
       )
       .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
       .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),

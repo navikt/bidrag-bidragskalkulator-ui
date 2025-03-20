@@ -35,7 +35,7 @@ export async function handleFormSubmission(
     ...result.data,
     barn: result.data.barn.map((barn) => ({
       alder: barn.alder,
-      samværsklasse: kalkulerSamværsklasse(barn.samværsgrad),
+      samværsklasse: kalkulerSamværsklasse(barn.samværsgrad, barn.bostatus),
       bidragstype: kalkulerBidragstype(
         result.data.inntektForelder1,
         result.data.inntektForelder2,
