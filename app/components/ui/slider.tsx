@@ -1,4 +1,4 @@
-import { BodyShort, Label, useId } from "@navikt/ds-react";
+import { BodyShort, ErrorMessage, Label, useId } from "@navikt/ds-react";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import * as React from "react";
 
@@ -14,6 +14,7 @@ type SliderProps = Omit<
   list?: { label: string; value: number }[];
   value?: string;
   onChange?: (value: string) => void;
+  error?: string | null;
 };
 
 function Slider({
@@ -28,11 +29,13 @@ function Slider({
   id: eksternId,
   onChange = () => {},
   list,
+  error,
   ...props
 }: SliderProps) {
   const generertId = useId();
   const id = eksternId ?? generertId;
   const labelId = `${id}-label`;
+  const descriptionId = `${id}-description`;
   const verdi = value
     ? [Number(value)]
     : defaultValue
@@ -49,7 +52,7 @@ function Slider({
         {label}
       </Label>
       {description && (
-        <BodyShort size="small" textColor="subtle">
+        <BodyShort size="medium" textColor="subtle" id={descriptionId}>
           {description}
         </BodyShort>
       )}
@@ -65,23 +68,34 @@ function Slider({
         )}
         onValueChange={handleChange}
         {...props}
-        id={id}
       >
         <SliderPrimitive.Track
           data-slot="slider-track"
           className={cn(
-            "bg-gray-300 relative grow overflow-hidden rounded-full h-2 w-full"
+            "relative grow overflow-hidden rounded-full h-2 w-full",
+            error ? "bg-red-200 outline-1 outline-red-500" : "bg-gray-300"
           )}
         >
           <SliderPrimitive.Range
             data-slot="slider-range"
-            className={cn("bg-blue-200 absolute h-full")}
+            className={cn("absolute h-full")}
           />
         </SliderPrimitive.Track>
         <SliderPrimitive.Thumb
+          id={id}
+          aria-valuetext={valueDescription}
           aria-labelledby={labelId}
+          aria-describedby={
+            error ? `${id}-error` : description ? descriptionId : undefined
+          }
+          aria-invalid={!!error}
           data-slot="slider-thumb"
-          className="border-primary bg-blue-500 ring-ring/50 block size-5 shrink-0 rounded-full border-none shadow-sm transition-[color,box-shadow] hover:ring-4 hover:ring-blue-500 focus-visible:ring-4 focus-visible:ring-blue-500 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+          className={cn(
+            "border-primary ring-ring/50 block size-5 shrink-0 rounded-full border-none shadow-sm transition-[color,box-shadow] hover:ring-4  focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50",
+            error
+              ? "bg-red-500 hover:ring-red-500 focus-visible:ring-red-500"
+              : "bg-blue-500 hover:ring-blue-500 focus-visible:ring-blue-500"
+          )}
         />
       </SliderPrimitive.Root>
       {list && (
@@ -94,6 +108,7 @@ function Slider({
         </div>
       )}
       {valueDescription && <BodyShort>{valueDescription}</BodyShort>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </div>
   );
 }
