@@ -43,7 +43,7 @@ export const ResultDisplay = ({ data, ref }: ResultDisplayProps) => {
   const totalSum = data.resultater.reduce((sum, neste) => sum + neste.sum, 0);
 
   return (
-    <div ref={ref}>
+    <div ref={ref} tabIndex={-1}>
       <Alert variant="info">
         <Heading size="small" spacing>
           {t(tekster.overskrift(totalSum))}

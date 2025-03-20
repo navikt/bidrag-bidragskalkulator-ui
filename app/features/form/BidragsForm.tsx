@@ -19,11 +19,12 @@ export function BidragsForm({ resultatRef }: BidragsFormProps) {
     submitSource: "state",
     method: "post",
     defaultValues: {
-      barn: [{ alder: "", samværsgrad: "15" }],
+      barn: [{ alder: "", samværsgrad: "15", bostatus: "" }],
       inntektForelder1: "",
       inntektForelder2: "",
     },
     onSubmitSuccess: () => {
+      resultatRef.current?.focus({ preventScroll: true });
       resultatRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "center",
@@ -47,13 +48,13 @@ export function BidragsForm({ resultatRef }: BidragsFormProps) {
 
   return (
     <form {...form.getFormProps()} className="space-y-4 mt-6">
-      {barnFields.map((key, item, index) => (
+      {barnFields.map((key, barn, index) => (
         <BarnForm
           key={key}
-          item={item}
+          barn={barn}
           index={index}
-          canRemove={barnFields.length() > 1}
-          onRemove={() => {
+          kanFjernes={barnFields.length() > 1}
+          onFjern={() => {
             barnFields.remove(index);
             setTimeout(() => {
               // Dette er den gamle lengden – den blir ikke oppdatert av en eller annen grunn
@@ -72,7 +73,7 @@ export function BidragsForm({ resultatRef }: BidragsFormProps) {
         variant="secondary"
         size="small"
         onClick={() => {
-          barnFields.push({ alder: "", samværsgrad: "15" });
+          barnFields.push({ alder: "", samværsgrad: "15", bostatus: "" });
 
           setTimeout(() => {
             const nyttBarnIndex = barnFields.length();
@@ -87,14 +88,18 @@ export function BidragsForm({ resultatRef }: BidragsFormProps) {
         <FormattertTallTextField
           {...form.field("inntektForelder1").getControlProps()}
           label={t(tekster.hvaErInntektenDin)}
+          description={t(tekster.hvaErInntektenDinBeskrivelse)}
           error={form.field("inntektForelder1").error()}
-          className="max-w-sm"
+          htmlSize={18}
         />
         <FormattertTallTextField
           {...form.field("inntektForelder2").getControlProps()}
           label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
+          description={t(
+            tekster.hvaErInntektenTilDenAndreForelderenBeskrivelse
+          )}
           error={form.field("inntektForelder2").error()}
-          className="max-w-sm"
+          htmlSize={18}
         />
       </div>
 
@@ -112,19 +117,29 @@ const tekster = definerTekster({
     nn: "Legg til barn",
   },
   hvaErInntektenDin: {
-    nb: "Hva er inntekten din per år?",
-    en: "What is your annual income?",
-    nn: "Kva er inntekta di per år?",
+    nb: "Hva er inntekten din?",
+    en: "What is your income?",
+    nn: "Kva er inntekta di?",
   },
   hvaErInntektenTilDenAndreForelderen: {
-    nb: "Hva er inntekten til den andre forelderen per år?",
-    en: "What is the other parent's annual income?",
-    nn: "Kva er inntekta til den andre forelderen per år?",
+    nb: "Hva er inntekten til den andre forelderen?",
+    en: "What is the other parent's income?",
+    nn: "Kva er inntekta til den andre forelderen?",
   },
   beregnBarnebidraget: {
     nb: "Beregn barnebidraget",
     en: "Calculate child support",
     nn: "Beregn fostringstilskotet",
+  },
+  hvaErInntektenDinBeskrivelse: {
+    nb: "Oppgi all inntekt per år før skatt.",
+    en: "Enter all annual income before taxes.",
+    nn: "Oppgi all inntekt per år før skatt.",
+  },
+  hvaErInntektenTilDenAndreForelderenBeskrivelse: {
+    nb: "Oppgi all inntekt per år før skatt",
+    en: "Enter all annual income before taxes.",
+    nn: "Oppgi all inntekt per år før skatt",
   },
 });
 
