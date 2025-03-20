@@ -3,12 +3,19 @@ export type Samværsklasse =
   | "SAMVÆRSKLASSE_1"
   | "SAMVÆRSKLASSE_2"
   | "SAMVÆRSKLASSE_3"
-  | "SAMVÆRSKLASSE_4";
+  | "SAMVÆRSKLASSE_4"
+  | "DELT_BOSTED";
 
 /**
  * Kalkulerer samværsklasse basert på hvor mange netter barnet bor hos forelderen
  */
-export function kalkulerSamværsklasse(samværsgrad: number): Samværsklasse {
+export function kalkulerSamværsklasse(
+  samværsgrad: number,
+  bostatus: string
+): Samværsklasse {
+  if (bostatus === "DELT_BOSTED") {
+    return "DELT_BOSTED";
+  }
   if (samværsgrad === 0 || samværsgrad === 30) {
     return "SAMVÆRSKLASSE_0";
   }
