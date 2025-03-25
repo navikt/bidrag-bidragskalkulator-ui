@@ -37,9 +37,9 @@ export async function handleFormSubmission(
       alder: barn.alder,
       samværsklasse: kalkulerSamværsklasse(barn.samværsgrad, barn.bostatus),
       bidragstype: kalkulerBidragstype(
+        barn.bostatus,
         result.data.inntektForelder1,
-        result.data.inntektForelder2,
-        barn.samværsgrad
+        result.data.inntektForelder2
       ),
     })),
   };

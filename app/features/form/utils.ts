@@ -35,12 +35,12 @@ export function kalkulerSamværsklasse(
  * Avgjør om forelderen er mottaker eller pliktig basert på samværsgrad
  */
 export function kalkulerBidragstype(
+  bostatus: "HOS_FORELDER_1" | "HOS_FORELDER_2" | "DELT_BOSTED",
   inntektForelder1: number,
-  inntektForelder2: number,
-  samværsgrad: number
+  inntektForelder2: number
 ): "MOTTAKER" | "PLIKTIG" {
-  if (samværsgrad >= 15) {
-    return "MOTTAKER";
+  if (bostatus === "DELT_BOSTED") {
+    return inntektForelder1 > inntektForelder2 ? "PLIKTIG" : "MOTTAKER";
   }
-  return "PLIKTIG";
+  return bostatus === "HOS_FORELDER_1" ? "MOTTAKER" : "PLIKTIG";
 }
