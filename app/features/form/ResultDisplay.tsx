@@ -111,13 +111,13 @@ export const ResultDisplay = ({ data, ref }: ResultDisplayProps) => {
                         ? t(
                             tekster.detaljer.motta(
                               resultat.barnetsAlder,
-                              resultat.underholdskostnad
+                              resultat.sum
                             )
                           )
                         : t(
                             tekster.detaljer.betale(
                               resultat.barnetsAlder,
-                              resultat.underholdskostnad
+                              resultat.sum
                             )
                           )}
                     </ListItem>
