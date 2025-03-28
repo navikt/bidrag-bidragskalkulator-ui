@@ -81,24 +81,6 @@ export const ResultDisplay = ({ data, ref }: ResultDisplayProps) => {
             </ExpansionCardTitle>
           </ExpansionCardHeader>
           <ExpansionCardContent>
-            <BodyLong spacing>
-              {t(tekster.detaljer.underholdskostnadBeskrivelse)}
-            </BodyLong>
-            <List>
-              {data.resultater.map((resultat, index) => (
-                <ListItem key={index}>
-                  {t(
-                    tekster.detaljer.underholdskostnadPerBarn(
-                      resultat.barnetsAlder,
-                      resultat.underholdskostnad
-                    )
-                  )}
-                </ListItem>
-              ))}
-            </List>
-            <BodyLong spacing>
-              {t(tekster.detaljer.underholdskostnadSplitt)}
-            </BodyLong>
             {data.resultater.length > 1 && (
               <>
                 <BodyLong spacing>
@@ -125,6 +107,24 @@ export const ResultDisplay = ({ data, ref }: ResultDisplayProps) => {
                 </List>
               </>
             )}
+            <BodyLong spacing>
+              {t(tekster.detaljer.underholdskostnadBeskrivelse)}
+            </BodyLong>
+            <List>
+              {data.resultater.map((resultat, index) => (
+                <ListItem key={index}>
+                  {t(
+                    tekster.detaljer.underholdskostnadPerBarn(
+                      resultat.barnetsAlder,
+                      resultat.underholdskostnad
+                    )
+                  )}
+                </ListItem>
+              ))}
+            </List>
+            <BodyLong spacing>
+              {t(tekster.detaljer.underholdskostnadSplitt)}
+            </BodyLong>
           </ExpansionCardContent>
         </ExpansionCard>
       </Alert>
@@ -214,26 +214,50 @@ const tekster = definerTekster({
       nn: "Barnebidraget over er ein summering av kva du skal betale eller motta per månad for kvar av barna. For kvar av barna ser beregningen slik ut:",
     },
     motta: (alder, kostnad) => ({
-      nb: `For ${alder}-åringen skal du motta ${formatterSum(
-        kostnad as number
-      )} i barnebidrag per måned.`,
-      en: `For the ${alder}-year-old, you should receive ${formatterSum(
-        kostnad as number
-      )} in child support per month.`,
-      nn: `For ${alder}-åringen skal du motta ${formatterSum(
-        kostnad as number
-      )} i fostringstilskot per måned.`,
+      nb: (
+        <>
+          For {alder}-åringen skal du motta{" "}
+          <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
+          måned.
+        </>
+      ),
+      en: (
+        <>
+          For the {alder}-year-old, you should receive{" "}
+          <strong>{formatterSum(kostnad as number)}</strong> in child support
+          per month.
+        </>
+      ),
+      nn: (
+        <>
+          For {alder}-åringen skal du motta{" "}
+          <strong>{formatterSum(kostnad as number)}</strong> i fostringstilskot
+          per måned.
+        </>
+      ),
     }),
     betale: (alder, kostnad) => ({
-      nb: `For ${alder}-åringen skal du betale ${formatterSum(
-        kostnad as number
-      )} i barnebidrag per måned.`,
-      en: `For the ${alder}-year-old, you should pay ${formatterSum(
-        kostnad as number
-      )} in child support per month.`,
-      nn: `For ${alder}-åringen skal du betale ${formatterSum(
-        kostnad as number
-      )} i fostringstilskot per måned.`,
+      nb: (
+        <>
+          For {alder}-åringen skal du betale{" "}
+          <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
+          måned.
+        </>
+      ),
+      en: (
+        <>
+          For the {alder}-year-old, you should pay{" "}
+          <strong>{formatterSum(kostnad as number)}</strong> in child support
+          per month.
+        </>
+      ),
+      nn: (
+        <>
+          For {alder}-åringen skal du betale{" "}
+          <strong>{formatterSum(kostnad as number)}</strong> i fostringstilskot
+          per måned.
+        </>
+      ),
     }),
   },
   callToActionGammelKalkulator: {
