@@ -13,6 +13,8 @@ import {
   ExpansionCardTitle,
 } from "@navikt/ds-react/ExpansionCard";
 import { ListItem } from "@navikt/ds-react/List";
+import { useRef } from "react";
+import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import type { SkjemaResponse } from "./validator";
@@ -23,6 +25,7 @@ type ResultDisplayProps = {
 
 export const ResultDisplay = ({ data, ref }: ResultDisplayProps) => {
   const { t } = useOversettelse();
+  const beregningsdetaljerAntallSporingerRef = useRef(0);
   if (!data) {
     return null;
   }
@@ -74,7 +77,20 @@ export const ResultDisplay = ({ data, ref }: ResultDisplayProps) => {
           </Button>
         </div>
         <BodyLong spacing>{t(tekster.callToActionGammelKalkulator)}</BodyLong>
-        <ExpansionCard aria-labelledby="detaljer" size="small">
+        <ExpansionCard
+          aria-labelledby="detaljer"
+          size="small"
+          onToggle={(open) => {
+            // Vi ønsker å unngå å spore at man åpner og lukker og åpner og lukker osv.
+            if (beregningsdetaljerAntallSporingerRef.current > 2) {
+              return;
+            }
+            beregningsdetaljerAntallSporingerRef.current++;
+            open
+              ? sporHendelse("beregningsdetaljer utvidet")
+              : sporHendelse("beregningsdetaljer kollapset");
+          }}
+        >
           <ExpansionCardHeader>
             <ExpansionCardTitle as="h3" size="small" id="detaljer">
               {t(tekster.detaljer.overskrift)}

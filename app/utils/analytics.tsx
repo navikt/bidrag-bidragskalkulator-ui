@@ -2,7 +2,9 @@ type EventType =
   | "skjema validering feilet"
   | "skjema innsending feilet"
   | "skjema fullført"
-  | "samværsgrad justert";
+  | "samværsgrad justert"
+  | "beregningsdetaljer utvidet"
+  | "beregningsdetaljer kollapset";
 
 /**
  * Sporer en hendelse
