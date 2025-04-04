@@ -70,7 +70,7 @@ export function Layout({ children }: LayoutProps) {
   });
 
   return (
-    <html lang={interntSpråk}>
+    <html lang={oversett(interntSpråk, tekster.langTag)}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -189,6 +189,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 }
 
 const tekster = definerTekster({
+  langTag: {
+    nb: "nb-NO",
+    en: "en-US",
+    nn: "nn-NO",
+  },
   breadcrumbs: {
     barnebidrag: {
       label: {
