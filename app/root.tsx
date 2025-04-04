@@ -17,7 +17,10 @@ import {
 } from "react-router";
 
 import { Page } from "@navikt/ds-react";
-import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
+import {
+  onLanguageSelect,
+  setBreadcrumbs,
+} from "@navikt/nav-dekoratoren-moduler";
 import { useState } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -26,7 +29,13 @@ import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDeco
 import { NotFound } from "./features/feilhåndtering/404";
 import { InternalServerError } from "./features/feilhåndtering/500";
 import { Analytics } from "./utils/analytics";
-import { hentSpråkFraCookie, OversettelseProvider, Språk } from "./utils/i18n";
+import {
+  definerTekster,
+  hentSpråkFraCookie,
+  oversett,
+  OversettelseProvider,
+  Språk,
+} from "./utils/i18n";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -40,7 +49,21 @@ export function Layout({ children }: LayoutProps) {
   useInjectDecoratorScript(decoratorFragments.DECORATOR_SCRIPTS);
   onLanguageSelect(({ locale }) => {
     if (Object.values(Språk).includes(locale as Språk)) {
-      setInterntSpråk(locale as Språk);
+      const språk = locale as Språk;
+      setInterntSpråk(språk);
+      setBreadcrumbs([
+        {
+          title: oversett(språk, tekster.breadcrumbs.barnebidrag.label),
+          url: oversett(språk, tekster.breadcrumbs.barnebidrag.url),
+        },
+        {
+          title: oversett(
+            språk,
+            tekster.breadcrumbs.barnebidragskalkulator.label
+          ),
+          url: "https://barnebidragskalkulator.nav.no",
+        },
+      ]);
     } else {
       setInterntSpråk(Språk.NorwegianBokmål);
     }
@@ -91,11 +114,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
         })),
         breadcrumbs: [
           {
-            title: "Barnebidrag",
-            url: "https://www.nav.no/barnebidrag",
+            title: oversett(språk, tekster.breadcrumbs.barnebidrag.label),
+            url: oversett(språk, tekster.breadcrumbs.barnebidrag.url),
           },
           {
-            title: "Barnebidragskalkulator",
+            title: oversett(
+              språk,
+              tekster.breadcrumbs.barnebidragskalkulator.label
+            ),
             url: "https://barnebidragskalkulator.nav.no",
           },
         ],
@@ -161,3 +187,27 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   return <InternalServerError stack={stack} />;
 }
+
+const tekster = definerTekster({
+  breadcrumbs: {
+    barnebidrag: {
+      label: {
+        nb: "Barnebidrag",
+        en: "Child support",
+        nn: "Fostringstilskot",
+      },
+      url: {
+        nb: "https://www.nav.no/barnebidrag",
+        en: "https://www.nav.no/barnebidrag/en",
+        nn: "https://www.nav.no/barnebidrag",
+      },
+    },
+    barnebidragskalkulator: {
+      label: {
+        nb: "Barnebidragskalkulator",
+        en: "Child support calculator",
+        nn: "Fostringstilskotskalkulator",
+      },
+    },
+  },
+});
