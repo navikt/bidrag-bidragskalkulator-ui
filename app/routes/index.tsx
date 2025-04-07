@@ -6,7 +6,7 @@ import { useActionData } from "react-router";
 import { handleFormSubmission } from "~/features/form/api.server";
 import { BidragsForm } from "~/features/form/BidragsForm";
 import { IntroPanel } from "~/features/form/IntroPanel";
-import { ResultDisplay } from "~/features/form/ResultDisplay";
+import { Resultatpanel } from "~/features/form/Resultatpanel";
 import type { SkjemaResponse } from "~/features/form/validator";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
@@ -67,7 +67,7 @@ export default function Barnebidragskalkulator() {
       </div>
       {actionData && (
         <div className="max-w-3xl mx-auto p-4 mt-8">
-          <ResultDisplay data={getResultData()} ref={resultatRef} />
+          <Resultatpanel data={getResultData()} ref={resultatRef} />
         </div>
       )}
     </>

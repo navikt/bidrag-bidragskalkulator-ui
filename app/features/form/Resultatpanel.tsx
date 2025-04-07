@@ -18,12 +18,12 @@ import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import type { SkjemaResponse } from "./validator";
-type ResultDisplayProps = {
+type ResultatpanelProps = {
   data: SkjemaResponse | null;
   ref: React.RefObject<HTMLDivElement | null>;
 };
 
-export const ResultDisplay = ({ data, ref }: ResultDisplayProps) => {
+export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
   const { t } = useOversettelse();
   const beregningsdetaljerAntallSporingerRef = useRef(0);
   if (!data) {
