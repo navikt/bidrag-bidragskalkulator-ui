@@ -47,17 +47,15 @@ export function BarnForm({ barn, index, kanFjernes, onFjern }: BarnFormProps) {
       >
         {t(tekster.barn)} {barnNummer}
       </Heading>
-      <div className="flex gap-4">
-        <TextField
-          {...barn.field("alder").getInputProps()}
-          label={t(tekster.barnetsAlder)}
-          error={barn.field("alder").error()}
-          aria-describedby={`barn-${barnNummer}-heading`}
-          inputMode="numeric"
-          autoComplete="off"
-          htmlSize={5}
-        />
-      </div>
+      <TextField
+        {...barn.field("alder").getInputProps()}
+        label={t(tekster.barnetsAlder)}
+        error={barn.field("alder").error()}
+        aria-describedby={`barn-${barnNummer}-heading`}
+        inputMode="numeric"
+        autoComplete="off"
+        htmlSize={5}
+      />
 
       <Select
         {...barn.field("bostatus").getInputProps()}
