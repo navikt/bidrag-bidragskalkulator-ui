@@ -47,7 +47,7 @@ function Slider({
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div>
       <Label htmlFor={id} id={labelId}>
         {label}
       </Label>
@@ -63,7 +63,7 @@ function Slider({
         min={min}
         max={max}
         className={cn(
-          "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50",
+          "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 mt-4",
           className
         )}
         onValueChange={handleChange}
@@ -99,7 +99,7 @@ function Slider({
         />
       </SliderPrimitive.Root>
       {list && (
-        <div className="flex justify-between gap-2">
+        <div className="flex justify-between gap-2 mt-2">
           {list.map((item) => (
             <span className="text-xs" key={item.value}>
               {item.label}
@@ -107,7 +107,7 @@ function Slider({
           ))}
         </div>
       )}
-      {valueDescription && <BodyShort>{valueDescription}</BodyShort>}
+      {valueDescription && <BodyShort className="font-bold mt-1">{valueDescription}</BodyShort>}
       {error && <ErrorMessage aria-live="assertive">{error}</ErrorMessage>}
     </div>
   );
