@@ -60,7 +60,9 @@ export default function Barnebidragskalkulator() {
         {isValidationErrorResponse(actionData) && (
           <div className="mt-6">
             <Alert variant="error">
-              <BodyLong>{actionData.fieldErrors.root}</BodyLong>
+              <BodyLong ref={resultatRef} tabIndex={-1}>
+                {actionData.fieldErrors.root}
+              </BodyLong>
             </Alert>
           </div>
         )}
