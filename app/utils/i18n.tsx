@@ -1,4 +1,4 @@
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useCallback, useContext, type ReactNode } from "react";
 import { z } from "zod";
 import { parseCookie } from "./cookie";
 
@@ -45,6 +45,19 @@ type Oversettelser = {
   [key: string]: OversettelseObject | OversettelseFunction | Oversettelser;
 };
 
+/**
+ * Definer oversettelser for en komponent.
+ *
+ * Selve funksjonen gjør ingenting, men det gir typesikkerhet til tekst-objektet som blir sendt inn.
+ *
+ * @example
+ * ```tsx
+ * const tekster = definerTekster({ hei: { en: "Hello", no: "Hei" } });
+ * ```
+ *
+ * @param tekster et objekt med oversettelser.
+ * @returns et typesikkert objekt med oversettelser.
+ */
 export function definerTekster<T extends Oversettelser>(tekster: T) {
   return tekster;
 }
@@ -66,8 +79,12 @@ export function definerTekster<T extends Oversettelser>(tekster: T) {
  */
 export function useOversettelse() {
   const språk = useOversettelseContext();
+  const t = useCallback(
+    (tekst: OversettelseObject) => oversett(språk, tekst),
+    [språk]
+  );
   return {
-    t: (tekst: OversettelseObject) => tekst[språk] as string,
+    t,
     språk,
   };
 }
@@ -88,6 +105,12 @@ export function oversett(språk: Språk, tekst: OversettelseObject) {
   return tekst[språk] as string;
 }
 
+/**
+ * Henter språket fra "decorator-language"-cookien, som er cookien som brukes av dekoratøren.
+ *
+ * @param cookieHeader den rene cookie-strengen som kommer fra request.headers.get("cookie").
+ * @returns språket som er valgt i cookien. Defaulter til norsk bokmål.
+ */
 export function hentSpråkFraCookie(cookieHeader: string | null) {
   if (!cookieHeader) {
     return Språk.NorwegianBokmål;
