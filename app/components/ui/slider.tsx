@@ -101,13 +101,15 @@ function Slider({
       {list && (
         <div className="flex justify-between gap-2 mt-2">
           {list.map((item) => (
-            <span className="text-xs" key={item.value}>
+            <span className="text-xs text-center" key={item.value}>
               {item.label}
             </span>
           ))}
         </div>
       )}
-      {valueDescription && <BodyShort className="font-bold mt-1">{valueDescription}</BodyShort>}
+      {valueDescription && (
+        <BodyShort className="font-bold mt-1">{valueDescription}</BodyShort>
+      )}
       {error && <ErrorMessage aria-live="assertive">{error}</ErrorMessage>}
     </div>
   );
