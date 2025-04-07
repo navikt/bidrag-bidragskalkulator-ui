@@ -32,14 +32,12 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
 
   if ("error" in data) {
     return (
-      <div className="mt-6">
-        <Alert variant="error">
-          <Heading size="small" spacing>
-            {t(tekster.noeGikkFeil)}
-          </Heading>
-          <BodyLong>{data.error}</BodyLong>
-        </Alert>
-      </div>
+      <Alert variant="error">
+        <Heading size="small" spacing ref={ref} tabIndex={-1}>
+          {t(tekster.noeGikkFeil)}
+        </Heading>
+        <BodyLong>{data.error}</BodyLong>
+      </Alert>
     );
   }
 
@@ -51,100 +49,98 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
   }, 0);
 
   return (
-    <div ref={ref} tabIndex={-1}>
-      <Alert variant="info">
-        <Heading size="small" spacing>
-          {totalSum > 0
-            ? t(tekster.overskrift.betale(Math.abs(totalSum)))
-            : t(tekster.overskrift.motta(Math.abs(totalSum)))}
-        </Heading>
-        {totalSum === 0 && <BodyLong spacing>{t(tekster.nullBidrag)}</BodyLong>}
-        <BodyLong spacing>{t(tekster.hvordanAvtale)}</BodyLong>
-        <div className="flex gap-4 justify-start mb-6">
-          <Button
-            as="a"
-            href="https://www.nav.no/fyllut/nav550060?sub=paper"
-            variant="primary"
-          >
-            {t(tekster.lagPrivatAvtale)}
-          </Button>
-          <Button
-            as="a"
-            href="https://www.nav.no/start/soknad-barnebidrag-bidragsmottaker"
-            variant="secondary"
-          >
-            {t(tekster.søkNavOmFastsetting)}
-          </Button>
-        </div>
-        <BodyLong spacing>{t(tekster.callToActionGammelKalkulator)}</BodyLong>
-        <ExpansionCard
-          aria-labelledby="detaljer"
-          size="small"
-          onToggle={(open) => {
-            // Vi ønsker å unngå å spore at man åpner og lukker og åpner og lukker osv.
-            if (beregningsdetaljerAntallSporingerRef.current > 2) {
-              return;
-            }
-            beregningsdetaljerAntallSporingerRef.current++;
-            open
-              ? sporHendelse("beregningsdetaljer utvidet")
-              : sporHendelse("beregningsdetaljer kollapset");
-          }}
+    <Alert variant="info">
+      <Heading size="small" spacing ref={ref} tabIndex={-1}>
+        {totalSum > 0
+          ? t(tekster.overskrift.betale(Math.abs(totalSum)))
+          : t(tekster.overskrift.motta(Math.abs(totalSum)))}
+      </Heading>
+      {totalSum === 0 && <BodyLong spacing>{t(tekster.nullBidrag)}</BodyLong>}
+      <BodyLong spacing>{t(tekster.hvordanAvtale)}</BodyLong>
+      <div className="flex gap-4 justify-start mb-6">
+        <Button
+          as="a"
+          href="https://www.nav.no/fyllut/nav550060?sub=paper"
+          variant="primary"
         >
-          <ExpansionCardHeader>
-            <ExpansionCardTitle as="h3" size="small" id="detaljer">
-              {t(tekster.detaljer.overskrift)}
-            </ExpansionCardTitle>
-          </ExpansionCardHeader>
-          <ExpansionCardContent>
-            {data.resultater.length > 1 && (
-              <>
-                <BodyLong spacing>
-                  {t(tekster.detaljer.utregningPerBarn)}
-                </BodyLong>
-                <List>
-                  {data.resultater.map((resultat, index) => (
-                    <ListItem key={index}>
-                      {resultat.bidragstype === "MOTTAKER"
-                        ? t(
-                            tekster.detaljer.motta(
-                              resultat.barnetsAlder,
-                              resultat.sum
-                            )
+          {t(tekster.lagPrivatAvtale)}
+        </Button>
+        <Button
+          as="a"
+          href="https://www.nav.no/start/soknad-barnebidrag-bidragsmottaker"
+          variant="secondary"
+        >
+          {t(tekster.søkNavOmFastsetting)}
+        </Button>
+      </div>
+      <BodyLong spacing>{t(tekster.callToActionGammelKalkulator)}</BodyLong>
+      <ExpansionCard
+        aria-labelledby="detaljer"
+        size="small"
+        onToggle={(open) => {
+          // Vi ønsker å unngå å spore at man åpner og lukker og åpner og lukker osv.
+          if (beregningsdetaljerAntallSporingerRef.current > 2) {
+            return;
+          }
+          beregningsdetaljerAntallSporingerRef.current++;
+          open
+            ? sporHendelse("beregningsdetaljer utvidet")
+            : sporHendelse("beregningsdetaljer kollapset");
+        }}
+      >
+        <ExpansionCardHeader>
+          <ExpansionCardTitle as="h3" size="small" id="detaljer">
+            {t(tekster.detaljer.overskrift)}
+          </ExpansionCardTitle>
+        </ExpansionCardHeader>
+        <ExpansionCardContent>
+          {data.resultater.length > 1 && (
+            <>
+              <BodyLong spacing>
+                {t(tekster.detaljer.utregningPerBarn)}
+              </BodyLong>
+              <List>
+                {data.resultater.map((resultat, index) => (
+                  <ListItem key={index}>
+                    {resultat.bidragstype === "MOTTAKER"
+                      ? t(
+                          tekster.detaljer.motta(
+                            resultat.barnetsAlder,
+                            resultat.sum
                           )
-                        : t(
-                            tekster.detaljer.betale(
-                              resultat.barnetsAlder,
-                              resultat.sum
-                            )
-                          )}
-                    </ListItem>
-                  ))}
-                </List>
-              </>
-            )}
-            <BodyLong spacing>
-              {t(tekster.detaljer.underholdskostnadBeskrivelse)}
-            </BodyLong>
-            <List>
-              {data.resultater.map((resultat, index) => (
-                <ListItem key={index}>
-                  {t(
-                    tekster.detaljer.underholdskostnadPerBarn(
-                      resultat.barnetsAlder,
-                      resultat.underholdskostnad
-                    )
-                  )}
-                </ListItem>
-              ))}
-            </List>
-            <BodyLong spacing>
-              {t(tekster.detaljer.underholdskostnadSplitt)}
-            </BodyLong>
-          </ExpansionCardContent>
-        </ExpansionCard>
-      </Alert>
-    </div>
+                        )
+                      : t(
+                          tekster.detaljer.betale(
+                            resultat.barnetsAlder,
+                            resultat.sum
+                          )
+                        )}
+                  </ListItem>
+                ))}
+              </List>
+            </>
+          )}
+          <BodyLong spacing>
+            {t(tekster.detaljer.underholdskostnadBeskrivelse)}
+          </BodyLong>
+          <List>
+            {data.resultater.map((resultat, index) => (
+              <ListItem key={index}>
+                {t(
+                  tekster.detaljer.underholdskostnadPerBarn(
+                    resultat.barnetsAlder,
+                    resultat.underholdskostnad
+                  )
+                )}
+              </ListItem>
+            ))}
+          </List>
+          <BodyLong spacing>
+            {t(tekster.detaljer.underholdskostnadSplitt)}
+          </BodyLong>
+        </ExpansionCardContent>
+      </ExpansionCard>
+    </Alert>
   );
 };
 
