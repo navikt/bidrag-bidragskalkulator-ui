@@ -10,6 +10,11 @@ const tekster = definerTekster({
         en: "Age is required",
         nn: "Alder må oppgis",
       },
+      tall: {
+        nb: "Alder må være et tall",
+        en: "Age must be a number",
+        nn: "Alder må vere eit tall",
+      },
       positivt: {
         nb: "Alder må være et positivt tall",
         en: "Age must be a positive number",
@@ -108,7 +113,12 @@ export function lagSkjemaSchema(språk: Språk) {
               .nonempty(oversett(språk, tekster.feilmeldinger.alder.påkrevd))
               .pipe(
                 z.coerce
-                  .number()
+                  .number({
+                    invalid_type_error: oversett(
+                      språk,
+                      tekster.feilmeldinger.alder.tall
+                    ),
+                  })
                   .min(0, oversett(språk, tekster.feilmeldinger.alder.positivt))
                   .max(25, {
                     message: oversett(
