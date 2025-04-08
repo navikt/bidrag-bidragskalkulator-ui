@@ -7,6 +7,7 @@ import { handleFormSubmission } from "~/features/form/api.server";
 import { BidragsForm } from "~/features/form/BidragsForm";
 import { IntroPanel } from "~/features/form/IntroPanel";
 import { Resultatpanel } from "~/features/form/Resultatpanel";
+import { useBidragsform } from "~/features/form/useBidragsForm";
 import type { SkjemaResponse } from "~/features/form/validator";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
@@ -37,6 +38,7 @@ export default function Barnebidragskalkulator() {
   const actionData = useActionData<typeof action>();
   const resultatRef = useRef<HTMLDivElement>(null);
   const { t } = useOversettelse();
+  const form = useBidragsform(resultatRef);
 
   const getResultData = () => {
     if (!actionData || isValidationErrorResponse(actionData)) {
@@ -55,7 +57,7 @@ export default function Barnebidragskalkulator() {
 
         <IntroPanel />
 
-        <BidragsForm resultatRef={resultatRef} />
+        <BidragsForm form={form} />
 
         {isValidationErrorResponse(actionData) && (
           <div className="mt-6">
@@ -69,7 +71,11 @@ export default function Barnebidragskalkulator() {
       </div>
       {actionData && (
         <div className="max-w-3xl mx-auto p-4 mt-8">
-          <Resultatpanel data={getResultData()} ref={resultatRef} />
+          <Resultatpanel
+            data={getResultData()}
+            formData={form.value()}
+            ref={resultatRef}
+          />
         </div>
       )}
     </>

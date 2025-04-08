@@ -149,7 +149,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         "Content-Security-Policy": cspHeader,
         "Referrer-Policy": "same-origin",
         "Permissions-Policy":
-          "camera=(), microphone=(), geolocation=(), payment=(), display-capture=(), fullscreen=(), usb=(), screen-wake-lock=(), clipboard-read=(), clipboard-write=()",
+          "camera=(), microphone=(), geolocation=(), payment=(), display-capture=(), fullscreen=(), usb=(), screen-wake-lock=(), clipboard-read=self, clipboard-write=self",
         "Cross-Origin-Opener-Policy": "same-origin",
         "Cross-Origin-Embedder-Policy": "credentialless",
         "Cross-Origin-Resource-Policy": "same-origin",

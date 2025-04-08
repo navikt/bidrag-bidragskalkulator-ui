@@ -4,7 +4,8 @@ type EventType =
   | "skjema fullført"
   | "samværsgrad justert"
   | "beregningsdetaljer utvidet"
-  | "beregningsdetaljer kollapset";
+  | "beregningsdetaljer kollapset"
+  | "delbar lenke kopiert";
 
 /**
  * Sporer en hendelse
