@@ -8,6 +8,26 @@ Kalkulatoren er under aktiv utvikling, så det er ikke sikkert at alt fungerer s
 
 Man deployer automatisk til dev- og prod-miljøene når man merger en pull request til main-branchen.
 
+### Manuell deploy til dev
+
+For å deploye en spesifikk branch til dev-miljøet:
+1. Gå til "Actions" i GitHub
+2. Velg "Manuell deploy til dev" fra workflows-listen
+3. Klikk "Run workflow"
+4. Velg branchen du vil deploye
+5. Klikk "Run workflow"
+
+### Deploy til prod
+
+Man kan deploye direkte til prod ved å lage en ny release i GitHub:
+1. Gå til "Releases" i GitHub
+2. Klikk på "Create a new release"
+3. Velg en tag (f.eks. v1.2.3)
+4. Skriv en tittel og beskrivelse av endringene
+5. Klikk "Publish release"
+
+Når releasen er publisert, vil applikasjonen automatisk deployes til prod-miljøet.
+
 **Dev-miljøet finner du på https://bidragskalkulator-v2.ekstern.dev.nav.no**
 
 **Prod-miljøet finner du på https://barnebidragskalkulator.nav.no**
