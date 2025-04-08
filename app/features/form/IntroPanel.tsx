@@ -1,4 +1,4 @@
-import { BodyLong, GuidePanel, Heading, Link } from "@navikt/ds-react";
+import { BodyLong, GuidePanel, Heading } from "@navikt/ds-react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export function IntroPanel() {
@@ -10,7 +10,6 @@ export function IntroPanel() {
       </Heading>
       <BodyLong spacing>{t(tekster.innhold1)}</BodyLong>
       <BodyLong spacing>{t(tekster.innhold2)}</BodyLong>
-      <BodyLong>{t(tekster.innhold3)}</BodyLong>
     </GuidePanel>
   );
 }
@@ -22,42 +21,13 @@ const tekster = definerTekster({
     nn: <>Kva kan du bruke fostringstilskots&shy;kalkulatoren til?</>,
   },
   innhold1: {
-    nb: "Barnebidraget avtaler du med den andre forelderen eller søker Nav om hjelp til å fastsette.",
-    en: "The child support is agreed upon with the other parent or sought by Nav to determine.",
-    nn: "Fostringstilskotet avtaler du med den andre forelderen eller søkjer Nav om hjelp til å fastsettje.",
+    nb: "Barnebidraget avtaler du med den andre forelderen eller søker Nav om hjelp til å fastsette. Barnebidragskalkulatoren hjelper deg å regne ut hva du skal betale eller motta i barnebidrag.",
+    en: "The child support is agreed upon with the other parent or sought by Nav to determine. The child support calculator helps you calculate how much you should pay or receive in child support.",
+    nn: "Fostringstilskotet avtaler du med den andre forelderen eller søkjer Nav om hjelp til å fastsettje. Fostringstilskotskalkulatoren hjelper deg å regne ut hva du skal betale eller motta i fostringstilskot.",
   },
   innhold2: {
     nb: "Forslaget er basert på noen få opplysninger, som gjør det enkelt å få en omtrentlig sum.",
     en: "The proposal is based on a few pieces of information, making it easy to get an approximate sum.",
     nn: "Forslaget er basert på nokon få opplysningar, som gjør det enkelt å få ein omtrentleg sum.",
-  },
-  innhold3: {
-    nb: (
-      <>
-        Om du ønsker en mer presis kalkulering, kan du bruke{" "}
-        <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
-          den gamle bidragskalkulatoren
-        </Link>{" "}
-        til å legge inn flere opplysninger og få en riktigere sum.
-      </>
-    ),
-    en: (
-      <>
-        If you want a more precise calculation, you can use the{" "}
-        <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
-          old child support calculator
-        </Link>{" "}
-        to enter more information and get a more accurate sum.
-      </>
-    ),
-    nn: (
-      <>
-        Om du ynskjer ein meir presis kalkulering, kan du bruke den{" "}
-        <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
-          gamle tilskotskalkulatoren
-        </Link>{" "}
-        til å leggje inn fleire opplysningar og få ein riktigare sum.
-      </>
-    ),
   },
 });
