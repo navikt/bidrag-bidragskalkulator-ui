@@ -57,23 +57,17 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
       </Heading>
       {totalSum === 0 && <BodyLong spacing>{t(tekster.nullBidrag)}</BodyLong>}
       <BodyLong spacing>{t(tekster.hvordanAvtale)}</BodyLong>
-      <div className="flex gap-4 justify-start mb-6">
-        <Button
-          as="a"
-          href="https://www.nav.no/fyllut/nav550060?sub=paper"
-          variant="primary"
-        >
-          {t(tekster.lagPrivatAvtale)}
-        </Button>
-        <Button
-          as="a"
-          href="https://www.nav.no/start/soknad-barnebidrag-bidragsmottaker"
-          variant="secondary"
-        >
-          {t(tekster.søkNavOmFastsetting)}
-        </Button>
-      </div>
+
+      <Button
+        as="a"
+        href="https://www.nav.no/fyllut/nav550060?sub=paper"
+        variant="primary"
+        className="mb-6"
+      >
+        {t(tekster.lagPrivatAvtale)}
+      </Button>
       <BodyLong spacing>{t(tekster.callToActionGammelKalkulator)}</BodyLong>
+      <BodyLong spacing>{t(tekster.hvisManIkkeKommerTilEnighet)}</BodyLong>
       <ExpansionCard
         aria-labelledby="detaljer"
         size="small"
@@ -175,14 +169,46 @@ const tekster = definerTekster({
     }),
   },
   nullBidrag: {
-    nb: "Det betyr at du ikke skal betale noe i barnebidrag. Det kan være fordi dere har delt samvær likt mellom dere, ofte i kombinasjon at differansen mellom inntektene deres er lav.",
-    en: "This means that you should not pay any child support. This may be because you and the other parent have shared custody equally, often in combination with a low difference in income.",
-    nn: "Det betyr at du ikke skal betale noe i fostringstilskot. Det kan være fordi du og den andre forelderen har delt samvær likt mellom dere, ofte i kombinasjon at differansen mellom inntektene deres er lav.",
+    nb: "Det kan være fordi dere har delt samvær likt mellom dere, ofte i kombinasjon at forskjellen mellom inntektene deres er lav.",
+    en: "This may be because you and the other parent have shared custody equally, often in combination with a low difference in income.",
+    nn: "Det kan være fordi du og den andre forelderen har delt samvær likt mellom dere, ofte i kombinasjon at forskjellen mellom inntektene deres er lav.",
   },
   hvordanAvtale: {
-    nb: "Barnebidraget avtaler du med den andre forelderen eller søker Nav om hjelp til å fastsette.",
-    en: "The child support is agreed upon with the other parent or sought by Nav to determine.",
-    nn: "Fostringstilskotet avtaler du med den andre forelderen eller søkjer Nav om hjelp til å fastsettje.",
+    nb: "Den endelige summen på barnebidraget avtaler du med den andre forelderen. Da står dere fritt til å endre avtalen på et senere tidspunkt, om ting som inntekt eller samvær skulle endre seg. Om du vil, kan du opprette en slik avtale her:",
+    en: "The final amount of child support is agreed upon with the other parent. You are free to change the agreement at a later time if things like income or custody change. If you want, you can create such an agreement here:",
+    nn: "Den endelige summen på fostringstilskotet avtaler du med den andre forelderen. Du står fritt til å endre avtalen på et senere tidspunkt, om ting som inntekt eller samvær skulle endre seg. Om du vil, kan du opprette en slik avtale her:",
+  },
+  hvisManIkkeKommerTilEnighet: {
+    nb: (
+      <>
+        Hvis dere ikke blir enige, kan dere søke Nav om hjelp til å fastsette
+        barnebidraget. Dette gjør dere ved å søke om{" "}
+        <Link href="https://www.nav.no/fyllut/nav540005" target="_blank">
+          fastsetting av barnebidrag
+        </Link>
+        . Merk at forventet saksbehandlingstid er 5 måneder.
+      </>
+    ),
+    en: (
+      <>
+        If you cannot agree, you can ask Nav for help to determine child
+        support. This is done by applying for{" "}
+        <Link href="https://www.nav.no/fyllut/nav540005" target="_blank">
+          determination of child support
+        </Link>
+        . Note that the expected processing time is 5 months.
+      </>
+    ),
+    nn: (
+      <>
+        Om dere ikkje blir einige, kan dere søkje Nav om hjelp til å fastsetje
+        fostringstilskotet. Dette gjer dere ved å søkje om{" "}
+        <Link href="https://www.nav.no/fyllut/nav540005" target="_blank">
+          fastsetting av fostringstilskot
+        </Link>
+        . Merk at forventa saksbehandlingstid er 5 månader.
+      </>
+    ),
   },
   detaljer: {
     overskrift: {

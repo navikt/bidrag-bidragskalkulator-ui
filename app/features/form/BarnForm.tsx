@@ -169,9 +169,9 @@ const tekster = definerTekster({
     nn: "Kor mykje vil barnet være saman med deg?",
   },
   samværsgradBeskrivelse: {
-    nb: "Estimér hvor mange netter barnet vil være hos deg i snitt per måned",
+    nb: "Estimer hvor mange netter barnet vil være hos deg i snitt per måned",
     en: "Estimate how many nights the child will stay with you on average per month",
-    nn: "Estimér kor mange netter barnet vil være hos deg i snitt per måned",
+    nn: "Estimer kor mange netter barnet vil være hos deg i snitt per måned",
   },
   netter: (antall) => ({
     nb: `${antall} netter`,
