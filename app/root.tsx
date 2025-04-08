@@ -131,6 +131,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       {
         "script-src-elem": ["'self'", "https://umami.nav.no"],
         "connect-src": ["'self'", "https://umami.nav.no"],
+        "style-src-elem": ["'self'"],
       },
       { env: env.ENVIRONMENT }
     ),
