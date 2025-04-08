@@ -1,13 +1,11 @@
-name: Bygg og deploy
+name: Deploy release til prod
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
 
 jobs:
-  deploy-dev:
-    name: Deploy til dev
+  deploy-prod:
+    name: Deploy til prod
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -19,7 +17,7 @@ jobs:
           persist-credentials: false
       - name: Bygg og push docker image til GAR
         uses: nais/docker-build-push@main
-        id: docker-push-dev
+        id: docker-push-prod
         with:
           team: bidrag
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
@@ -28,7 +26,7 @@ jobs:
       - name: Deploy til nais
         uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: dev-gcp
-          IMAGE: ${{ steps.docker-push-dev.outputs.image }}
+          CLUSTER: prod-gcp
+          IMAGE: ${{ steps.docker-push-prod.outputs.image }}
           RESOURCE: .nais/naiserator.yml
-          VARS: .nais/dev.json
+          VARS: .nais/prod.json

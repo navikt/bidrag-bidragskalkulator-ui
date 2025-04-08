@@ -1,13 +1,16 @@
-name: Bygg og deploy
+name: Manuell deploy til dev
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+    inputs:
+      branch:
+        description: "Branchen du vil deploye"
+        required: true
+        default: "main"
+        type: string
 
 jobs:
   deploy-dev:
-    name: Deploy til dev
+    name: Deploy to dev
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,15 +20,16 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+          ref: ${{ github.event.inputs.branch }}
       - name: Bygg og push docker image til GAR
         uses: nais/docker-build-push@main
         id: docker-push-dev
         with:
           team: bidrag
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}F
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
-      - name: Deploy til nais
+      - name: Deploy to nais
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
