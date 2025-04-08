@@ -22,7 +22,7 @@ jobs:
         id: docker-push-dev
         with:
           team: bidrag
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}F
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
       - name: Deploy to nais
@@ -32,30 +32,3 @@ jobs:
           IMAGE: ${{ steps.docker-push-dev.outputs.image }}
           RESOURCE: .nais/naiserator.yml
           VARS: .nais/dev.json
-  deploy-prod:
-    name: Deploy to prod
-    needs: [deploy-dev]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-      packages: write
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-      - name: Build and push docker image to GAR
-        uses: nais/docker-build-push@main
-        id: docker-push-prod
-        with:
-          team: bidrag
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
-      - name: Deploy to nais
-        uses: nais/deploy/actions/deploy@v2
-        env:
-          CLUSTER: prod-gcp
-          IMAGE: ${{ steps.docker-push-prod.outputs.image }}
-          RESOURCE: .nais/naiserator.yml
-          VARS: .nais/prod.json
