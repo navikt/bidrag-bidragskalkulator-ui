@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: Bygg og deploy
 on:
   workflow_dispatch:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy-dev:
-    name: Deploy to dev
+    name: Deploy til dev
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
-      - name: Build and push docker image to GAR
+      - name: Bygg og push docker image til GAR
         uses: nais/docker-build-push@main
         id: docker-push-dev
         with:
@@ -25,7 +25,7 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
-      - name: Deploy to nais
+      - name: Deploy til nais
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
