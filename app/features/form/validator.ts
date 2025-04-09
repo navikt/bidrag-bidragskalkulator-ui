@@ -102,6 +102,18 @@ const tekster = definerTekster({
   },
 });
 
+export const søkeparametreSchema = z.object({
+  barn: z.array(
+    z.object({
+      alder: z.string(),
+      samværsgrad: z.string(),
+      bostatus: z.enum(["HOS_FORELDER_1", "DELT_BOSTED", "HOS_FORELDER_2"]),
+    })
+  ),
+  inntektForelder1: z.string(),
+  inntektForelder2: z.string(),
+});
+
 export function lagSkjemaSchema(språk: Språk) {
   return z.object({
     barn: z
