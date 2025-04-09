@@ -84,7 +84,13 @@ export const Resultatpanel = ({ data, ref, formData }: ResultatpanelProps) => {
 
   return (
     <Alert variant="info">
-      <Heading size="small" spacing ref={ref} tabIndex={-1}>
+      <Heading
+        size="small"
+        spacing
+        ref={ref}
+        tabIndex={-1}
+        className="focus:outline-0"
+      >
         {totalSum > 0
           ? t(tekster.overskrift.betale(Math.abs(totalSum)))
           : t(tekster.overskrift.motta(Math.abs(totalSum)))}
@@ -345,9 +351,9 @@ const tekster = definerTekster({
     }),
   },
   callToActionDelingsUrl: {
-    nb: "Du kan dele beregningen med den andre forelderen ved å kopiere lenken til beregningen med knappen under.",
-    en: "You can share the calculation with the other parent by copying the link to the calculation with the button below.",
-    nn: "Du kan dele beregningen med den andre forelderen ved å kopiere lenken til beregningen med knappen under.",
+    nb: "Du kan dele beregningen med den andre forelderen ved å kopiere lenken til beregningen:",
+    en: "You can share the calculation with the other parent by copying the link to the calculation:",
+    nn: "Du kan dele beregningen med den andre forelderen ved å kopiere lenken til beregningen:",
   },
   callToActionGammelKalkulator: {
     nb: (
@@ -388,16 +394,11 @@ const tekster = definerTekster({
     en: "Make a private agreement",
     nn: "Lag ein privat avtale",
   },
-  søkNavOmFastsetting: {
-    nb: "Søk Nav om fastsetting",
-    en: "Ask Nav for determination",
-    nn: "Søk Nav om fastsettelse",
-  },
   delBeregning: {
     vanlig: {
-      nb: "Kopier lenke til beregning",
-      en: "Copy link to calculation",
-      nn: "Kopier lenke til berekning",
+      nb: "Kopier lenke",
+      en: "Copy link",
+      nn: "Kopier lenke",
     },
     kopiert: {
       nb: "Kopiert!",
