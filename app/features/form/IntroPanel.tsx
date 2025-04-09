@@ -18,7 +18,7 @@ const tekster = definerTekster({
     nn: "Fostringstilskotskalkulatoren hjelper deg å regne ut hva du skal betale eller motta i fostringstilskot.",
   },
   innhold2: {
-    nb: "Summen kan du bruke til å lage en avtale med den andre foreldren.",
+    nb: "Summen kan du bruke til å lage en avtale med den andre forelderen.",
     en: "The sum can be used to make an agreement with the other parent.",
     nn: "Summen kan du bruke til å lage ein avtale med den andre forelderen.",
   },

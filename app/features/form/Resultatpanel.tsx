@@ -84,7 +84,13 @@ export const Resultatpanel = ({ data, ref, formData }: ResultatpanelProps) => {
 
   return (
     <Alert variant="info">
-      <Heading size="small" spacing ref={ref} tabIndex={-1}>
+      <Heading
+        size="small"
+        spacing
+        ref={ref}
+        tabIndex={-1}
+        className="focus:outline-0"
+      >
         {totalSum > 0
           ? t(tekster.overskrift.betale(Math.abs(totalSum)))
           : t(tekster.overskrift.motta(Math.abs(totalSum)))}
@@ -92,23 +98,24 @@ export const Resultatpanel = ({ data, ref, formData }: ResultatpanelProps) => {
       {totalSum === 0 && <BodyLong spacing>{t(tekster.nullBidrag)}</BodyLong>}
       <BodyLong spacing>{t(tekster.hvordanAvtale)}</BodyLong>
 
-      <div className="flex gap-4 justify-start items-start mb-6">
-        <Button
-          as="a"
-          href="https://www.nav.no/fyllut/nav550060?sub=paper"
-          variant="primary"
-        >
-          {t(tekster.lagPrivatAvtale)}
-        </Button>
-        <CopyButton
-          size="medium"
-          copyText={lagDelingsUrl()}
-          text={t(tekster.delBeregning.vanlig)}
-          activeText={t(tekster.delBeregning.kopiert)}
-          onClick={() => sporHendelse("delbar lenke kopiert")}
-        />
-      </div>
-
+      <Button
+        as="a"
+        href="https://www.nav.no/fyllut/nav550060?sub=paper"
+        variant="primary"
+        className="mb-6"
+      >
+        {t(tekster.lagPrivatAvtale)}
+      </Button>
+      <BodyLong spacing>{t(tekster.callToActionDelingsUrl)}</BodyLong>
+      <CopyButton
+        variant="action"
+        size="medium"
+        copyText={lagDelingsUrl()}
+        text={t(tekster.delBeregning.vanlig)}
+        activeText={t(tekster.delBeregning.kopiert)}
+        onClick={() => sporHendelse("delbar lenke kopiert")}
+        className="mb-6"
+      />
       <BodyLong spacing>{t(tekster.callToActionGammelKalkulator)}</BodyLong>
       <BodyLong spacing>{t(tekster.hvisManIkkeKommerTilEnighet)}</BodyLong>
       <ExpansionCard
@@ -212,9 +219,9 @@ const tekster = definerTekster({
     }),
   },
   nullBidrag: {
-    nb: "Det kan være fordi dere har delt samvær likt mellom dere, ofte i kombinasjon at forskjellen mellom inntektene deres er lav.",
-    en: "This may be because you and the other parent have shared custody equally, often in combination with a low difference in income.",
-    nn: "Det kan være fordi du og den andre forelderen har delt samvær likt mellom dere, ofte i kombinasjon at forskjellen mellom inntektene deres er lav.",
+    nb: "Det kan være fordi dere har delt nettene med barnet likt mellom dere, og fordi det er liten forskjell mellom inntektene deres.",
+    en: "It may be because you have divided the nights with the child equally between you, and because there is a small difference between your incomes.",
+    nn: "Det kan vere fordi dere har delt nettene med barnet likt mellom dere, og fordi det er liten forskjell mellom inntektene deres.",
   },
   hvordanAvtale: {
     nb: "Den endelige summen på barnebidraget avtaler du med den andre forelderen. Da står dere fritt til å endre avtalen på et senere tidspunkt, om ting som inntekt eller samvær skulle endre seg. Om du vil, kan du opprette en slik avtale her:",
@@ -229,7 +236,8 @@ const tekster = definerTekster({
         <Link href="https://www.nav.no/fyllut/nav540005" target="_blank">
           fastsetting av barnebidrag
         </Link>
-        . Merk at forventet saksbehandlingstid er 5 måneder.
+        . Vær oppmerksom på at det koster 1314 kroner, og at
+        saksbehandlingstiden er 5 måneder.
       </>
     ),
     en: (
@@ -239,7 +247,7 @@ const tekster = definerTekster({
         <Link href="https://www.nav.no/fyllut/nav540005" target="_blank">
           determination of child support
         </Link>
-        . Note that the expected processing time is 5 months.
+        . It costs 1314 kroner, and the processing time is 5 months.
       </>
     ),
     nn: (
@@ -249,7 +257,8 @@ const tekster = definerTekster({
         <Link href="https://www.nav.no/fyllut/nav540005" target="_blank">
           fastsetting av fostringstilskot
         </Link>
-        . Merk at forventa saksbehandlingstid er 5 månader.
+        . Vær oppmerksam på at det koster 1314 kroner, og at
+        saksbehandlingstiden er 5 måneder.
       </>
     ),
   },
@@ -341,15 +350,20 @@ const tekster = definerTekster({
       ),
     }),
   },
+  callToActionDelingsUrl: {
+    nb: "Du kan dele beregningen med den andre forelderen ved å kopiere lenken til beregningen:",
+    en: "You can share the calculation with the other parent by copying the link to the calculation:",
+    nn: "Du kan dele beregningen med den andre forelderen ved å kopiere lenken til beregningen:",
+  },
   callToActionGammelKalkulator: {
     nb: (
       <>
         Forslaget er basert på noen få opplysninger, som gjør det enkelt å få en
-        omtrentlig sum. Om du ønsker en mer presis kalkulering, kan du bruke{" "}
+        omtrentlig sum. Om du ønsker en mer presis beregning, kan du bruke{" "}
         <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
           den gamle bidragskalkulatoren
         </Link>{" "}
-        til å legge inn flere opplysninger og få en riktigere sum.
+        til å legge inn flere opplysninger.
       </>
     ),
     en: (
@@ -360,18 +374,18 @@ const tekster = definerTekster({
         <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
           old child support calculator
         </Link>{" "}
-        to enter more information and get a more accurate sum.
+        to enter more information.
       </>
     ),
     nn: (
       <>
         Forslaget er basert på nokon få opplysningar, som gjør det enkelt å få
-        ein omtrentleg sum. Om du ynskjer ein meir presis kalkulering, kan du
+        ein omtrentleg sum. Om du ynskjer ein meir presis berekning, kan du
         bruke{" "}
         <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
           den gamle bidragskalkulatoren
         </Link>{" "}
-        til å leggje inn fleire opplysningar og få ein riktigare sum.
+        til å leggje inn fleire opplysningar.
       </>
     ),
   },
@@ -380,16 +394,11 @@ const tekster = definerTekster({
     en: "Make a private agreement",
     nn: "Lag ein privat avtale",
   },
-  søkNavOmFastsetting: {
-    nb: "Søk Nav om fastsetting",
-    en: "Ask Nav for determination",
-    nn: "Søk Nav om fastsettelse",
-  },
   delBeregning: {
     vanlig: {
-      nb: "Kopier lenke til beregning",
-      en: "Copy link to calculation",
-      nn: "Kopier lenke til berekning",
+      nb: "Kopier lenke",
+      en: "Copy link",
+      nn: "Kopier lenke",
     },
     kopiert: {
       nb: "Kopiert!",
