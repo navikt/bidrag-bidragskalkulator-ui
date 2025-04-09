@@ -81,6 +81,8 @@ export function BidragsForm({ resultatRef }: BidragsFormProps) {
           }, 0);
         }}
       >
+
+        
         {t(tekster.leggTilBarn)}
       </Button>
 
