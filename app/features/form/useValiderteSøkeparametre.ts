@@ -10,6 +10,10 @@ import { sporHendelse } from "~/utils/analytics";
  */
 export function useValiderteSøkeparametre<T>(schema: ZodSchema<T>) {
   const [søkeparameterString] = useSearchParams();
+  if (!søkeparameterString) {
+    return null;
+  }
+
   try {
     const søkeparametre = parseSøkeparametreTilObjekt(
       søkeparameterString.toString()
@@ -18,17 +22,11 @@ export function useValiderteSøkeparametre<T>(schema: ZodSchema<T>) {
     const resultat = schema.safeParse(søkeparametre);
 
     if (!resultat.success) {
-      sporHendelse("delbar lenke feilet validering", {
-        feil: resultat.error.format(),
-      });
       return null;
     }
 
     return resultat.data;
   } catch (e) {
-    sporHendelse("delbar lenke feilet validering", {
-      feil: String(e),
-    });
     return null;
   }
 }
