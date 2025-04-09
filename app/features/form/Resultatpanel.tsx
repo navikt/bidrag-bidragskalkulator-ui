@@ -53,8 +53,6 @@ export const Resultatpanel = ({ data, ref, formData }: ResultatpanelProps) => {
     searchParams.append("inntektForelder1", formData.inntektForelder1);
     searchParams.append("inntektForelder2", formData.inntektForelder2);
 
-    console.log(searchParams.toString());
-
     return `${window.location.origin}${
       window.location.pathname
     }?${searchParams.toString()}`;
