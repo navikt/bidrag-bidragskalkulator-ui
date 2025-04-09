@@ -6,9 +6,9 @@ const tekster = definerTekster({
   feilmeldinger: {
     alder: {
       påkrevd: {
-        nb: "Alder må oppgis",
-        en: "Age is required",
-        nn: "Alder må oppgis",
+        nb: "Fyll ut alder",
+        en: "Fill in age",
+        nn: "Fyll ut alder",
       },
       tall: {
         nb: "Alder må være et tall",
@@ -26,16 +26,16 @@ const tekster = definerTekster({
         nn: "Alder må vere høyst 25 år",
       },
       heleÅr: {
-        nb: "Oppgi alder i hele år",
-        en: "Enter age in whole years",
-        nn: "Oppgi alder i heile år",
+        nb: "Fyll ut alder i hele år",
+        en: "Fill in age in whole years",
+        nn: "Fyll ut alder i heile år",
       },
     },
     samvær: {
       påkrevd: {
-        nb: "Samværsgrad må oppgis",
-        en: "Visitation degree is required",
-        nn: "Samværsgrad må oppgis",
+        nb: "Fyll ut samværsgrad",
+        en: "Fill in visitation degree",
+        nn: "Fyll ut samværsgrad",
       },
       minimum: {
         nb: "Samværsgrad må være minst 0",
@@ -48,21 +48,21 @@ const tekster = definerTekster({
         nn: "Samværsgrad må vere høgst 100",
       },
       minimumHosForelder1: {
-        nb: "Barnet kan ikke være mer hos deg enn den andre forelderen om barnet bor hos deg",
-        en: "The child cannot stay with you more than the other parent if the child lives with you",
-        nn: "Barnet kan ikkje være mer hos deg enn den andre forelderen om barnet bur hos deg",
+        nb: "Barnet kan ikke ha færrest netter hos deg når barnet bor hos deg.",
+        en: "The child cannot have fewer nights with you when the child lives with you.",
+        nn: "Barnet kan ikkje ha færrest netter hos deg når barnet bur hos deg.",
       },
       maksimumHosForelder2: {
-        nb: "Barnet kan ikke være mer hos deg enn den andre forelderen om barnet bor hos den andre forelderen",
-        en: "The child cannot stay with you more than the other parent if the child lives with the other parent",
-        nn: "Barnet kan ikkje være mer hos deg enn den andre forelderen om barnet bur hos den andre forelderen",
+        nb: "Barnet kan ikke ha flest netter hos deg når barnet bor hos den andre forelderen.",
+        en: "The child cannot spend most nights with you when the child lives with the other parent.",
+        nn: "Barnet kan ikkje ha flest netter hos deg når barnet bur hos den andre forelderen.",
       },
     },
     bostatus: {
       påkrevd: {
-        nb: "Bosted må oppgis",
-        en: "Bostatus is required",
-        nn: "Bosted må oppgis",
+        nb: "Fyll ut hvor barnet bor",
+        en: "Fill in where the child lives",
+        nn: "Fyll ut kjeres barnet bor",
       },
       ugyldig: {
         nb: "Ugyldig verdi",
@@ -77,16 +77,16 @@ const tekster = definerTekster({
         nn: "Minst eitt barn må leggjast til",
       },
       maksimum: {
-        nb: "Maks 10 barn kan legges til",
+        nb: "Maksimum 10 barn kan legges til",
         en: "Maximum 10 children can be added",
-        nn: "Maks 10 barn kan leggjast til",
+        nn: "Maksimum 10 barn kan leggjast til",
       },
     },
     inntekt: {
       påkrevd: {
-        nb: "Inntekt må oppgis",
-        en: "Income is required",
-        nn: "Inntekt må oppgis",
+        nb: "Fyll ut inntekt",
+        en: "Fill in income",
+        nn: "Fyll ut inntekt",
       },
       positivt: {
         nb: "Inntekt må være et positivt tall",
@@ -94,9 +94,9 @@ const tekster = definerTekster({
         nn: "Inntekt må vere eit positivt tal",
       },
       heleKroner: {
-        nb: "Oppgi inntekt i hele kroner",
-        en: "Enter income in whole kroner",
-        nn: "Oppgi inntekt i heile kroner",
+        nb: "Fyll ut inntekt i hele kroner",
+        en: "Fill in income in whole kroner",
+        nn: "Fyll ut inntekt i heile kroner",
       },
     },
   },

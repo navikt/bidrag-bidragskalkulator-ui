@@ -190,9 +190,9 @@ const tekster = definerTekster({
       nn: "Ingen netter hos deg",
     },
     halvpartenAvTidenHosDeg: {
-      nb: "Halvparten av tiden hos deg",
+      nb: "Halvparten av nettene hos deg",
       en: "Half the nights with you",
-      nn: "Halvparten av tiden hos deg",
+      nn: "Halvparten av nettene hos deg",
     },
     alleNetterHosDeg: {
       nb: "Alle netter hos deg",
