@@ -1,5 +1,5 @@
 import { useForm } from "@rvf/react-router";
-import { type RefObject } from "react";
+import { useEffect, useState, type RefObject } from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { useOversettelse } from "~/utils/i18n";
 import { useValiderteSøkeparametre } from "./useValiderteSøkeparametre";
@@ -10,6 +10,7 @@ export const useBidragsform = (
 ) => {
   const { språk } = useOversettelse();
   const validator = lagValidatorMedSpråk(språk);
+  const [erEndretSidenUtregning, settErEndretSidenUtregning] = useState(false);
 
   const validerteSøkeparametre = useValiderteSøkeparametre(søkeparametreSchema);
 
@@ -32,6 +33,7 @@ export const useBidragsform = (
         block: "center",
       });
       sporHendelse("skjema fullført");
+      settErEndretSidenUtregning(false);
     },
     onInvalidSubmit: () => {
       sporHendelse("skjema validering feilet", {
@@ -45,5 +47,16 @@ export const useBidragsform = (
       sporHendelse("skjema innsending feilet", { feil: String(error) });
     },
   });
-  return form;
+
+  useEffect(() => {
+    const unsubscribe = form.subscribe.value(() => {
+      settErEndretSidenUtregning(true);
+    });
+    return () => unsubscribe();
+  }, [form]);
+
+  return {
+    erEndretSidenUtregning,
+    form,
+  };
 };

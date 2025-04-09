@@ -38,7 +38,7 @@ export default function Barnebidragskalkulator() {
   const actionData = useActionData<typeof action>();
   const resultatRef = useRef<HTMLDivElement>(null);
   const { t } = useOversettelse();
-  const form = useBidragsform(resultatRef);
+  const { form, erEndretSidenUtregning } = useBidragsform(resultatRef);
 
   const getResultData = () => {
     if (!actionData || isValidationErrorResponse(actionData)) {
@@ -69,7 +69,7 @@ export default function Barnebidragskalkulator() {
           </div>
         )}
       </div>
-      {actionData && (
+      {actionData && !erEndretSidenUtregning && (
         <div className="max-w-3xl mx-auto p-4 mt-8">
           <Resultatpanel
             data={getResultData()}
