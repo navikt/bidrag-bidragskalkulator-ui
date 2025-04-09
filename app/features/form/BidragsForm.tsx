@@ -1,48 +1,23 @@
 import { Button } from "@navikt/ds-react";
-import { useFieldArray, useForm } from "@rvf/react-router";
-import { type RefObject } from "react";
-import { sporHendelse } from "~/utils/analytics";
+import { useFieldArray, type FormApi } from "@rvf/react-router";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { BarnForm } from "./BarnForm";
 import { FormattertTallTextField } from "./FormattertTallTextField";
-import { lagValidatorMedSpråk } from "./validator";
 
 type BidragsFormProps = {
-  resultatRef: RefObject<HTMLDivElement | null>;
+  form: FormApi<{
+    barn: {
+      alder: string;
+      bostatus: string;
+      samværsgrad: string;
+    }[];
+    inntektForelder1: string;
+    inntektForelder2: string;
+  }>;
 };
 
-export function BidragsForm({ resultatRef }: BidragsFormProps) {
-  const { t, språk } = useOversettelse();
-  const validator = lagValidatorMedSpråk(språk);
-  const form = useForm({
-    validator,
-    submitSource: "state",
-    method: "post",
-    defaultValues: {
-      barn: [{ alder: "", samværsgrad: "15", bostatus: "" }],
-      inntektForelder1: "",
-      inntektForelder2: "",
-    },
-    onSubmitSuccess: () => {
-      resultatRef.current?.focus({ preventScroll: true });
-      resultatRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-      sporHendelse("skjema fullført");
-    },
-    onInvalidSubmit: () => {
-      sporHendelse("skjema validering feilet", {
-        førsteFeil:
-          document.activeElement instanceof HTMLInputElement
-            ? document.activeElement.name
-            : null,
-      });
-    },
-    onSubmitFailure: (error) => {
-      sporHendelse("skjema innsending feilet", { feil: String(error) });
-    },
-  });
+export function BidragsForm({ form }: BidragsFormProps) {
+  const { t } = useOversettelse();
 
   const barnFields = useFieldArray(form.scope("barn"));
 

@@ -2,6 +2,7 @@ import {
   Alert,
   BodyLong,
   Button,
+  CopyButton,
   ExpansionCard,
   Heading,
   Link,
@@ -21,11 +22,44 @@ import type { SkjemaResponse } from "./validator";
 type ResultatpanelProps = {
   data: SkjemaResponse | null;
   ref: React.RefObject<HTMLDivElement | null>;
+  formData: {
+    barn: Array<{
+      alder: string;
+      bostatus: string;
+      samværsgrad: string;
+    }>;
+    inntektForelder1: string;
+    inntektForelder2: string;
+  };
 };
 
-export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
+export const Resultatpanel = ({ data, ref, formData }: ResultatpanelProps) => {
   const { t } = useOversettelse();
   const beregningsdetaljerAntallSporingerRef = useRef(0);
+
+  const lagDelingsUrl = () => {
+    if (!formData) {
+      return "";
+    }
+
+    const searchParams = new URLSearchParams();
+
+    formData.barn.forEach((barn, index) => {
+      searchParams.append(`barn[${index}].alder`, barn.alder);
+      searchParams.append(`barn[${index}].bostatus`, barn.bostatus);
+      searchParams.append(`barn[${index}].samværsgrad`, barn.samværsgrad);
+    });
+
+    searchParams.append("inntektForelder1", formData.inntektForelder1);
+    searchParams.append("inntektForelder2", formData.inntektForelder2);
+
+    console.log(searchParams.toString());
+
+    return `${window.location.origin}${
+      window.location.pathname
+    }?${searchParams.toString()}`;
+  };
+
   if (!data) {
     return null;
   }
@@ -58,14 +92,23 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
       {totalSum === 0 && <BodyLong spacing>{t(tekster.nullBidrag)}</BodyLong>}
       <BodyLong spacing>{t(tekster.hvordanAvtale)}</BodyLong>
 
-      <Button
-        as="a"
-        href="https://www.nav.no/fyllut/nav550060?sub=paper"
-        variant="primary"
-        className="mb-6"
-      >
-        {t(tekster.lagPrivatAvtale)}
-      </Button>
+      <div className="flex gap-4 justify-start items-start mb-6">
+        <Button
+          as="a"
+          href="https://www.nav.no/fyllut/nav550060?sub=paper"
+          variant="primary"
+        >
+          {t(tekster.lagPrivatAvtale)}
+        </Button>
+        <CopyButton
+          size="medium"
+          copyText={lagDelingsUrl()}
+          text={t(tekster.delBeregning.vanlig)}
+          activeText={t(tekster.delBeregning.kopiert)}
+          onClick={() => sporHendelse("delbar lenke kopiert")}
+        />
+      </div>
+
       <BodyLong spacing>{t(tekster.callToActionGammelKalkulator)}</BodyLong>
       <BodyLong spacing>{t(tekster.hvisManIkkeKommerTilEnighet)}</BodyLong>
       <ExpansionCard
@@ -341,5 +384,17 @@ const tekster = definerTekster({
     nb: "Søk Nav om fastsetting",
     en: "Ask Nav for determination",
     nn: "Søk Nav om fastsettelse",
+  },
+  delBeregning: {
+    vanlig: {
+      nb: "Kopier lenke til beregning",
+      en: "Copy link to calculation",
+      nn: "Kopier lenke til berekning",
+    },
+    kopiert: {
+      nb: "Kopiert!",
+      en: "Copied!",
+      nn: "Kopiert!",
+    },
   },
 });
