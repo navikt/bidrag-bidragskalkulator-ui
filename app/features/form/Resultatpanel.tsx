@@ -102,6 +102,7 @@ export const Resultatpanel = ({ data, ref, formData }: ResultatpanelProps) => {
       </Button>
       <BodyLong spacing>{t(tekster.callToActionDelingsUrl)}</BodyLong>
       <CopyButton
+        variant="action"
         size="medium"
         copyText={lagDelingsUrl()}
         text={t(tekster.delBeregning.vanlig)}
