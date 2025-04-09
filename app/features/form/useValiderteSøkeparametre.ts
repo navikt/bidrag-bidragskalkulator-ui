@@ -1,5 +1,6 @@
 import { useSearchParams } from "react-router";
 import { ZodSchema } from "zod";
+import { sporHendelse } from "~/utils/analytics";
 
 /**
  * Henter ut en parset versjon av søkeparametrene i URL-en.
@@ -16,6 +17,9 @@ export function useValiderteSøkeparametre<T>(schema: ZodSchema<T>) {
   const resultat = schema.safeParse(søkeparametre);
 
   if (!resultat.success) {
+    sporHendelse("delbar lenke feilet validering", {
+      feil: resultat.error.format(),
+    });
     return null;
   }
 

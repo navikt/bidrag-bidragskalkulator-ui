@@ -5,7 +5,8 @@ type EventType =
   | "samværsgrad justert"
   | "beregningsdetaljer utvidet"
   | "beregningsdetaljer kollapset"
-  | "delbar lenke kopiert";
+  | "delbar lenke kopiert"
+  | "delbar lenke feilet validering";
 
 /**
  * Sporer en hendelse
