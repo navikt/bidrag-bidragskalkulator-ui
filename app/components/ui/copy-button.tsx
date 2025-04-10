@@ -85,7 +85,7 @@ export const CopyButton = ({
   activeDuration = 2000,
   title,
   iconPosition = "left",
-  onClick = () => {},
+  onClick,
   size = "medium",
   ref,
   ...rest

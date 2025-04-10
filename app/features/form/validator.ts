@@ -223,9 +223,6 @@ export function lagSkjemaSchema(språk: Språk) {
   });
 }
 
-const defaultValidator = lagSkjemaSchema(Språk.NorwegianBokmål);
-export type SkjemaSchema = z.infer<typeof defaultValidator>;
-
 export function lagValidatorMedSpråk(språk: Språk) {
   return withZod(lagSkjemaSchema(språk));
 }

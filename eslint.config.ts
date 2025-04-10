@@ -7,6 +7,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 const config = [
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
+    ignores: ["**/.*", "node_modules/**", "build/**/*"],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
@@ -59,10 +60,6 @@ const config = [
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
     },
-  },
-  {
-    files: ["**/*"],
-    ignores: ["**/.*", "node_modules/**"],
   },
 ] satisfies Linter.Config[];
 

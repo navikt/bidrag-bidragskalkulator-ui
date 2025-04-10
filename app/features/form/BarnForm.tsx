@@ -1,9 +1,7 @@
 import { Button, Heading, Select, TextField } from "@navikt/ds-react";
 import { useField, type FormApi } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
-import { useDebounceCallback } from "~/hooks/useDebounceCallback";
 import { cn } from "~/lib/utils";
-import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 type BarnFormProps = {
   barn: FormApi<{
@@ -18,11 +16,6 @@ type BarnFormProps = {
 
 export function BarnForm({ barn, index, kanFjernes, onFjern }: BarnFormProps) {
   const { t } = useOversettelse();
-  const sporSamværsgrad = useDebounceCallback((value: string) => {
-    sporHendelse("samværsgrad justert", {
-      samværsgrad: value,
-    });
-  }, 4000);
 
   const samværsgrad = Number(barn.field("samværsgrad").value());
   const samværsgradBeskrivelse =
@@ -81,10 +74,6 @@ export function BarnForm({ barn, index, kanFjernes, onFjern }: BarnFormProps) {
       ) && (
         <Slider
           {...samværsgradField.getControlProps()}
-          onChange={(value) => {
-            samværsgradField.onChange(value);
-            sporSamværsgrad(value);
-          }}
           label={t(tekster.samværsgradLabel)}
           description={t(tekster.samværsgradBeskrivelse)}
           error={barn.field("samværsgrad").error()}

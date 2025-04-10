@@ -13,7 +13,7 @@ type SliderProps = Omit<
   valueDescription?: string;
   list?: { label: string; value: number }[];
   value?: string;
-  onChange?: (value: string) => void;
+  onChange: (value: string) => void;
   error?: string | null;
 };
 
@@ -27,7 +27,7 @@ function Slider({
   description,
   valueDescription,
   id: eksternId,
-  onChange = () => {},
+  onChange,
   list,
   error,
   ...props
