@@ -25,7 +25,7 @@ export function useValiderteSøkeparametre<T>(schema: ZodSchema<T>) {
     }
 
     return resultat.data;
-  } catch (e) {
+  } catch {
     return null;
   }
 }
