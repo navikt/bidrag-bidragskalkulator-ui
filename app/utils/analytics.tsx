@@ -2,7 +2,6 @@ type EventType =
   | "skjema validering feilet"
   | "skjema innsending feilet"
   | "skjema fullført"
-  | "samværsgrad justert"
   | "beregningsdetaljer utvidet"
   | "beregningsdetaljer kollapset"
   | "delbar lenke kopiert";
