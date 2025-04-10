@@ -1,6 +1,5 @@
 import { useSearchParams } from "react-router";
 import { ZodSchema } from "zod";
-import { sporHendelse } from "~/utils/analytics";
 
 /**
  * Henter ut en parset versjon av søkeparametrene i URL-en.
