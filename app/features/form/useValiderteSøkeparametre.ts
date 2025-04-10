@@ -33,12 +33,16 @@ export function useValiderteSøkeparametre<T>(schema: ZodSchema<T>) {
 /** Intern støttefunksjon for å gjøre om en søkeparameter-streng til et objekt */
 function parseSøkeparametreTilObjekt(søkeparameterstring: string) {
   const søkeparametre = new URLSearchParams(søkeparameterstring);
-  const resultat: Record<string, unknown> = {};
+  type Søkeparameter =
+    | string
+    | Array<Record<string, string>>
+    | Record<string, string>;
+  const resultat: Record<string, Søkeparameter> = {};
 
   for (const [nøkkel, verdi] of søkeparametre.entries()) {
     const sti = nøkkel.replace(/\]/g, "").split(/\[|\./); // støtter både items[0].id og items[0][id]
 
-    let nåværende: any = resultat;
+    let nåværende = resultat;
     sti.forEach((segment, index) => {
       const erSiste = index === sti.length - 1;
       const nesteSegment = sti[index + 1];
@@ -50,7 +54,7 @@ function parseSøkeparametreTilObjekt(søkeparameterstring: string) {
         if (nåværende[segment] == null) {
           nåværende[segment] = erArray ? [] : {};
         }
-        nåværende = nåværende[segment];
+        nåværende = nåværende[segment] as Record<string, Søkeparameter>;
       }
     });
   }
