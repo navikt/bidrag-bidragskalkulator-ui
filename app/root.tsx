@@ -36,6 +36,7 @@ import {
   OversettelseProvider,
   Språk,
 } from "./utils/i18n";
+import { hentPersoninformasjon } from "./features/personinformasjon/api.server";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -102,7 +103,9 @@ export function Layout({ children }: LayoutProps) {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const språk = hentSpråkFraCookie(request.headers.get("Cookie"));
-  const [decoratorFragments, cspHeader] = await Promise.all([
+
+  const [informasjon, decoratorFragments, cspHeader] = await Promise.all([
+    hentPersoninformasjon(request),
     fetchDecoratorHtml({
       env: env.ENVIRONMENT,
       params: {
@@ -139,6 +142,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return data(
     {
+      informasjon,
       decoratorFragments,
       språk,
       umamiWebsiteId: env.UMAMI_WEBSITE_ID,
