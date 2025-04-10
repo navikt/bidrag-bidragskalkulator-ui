@@ -2,7 +2,6 @@ import {
   Alert,
   BodyLong,
   Button,
-  CopyButton,
   ExpansionCard,
   Heading,
   Link,
@@ -15,6 +14,7 @@ import {
 } from "@navikt/ds-react/ExpansionCard";
 import { ListItem } from "@navikt/ds-react/List";
 import { useRef } from "react";
+import { CopyButton } from "~/components/ui/copy-button";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
@@ -106,7 +106,7 @@ export const Resultatpanel = ({ data, ref, formData }: ResultatpanelProps) => {
       </Button>
       <BodyLong spacing>{t(tekster.callToActionDelingsUrl)}</BodyLong>
       <CopyButton
-        variant="action"
+        variant="secondary-neutral"
         size="medium"
         copyText={lagDelingsUrl()}
         text={t(tekster.delBeregning.vanlig)}
