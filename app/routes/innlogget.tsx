@@ -40,7 +40,10 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const respons = await hentPersoninformasjon(request);
+  const respons = await hentPersoninformasjon({
+    request,
+    redirectUrl: "/innlogget",
+  });
   if (respons instanceof Response) {
     return respons;
   }
