@@ -24,7 +24,15 @@ export function InnloggetBidragsskjema() {
         personinformasjon.barnRelasjon[0].motpart
           ? personinformasjon.barnRelasjon[0].motpart?.ident ?? ""
           : "",
-      barn: [],
+      barn:
+        personinformasjon.barnRelasjon.length === 1 &&
+        personinformasjon.barnRelasjon[0].fellesBarn.length > 0
+          ? personinformasjon.barnRelasjon[0].fellesBarn.map((barn) => ({
+              ident: barn.ident,
+              bosted: "",
+              samvær: "15",
+            }))
+          : [],
       inntektDeg: "",
       inntektMotpart: "",
     },
@@ -213,6 +221,7 @@ const BostedOgSamvær = () => {
           barnField.value("ident"),
           personinformasjon
         );
+        console.log(barnInfo);
         const samvær = barnField.field("samvær").value() ?? "15";
         const samværsgradBeskrivelse =
           samvær === "1"
@@ -348,8 +357,8 @@ const finnBarnBasertPåIdent = (
   personinformasjon: PersoninformasjonResponse
 ) => {
   return personinformasjon.barnRelasjon
-    .find((relasjon) => relasjon.motpart?.ident === ident)
-    ?.fellesBarn.find((barn) => barn.ident === ident);
+    .flatMap((relasjon) => relasjon.fellesBarn)
+    .find((barn) => barn.ident === ident);
 };
 
 const finnMotpartBasertPåIdent = (
