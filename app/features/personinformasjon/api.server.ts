@@ -30,24 +30,16 @@ async function hentPersoninformasjonFraApi(token: string) {
   return parsed.data;
 }
 
-const loginBaseUrl = `${env.INGRESS}/oauth2/login`;
+const loginUrl = `${env.INGRESS}/oauth2/login`;
 const audience = `${env.ENVIRONMENT}-gcp:bidrag:bidrag-bidragskalkulator-api`;
 
-export async function hentPersoninformasjon({
-  request,
-  redirectUrl,
-}: {
-  request: Request;
-  redirectUrl: string;
-}): Promise<PersoninformasjonResponse | Response> {
+export async function hentPersoninformasjon(
+  request: Request
+): Promise<PersoninformasjonResponse | Response> {
   if (process.env.NODE_ENV === "development") {
     // Dette er mocket data, som man kan bruke i utvikling
     return PERSON_MED_EN_MOTPART_TO_BARN;
   }
-
-  const loginUrl = !!redirectUrl
-    ? `${loginBaseUrl}?redirect=${redirectUrl}`
-    : loginBaseUrl;
 
   const token = getToken(request);
   if (!token) {
