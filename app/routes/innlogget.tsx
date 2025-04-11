@@ -6,13 +6,13 @@ import type {
   LoaderFunctionArgs,
   MetaArgs,
 } from "react-router";
-import { useActionData, useLoaderData } from "react-router";
+import { useActionData } from "react-router";
 import { handleFormSubmission } from "~/features/form/api.server";
-import { BidragsForm } from "~/features/form/BidragsForm";
 import { IntroPanel } from "~/features/form/IntroPanel";
 import { Resultatpanel } from "~/features/form/Resultatpanel";
 import { useBidragsform } from "~/features/form/useBidragsForm";
 import type { SkjemaResponse } from "~/features/form/validator";
+import { InnloggetBidragsskjema } from "~/features/innlogget/InnloggetBidragsskjema";
 import { hentPersoninformasjon } from "~/features/personinformasjon/api.server";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
@@ -53,13 +53,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function InnloggetBarnebidragskalkulator() {
-  const { personinformasjon } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const resultatRef = useRef<HTMLDivElement>(null);
   const { t } = useOversettelse();
   const { form, erEndretSidenUtregning } = useBidragsform(resultatRef);
-
-  console.log(personinformasjon);
 
   const getResultData = () => {
     if (!actionData || isValidationErrorResponse(actionData)) {
@@ -78,7 +75,7 @@ export default function InnloggetBarnebidragskalkulator() {
 
         <IntroPanel />
 
-        <BidragsForm form={form} />
+        <InnloggetBidragsskjema />
 
         {isValidationErrorResponse(actionData) && (
           <div className="mt-6">
