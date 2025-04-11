@@ -9,7 +9,7 @@ metadata:
 
 spec:
   ingresses:
-    - {{ ingress }}
+    - {{ INGRESS }}
   image: {{ image }}
   port: 3000
   env:
@@ -19,6 +19,8 @@ spec:
       value: {{ENVIRONMENT}}
     - name: UMAMI_WEBSITE_ID
       value: {{UMAMI_WEBSITE_ID}}
+    - name: INGRESS
+      value: {{INGRESS}}
   accessPolicy:
     outbound:
       rules:
@@ -39,3 +41,9 @@ spec:
     path: "/api/internal/isready"
     initialDelay: 15
     timeout: 1
+  idporten:
+    enabled: true
+    sidecar:
+      enabled: true
+  tokenx:
+    enabled: true
