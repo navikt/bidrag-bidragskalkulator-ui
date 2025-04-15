@@ -1,6 +1,6 @@
 import { useFormContext } from "@rvf/react";
 import { useOversettelse, definerTekster } from "~/utils/i18n";
-import type { InnloggetForm } from "./schema";
+import type { InnloggetSkjema } from "./schema";
 import { usePersoninformasjon } from "./usePersoninformasjon";
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { toBarnFormValue } from "./utils";
@@ -17,7 +17,7 @@ const tekster = definerTekster({
 
 export function Motpart() {
   const personinformasjon = usePersoninformasjon();
-  const form = useFormContext<InnloggetForm>();
+  const form = useFormContext<InnloggetSkjema>();
   const { t } = useOversettelse();
 
   const { onChange, ...formInputProps } = form.getInputProps("motpartIdent");

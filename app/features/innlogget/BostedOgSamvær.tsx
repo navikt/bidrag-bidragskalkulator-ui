@@ -1,7 +1,7 @@
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useFormContext, useFieldArray } from "@rvf/react";
 import { useOversettelse, definerTekster } from "~/utils/i18n";
-import type { InnloggetForm } from "./schema";
+import type { InnloggetSkjema } from "./schema";
 import { usePersoninformasjon } from "./usePersoninformasjon";
 import {
   finnBarnBasertPåIdent,
@@ -13,7 +13,7 @@ import { Slider } from "~/components/ui/slider";
 export const BostedOgSamvær = () => {
   const personinformasjon = usePersoninformasjon();
   const { t } = useOversettelse();
-  const form = useFormContext<InnloggetForm>();
+  const form = useFormContext<InnloggetSkjema>();
   const motpart = finnMotpartBasertPåIdent(
     form.value("motpartIdent"),
     personinformasjon
@@ -28,14 +28,16 @@ export const BostedOgSamvær = () => {
           personinformasjon
         );
 
-        const samvær =
-          barnField.field("samvær").value() ?? SAMVÆR_FORHÅNDSVALGT_VERDI;
+        const samvær = barnField.value("samvær") ?? SAMVÆR_FORHÅNDSVALGT_VERDI;
 
         const samværsgradBeskrivelse =
           samvær === "1"
             ? t(tekster.samvær.enNatt)
             : t(tekster.samvær.netter(samvær));
 
+        const borHosEnForelder = ["HOS_FORELDER_1", "HOS_FORELDER_2"].includes(
+          barnField.value("bosted")
+        );
         return (
           <div
             key={key}
@@ -58,9 +60,7 @@ export const BostedOgSamvær = () => {
               </Radio>
             </RadioGroup>
 
-            {["HOS_FORELDER_1", "HOS_FORELDER_2"].includes(
-              barnField.field("bosted").value()
-            ) && (
+            {borHosEnForelder && (
               <Slider
                 {...barnField.field("samvær").getControlProps()}
                 label={t(tekster.samvær.label)}

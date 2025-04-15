@@ -16,7 +16,7 @@ const barnRelasjonSchema = z.object({
  * Schemaet for responsen fra personinformasjon API-et.
  */
 export const personinformasjonResponseSchema = z.object({
-  paaloggetPerson: personSchema,
+  påloggetPerson: personSchema,
   barnRelasjon: z.array(barnRelasjonSchema),
 });
 

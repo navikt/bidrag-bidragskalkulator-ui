@@ -2,11 +2,11 @@ import type {
   Person,
   PersoninformasjonResponse,
 } from "../personinformasjon/schema";
-import type { InnloggetFormBarn, InnloggetForm } from "./schema";
+import type { InnloggetBarnSkjema, InnloggetSkjema } from "./schema";
 
 export const SAMVÆR_FORHÅNDSVALGT_VERDI = "15";
 
-export const toBarnFormValue = (person: Person): InnloggetFormBarn => {
+export const toBarnFormValue = (person: Person): InnloggetBarnSkjema => {
   return {
     ident: person.ident,
     bosted: "",
@@ -16,7 +16,7 @@ export const toBarnFormValue = (person: Person): InnloggetFormBarn => {
 
 export const getInnloggetFormDefaultValues = (
   personinformasjon: PersoninformasjonResponse
-): InnloggetForm => {
+): InnloggetSkjema => {
   const harKunEnMotpart = personinformasjon.barnRelasjon.length === 1;
 
   const motpartIdent = harKunEnMotpart
