@@ -65,7 +65,7 @@ export default function InnloggetBarnebidragskalkulator() {
 
   return (
     <>
-      <div className="max-w-xl mx-auto p-4 mt-8">
+      <div className="max-w-xl mx-auto p-4 mt-8 flex flex-col gap-4">
         <Heading size="xlarge" level="1" spacing align="center">
           {t(tekster.overskrift)}
         </Heading>

@@ -2,7 +2,7 @@ import type { PersoninformasjonResponse } from "~/features/personinformasjon/sch
 
 export const PERSON_MED_EN_MOTPART_TO_BARN: PersoninformasjonResponse = {
   paaloggetPerson: {
-    ident: "30458043937",
+    ident: "08025327080",
     fornavn: "Selvtilfreds",
     fulltNavn: "Selvtilfreds Motvind",
     alder: 44,
@@ -10,14 +10,14 @@ export const PERSON_MED_EN_MOTPART_TO_BARN: PersoninformasjonResponse = {
   barnRelasjon: [
     {
       motpart: {
-        ident: "07418021890",
+        ident: "16482086857",
         fornavn: "Vrien",
         fulltNavn: "Vrien Medvind",
         alder: 45,
       },
       fellesBarn: [
         {
-          ident: "03422282172",
+          ident: "03422282173",
           fornavn: "Overflødig",
           fulltNavn: "Overflødig Medvind",
           alder: 3,
@@ -32,22 +32,22 @@ export const PERSON_MED_EN_MOTPART_TO_BARN: PersoninformasjonResponse = {
     },
     {
       motpart: {
-        ident: "07418021890",
-        fornavn: "Vrien",
-        fulltNavn: "Kødden Medvind",
+        ident: "17418021890",
+        fornavn: "Kødden",
+        fulltNavn: "Kødden Bris",
         alder: 45,
       },
       fellesBarn: [
         {
-          ident: "03422282172",
+          ident: "13422282172",
           fornavn: "Uheldig",
-          fulltNavn: "Uheldig Medvind",
+          fulltNavn: "Uheldig Bris",
           alder: 3,
         },
         {
-          ident: "03421682172",
+          ident: "23421682172",
           fornavn: "Slitsom",
-          fulltNavn: "Slitsom Medvind",
+          fulltNavn: "Slitsom Bris",
           alder: 9,
         },
       ],
