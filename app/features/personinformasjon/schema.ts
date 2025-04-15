@@ -7,16 +7,9 @@ const personSchema = z.object({
   alder: z.number().int().nonnegative(),
 });
 
-const barnSchema = z.object({
-  ident: z.string(),
-  fornavn: z.string(),
-  fulltNavn: z.string(),
-  alder: z.number().int().nonnegative(),
-});
-
 const barnRelasjonSchema = z.object({
   motpart: personSchema.nullable(),
-  fellesBarn: z.array(barnSchema),
+  fellesBarn: z.array(personSchema),
 });
 
 /**
@@ -26,6 +19,8 @@ export const personinformasjonResponseSchema = z.object({
   paaloggetPerson: personSchema,
   barnRelasjon: z.array(barnRelasjonSchema),
 });
+
+export type Person = z.infer<typeof personSchema>;
 
 export type PersoninformasjonResponse = z.infer<
   typeof personinformasjonResponseSchema
