@@ -1,4 +1,3 @@
-import { withZod } from "@rvf/zod";
 import { z } from "zod";
 import { definerTekster, oversett, Språk } from "~/utils/i18n";
 
@@ -15,23 +14,15 @@ export const innloggetSkjemaSchema = z.object({
   motpartInntekt: z.string(),
 });
 
-export type InnloggetBarnSkjema = z.infer<typeof barnSchema>;
-export type InnloggetSkjema = z.infer<typeof innloggetSkjemaSchema>;
-
 const getBarnSkjema = (språk: Språk) => {
   return z
     .object({
       ident: z
         .string()
         .length(11, oversett(språk, tekster.feilmeldinger.barnIdent.ugyldig)),
-      bosted: z
-        .string()
-        .nonempty(oversett(språk, tekster.feilmeldinger.bostatus.påkrevd))
-        .pipe(
-          z.enum(["HOS_FORELDER_1", "DELT_BOSTED", "HOS_FORELDER_2"], {
-            message: oversett(språk, tekster.feilmeldinger.bostatus.ugyldig),
-          })
-        ),
+      bosted: z.enum(["HOS_FORELDER_1", "DELT_BOSTED", "HOS_FORELDER_2"], {
+        message: oversett(språk, tekster.feilmeldinger.bostatus.ugyldig),
+      }),
       samvær: z
         .string()
         .nonempty(oversett(språk, tekster.feilmeldinger.samvær.påkrevd))
@@ -105,11 +96,9 @@ export const getInnloggetSkjema = (språk: Språk) => {
   });
 };
 
-export function getInnloggetBidragsskjemaValidator(språk: Språk) {
-  return withZod(getInnloggetSkjema(språk));
-}
-
-export type InnloggetSkjemaValidator = z.infer<
+export type InnloggetBarnSkjema = z.infer<typeof barnSchema>;
+export type InnloggetSkjema = z.infer<typeof innloggetSkjemaSchema>;
+export type InnloggetSkjemaValidert = z.infer<
   ReturnType<typeof getInnloggetSkjema>
 >;
 

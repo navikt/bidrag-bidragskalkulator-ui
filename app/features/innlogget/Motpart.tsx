@@ -5,16 +5,6 @@ import { usePersoninformasjon } from "./usePersoninformasjon";
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { toBarnFormValue } from "./utils";
 
-const tekster = definerTekster({
-  velgMotpart: {
-    label: {
-      nb: "Velg medforelder",
-      en: "Select co-parent",
-      nn: "Velg medforelder",
-    },
-  },
-});
-
 export function Motpart() {
   const personinformasjon = usePersoninformasjon();
   const form = useFormContext<InnloggetSkjema>();
@@ -32,6 +22,7 @@ export function Motpart() {
         ? fellesBarn.map(toBarnFormValue)
         : [];
 
+    // TODO Reset form errors
     form.setValue("barn", barnFormValue);
     form.setValue("motpartInntekt", "");
     onChange?.(motpartIdent);
@@ -56,3 +47,13 @@ export function Motpart() {
     </RadioGroup>
   );
 }
+
+const tekster = definerTekster({
+  velgMotpart: {
+    label: {
+      nb: "Velg medforelder",
+      en: "Select co-parent",
+      nn: "Velg medforelder",
+    },
+  },
+});
