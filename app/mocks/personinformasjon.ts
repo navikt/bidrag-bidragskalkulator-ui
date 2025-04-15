@@ -1,7 +1,7 @@
 import type { PersoninformasjonResponse } from "~/features/personinformasjon/schema";
 
 export const PERSON_MED_EN_MOTPART_TO_BARN: PersoninformasjonResponse = {
-  paaloggetPerson: {
+  påloggetPerson: {
     ident: "08025327080",
     fornavn: "Selvtilfreds",
     fulltNavn: "Selvtilfreds Motvind",

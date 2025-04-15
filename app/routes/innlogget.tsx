@@ -44,6 +44,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (respons instanceof Response) {
     return respons;
   }
+
+  console.log("personinformasjon", JSON.stringify(respons));
   return {
     personinformasjon: respons,
   };
