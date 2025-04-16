@@ -6,7 +6,7 @@ import { usePersoninformasjon } from "./usePersoninformasjon";
 import {
   finnBarnBasertPåIdent,
   finnMotpartBasertPåIdent,
-  SAMVÆR_FORHÅNDSVALGT_VERDI,
+  SAMVÆR_STANDARDVERDI,
 } from "./utils";
 import { Slider } from "~/components/ui/slider";
 
@@ -28,7 +28,7 @@ export const BostedOgSamvær = () => {
           personinformasjon
         );
 
-        const samvær = barnField.value("samvær") ?? SAMVÆR_FORHÅNDSVALGT_VERDI;
+        const samvær = barnField.value("samvær") ?? SAMVÆR_STANDARDVERDI;
 
         const samværsgradBeskrivelse =
           samvær === "1"

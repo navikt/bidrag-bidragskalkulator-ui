@@ -3,7 +3,7 @@ import { useOversettelse, definerTekster } from "~/utils/i18n";
 import type { InnloggetSkjema } from "./schema";
 import { usePersoninformasjon } from "./usePersoninformasjon";
 import { Radio, RadioGroup } from "@navikt/ds-react";
-import { toBarnFormValue } from "./utils";
+import { tilInnloggetBarnSkjema } from "./utils";
 
 export function Motpart() {
   const personinformasjon = usePersoninformasjon();
@@ -19,7 +19,7 @@ export function Motpart() {
 
     const barnFormValue =
       fellesBarn && fellesBarn.length > 0
-        ? fellesBarn.map(toBarnFormValue)
+        ? fellesBarn.map(tilInnloggetBarnSkjema)
         : [];
 
     // TODO Reset form errors

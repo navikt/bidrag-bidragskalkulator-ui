@@ -1,7 +1,16 @@
 import { validationError } from "@rvf/react-router";
 import { env } from "~/config/env.server";
-import { definerTekster, hentSpråkFraCookie, oversett } from "~/utils/i18n";
-import { kalkulerBidragstype, kalkulerSamværsklasse } from "./utils";
+import {
+  definerTekster,
+  hentSpråkFraCookie,
+  oversett,
+  Språk,
+} from "~/utils/i18n";
+import {
+  kalkulerBidragstype,
+  kalkulerSamværsklasse,
+  type Samværsklasse,
+} from "./utils";
 import { lagValidatorMedSpråk, responseSchema } from "./validator";
 
 const tekster = definerTekster({
@@ -19,31 +28,23 @@ const tekster = definerTekster({
   },
 });
 
-export async function handleFormSubmission(
-  formData: FormData,
-  cookieHeader?: string | null
-) {
-  const språk = hentSpråkFraCookie(cookieHeader || null);
-  const validator = lagValidatorMedSpråk(språk);
-  const result = await validator.validate(formData);
+export type BidragsutregningRequest = {
+  barn: {
+    alder: number;
+    samværsklasse: Samværsklasse;
+    bidragstype: "MOTTAKER" | "PLIKTIG";
+  }[];
+  inntektForelder1: number;
+  inntektForelder2: number;
+};
 
-  if (result.error) {
-    return validationError(result.error, result.submittedData);
-  }
-
-  const requestData = {
-    ...result.data,
-    barn: result.data.barn.map((barn) => ({
-      alder: barn.alder,
-      samværsklasse: kalkulerSamværsklasse(barn.samværsgrad, barn.bostatus),
-      bidragstype: kalkulerBidragstype(
-        barn.bostatus,
-        result.data.inntektForelder1,
-        result.data.inntektForelder2
-      ),
-    })),
-  };
-
+export async function hentBidragsutregningFraApi({
+  requestData,
+  språk,
+}: {
+  requestData: BidragsutregningRequest;
+  språk: Språk;
+}) {
   try {
     const response = await fetch(
       `${env.SERVER_URL}/api/v1/beregning/barnebidrag`,
@@ -77,4 +78,35 @@ export async function handleFormSubmission(
       error: oversett(språk, tekster.feil.beregning),
     };
   }
+}
+
+export async function handleFormSubmission(
+  formData: FormData,
+  cookieHeader?: string | null
+) {
+  const språk = hentSpråkFraCookie(cookieHeader || null);
+  const validator = lagValidatorMedSpråk(språk);
+  const result = await validator.validate(formData);
+
+  if (result.error) {
+    return validationError(result.error, result.submittedData);
+  }
+
+  const requestData = {
+    ...result.data,
+    barn: result.data.barn.map((barn) => ({
+      alder: barn.alder,
+      samværsklasse: kalkulerSamværsklasse(barn.samværsgrad, barn.bostatus),
+      bidragstype: kalkulerBidragstype(
+        barn.bostatus,
+        result.data.inntektForelder1,
+        result.data.inntektForelder2
+      ),
+    })),
+  };
+
+  return hentBidragsutregningFraApi({
+    requestData,
+    språk,
+  });
 }

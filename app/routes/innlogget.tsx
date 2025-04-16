@@ -7,11 +7,10 @@ import type {
   MetaArgs,
 } from "react-router";
 import { useActionData } from "react-router";
-import { handleFormSubmission } from "~/features/form/api.server";
 import { IntroPanel } from "~/features/form/IntroPanel";
 import { Resultatpanel } from "~/features/form/Resultatpanel";
-import { useBidragsform } from "~/features/form/useBidragsForm";
 import type { SkjemaResponse } from "~/features/form/validator";
+import { hentBidragsutregning } from "~/features/innlogget/api.server";
 import { InnloggetBidragsskjema } from "~/features/innlogget/InnloggetBidragsskjema";
 import { hentPersoninformasjon } from "~/features/personinformasjon/api.server";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
@@ -33,10 +32,7 @@ export function meta({ matches }: MetaArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  return handleFormSubmission(
-    await request.formData(),
-    request.headers.get("Cookie")
-  );
+  return hentBidragsutregning(request);
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -45,7 +41,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return respons;
   }
 
-  console.log("personinformasjon", JSON.stringify(respons));
   return {
     personinformasjon: respons,
   };
@@ -55,7 +50,8 @@ export default function InnloggetBarnebidragskalkulator() {
   const actionData = useActionData<typeof action>();
   const resultatRef = useRef<HTMLDivElement>(null);
   const { t } = useOversettelse();
-  const { form, erEndretSidenUtregning } = useBidragsform(resultatRef);
+  const erEndretSidenUtregning = false; // TODO
+  // const { form, erEndretSidenUtregning } = useBidragsform(resultatRef);
 
   const getResultData = () => {
     if (!actionData || isValidationErrorResponse(actionData)) {
@@ -88,11 +84,7 @@ export default function InnloggetBarnebidragskalkulator() {
       </div>
       {actionData && !erEndretSidenUtregning && (
         <div className="max-w-3xl mx-auto p-4 mt-8">
-          <Resultatpanel
-            data={getResultData()}
-            formData={form.value()}
-            ref={resultatRef}
-          />
+          <Resultatpanel data={getResultData()} ref={resultatRef} />
         </div>
       )}
     </>
