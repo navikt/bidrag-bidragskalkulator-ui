@@ -102,6 +102,7 @@ export function Layout({ children }: LayoutProps) {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const språk = hentSpråkFraCookie(request.headers.get("Cookie"));
+
   const [decoratorFragments, cspHeader] = await Promise.all([
     fetchDecoratorHtml({
       env: env.ENVIRONMENT,

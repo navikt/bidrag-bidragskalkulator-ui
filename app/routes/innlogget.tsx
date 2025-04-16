@@ -1,15 +1,18 @@
 import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import { isValidationErrorResponse } from "@rvf/react-router";
 import { useRef } from "react";
-import type { ActionFunctionArgs, MetaArgs } from "react-router";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaArgs,
+} from "react-router";
 import { useActionData } from "react-router";
-import { handleFormSubmission } from "~/features/form/api.server";
-import { BidragsForm } from "~/features/form/BidragsForm";
 import { IntroPanel } from "~/features/form/IntroPanel";
 import { Resultatpanel } from "~/features/form/Resultatpanel";
-import { useBidragsform } from "~/features/form/useBidragsForm";
-import { lagDelingsurl } from "~/features/form/utils";
 import type { SkjemaResponse } from "~/features/form/validator";
+import { hentBidragsutregning } from "~/features/innlogget/api.server";
+import { InnloggetBidragsskjema } from "~/features/innlogget/InnloggetBidragsskjema";
+import { hentPersoninformasjon } from "~/features/personinformasjon/api.server";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
 export function meta({ matches }: MetaArgs) {
@@ -29,17 +32,26 @@ export function meta({ matches }: MetaArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  return handleFormSubmission(
-    await request.formData(),
-    request.headers.get("Cookie")
-  );
+  return hentBidragsutregning(request);
 }
 
-export default function Barnebidragskalkulator() {
+export async function loader({ request }: LoaderFunctionArgs) {
+  const respons = await hentPersoninformasjon(request);
+  if (respons instanceof Response) {
+    return respons;
+  }
+
+  return {
+    personinformasjon: respons,
+  };
+}
+
+export default function InnloggetBarnebidragskalkulator() {
   const actionData = useActionData<typeof action>();
   const resultatRef = useRef<HTMLDivElement>(null);
   const { t } = useOversettelse();
-  const { form, erEndretSidenUtregning } = useBidragsform(resultatRef);
+  const erEndretSidenUtregning = false; // TODO
+  // const { form, erEndretSidenUtregning } = useBidragsform(resultatRef);
 
   const getResultData = () => {
     if (!actionData || isValidationErrorResponse(actionData)) {
@@ -51,14 +63,14 @@ export default function Barnebidragskalkulator() {
 
   return (
     <>
-      <div className="max-w-xl mx-auto p-4 mt-8">
+      <div className="max-w-xl mx-auto p-4 mt-8 flex flex-col gap-4">
         <Heading size="xlarge" level="1" spacing align="center">
           {t(tekster.overskrift)}
         </Heading>
 
         <IntroPanel />
 
-        <BidragsForm form={form} />
+        <InnloggetBidragsskjema />
 
         {isValidationErrorResponse(actionData) && (
           <div className="mt-6">
@@ -72,11 +84,7 @@ export default function Barnebidragskalkulator() {
       </div>
       {actionData && !erEndretSidenUtregning && (
         <div className="max-w-3xl mx-auto p-4 mt-8">
-          <Resultatpanel
-            data={getResultData()}
-            delingsurl={lagDelingsurl(form.value())}
-            ref={resultatRef}
-          />
+          <Resultatpanel data={getResultData()} ref={resultatRef} />
         </div>
       )}
     </>

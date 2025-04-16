@@ -19,44 +19,20 @@ import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import type { SkjemaResponse } from "./validator";
+
 type ResultatpanelProps = {
   data: SkjemaResponse | null;
   ref: React.RefObject<HTMLDivElement | null>;
-  formData: {
-    barn: Array<{
-      alder: string;
-      bostatus: string;
-      samværsgrad: string;
-    }>;
-    inntektForelder1: string;
-    inntektForelder2: string;
-  };
+  delingsurl?: string;
 };
 
-export const Resultatpanel = ({ data, ref, formData }: ResultatpanelProps) => {
+export const Resultatpanel = ({
+  data,
+  ref,
+  delingsurl,
+}: ResultatpanelProps) => {
   const { t } = useOversettelse();
   const beregningsdetaljerAntallSporingerRef = useRef(0);
-
-  const lagDelingsUrl = () => {
-    if (!formData) {
-      return "";
-    }
-
-    const searchParams = new URLSearchParams();
-
-    formData.barn.forEach((barn, index) => {
-      searchParams.append(`barn[${index}].alder`, barn.alder);
-      searchParams.append(`barn[${index}].bostatus`, barn.bostatus);
-      searchParams.append(`barn[${index}].samværsgrad`, barn.samværsgrad);
-    });
-
-    searchParams.append("inntektForelder1", formData.inntektForelder1);
-    searchParams.append("inntektForelder2", formData.inntektForelder2);
-
-    return `${window.location.origin}${
-      window.location.pathname
-    }?${searchParams.toString()}`;
-  };
 
   if (!data) {
     return null;
@@ -104,16 +80,22 @@ export const Resultatpanel = ({ data, ref, formData }: ResultatpanelProps) => {
       >
         {t(tekster.lagPrivatAvtale)}
       </Button>
-      <BodyLong spacing>{t(tekster.callToActionDelingsUrl)}</BodyLong>
-      <CopyButton
-        variant="secondary-neutral"
-        size="medium"
-        copyText={lagDelingsUrl()}
-        text={t(tekster.delBeregning.vanlig)}
-        activeText={t(tekster.delBeregning.kopiert)}
-        onClick={() => sporHendelse("delbar lenke kopiert")}
-        className="mb-6"
-      />
+
+      {delingsurl && (
+        <>
+          <BodyLong spacing>{t(tekster.callToActionDelingsUrl)}</BodyLong>
+          <CopyButton
+            variant="secondary-neutral"
+            size="medium"
+            copyText={delingsurl}
+            text={t(tekster.delBeregning.vanlig)}
+            activeText={t(tekster.delBeregning.kopiert)}
+            onClick={() => sporHendelse("delbar lenke kopiert")}
+            className="mb-6"
+          />
+        </>
+      )}
+
       <BodyLong spacing>{t(tekster.callToActionGammelKalkulator)}</BodyLong>
       <BodyLong spacing>{t(tekster.hvisManIkkeKommerTilEnighet)}</BodyLong>
       <ExpansionCard
