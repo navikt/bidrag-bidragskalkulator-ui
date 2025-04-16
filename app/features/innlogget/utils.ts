@@ -4,17 +4,18 @@ import type {
 } from "../personinformasjon/schema";
 import type { InnloggetBarnSkjema, InnloggetSkjema } from "./schema";
 
-export const SAMVÆR_FORHÅNDSVALGT_VERDI = "15";
+export const SAMVÆR_STANDARDVERDI = "15";
 
-export const toBarnFormValue = (person: Person): InnloggetBarnSkjema => {
+export const tilInnloggetBarnSkjema = (person: Person): InnloggetBarnSkjema => {
   return {
     ident: person.ident,
     bosted: "",
-    samvær: SAMVÆR_FORHÅNDSVALGT_VERDI,
+    samvær: SAMVÆR_STANDARDVERDI,
+    alder: String(person.alder),
   };
 };
 
-export const getInnloggetFormDefaultValues = (
+export const getInnloggetSkjemaStandardverdi = (
   personinformasjon: PersoninformasjonResponse
 ): InnloggetSkjema => {
   const harKunEnMotpart = personinformasjon.barnRelasjon.length === 1;
@@ -24,7 +25,7 @@ export const getInnloggetFormDefaultValues = (
     : "";
 
   const barn = harKunEnMotpart
-    ? personinformasjon.barnRelasjon[0].fellesBarn.map(toBarnFormValue)
+    ? personinformasjon.barnRelasjon[0].fellesBarn.map(tilInnloggetBarnSkjema)
     : [];
 
   return {

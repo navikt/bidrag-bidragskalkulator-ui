@@ -1,20 +1,21 @@
 import { z } from "zod";
 import { definerTekster, oversett, Språk } from "~/utils/i18n";
 
-export const barnSchema = z.object({
+export const BarnSchema = z.object({
   ident: z.string().length(11),
   bosted: z.enum(["HOS_FORELDER_1", "HOS_FORELDER_2", "DELT_BOSTED", ""]),
   samvær: z.string().optional(),
+  alder: z.string(),
 });
 
-export const innloggetSkjemaSchema = z.object({
+export const InnloggetSkjemaSchema = z.object({
   motpartIdent: z.string().length(11),
-  barn: z.array(barnSchema).min(1),
+  barn: z.array(BarnSchema),
   inntektDeg: z.string(),
   motpartInntekt: z.string(),
 });
 
-const getBarnSkjema = (språk: Språk) => {
+export const getBarnSkjema = (språk: Språk) => {
   return z
     .object({
       ident: z
@@ -32,6 +33,7 @@ const getBarnSkjema = (språk: Språk) => {
             .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
             .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum))
         ),
+      alder: z.string().pipe(z.coerce.number().nonnegative()),
     })
     .refine(
       ({ bosted, samvær }) => {
@@ -96,8 +98,8 @@ export const getInnloggetSkjema = (språk: Språk) => {
   });
 };
 
-export type InnloggetBarnSkjema = z.infer<typeof barnSchema>;
-export type InnloggetSkjema = z.infer<typeof innloggetSkjemaSchema>;
+export type InnloggetBarnSkjema = z.infer<typeof BarnSchema>;
+export type InnloggetSkjema = z.infer<typeof InnloggetSkjemaSchema>;
 export type InnloggetSkjemaValidert = z.infer<
   ReturnType<typeof getInnloggetSkjema>
 >;

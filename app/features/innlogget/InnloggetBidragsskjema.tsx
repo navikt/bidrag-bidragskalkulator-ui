@@ -1,5 +1,6 @@
 import { Button } from "@navikt/ds-react";
-import { FormProvider, useForm } from "@rvf/react";
+import { FormProvider } from "@rvf/react";
+import { useForm } from "@rvf/react-router";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { usePersoninformasjon } from "./usePersoninformasjon";
 import {
@@ -10,20 +11,18 @@ import {
 import { Motpart } from "./Motpart";
 import { BostedOgSamvær } from "./BostedOgSamvær";
 import { Inntektsopplysninger } from "./Inntektsopplysninger";
-import { getInnloggetFormDefaultValues } from "./utils";
+import { getInnloggetSkjemaStandardverdi } from "./utils";
 
 export function InnloggetBidragsskjema() {
   const personinformasjon = usePersoninformasjon();
   const { språk } = useOversettelse();
   const { t } = useOversettelse();
 
-  const form = useForm<InnloggetSkjema, InnloggetSkjemaValidert, {}>({
+  const form = useForm<InnloggetSkjema, InnloggetSkjemaValidert>({
     schema: getInnloggetSkjema(språk),
     submitSource: "state",
-    defaultValues: getInnloggetFormDefaultValues(personinformasjon),
-    handleSubmit: (validatedValues) => {
-      console.log("Submitting form", validatedValues);
-    },
+    method: "post",
+    defaultValues: getInnloggetSkjemaStandardverdi(personinformasjon),
   });
 
   const harValgtMotpart = Boolean(form.value("barn"));
