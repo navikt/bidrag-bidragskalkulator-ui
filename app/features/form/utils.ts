@@ -44,3 +44,28 @@ export function kalkulerBidragstype(
   }
   return bostatus === "HOS_FORELDER_1" ? "MOTTAKER" : "PLIKTIG";
 }
+
+export const lagDelingsurl = (formData: {
+  barn: Array<{
+    alder: string;
+    bostatus: string;
+    samværsgrad: string;
+  }>;
+  inntektForelder1: string;
+  inntektForelder2: string;
+}) => {
+  const searchParams = new URLSearchParams();
+
+  formData.barn.forEach((barn, index) => {
+    searchParams.append(`barn[${index}].alder`, barn.alder);
+    searchParams.append(`barn[${index}].bostatus`, barn.bostatus);
+    searchParams.append(`barn[${index}].samværsgrad`, barn.samværsgrad);
+  });
+
+  searchParams.append("inntektForelder1", formData.inntektForelder1);
+  searchParams.append("inntektForelder2", formData.inntektForelder2);
+
+  return `${window.location.origin}${
+    window.location.pathname
+  }?${searchParams.toString()}`;
+};
