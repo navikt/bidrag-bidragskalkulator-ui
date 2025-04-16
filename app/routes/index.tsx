@@ -8,6 +8,7 @@ import { BidragsForm } from "~/features/form/BidragsForm";
 import { IntroPanel } from "~/features/form/IntroPanel";
 import { Resultatpanel } from "~/features/form/Resultatpanel";
 import { useBidragsform } from "~/features/form/useBidragsForm";
+import { lagDelingsurl } from "~/features/form/utils";
 import type { SkjemaResponse } from "~/features/form/validator";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
@@ -73,7 +74,7 @@ export default function Barnebidragskalkulator() {
         <div className="max-w-3xl mx-auto p-4 mt-8">
           <Resultatpanel
             data={getResultData()}
-            formData={form.value()}
+            delingsurl={lagDelingsurl(form.value())}
             ref={resultatRef}
           />
         </div>
