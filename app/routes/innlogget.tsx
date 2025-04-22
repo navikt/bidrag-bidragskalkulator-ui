@@ -12,7 +12,7 @@ import { Resultatpanel } from "~/features/form/Resultatpanel";
 import type { SkjemaResponse } from "~/features/form/validator";
 import { hentBidragsutregning } from "~/features/innlogget/beregning/api.server";
 import { InnloggetBidragsskjema } from "~/features/innlogget/InnloggetBidragsskjema";
-import { hentPersoninformasjon } from "~/features/innlogget/personinformasjon/api.server";
+import { hentPersoninformasjonAutentisert } from "~/features/innlogget/personinformasjon/api.server";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
 export function meta({ matches }: MetaArgs) {
@@ -36,7 +36,10 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const respons = await hentPersoninformasjon(request);
+  const respons = await hentPersoninformasjonAutentisert({
+    request,
+    navigerTilUrlEtterAutentisering: "/innlogget",
+  });
   if (respons instanceof Response) {
     return respons;
   }
