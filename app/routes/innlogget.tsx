@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Heading } from "@navikt/ds-react";
+import { Alert, BodyLong, Heading, Link } from "@navikt/ds-react";
 import { isValidationErrorResponse } from "@rvf/react-router";
 import { useRef } from "react";
 import type {
@@ -6,13 +6,14 @@ import type {
   LoaderFunctionArgs,
   MetaArgs,
 } from "react-router";
-import { useActionData } from "react-router";
+import { Link as ReactRouterLink, useActionData } from "react-router";
 import { IntroPanel } from "~/features/form/IntroPanel";
 import { Resultatpanel } from "~/features/form/Resultatpanel";
 import type { SkjemaResponse } from "~/features/form/validator";
 import { hentBidragsutregning } from "~/features/innlogget/beregning/api.server";
 import { InnloggetBidragsskjema } from "~/features/innlogget/InnloggetBidragsskjema";
 import { hentPersoninformasjonAutentisert } from "~/features/innlogget/personinformasjon/api.server";
+import { usePersoninformasjon } from "~/features/innlogget/personinformasjon/usePersoninformasjon";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
 export function meta({ matches }: MetaArgs) {
@@ -53,8 +54,10 @@ export default function InnloggetBarnebidragskalkulator() {
   const actionData = useActionData<typeof action>();
   const resultatRef = useRef<HTMLDivElement>(null);
   const { t } = useOversettelse();
+  const personinformasjon = usePersoninformasjon();
   const erEndretSidenUtregning = false; // TODO
-  // const { form, erEndretSidenUtregning } = useBidragsform(resultatRef);
+
+  const harMotpart = personinformasjon.barnRelasjon.length > 0;
 
   const getResultData = () => {
     if (!actionData || isValidationErrorResponse(actionData)) {
@@ -73,7 +76,18 @@ export default function InnloggetBarnebidragskalkulator() {
 
         <IntroPanel />
 
-        <InnloggetBidragsskjema />
+        {harMotpart && <InnloggetBidragsskjema />}
+
+        {!harMotpart && (
+          <Alert variant="info">
+            <div className="space-y-4">
+              <BodyLong>{t(tekster.ingenMotpart.info)}</BodyLong>
+              <Link as={ReactRouterLink} to="/">
+                {t(tekster.ingenMotpart.lenke)}
+              </Link>
+            </div>
+          </Alert>
+        )}
 
         {isValidationErrorResponse(actionData) && (
           <div className="mt-6">
@@ -111,5 +125,17 @@ const tekster = definerTekster({
     nb: <>Barnebidrags&shy;kalkulator</>,
     en: "Child support calculator",
     nn: <>Fostringstilskots&shy;kalkulator</>,
+  },
+  ingenMotpart: {
+    info: {
+      nb: "Vi finner ingen medforelder i systemet. Om du ønsker bruke kalkulatoren, kan du fylle ut skjema selv.",
+      en: "We cannot find any co-parent in the system. If you want to use the calculator, you can fill out the form yourself.",
+      nn: "Vi finn ingen medforelder i systemet. Om du ønskjer å bruke kalkulatoren, kan du fylle ut skjema sjølv.",
+    },
+    lenke: {
+      nb: "Fyll ut skjema selv",
+      en: "Fill out the form yourself",
+      nn: "Fyll ut skjema sjølv",
+    },
   },
 });
