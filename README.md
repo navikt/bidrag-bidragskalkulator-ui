@@ -11,6 +11,7 @@ Man deployer automatisk til dev- og prod-miljøene når man merger en pull reque
 ### Manuell deploy til dev
 
 For å deploye en spesifikk branch til dev-miljøet:
+
 1. Gå til "Actions" i GitHub
 2. Velg "Manuell deploy til dev" fra workflows-listen
 3. Klikk "Run workflow"
@@ -20,6 +21,7 @@ For å deploye en spesifikk branch til dev-miljøet:
 ### Deploy til prod
 
 Man kan deploye direkte til prod ved å lage en ny release i GitHub:
+
 1. Gå til "Releases" i GitHub
 2. Klikk på "Create a new release"
 3. Velg en tag (f.eks. v1.2.3)
@@ -34,7 +36,17 @@ Når releasen er publisert, vil applikasjonen automatisk deployes til prod-milj�
 
 ## Lokal utvikling
 
+For å installere npm pakker med @navikt-scope trenger du en `.npmrc`-fil med følgende:
+
+```
+//npm.pkg.github.com/:_authToken=TOKEN
+@navikt:registry=https://npm.pkg.github.com
+```
+
+Token genererer du under [developer settings på Github](https://github.com/settings/tokens). Den trenger kun `read:packages`. Husk å enable SSO for navikt-orgen!
+
 Installer avhengigheter:
+
 ```bash
 npm install
 ```
@@ -71,4 +83,5 @@ Kjør docker-containeren:
 ```bash
 docker run -p 3000:3000 bidragskalkulator
 ```
+
 </details>
