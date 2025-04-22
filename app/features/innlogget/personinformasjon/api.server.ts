@@ -30,33 +30,39 @@ const hentPersoninformasjonFraApi = async (token: string) => {
   return parsed.data;
 };
 
-const loginUrl = `${env.INGRESS}/oauth2/login?redirect=${env.INGRESS}/innlogget`;
+const innloggingsurlbase = `${env.INGRESS}/oauth2/login`;
 const audience = `${env.ENVIRONMENT}-gcp:bidrag:bidrag-bidragskalkulator-api`;
 
-export const hentPersoninformasjon = async (
-  request: Request
-): Promise<PersoninformasjonRespons | Response> => {
+export const hentPersoninformasjonAutentisert = async ({
+  request,
+  navigerTilUrlEtterAutentisering,
+}: {
+  request: Request;
+  navigerTilUrlEtterAutentisering: string;
+}): Promise<PersoninformasjonRespons | Response> => {
   if (process.env.NODE_ENV === "development") {
     // Dette er mocket data, som man kan bruke i utvikling
     return PERSON_MED_EN_MOTPART_TO_BARN;
   }
 
+  const innloggingsurl = `${innloggingsurlbase}?redirect=${env.INGRESS}${navigerTilUrlEtterAutentisering}`;
+
   const token = getToken(request);
   if (!token) {
     console.info("Ingen token funnet, omdirigerer til innlogging");
-    return redirect(loginUrl);
+    return redirect(innloggingsurl);
   }
 
   const validation = await validateToken(token);
   if (!validation.ok) {
     console.info("Token er ikke gyldig, omdirigerer til innlogging");
-    return redirect(loginUrl);
+    return redirect(innloggingsurl);
   }
 
   const obo = await requestOboToken(token, audience);
   if (!obo.ok) {
     console.info("Ingen OBO token funnet, omdirigerer til innlogging");
-    return redirect(loginUrl);
+    return redirect(innloggingsurl);
   }
 
   return hentPersoninformasjonFraApi(obo.token);
