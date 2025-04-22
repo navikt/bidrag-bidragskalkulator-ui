@@ -11,7 +11,7 @@ import {
   kalkulerSamværsklasse,
   type Samværsklasse,
 } from "./utils";
-import { lagValidatorMedSpråk, responseSchema } from "./validator";
+import { lagValidatorMedSpråk, ResponseSchema } from "./validator";
 
 const tekster = definerTekster({
   feil: {
@@ -63,7 +63,7 @@ export async function hentBidragsutregningFraApi({
       };
     }
     const json = await response.json();
-    const parsed = responseSchema.safeParse(json);
+    const parsed = ResponseSchema.safeParse(json);
 
     if (!parsed.success) {
       return {

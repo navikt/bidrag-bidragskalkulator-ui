@@ -9,7 +9,6 @@ import type {
 import { Link as ReactRouterLink, useActionData } from "react-router";
 import { IntroPanel } from "~/features/form/IntroPanel";
 import { Resultatpanel } from "~/features/form/Resultatpanel";
-import type { SkjemaResponse } from "~/features/form/validator";
 import { hentBidragsutregning } from "~/features/innlogget/beregning/api.server";
 import { InnloggetBidragsskjema } from "~/features/innlogget/InnloggetBidragsskjema";
 import { hentPersoninformasjonAutentisert } from "~/features/innlogget/personinformasjon/api.server";
@@ -89,13 +88,8 @@ export default function InnloggetBarnebidragskalkulator() {
     return () => unsubscribe();
   }, [form]);
 
-  const getResultData = () => {
-    if (!actionData || isValidationErrorResponse(actionData)) {
-      return null;
-    }
-
-    return actionData as SkjemaResponse;
-  };
+  const skjemarespons =
+    !actionData || isValidationErrorResponse(actionData) ? null : actionData;
 
   return (
     <>
@@ -129,9 +123,9 @@ export default function InnloggetBarnebidragskalkulator() {
           </div>
         )}
       </div>
-      {actionData && !erEndretSidenUtregning && (
+      {skjemarespons && !erEndretSidenUtregning && (
         <div className="max-w-3xl mx-auto p-4 mt-8">
-          <Resultatpanel data={getResultData()} ref={resultatRef} />
+          <Resultatpanel data={skjemarespons} ref={resultatRef} />
         </div>
       )}
     </>

@@ -21,7 +21,7 @@ import { formatterSum } from "~/utils/tall";
 import type { SkjemaResponse } from "./validator";
 
 type ResultatpanelProps = {
-  data: SkjemaResponse | null;
+  data: SkjemaResponse;
   ref: React.RefObject<HTMLDivElement | null>;
   delingsurl?: string;
 };
@@ -33,10 +33,6 @@ export const Resultatpanel = ({
 }: ResultatpanelProps) => {
   const { t } = useOversettelse();
   const beregningsdetaljerAntallSporingerRef = useRef(0);
-
-  if (!data) {
-    return null;
-  }
 
   if ("error" in data) {
     return (

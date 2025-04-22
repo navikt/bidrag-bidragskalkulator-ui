@@ -227,7 +227,7 @@ export function lagValidatorMedSpråk(språk: Språk) {
   return withZod(lagSkjemaSchema(språk));
 }
 
-export const responseSchema = z.object({
+export const ResponseSchema = z.object({
   resultater: z.array(
     z.object({
       sum: z.number(),
@@ -238,4 +238,4 @@ export const responseSchema = z.object({
   ),
 });
 
-export type SkjemaResponse = z.infer<typeof responseSchema> | { error: string };
+export type SkjemaResponse = z.infer<typeof ResponseSchema> | { error: string };
