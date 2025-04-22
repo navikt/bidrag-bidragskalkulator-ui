@@ -1,0 +1,29 @@
+name: Legg til deploy-knapp i PR
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  add-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Legg til deploy-knapp i PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const workflowId = 'manual-deploy-dev.yml';
+            const comment = `## 🚀 Deploy til dev-miljø
+
+            Vil du deploye denne branchen til dev-miljøet?
+
+            [![Deploy til dev](https://img.shields.io/badge/Deploy-til_dev-blue?style=for-the-badge)](${context.payload.repository.html_url}/actions/workflows/${workflowId}/workflow_run?branch=${context.payload.pull_request.head.ref})`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
