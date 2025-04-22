@@ -19,8 +19,8 @@ jobs:
 
             Vil du deploye denne branchen til dev-miljøet?
 
-            [![Deploy til dev](https://img.shields.io/badge/Deploy-til_dev-blue?style=for-the-badge)](${context.payload.repository.html_url}/actions/workflows/${workflowId})]
-            
+            [![Deploy til dev](https://img.shields.io/badge/Deploy-til_dev-blue?style=for-the-badge)](${context.payload.repository.html_url}/actions/workflows/${workflowId})
+
             Klikk på knappen over, trykk "Run workflow", velg branchen "${context.payload.pull_request.head.ref}" og trykk på den grønne knappen.`;
 
             github.rest.issues.createComment({
