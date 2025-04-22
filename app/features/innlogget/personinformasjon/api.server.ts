@@ -30,7 +30,7 @@ const hentPersoninformasjonFraApi = async (token: string) => {
   return parsed.data;
 };
 
-const loginUrl = `${env.INGRESS}/oauth2/login`;
+const loginUrl = `${env.INGRESS}/oauth2/login?redirect=${env.INGRESS}/innlogget`;
 const audience = `${env.ENVIRONMENT}-gcp:bidrag:bidrag-bidragskalkulator-api`;
 
 export const hentPersoninformasjon = async (
