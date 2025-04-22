@@ -15,17 +15,32 @@ jobs:
         with:
           script: |
             const workflowId = 'manual-deploy-dev.yml';
-            const comment = `## 🚀 Deploy til dev-miljø
 
-            Vil du deploye denne branchen til dev-miljøet?
-
-            [![Deploy til dev](https://img.shields.io/badge/Deploy-til_dev-blue?style=for-the-badge)](${context.payload.repository.html_url}/actions/workflows/${workflowId})
-
-            Klikk på knappen over, trykk "Run workflow", velg branchen "${context.payload.pull_request.head.ref}" og trykk på den grønne knappen.`;
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
+            // Hent eksisterende kommentarer
+            const kommentarer = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: comment
+              issue_number: context.issue.number
             });
+
+            // Sjekk om vi allerede har en deploy-kommentar
+            const harAlleredeLagetDeployKommentar = kommentarer.data.some(kommentar => 
+              kommentar.body.includes('🚀 Deploy til dev-miljø')
+            );
+
+            if (!harAlleredeLagetDeployKommentar) {
+              const kommentar = `## 🚀 Deploy til dev-miljø
+
+              Vil du deploye denne branchen til dev-miljøet?
+
+              [![Deploy til dev](https://img.shields.io/badge/Deploy-til_dev-blue?style=for-the-badge)](${context.payload.repository.html_url}/actions/workflows/${workflowId})
+
+              Klikk på knappen over, trykk "Run workflow", velg branchen "${context.payload.pull_request.head.ref}" og trykk på den grønne knappen.`;
+
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: kommentar
+              });
+            }
