@@ -1,6 +1,6 @@
 import { Alert, BodyLong, Heading, Link } from "@navikt/ds-react";
-import { isValidationErrorResponse } from "@rvf/react-router";
-import { useRef } from "react";
+import { isValidationErrorResponse, useForm } from "@rvf/react-router";
+import { useEffect, useRef, useState } from "react";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -14,6 +14,12 @@ import { hentBidragsutregning } from "~/features/innlogget/beregning/api.server"
 import { InnloggetBidragsskjema } from "~/features/innlogget/InnloggetBidragsskjema";
 import { hentPersoninformasjonAutentisert } from "~/features/innlogget/personinformasjon/api.server";
 import { usePersoninformasjon } from "~/features/innlogget/personinformasjon/usePersoninformasjon";
+import {
+  type InnloggetSkjema,
+  type InnloggetSkjemaValidert,
+  getInnloggetSkjema,
+} from "~/features/innlogget/schema";
+import { getInnloggetSkjemaStandardverdi } from "~/features/innlogget/utils";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
 export function meta({ matches }: MetaArgs) {
@@ -55,9 +61,33 @@ export default function InnloggetBarnebidragskalkulator() {
   const resultatRef = useRef<HTMLDivElement>(null);
   const { t } = useOversettelse();
   const personinformasjon = usePersoninformasjon();
-  const erEndretSidenUtregning = false; // TODO
+  const [erEndretSidenUtregning, settErEndretSidenUtregning] = useState(false);
 
   const harMotpart = personinformasjon.barnRelasjon.length > 0;
+
+  const { språk } = useOversettelse();
+
+  const form = useForm<InnloggetSkjema, InnloggetSkjemaValidert>({
+    schema: getInnloggetSkjema(språk),
+    submitSource: "state",
+    method: "post",
+    defaultValues: getInnloggetSkjemaStandardverdi(personinformasjon),
+    onSubmitSuccess: () => {
+      resultatRef.current?.focus({ preventScroll: true });
+      resultatRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      settErEndretSidenUtregning(false);
+    },
+  });
+
+  useEffect(() => {
+    const unsubscribe = form.subscribe.value(() => {
+      settErEndretSidenUtregning(true);
+    });
+    return () => unsubscribe();
+  }, [form]);
 
   const getResultData = () => {
     if (!actionData || isValidationErrorResponse(actionData)) {
@@ -76,7 +106,7 @@ export default function InnloggetBarnebidragskalkulator() {
 
         <IntroPanel />
 
-        {harMotpart && <InnloggetBidragsskjema />}
+        {harMotpart && <InnloggetBidragsskjema form={form} />}
 
         {!harMotpart && (
           <Alert variant="info">
