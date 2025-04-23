@@ -40,7 +40,6 @@ export const hentPersoninformasjonAutentisert = async ({
   navigerTilUrlEtterAutentisering: string;
 }): Promise<PersoninformasjonRespons | Response> => {
   if (process.env.NODE_ENV === "development") {
-    // Dette er mocket data, som man kan bruke i utvikling
     return hentPersoninformasjonFraApi(env.BIDRAG_BIDRAGSKALKULATOR_TOKEN);
   }
 
