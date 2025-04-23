@@ -18,13 +18,15 @@ import {
 
 import { Page } from "@navikt/ds-react";
 import {
+  injectDecoratorClientSide,
   onLanguageSelect,
   setBreadcrumbs,
 } from "@navikt/nav-dekoratoren-moduler";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { env } from "./config/env.server";
+import { publicEnv } from "./config/publicEnv";
 import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
 import { NotFound } from "./features/feilhåndtering/404";
 import { InternalServerError } from "./features/feilhåndtering/500";
@@ -171,14 +173,20 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let content: React.ReactNode;
+  useEffect(() => {
+    injectDecoratorClientSide({
+      env: publicEnv.ENVIRONMENT,
+    });
+  }, []);
+
+  let innhold: React.ReactNode;
 
   if (isRouteErrorResponse(error)) {
-    content = <NotFound />;
+    innhold = <NotFound />;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
-    content = <InternalServerError stack={error.stack} />;
+    innhold = <InternalServerError stack={error.stack} />;
   } else {
-    content = <InternalServerError />;
+    innhold = <InternalServerError />;
   }
 
   return (
@@ -189,9 +197,19 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         <Meta />
         <Links />
       </head>
-      {content}
-      <ScrollRestoration />
-      <Scripts />
+      <body>
+        <Page.Block
+          className="flex-1"
+          as="main"
+          id="maincontent"
+          width="xl"
+          gutters
+        >
+          {innhold}
+        </Page.Block>
+        <ScrollRestoration />
+        <Scripts />
+      </body>
     </html>
   );
 }
