@@ -18,7 +18,7 @@ import { CopyButton } from "~/components/ui/copy-button";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
-import type { SkjemaResponse } from "./validator";
+import type { SkjemaResponse } from "../beregning/schema";
 
 type ResultatpanelProps = {
   data: SkjemaResponse;

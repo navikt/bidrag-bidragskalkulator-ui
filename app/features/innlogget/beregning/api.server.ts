@@ -5,7 +5,7 @@ import { validationError } from "@rvf/react-router";
 import {
   hentBidragsutregningFraApi,
   type BidragsutregningRequest,
-} from "../../form/api.server";
+} from "~/features/beregning/api.server";
 import { kalkulerBidragstype, kalkulerSamværsklasse } from "../../form/utils";
 
 export async function hentBidragsutregning(request: Request) {
