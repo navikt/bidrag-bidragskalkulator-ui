@@ -57,6 +57,14 @@ Kopiér .env.example til .env.
 cp .env.example .env
 ```
 
+### Generer token og sette nødvendige miljøvariabler
+
+Genererer token og setter nødvendige miljøvariabler basert på om applikasjonen skal kjøres mot lokal backend eller mot dev-miljøet.
+
+```bash
+npm run generate-token
+```
+
 Kjør lokalt:
 
 ```bash
@@ -64,9 +72,8 @@ npm run dev
 # Kjører på http://localhost:5173
 ```
 
-### Server
+### Kjøre backend lokalt
 
-For å kunne kalkulere lokalt, må du også kjøre serveren lokalt.
 For å kjøre serveren lokalt, kan du følge instruksene her: https://github.com/navikt/bidrag-bidragskalkulator-api
 
 <details>

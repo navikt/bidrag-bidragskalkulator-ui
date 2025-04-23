@@ -1,7 +1,6 @@
 import { env } from "~/config/env.server";
 import { getToken, validateToken, requestOboToken } from "@navikt/oasis";
 import { redirect } from "react-router";
-import { PERSON_MED_EN_MOTPART_TO_BARN } from "~/mocks/personinformasjon";
 import {
   PersoninformasjonResponsSchema,
   type PersoninformasjonRespons,
@@ -41,8 +40,7 @@ export const hentPersoninformasjonAutentisert = async ({
   navigerTilUrlEtterAutentisering: string;
 }): Promise<PersoninformasjonRespons | Response> => {
   if (process.env.NODE_ENV === "development") {
-    // Dette er mocket data, som man kan bruke i utvikling
-    return PERSON_MED_EN_MOTPART_TO_BARN;
+    return hentPersoninformasjonFraApi(env.BIDRAG_BIDRAGSKALKULATOR_TOKEN);
   }
 
   const innloggingsurl = `${innloggingsurlbase}?redirect=${env.INGRESS}${navigerTilUrlEtterAutentisering}`;

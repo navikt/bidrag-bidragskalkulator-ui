@@ -5,6 +5,7 @@ const envSchema = z.object({
   ENVIRONMENT: z.enum(["dev", "prod"]),
   UMAMI_WEBSITE_ID: z.string(), // TODO: Legg til UUID-validering
   INGRESS: z.string().url(),
+  BIDRAG_BIDRAGSKALKULATOR_TOKEN: z.string(),
 });
 
 const envParse = envSchema.safeParse(process.env);
