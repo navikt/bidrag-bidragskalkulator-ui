@@ -20,13 +20,10 @@ export function Motpart() {
     const fellesBarn = barnRelasjon?.fellesBarn ?? [];
     const barnFormValue = fellesBarn.map(tilInnloggetBarnSkjema);
 
-    // TODO Nullstille for errors
     form.setValue("barn", barnFormValue);
     form.setValue("motpartInntekt", "");
     onChange?.(motpartIdent);
   };
-
-  // TODO håndter ingen motpart/barn
 
   if (personinformasjon.barnRelasjon.length === 1) {
     return null;
