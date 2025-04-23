@@ -10,7 +10,7 @@
     "typecheck": "react-router typegen && tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "generate-token": "chmod +x ./token-generator.sh && ./token-generator.sh"
+    "generate-token": "node ./token-generator.cjs"
   },
   "dependencies": {
     "@navikt/aksel-icons": "^7.12.2",

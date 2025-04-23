@@ -50,11 +50,12 @@ const ask = (query) =>
       throw new Error("access_token not found in response");
     }
 
+    await browser.close();
+
     // Write token to .env
     const envFile = ".env";
     const tokenEnvName = "BIDRAG_BIDRAGSKALKULATOR_TOKEN";
     const serverEnvName = "SERVER_URL";
-    let newLine = `${tokenEnvName}=${token}\n`;
 
     let envContent = fs.existsSync(envFile)
       ? fs.readFileSync(envFile, "utf8")
@@ -96,7 +97,5 @@ const ask = (query) =>
     console.log("✅ Token and Server url stored in .env");
   } catch (err) {
     console.error("❌ Error:", err.message);
-  } finally {
-    await browser.close();
   }
 })();
