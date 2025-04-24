@@ -22,7 +22,7 @@ import { lagDekoratørHtmlFragmenter } from "./features/dektoratøren/htmlFragme
 import { useDekoratørSpråk } from "./features/dektoratøren/useDektoratørSpråk";
 import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
 import { InternalServerError } from "./features/feilhåndtering/500";
-import { lagCspHeader } from "./features/headers/csp.server";
+import { lagHeaders } from "./features/headers/headers.server";
 import { Analytics } from "./utils/analytics";
 import {
   definerTekster,
@@ -33,9 +33,9 @@ import {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const språk = hentSpråkFraCookie(request.headers.get("Cookie"));
-  const [dekoratørHtml, cspHeader] = await Promise.all([
+  const [dekoratørHtml, headers] = await Promise.all([
     lagDekoratørHtmlFragmenter(språk),
-    lagCspHeader(),
+    lagHeaders(språk),
   ]);
 
   return data(
@@ -45,27 +45,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       umamiWebsiteId: env.UMAMI_WEBSITE_ID,
     },
     {
-      headers: {
-        // Sikkerhetsheaders
-        "Content-Security-Policy": cspHeader,
-        "Referrer-Policy": "same-origin",
-        "Permissions-Policy":
-          "camera=(), microphone=(), geolocation=(), payment=(), display-capture=(), fullscreen=(), usb=(), screen-wake-lock=(), clipboard-read=self, clipboard-write=self",
-        "Cross-Origin-Opener-Policy": "same-origin",
-        "Cross-Origin-Embedder-Policy": "credentialless",
-        "Cross-Origin-Resource-Policy": "same-origin",
-        "X-Permitted-Cross-Domain-Policies": "none",
-        "X-Content-Type-Options": "nosniff",
-
-        // Andre headers
-        "Cache-Control": "max-age=60, stale-while-revalidate=86400",
-        "Content-Language": språk,
-        "Accept-CH":
-          "Sec-CH-UA, Sec-CH-UA-Mobile, Sec-CH-UA-Platform, Sec-CH-UA-Arch, Sec-CH-Prefers-Color-Scheme",
-        Vary: "Accept-Encoding, Accept-Language",
-        "X-DNS-Prefetch-Control": "on",
-        NEL: '{"report_to":"default","max_age":31536000,"include_subdomains":true}',
-      },
+      headers,
     }
   );
 }
@@ -157,26 +137,5 @@ const tekster = definerTekster({
     nb: "nb-NO",
     en: "en-US",
     nn: "nn-NO",
-  },
-  breadcrumbs: {
-    barnebidrag: {
-      label: {
-        nb: "Barnebidrag",
-        en: "Child support",
-        nn: "Fostringstilskot",
-      },
-      url: {
-        nb: "https://www.nav.no/barnebidrag",
-        en: "https://www.nav.no/barnebidrag/en",
-        nn: "https://www.nav.no/barnebidrag",
-      },
-    },
-    barnebidragskalkulator: {
-      label: {
-        nb: "Barnebidragskalkulator",
-        en: "Child support calculator",
-        nn: "Fostringstilskotskalkulator",
-      },
-    },
   },
 });
