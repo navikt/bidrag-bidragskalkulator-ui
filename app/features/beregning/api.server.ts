@@ -1,25 +1,18 @@
 import { env } from "process";
 import { definerTekster, Språk, oversett } from "~/utils/i18n";
-import type { Samværsklasse } from "../form/utils";
-import { ResponseSchema } from "./schema";
-
-export type BidragsutregningRequest = {
-  barn: {
-    alder: number;
-    samværsklasse: Samværsklasse;
-    bidragstype: "MOTTAKER" | "PLIKTIG";
-  }[];
-  inntektForelder1: number;
-  inntektForelder2: number;
-};
+import {
+  Bidragsutregningskjema,
+  type Bidragsutregningsgrunnlag,
+  type Bidragsutregning,
+} from "./schema";
 
 export const hentBidragsutregningFraApi = async ({
   requestData,
   språk,
 }: {
-  requestData: BidragsutregningRequest;
+  requestData: Bidragsutregningsgrunnlag;
   språk: Språk;
-}) => {
+}): Promise<Bidragsutregning | { error: string }> => {
   try {
     const response = await fetch(
       `${env.SERVER_URL}/api/v1/beregning/barnebidrag`,
@@ -38,7 +31,7 @@ export const hentBidragsutregningFraApi = async ({
       };
     }
     const json = await response.json();
-    const parsed = ResponseSchema.safeParse(json);
+    const parsed = Bidragsutregningskjema.safeParse(json);
 
     if (!parsed.success) {
       return {

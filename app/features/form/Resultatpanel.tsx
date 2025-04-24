@@ -18,10 +18,10 @@ import { CopyButton } from "~/components/ui/copy-button";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
-import type { SkjemaResponse } from "../beregning/schema";
+import type { Bidragsutregning } from "../beregning/schema";
 
 type ResultatpanelProps = {
-  data: SkjemaResponse;
+  data: Bidragsutregning | { error: string };
   ref: React.RefObject<HTMLDivElement | null>;
   delingsurl?: string;
 };
