@@ -5,7 +5,6 @@ import {
 import parse from "html-react-parser";
 import {
   data,
-  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
@@ -28,7 +27,6 @@ import "./app.css";
 import { env } from "./config/env.server";
 import { publicEnv } from "./config/publicEnv";
 import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
-import { NotFound } from "./features/feilhåndtering/404";
 import { InternalServerError } from "./features/feilhåndtering/500";
 import { Analytics } from "./utils/analytics";
 import {
@@ -181,9 +179,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   let innhold: React.ReactNode;
 
-  if (isRouteErrorResponse(error)) {
-    innhold = <NotFound />;
-  } else if (import.meta.env.DEV && error && error instanceof Error) {
+  if (import.meta.env.DEV && error && error instanceof Error) {
     innhold = <InternalServerError stack={error.stack} />;
   } else {
     innhold = <InternalServerError />;
