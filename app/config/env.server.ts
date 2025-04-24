@@ -7,7 +7,9 @@ const envSchema = z.object({
     .string()
     .describe("ID for umami (sporingsverktøyet vårt)"),
   INGRESS: z.string().url().describe("Hvilken URL tjenesten kjører på"),
-  BIDRAG_BIDRAGSKALKULATOR_TOKEN: z.string().describe("Token for å kalle bidragskalkulator apiene"),
+  BIDRAG_BIDRAGSKALKULATOR_TOKEN: z
+    .string()
+    .describe("Token for å kalle bidragskalkulator APIene"),
 });
 
 const envParse = envSchema.safeParse(process.env);
@@ -17,7 +19,9 @@ if (!envParse.success) {
     "❌ Manglende eller ugyldige miljøvariabler:",
     envParse.error.format()
   );
-  throw new Error("Ugyldige miljøvariabler");
+  throw new Error(
+    "Ugyldige miljøvariabler: " + envParse.error.format().toString()
+  );
 }
 
 export const env = envParse.data;
