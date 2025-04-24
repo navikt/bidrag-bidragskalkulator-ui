@@ -9,7 +9,6 @@ import { IntroPanel } from "~/features/form/IntroPanel";
 import { Resultatpanel } from "~/features/form/Resultatpanel";
 import { useBidragsform } from "~/features/form/useBidragsForm";
 import { lagDelingsurl } from "~/features/form/utils";
-import type { SkjemaResponse } from "~/features/form/validator";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
 export function meta({ matches }: MetaArgs) {
@@ -41,13 +40,8 @@ export default function Barnebidragskalkulator() {
   const { t } = useOversettelse();
   const { form, erEndretSidenUtregning } = useBidragsform(resultatRef);
 
-  const getResultData = () => {
-    if (!actionData || isValidationErrorResponse(actionData)) {
-      return null;
-    }
-
-    return actionData as SkjemaResponse;
-  };
+  const skjemarespons =
+    !actionData || isValidationErrorResponse(actionData) ? null : actionData;
 
   return (
     <>
@@ -70,10 +64,10 @@ export default function Barnebidragskalkulator() {
           </div>
         )}
       </div>
-      {actionData && !erEndretSidenUtregning && (
+      {skjemarespons && !erEndretSidenUtregning && (
         <div className="max-w-3xl mx-auto p-4 mt-8">
           <Resultatpanel
-            data={getResultData()}
+            data={skjemarespons}
             delingsurl={lagDelingsurl(form.value())}
             ref={resultatRef}
           />
