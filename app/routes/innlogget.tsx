@@ -19,6 +19,7 @@ import {
   getInnloggetSkjema,
 } from "~/features/innlogget/schema";
 import { getInnloggetSkjemaStandardverdi } from "~/features/innlogget/utils";
+import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
 export function meta({ matches }: MetaArgs) {
@@ -78,6 +79,18 @@ export default function InnloggetBarnebidragskalkulator() {
         block: "center",
       });
       settErEndretSidenUtregning(false);
+      sporHendelse("skjema fullført");
+    },
+    onInvalidSubmit: () => {
+      sporHendelse("skjema validering feilet", {
+        førsteFeil:
+          document.activeElement instanceof HTMLInputElement
+            ? document.activeElement.name
+            : null,
+      });
+    },
+    onSubmitFailure: (error) => {
+      sporHendelse("skjema innsending feilet", { feil: String(error) });
     },
   });
 
