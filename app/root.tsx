@@ -1,7 +1,4 @@
-import {
-  buildCspHeader,
-  fetchDecoratorHtml,
-} from "@navikt/nav-dekoratoren-moduler/ssr";
+import { fetchDecoratorHtml } from "@navikt/nav-dekoratoren-moduler/ssr";
 import parse from "html-react-parser";
 import {
   data,
@@ -36,6 +33,7 @@ import {
   OversettelseProvider,
   Språk,
 } from "./utils/i18n";
+import { lagCspHeader } from "./features/headers/csp.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const språk = hentSpråkFraCookie(request.headers.get("Cookie"));
@@ -64,14 +62,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         ],
       },
     }),
-    buildCspHeader(
-      {
-        "script-src-elem": ["'self'", "https://umami.nav.no"],
-        "connect-src": ["'self'", "https://umami.nav.no"],
-        "style-src-elem": ["'self'"],
-      },
-      { env: env.ENVIRONMENT }
-    ),
+    lagCspHeader(),
   ]);
 
   return data(
