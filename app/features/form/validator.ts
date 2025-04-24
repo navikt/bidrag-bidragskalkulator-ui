@@ -226,16 +226,3 @@ export function lagSkjemaSchema(språk: Språk) {
 export function lagValidatorMedSpråk(språk: Språk) {
   return withZod(lagSkjemaSchema(språk));
 }
-
-export const ResponseSchema = z.object({
-  resultater: z.array(
-    z.object({
-      sum: z.number(),
-      barnetsAlder: z.number(),
-      bidragstype: z.enum(["PLIKTIG", "MOTTAKER"]),
-      underholdskostnad: z.number(),
-    })
-  ),
-});
-
-export type SkjemaResponse = z.infer<typeof ResponseSchema> | { error: string };

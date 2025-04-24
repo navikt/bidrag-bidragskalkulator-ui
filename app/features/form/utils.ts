@@ -1,10 +1,4 @@
-export type Samværsklasse =
-  | "SAMVÆRSKLASSE_0"
-  | "SAMVÆRSKLASSE_1"
-  | "SAMVÆRSKLASSE_2"
-  | "SAMVÆRSKLASSE_3"
-  | "SAMVÆRSKLASSE_4"
-  | "DELT_BOSTED";
+import type { Samværsklasse } from "../beregning/schema";
 
 /**
  * Kalkulerer samværsklasse basert på hvor mange netter barnet bor hos forelderen

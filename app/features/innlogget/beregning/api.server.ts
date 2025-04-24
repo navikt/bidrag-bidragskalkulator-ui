@@ -2,11 +2,9 @@ import { hentSpråkFraCookie } from "~/utils/i18n";
 import { getInnloggetSkjema } from "../schema";
 import { parseFormData } from "@rvf/react";
 import { validationError } from "@rvf/react-router";
-import {
-  hentBidragsutregningFraApi,
-  type BidragsutregningRequest,
-} from "../../form/api.server";
+import { hentBidragsutregningFraApi } from "~/features/beregning/api.server";
 import { kalkulerBidragstype, kalkulerSamværsklasse } from "../../form/utils";
+import type { Bidragsutregningsgrunnlag } from "~/features/beregning/schema";
 
 export async function hentBidragsutregning(request: Request) {
   const cookieHeader = request.headers.get("Cookie");
@@ -22,7 +20,7 @@ export async function hentBidragsutregning(request: Request) {
   const inntektForelder1 = skjemaData.inntektDeg;
   const inntektForelder2 = skjemaData.motpartInntekt;
 
-  const requestData: BidragsutregningRequest = {
+  const requestData: Bidragsutregningsgrunnlag = {
     inntektForelder1,
     inntektForelder2,
     barn: skjemaData.barn.map((barn) => {
