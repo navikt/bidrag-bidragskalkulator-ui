@@ -7,7 +7,9 @@ const envSchema = z.object({
     .string()
     .describe("ID for umami (sporingsverktøyet vårt)"),
   INGRESS: z.string().url().describe("Hvilken URL tjenesten kjører på"),
-  BIDRAG_BIDRAGSKALKULATOR_TOKEN: z.string().describe("Token for å kalle bidragskalkulator apiene"),
+  BIDRAG_BIDRAGSKALKULATOR_TOKEN: z
+    .string()
+    .describe("Token for å kalle bidrags-bidragskalkulator-api"),
 });
 
 const envParse = envSchema.safeParse(process.env);
