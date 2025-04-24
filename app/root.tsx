@@ -18,13 +18,15 @@ import {
 
 import { Page } from "@navikt/ds-react";
 import {
+  injectDecoratorClientSide,
   onLanguageSelect,
   setBreadcrumbs,
 } from "@navikt/nav-dekoratoren-moduler";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { env } from "./config/env.server";
+import { publicEnv } from "./config/publicEnv";
 import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
 import { NotFound } from "./features/feilhåndtering/404";
 import { InternalServerError } from "./features/feilhåndtering/500";
@@ -36,69 +38,6 @@ import {
   OversettelseProvider,
   Språk,
 } from "./utils/i18n";
-
-type LayoutProps = {
-  children: React.ReactNode;
-};
-export function Layout({ children }: LayoutProps) {
-  const { decoratorFragments, språk, umamiWebsiteId } =
-    useLoaderData<typeof loader>();
-
-  const [interntSpråk, setInterntSpråk] = useState(språk);
-
-  useInjectDecoratorScript(decoratorFragments.DECORATOR_SCRIPTS);
-  onLanguageSelect(({ locale }) => {
-    if (Object.values(Språk).includes(locale as Språk)) {
-      const språk = locale as Språk;
-      setInterntSpråk(språk);
-      setBreadcrumbs([
-        {
-          title: oversett(språk, tekster.breadcrumbs.barnebidrag.label),
-          url: oversett(språk, tekster.breadcrumbs.barnebidrag.url),
-        },
-        {
-          title: oversett(
-            språk,
-            tekster.breadcrumbs.barnebidragskalkulator.label
-          ),
-          url: "https://barnebidragskalkulator.nav.no",
-        },
-      ]);
-    } else {
-      setInterntSpråk(Språk.NorwegianBokmål);
-    }
-  });
-
-  return (
-    <html lang={oversett(interntSpråk, tekster.langTag)}>
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-        {parse(decoratorFragments.DECORATOR_HEAD_ASSETS, { trim: true })}
-        <Analytics umamiWebsiteId={umamiWebsiteId} />
-      </head>
-      <body className="flex flex-col min-h-screen">
-        {parse(decoratorFragments.DECORATOR_HEADER, { trim: true })}
-        <OversettelseProvider språk={interntSpråk}>
-          <Page.Block
-            className="flex-1"
-            as="main"
-            id="maincontent"
-            width="xl"
-            gutters
-          >
-            {children}
-          </Page.Block>
-        </OversettelseProvider>
-        {parse(decoratorFragments.DECORATOR_FOOTER, { trim: true })}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  );
-}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const språk = hentSpråkFraCookie(request.headers.get("Cookie"));
@@ -174,19 +113,105 @@ export const headers = ({ loaderHeaders }: HeadersArgs) => {
 };
 
 export default function App() {
-  return <Outlet />;
+  const { decoratorFragments, språk, umamiWebsiteId } =
+    useLoaderData<typeof loader>();
+
+  const [interntSpråk, setInterntSpråk] = useState(språk);
+
+  useInjectDecoratorScript(decoratorFragments.DECORATOR_SCRIPTS);
+  onLanguageSelect(({ locale }) => {
+    if (Object.values(Språk).includes(locale as Språk)) {
+      const språk = locale as Språk;
+      setInterntSpråk(språk);
+      setBreadcrumbs([
+        {
+          title: oversett(språk, tekster.breadcrumbs.barnebidrag.label),
+          url: oversett(språk, tekster.breadcrumbs.barnebidrag.url),
+        },
+        {
+          title: oversett(
+            språk,
+            tekster.breadcrumbs.barnebidragskalkulator.label
+          ),
+          url: "https://barnebidragskalkulator.nav.no",
+        },
+      ]);
+    } else {
+      setInterntSpråk(Språk.NorwegianBokmål);
+    }
+  });
+
+  return (
+    <html lang={oversett(interntSpråk, tekster.langTag)}>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+        {parse(decoratorFragments.DECORATOR_HEAD_ASSETS, { trim: true })}
+        <Analytics umamiWebsiteId={umamiWebsiteId} />
+      </head>
+      <body className="flex flex-col min-h-screen">
+        {parse(decoratorFragments.DECORATOR_HEADER, { trim: true })}
+        <OversettelseProvider språk={interntSpråk}>
+          <Page.Block
+            className="flex-1"
+            as="main"
+            id="maincontent"
+            width="xl"
+            gutters
+          >
+            <Outlet />
+          </Page.Block>
+        </OversettelseProvider>
+        {parse(decoratorFragments.DECORATOR_FOOTER, { trim: true })}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let stack: string | undefined;
+  useEffect(() => {
+    injectDecoratorClientSide({
+      env: publicEnv.ENVIRONMENT,
+    });
+  }, []);
+
+  let innhold: React.ReactNode;
 
   if (isRouteErrorResponse(error)) {
-    return <NotFound />;
+    innhold = <NotFound />;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
-    stack = error.stack;
+    innhold = <InternalServerError stack={error.stack} />;
+  } else {
+    innhold = <InternalServerError />;
   }
 
-  return <InternalServerError stack={stack} />;
+  return (
+    <html lang="nb-NO">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <Page.Block
+          className="flex-1"
+          as="main"
+          id="maincontent"
+          width="xl"
+          gutters
+        >
+          {innhold}
+        </Page.Block>
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
 }
 
 const tekster = definerTekster({
