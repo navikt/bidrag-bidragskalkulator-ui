@@ -1,10 +1,7 @@
 import { env } from "~/config/env.server";
 import { getToken, validateToken, requestOboToken } from "@navikt/oasis";
 import { redirect } from "react-router";
-import {
-  PersoninformasjonResponsSchema,
-  type PersoninformasjonRespons,
-} from "./schema";
+import { PersoninformasjonSchema, type Personinformasjon } from "./schema";
 
 const hentPersoninformasjonFraApi = async (token: string) => {
   const response = await fetch(`${env.SERVER_URL}/api/v1/person/informasjon`, {
@@ -20,7 +17,7 @@ const hentPersoninformasjonFraApi = async (token: string) => {
     throw data;
   }
 
-  const parsed = PersoninformasjonResponsSchema.safeParse(data);
+  const parsed = PersoninformasjonSchema.safeParse(data);
 
   if (!parsed.success) {
     throw parsed.error;
@@ -38,7 +35,7 @@ export const hentPersoninformasjonAutentisert = async ({
 }: {
   request: Request;
   navigerTilUrlEtterAutentisering: string;
-}): Promise<PersoninformasjonRespons | Response> => {
+}): Promise<Personinformasjon | Response> => {
   if (process.env.NODE_ENV === "development") {
     return hentPersoninformasjonFraApi(env.BIDRAG_BIDRAGSKALKULATOR_TOKEN);
   }
