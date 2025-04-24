@@ -12,17 +12,14 @@ import {
 } from "react-router";
 
 import { Page } from "@navikt/ds-react";
-import {
-  injectDecoratorClientSide,
-  onLanguageSelect,
-  setBreadcrumbs,
-} from "@navikt/nav-dekoratoren-moduler";
-import { useEffect, useState } from "react";
+import { injectDecoratorClientSide } from "@navikt/nav-dekoratoren-moduler";
+import { useEffect } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { env } from "./config/env.server";
 import { publicEnv } from "./config/publicEnv";
 import { lagDekoratørHtmlFragmenter } from "./features/dektoratøren/htmlFragmenter";
+import { useDekoratørSpråk } from "./features/dektoratøren/useDektoratørSpråk";
 import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
 import { InternalServerError } from "./features/feilhåndtering/500";
 import { lagCspHeader } from "./features/headers/csp.server";
@@ -32,7 +29,6 @@ import {
   hentSpråkFraCookie,
   oversett,
   OversettelseProvider,
-  Språk,
 } from "./utils/i18n";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -82,30 +78,8 @@ export default function App() {
   const { dekoratørHtml, språk, umamiWebsiteId } =
     useLoaderData<typeof loader>();
 
-  const [interntSpråk, setInterntSpråk] = useState(språk);
-
+  const interntSpråk = useDekoratørSpråk(språk);
   useInjectDecoratorScript(dekoratørHtml.DECORATOR_SCRIPTS);
-  onLanguageSelect(({ locale }) => {
-    if (Object.values(Språk).includes(locale as Språk)) {
-      const språk = locale as Språk;
-      setInterntSpråk(språk);
-      setBreadcrumbs([
-        {
-          title: oversett(språk, tekster.breadcrumbs.barnebidrag.label),
-          url: oversett(språk, tekster.breadcrumbs.barnebidrag.url),
-        },
-        {
-          title: oversett(
-            språk,
-            tekster.breadcrumbs.barnebidragskalkulator.label
-          ),
-          url: "https://barnebidragskalkulator.nav.no",
-        },
-      ]);
-    } else {
-      setInterntSpråk(Språk.NorwegianBokmål);
-    }
-  });
 
   return (
     <html lang={oversett(interntSpråk, tekster.langTag)}>
