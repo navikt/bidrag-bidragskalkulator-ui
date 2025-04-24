@@ -21,13 +21,11 @@ const BarnRelasjonSchema = z.object({
 /**
  * Schemaet for responsen fra personinformasjon API-et.
  */
-export const PersoninformasjonResponsSchema = z.object({
+export const PersoninformasjonSchema = z.object({
   påloggetPerson: PersonSchema,
   barnRelasjon: z.array(BarnRelasjonSchema),
 });
 
 export type Barn = z.infer<typeof BarnSchema>;
 
-export type PersoninformasjonRespons = z.infer<
-  typeof PersoninformasjonResponsSchema
->;
+export type Personinformasjon = z.infer<typeof PersoninformasjonSchema>;

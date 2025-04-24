@@ -1,7 +1,4 @@
-import type {
-  Barn,
-  PersoninformasjonRespons,
-} from "./personinformasjon/schema";
+import type { Barn, Personinformasjon } from "./personinformasjon/schema";
 import type { InnloggetBarnSkjema, InnloggetSkjema } from "./schema";
 
 export const SAMVÆR_STANDARDVERDI = "15";
@@ -16,7 +13,7 @@ export const tilInnloggetBarnSkjema = (person: Barn): InnloggetBarnSkjema => {
 };
 
 export const getInnloggetSkjemaStandardverdi = (
-  personinformasjon: PersoninformasjonRespons
+  personinformasjon: Personinformasjon
 ): InnloggetSkjema => {
   const harKunEnMotpart = personinformasjon.barnRelasjon.length === 1;
 
@@ -38,7 +35,7 @@ export const getInnloggetSkjemaStandardverdi = (
 
 export const finnBarnBasertPåIdent = (
   ident: string,
-  personinformasjon: PersoninformasjonRespons
+  personinformasjon: Personinformasjon
 ) => {
   return personinformasjon.barnRelasjon
     .flatMap((relasjon) => relasjon.fellesBarn)
@@ -47,7 +44,7 @@ export const finnBarnBasertPåIdent = (
 
 export const finnMotpartBasertPåIdent = (
   ident: string,
-  personinformasjon: PersoninformasjonRespons
+  personinformasjon: Personinformasjon
 ) => {
   return personinformasjon.barnRelasjon.find(
     (relasjon) => relasjon.motpart?.ident === ident
