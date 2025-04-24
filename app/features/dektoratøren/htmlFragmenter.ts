@@ -5,7 +5,7 @@ import { breadcrumbTekster } from "./breadcrumbTekster";
 
 export function lagDekoratørHtmlFragmenter(språk: Språk) {
   return fetchDecoratorHtml({
-    env: env.ENVIRONMENT,
+    env: env.ENVIRONMENT === "local" ? "dev" : env.ENVIRONMENT,
     params: {
       language: språk,
       context: "privatperson",

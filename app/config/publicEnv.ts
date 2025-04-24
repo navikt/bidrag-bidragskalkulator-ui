@@ -5,7 +5,7 @@ const miljøvariabler = isServer ? process.env : import.meta.env;
 
 const envSchema = z.object({
   UMAMI_WEBSITE_ID: z.string(),
-  ENVIRONMENT: z.enum(["dev", "prod"]),
+  ENVIRONMENT: z.enum(["local", "dev", "prod"]),
 });
 
 const parsedEnv = envSchema.safeParse(miljøvariabler);

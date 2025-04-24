@@ -36,7 +36,7 @@ export const hentPersoninformasjonAutentisert = async ({
   request: Request;
   navigerTilUrlEtterAutentisering: string;
 }): Promise<Personinformasjon | Response> => {
-  if (process.env.NODE_ENV === "development") {
+  if (env.ENVIRONMENT === "local") {
     return hentPersoninformasjonFraApi(env.BIDRAG_BIDRAGSKALKULATOR_TOKEN);
   }
 
