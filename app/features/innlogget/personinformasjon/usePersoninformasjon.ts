@@ -1,13 +1,18 @@
-import { useMatches } from "react-router";
-import type { Personinformasjon } from "./schema";
+import { useLoaderData } from "react-router";
+import { PersoninformasjonSchema, type Personinformasjon } from "./schema";
 
-export function usePersoninformasjon() {
-  const matches = useMatches().find((match) => match.pathname === "/innlogget");
-  const data = matches?.data as {
-    personinformasjon: Personinformasjon;
-  };
+export function usePersoninformasjon(): Personinformasjon {
+  const data = useLoaderData();
+
   if (!data) {
-    throw new Error("Personinformasjon ikke funnet");
+    throw new Error("Loader data ikke funnet");
   }
-  return data.personinformasjon;
+
+  const parsed = PersoninformasjonSchema.safeParse(data?.personinformasjon);
+
+  if (!parsed.success) {
+    throw new Error("Personinformasjon er ikke gyldig");
+  }
+
+  return parsed.data;
 }
