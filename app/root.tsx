@@ -1,4 +1,3 @@
-import { fetchDecoratorHtml } from "@navikt/nav-dekoratoren-moduler/ssr";
 import parse from "html-react-parser";
 import {
   data,
@@ -23,8 +22,10 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { env } from "./config/env.server";
 import { publicEnv } from "./config/publicEnv";
+import { lagDekoratørHtmlFragmenter } from "./features/dektoratøren/htmlFragmenter";
 import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
 import { InternalServerError } from "./features/feilhåndtering/500";
+import { lagCspHeader } from "./features/headers/csp.server";
 import { Analytics } from "./utils/analytics";
 import {
   definerTekster,
@@ -33,41 +34,17 @@ import {
   OversettelseProvider,
   Språk,
 } from "./utils/i18n";
-import { lagCspHeader } from "./features/headers/csp.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const språk = hentSpråkFraCookie(request.headers.get("Cookie"));
-  const [decoratorFragments, cspHeader] = await Promise.all([
-    fetchDecoratorHtml({
-      env: env.ENVIRONMENT,
-      params: {
-        language: språk,
-        context: "privatperson",
-        availableLanguages: Object.values(Språk).map((språk) => ({
-          locale: språk,
-          handleInApp: true,
-        })),
-        breadcrumbs: [
-          {
-            title: oversett(språk, tekster.breadcrumbs.barnebidrag.label),
-            url: oversett(språk, tekster.breadcrumbs.barnebidrag.url),
-          },
-          {
-            title: oversett(
-              språk,
-              tekster.breadcrumbs.barnebidragskalkulator.label
-            ),
-            url: "https://barnebidragskalkulator.nav.no",
-          },
-        ],
-      },
-    }),
+  const [dekoratørHtml, cspHeader] = await Promise.all([
+    lagDekoratørHtmlFragmenter(språk),
     lagCspHeader(),
   ]);
 
   return data(
     {
-      decoratorFragments,
+      dekoratørHtml,
       språk,
       umamiWebsiteId: env.UMAMI_WEBSITE_ID,
     },
@@ -102,12 +79,12 @@ export const headers = ({ loaderHeaders }: HeadersArgs) => {
 };
 
 export default function App() {
-  const { decoratorFragments, språk, umamiWebsiteId } =
+  const { dekoratørHtml, språk, umamiWebsiteId } =
     useLoaderData<typeof loader>();
 
   const [interntSpråk, setInterntSpråk] = useState(språk);
 
-  useInjectDecoratorScript(decoratorFragments.DECORATOR_SCRIPTS);
+  useInjectDecoratorScript(dekoratørHtml.DECORATOR_SCRIPTS);
   onLanguageSelect(({ locale }) => {
     if (Object.values(Språk).includes(locale as Språk)) {
       const språk = locale as Språk;
@@ -137,11 +114,11 @@ export default function App() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        {parse(decoratorFragments.DECORATOR_HEAD_ASSETS, { trim: true })}
+        {parse(dekoratørHtml.DECORATOR_HEAD_ASSETS, { trim: true })}
         <Analytics umamiWebsiteId={umamiWebsiteId} />
       </head>
       <body className="flex flex-col min-h-screen">
-        {parse(decoratorFragments.DECORATOR_HEADER, { trim: true })}
+        {parse(dekoratørHtml.DECORATOR_HEADER, { trim: true })}
         <OversettelseProvider språk={interntSpråk}>
           <Page.Block
             className="flex-1"
@@ -153,7 +130,7 @@ export default function App() {
             <Outlet />
           </Page.Block>
         </OversettelseProvider>
-        {parse(decoratorFragments.DECORATOR_FOOTER, { trim: true })}
+        {parse(dekoratørHtml.DECORATOR_FOOTER, { trim: true })}
         <ScrollRestoration />
         <Scripts />
       </body>
