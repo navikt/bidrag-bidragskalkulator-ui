@@ -4,7 +4,7 @@ import { definerTekster, oversett, Språk } from "~/utils/i18n";
 export const InnloggetBarnSkjemaSchema = z.object({
   ident: z.string().length(11),
   bosted: z.enum(["HOS_FORELDER_1", "HOS_FORELDER_2", "DELT_BOSTED", ""]),
-  samvær: z.string().optional(),
+  samvær: z.string(),
   alder: z.string(),
 });
 
@@ -22,7 +22,7 @@ export const getInnloggetBarnSkjema = (språk: Språk) => {
         .string()
         .length(11, oversett(språk, tekster.feilmeldinger.barnIdent.ugyldig)),
       bosted: z.enum(["HOS_FORELDER_1", "DELT_BOSTED", "HOS_FORELDER_2"], {
-        message: oversett(språk, tekster.feilmeldinger.bostatus.ugyldig),
+        message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
       }),
       samvær: z
         .string()
@@ -157,11 +157,6 @@ const tekster = definerTekster({
         nb: "Fyll ut hvor barnet bor",
         en: "Fill in where the child lives",
         nn: "Fyll ut kjeres barnet bor",
-      },
-      ugyldig: {
-        nb: "Ugyldig verdi",
-        en: "Invalid value",
-        nn: "Ugyldig verdi",
       },
     },
     barn: {
