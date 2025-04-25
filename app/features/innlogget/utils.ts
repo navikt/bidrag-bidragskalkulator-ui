@@ -29,7 +29,7 @@ export const getInnloggetSkjemaStandardverdi = (
   return {
     motpartIdent,
     barn,
-    inntektDeg: "",
+    inntektDeg: String(personinformasjon.inntekt.inntektSiste12Mnd ?? ""),
     motpartInntekt: "",
   };
 };

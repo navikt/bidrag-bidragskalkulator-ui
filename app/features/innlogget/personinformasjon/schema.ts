@@ -24,6 +24,9 @@ const BarnRelasjonSchema = z.object({
 export const PersoninformasjonSchema = z.object({
   påloggetPerson: PersonSchema,
   barnRelasjon: z.array(BarnRelasjonSchema),
+  inntekt: z.object({
+    inntektSiste12Mnd: z.number().int().nonnegative().nullable(),
+  }),
 });
 
 export type Barn = z.infer<typeof BarnSchema>;
