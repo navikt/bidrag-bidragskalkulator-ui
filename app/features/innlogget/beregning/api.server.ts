@@ -3,8 +3,8 @@ import { getInnloggetSkjema } from "../schema";
 import { parseFormData } from "@rvf/react";
 import { validationError } from "@rvf/react-router";
 import { hentBidragsutregningFraApi } from "~/features/beregning/api.server";
-import { kalkulerBidragstype, kalkulerSamværsklasse } from "../../form/utils";
 import type { Bidragsutregningsgrunnlag } from "~/features/beregning/schema";
+import { kalkulerBidragstype, kalkulerSamværsklasse } from "../utils";
 
 export async function hentBidragsutregning(request: Request) {
   const cookieHeader = request.headers.get("Cookie");
