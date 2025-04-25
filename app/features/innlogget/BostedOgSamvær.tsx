@@ -3,21 +3,19 @@ import { useFieldArray, useFormContext } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
-import type { InnloggetSkjema } from "./schema";
-import {
-  finnBarnBasertPåIdent,
-  finnMotpartBasertPåIdent,
-  SAMVÆR_STANDARDVERDI,
-} from "./utils";
+import type { FastBosted, InnloggetSkjema } from "./schema";
+import { finnBarnBasertPåIdent, SAMVÆR_STANDARDVERDI } from "./utils";
+
+const BOSTED_OPTIONS: FastBosted[] = [
+  "DELT_FAST_BOSTED",
+  "IKKE_DELT_FAST_BOSTED",
+];
 
 export const BostedOgSamvær = () => {
   const personinformasjon = usePersoninformasjon();
   const { t } = useOversettelse();
   const form = useFormContext<InnloggetSkjema>();
-  const motpart = finnMotpartBasertPåIdent(
-    form.value("motpartIdent"),
-    personinformasjon
-  );
+
   const barnArray = useFieldArray(form.scope("barn"));
 
   return (
@@ -35,9 +33,9 @@ export const BostedOgSamvær = () => {
             ? t(tekster.samvær.enNatt)
             : t(tekster.samvær.netter(samvær));
 
-        const borHosEnForelder = ["HOS_FORELDER_1", "HOS_FORELDER_2"].includes(
-          barnField.value("bosted")
-        );
+        const borHosEnForelder =
+          barnField.value("bosted") === "IKKE_DELT_FAST_BOSTED";
+
         return (
           <div
             key={key}
@@ -49,15 +47,13 @@ export const BostedOgSamvær = () => {
               error={barnField.field("bosted").error()}
               legend={t(tekster.bosted.label(`${barnInfo?.fornavn}`))}
             >
-              <Radio value="HOS_FORELDER_1">
-                {t(tekster.bosted.valg.hosDeg)}
-              </Radio>
-              <Radio value="DELT_BOSTED">
-                {t(tekster.bosted.valg.deltBosted)}
-              </Radio>
-              <Radio value="HOS_FORELDER_2">
-                {t(tekster.bosted.valg.hosDenAndre(motpart?.fornavn ?? ""))}
-              </Radio>
+              {BOSTED_OPTIONS.map((bosted) => {
+                return (
+                  <Radio value={bosted} key={bosted}>
+                    {t(tekster.bosted.valg[bosted])}
+                  </Radio>
+                );
+              })}
             </RadioGroup>
 
             {borHosEnForelder && (
@@ -108,15 +104,15 @@ const tekster = definerTekster({
         en: "Select where the child will live",
         nn: "Velg kvar barnet skal bo",
       },
-      hosDeg: {
-        nb: "Barnet bor hos deg",
-        en: "The child lives with you",
-        nn: "Barnet bor hos deg",
-      },
-      deltBosted: {
-        nb: "Vi har avtale om delt bosted",
+      DELT_FAST_BOSTED: {
+        nb: "Vi har avtale om delt fast bosted",
         en: "We have an agreement on shared custody",
         nn: "Vi har avtale om delt bosted",
+      },
+      IKKE_DELT_FAST_BOSTED: {
+        nb: "Vi har ikke avtale om delt fast bosted",
+        en: "The child lives permanently with one of us",
+        nn: "Barnet bur fast hos ein av oss",
       },
       hosDenAndre: (navn) => ({
         nb: `Barnet bor hos ${navn}`,

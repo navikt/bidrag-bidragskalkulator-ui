@@ -27,6 +27,7 @@ export async function hentBidragsutregning(request: Request) {
       const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
       const bidragstype = kalkulerBidragstype(
         barn.bosted,
+        barn.samvær,
         inntektForelder1,
         inntektForelder2
       );
