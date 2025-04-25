@@ -95,7 +95,7 @@ export default function App() {
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   useEffect(() => {
     injectDecoratorClientSide({
-      env: publicEnv.ENVIRONMENT,
+      env: publicEnv.ENVIRONMENT === "local" ? "dev" : publicEnv.ENVIRONMENT,
     });
   }, []);
 
