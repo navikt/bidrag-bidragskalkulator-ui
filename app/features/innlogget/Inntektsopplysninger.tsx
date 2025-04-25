@@ -26,12 +26,12 @@ export const Inntektsopplysninger = () => {
       />
 
       <FormattertTallTextField
-        {...form.field("motpartInntekt").getControlProps()}
+        {...form.field("inntektMotpart").getControlProps()}
         label={t(
           tekster.hvaErInntektenTilDenAndreForelderen(motpart?.fornavn ?? "")
         )}
         description={t(tekster.hvaErInntektenTilDenAndreForelderenBeskrivelse)}
-        error={form.field("motpartInntekt").error()}
+        error={form.field("inntektMotpart").error()}
         htmlSize={18}
       />
     </div>

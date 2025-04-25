@@ -12,7 +12,7 @@ export const InnloggetSkjemaSchema = z.object({
   motpartIdent: z.string().length(11),
   barn: z.array(InnloggetBarnSkjemaSchema),
   inntektDeg: z.string(),
-  motpartInntekt: z.string(),
+  inntektMotpart: z.string(),
 });
 
 export const getInnloggetBarnSkjema = (språk: Språk) => {
@@ -86,7 +86,7 @@ export const getInnloggetSkjema = (språk: Språk) => {
           .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
           .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner))
       ),
-    motpartInntekt: z
+    inntektMotpart: z
       .string()
       .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
       .pipe(

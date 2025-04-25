@@ -21,7 +21,7 @@ export function Motpart() {
     const barnFormValue = fellesBarn.map(tilInnloggetBarnSkjema);
 
     form.setValue("barn", barnFormValue);
-    form.setValue("motpartInntekt", "");
+    form.setValue("inntektMotpart", "");
     onChange?.(motpartIdent);
   };
 
