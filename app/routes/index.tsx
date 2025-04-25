@@ -6,12 +6,15 @@ import type {
   LoaderFunctionArgs,
   MetaArgs,
 } from "react-router";
-import { Link as ReactRouterLink, useActionData } from "react-router";
+import {
+  Link as ReactRouterLink,
+  useActionData,
+  useLoaderData,
+} from "react-router";
 import { hentBidragsutregning } from "~/features/innlogget/beregning/api.server";
 import { InnloggetBidragsskjema } from "~/features/innlogget/InnloggetBidragsskjema";
 import { IntroPanel } from "~/features/innlogget/IntroPanel";
 import { hentPersoninformasjonAutentisert } from "~/features/innlogget/personinformasjon/api.server";
-import { usePersoninformasjon } from "~/features/innlogget/personinformasjon/usePersoninformasjon";
 import { Resultatpanel } from "~/features/innlogget/Resultatpanel";
 import {
   type InnloggetSkjema,
@@ -51,16 +54,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return respons;
   }
 
-  return {
-    personinformasjon: respons,
-  };
+  return respons;
 }
 
 export default function InnloggetBarnebidragskalkulator() {
   const actionData = useActionData<typeof action>();
   const resultatRef = useRef<HTMLDivElement>(null);
   const { t } = useOversettelse();
-  const personinformasjon = usePersoninformasjon();
+  const personinformasjon = useLoaderData<typeof loader>();
   const [erEndretSidenUtregning, settErEndretSidenUtregning] = useState(false);
 
   const harMotpart = personinformasjon.barnRelasjon.length > 0;
