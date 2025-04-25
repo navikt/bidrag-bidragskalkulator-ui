@@ -64,7 +64,7 @@ export default function InnloggetBarnebidragskalkulator() {
   const personinformasjon = useLoaderData<typeof loader>();
   const [erEndretSidenUtregning, settErEndretSidenUtregning] = useState(false);
 
-  const harMotpart = personinformasjon.barnRelasjon.length > 0;
+  const harMotpart = personinformasjon.relasjoner.length > 0;
 
   const { språk } = useOversettelse();
 

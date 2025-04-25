@@ -13,7 +13,7 @@ const BarnSchema = z.object({
   alder: z.number().int().nonnegative(),
 });
 
-const BarnRelasjonSchema = z.object({
+const RelasjonSchema = z.object({
   motpart: PersonSchema.nullable(),
   fellesBarn: z.array(BarnSchema),
 });
@@ -22,10 +22,10 @@ const BarnRelasjonSchema = z.object({
  * Schemaet for responsen fra personinformasjon API-et.
  */
 export const PersoninformasjonSchema = z.object({
-  påloggetPerson: PersonSchema.and(
+  påloggetBruker: PersonSchema.and(
     z.object({ inntekt: z.number().int().nonnegative().nullable() })
   ),
-  barnRelasjon: z.array(BarnRelasjonSchema),
+  relasjoner: z.array(RelasjonSchema),
 });
 
 export type Barn = z.infer<typeof BarnSchema>;

@@ -13,7 +13,7 @@ export function Motpart() {
   const { onChange, ...formInputProps } = form.getInputProps("motpartIdent");
 
   const vedEndreMotpart = (motpartIdent: string) => {
-    const barnRelasjon = personinformasjon.barnRelasjon.find(
+    const barnRelasjon = personinformasjon.relasjoner.find(
       (relasjon) => relasjon.motpart?.ident === motpartIdent
     );
 
@@ -25,7 +25,7 @@ export function Motpart() {
     onChange?.(motpartIdent);
   };
 
-  if (personinformasjon.barnRelasjon.length === 1) {
+  if (personinformasjon.relasjoner.length === 1) {
     return null;
   }
 
@@ -36,7 +36,7 @@ export function Motpart() {
       onChange={vedEndreMotpart}
       error={form.field("motpartIdent").error()}
     >
-      {personinformasjon.barnRelasjon.map((relasjon) => (
+      {personinformasjon.relasjoner.map((relasjon) => (
         <Radio key={relasjon.motpart?.ident} value={relasjon.motpart?.ident}>
           {relasjon.motpart?.fulltNavn}
         </Radio>

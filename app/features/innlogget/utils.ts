@@ -16,20 +16,20 @@ export const tilInnloggetBarnSkjema = (person: Barn): InnloggetBarnSkjema => {
 export const getInnloggetSkjemaStandardverdi = (
   personinformasjon: Personinformasjon
 ): InnloggetSkjema => {
-  const harKunEnMotpart = personinformasjon.barnRelasjon.length === 1;
+  const harKunEnMotpart = personinformasjon.relasjoner.length === 1;
 
   const motpartIdent = harKunEnMotpart
-    ? (personinformasjon.barnRelasjon[0].motpart?.ident ?? "")
+    ? (personinformasjon.relasjoner[0].motpart?.ident ?? "")
     : "";
 
   const barn = harKunEnMotpart
-    ? personinformasjon.barnRelasjon[0].fellesBarn.map(tilInnloggetBarnSkjema)
+    ? personinformasjon.relasjoner[0].fellesBarn.map(tilInnloggetBarnSkjema)
     : [];
 
   return {
     motpartIdent,
     barn,
-    inntektDeg: String(personinformasjon.påloggetPerson.inntekt ?? ""),
+    inntektDeg: String(personinformasjon.påloggetBruker.inntekt ?? ""),
     inntektMotpart: "",
   };
 };
@@ -77,7 +77,7 @@ export const finnBarnBasertPåIdent = (
   ident: string,
   personinformasjon: Personinformasjon
 ) => {
-  return personinformasjon.barnRelasjon
+  return personinformasjon.relasjoner
     .flatMap((relasjon) => relasjon.fellesBarn)
     .find((barn) => barn.ident === ident);
 };
@@ -86,7 +86,7 @@ export const finnMotpartBasertPåIdent = (
   ident: string,
   personinformasjon: Personinformasjon
 ) => {
-  return personinformasjon.barnRelasjon.find(
+  return personinformasjon.relasjoner.find(
     (relasjon) => relasjon.motpart?.ident === ident
   )?.motpart;
 };

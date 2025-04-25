@@ -1,13 +1,13 @@
 import type { Personinformasjon } from "~/features/innlogget/personinformasjon/schema";
 
 export const PERSON_MED_EN_MOTPART_TO_BARN: Personinformasjon = {
-  påloggetPerson: {
+  påloggetBruker: {
     ident: "16478530521",
     fornavn: "Uglesett",
     fulltNavn: "Uglesett Flyvertinne",
     inntekt: 700_000,
   },
-  barnRelasjon: [
+  relasjoner: [
     {
       motpart: {
         ident: "07488830028",
