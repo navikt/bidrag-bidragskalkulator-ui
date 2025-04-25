@@ -17,7 +17,6 @@ import { useEffect } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { env } from "./config/env.server";
-import { publicEnv } from "./config/publicEnv";
 import { lagDekoratørHtmlFragmenter } from "./features/dektoratøren/htmlFragmenter";
 import { useDekoratørSpråk } from "./features/dektoratøren/useDektoratørSpråk";
 import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
@@ -95,7 +94,9 @@ export default function App() {
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   useEffect(() => {
     injectDecoratorClientSide({
-      env: publicEnv.ENVIRONMENT === "local" ? "dev" : publicEnv.ENVIRONMENT,
+      env: location.hostname.includes("barnebidragskalkulator.nav.no")
+        ? "prod"
+        : "dev",
     });
   }, []);
 
