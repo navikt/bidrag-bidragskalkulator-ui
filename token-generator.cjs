@@ -26,7 +26,7 @@ const ask = (query) =>
   try {
     await page.goto(tokenUrl, { waitUntil: "networkidle2" });
 
-    console.log("🔑 Please log in manually in the browser window...");
+    console.log("🔑 Vennligst logg inn via nettleseren som ble åpnet.");
 
     // Wait for the page that returns the JSON response with the token
     await page.waitForFunction(
@@ -47,7 +47,7 @@ const ask = (query) =>
     const token = responseJson.access_token;
 
     if (!token) {
-      throw new Error("access_token not found in response");
+      throw new Error("access_token ble ikke funnet i responsen");
     }
 
     await browser.close();
@@ -74,19 +74,19 @@ const ask = (query) =>
     envContent = setEnvVar(envContent, tokenEnvName, token);
 
     // Prompt for backend environment
-    console.log("\n📡 Which backend environment do you want to use?");
-    console.log("1) local");
-    console.log("2) dev");
+    console.log("\n📡 Hvilken backend-miljø vil du bruke?");
+    console.log("1) lokalt");
+    console.log("2) dev-miljøet");
 
     let serverUrl = "";
     while (!serverUrl) {
-      const choice = await ask("Choose 1 or 2: ");
+      const choice = await ask("Velg 1 eller 2: ");
       if (choice === "1") {
         serverUrl = "http://localhost:8080";
       } else if (choice === "2") {
         serverUrl = "https://bidragskalkulator-api.intern.dev.nav.no";
       } else {
-        console.log("❗ Invalid choice. Please enter 1 or 2.");
+        console.log("❗ Ugyldig valg. Vennligst skriv 1 eller 2.");
       }
     }
 
@@ -94,8 +94,8 @@ const ask = (query) =>
 
     fs.writeFileSync(envFile, envContent.trim() + "\n");
 
-    console.log("✅ Token and Server url stored in .env");
+    console.log("✅ Token og Server-URL lagret i .env");
   } catch (err) {
-    console.error("❌ Error:", err.message);
+    console.error("❌ Feil:", err.message);
   }
 })();
