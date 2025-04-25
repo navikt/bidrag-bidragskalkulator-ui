@@ -1,6 +1,7 @@
 import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
+
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
 import type { InnloggetSkjema } from "./schema";
 import { finnMotpartBasertPåIdent } from "./utils";
