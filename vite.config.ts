@@ -13,9 +13,5 @@ export default defineConfig(({ mode }) => {
       reactRouter(),
       tsconfigPaths(),
     ],
-    define: {
-      "import.meta.env.UMAMI_WEBSITE_ID": JSON.stringify(env.UMAMI_WEBSITE_ID),
-      "import.meta.env.ENVIRONMENT": JSON.stringify(env.ENVIRONMENT),
-    },
   };
 });
