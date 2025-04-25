@@ -4,13 +4,11 @@ import { reactRouterDevTools } from "react-router-devtools";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-export default defineConfig(({ mode }) => {
-  return {
-    plugins: [
-      tailwindcss(),
-      reactRouterDevTools(),
-      reactRouter(),
-      tsconfigPaths(),
-    ],
-  };
+export default defineConfig({
+  plugins: [
+    tailwindcss(),
+    reactRouterDevTools(),
+    reactRouter(),
+    tsconfigPaths(),
+  ],
 });
