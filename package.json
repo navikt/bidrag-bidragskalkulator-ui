@@ -29,7 +29,7 @@
     "clsx": "^2.1.1",
     "csp-header": "^6.1.0",
     "html-react-parser": "^5.2.3",
-    "isbot": "^5.1.26",
+    "isbot": "^5.1.27",
     "lucide-react": "^0.503.0",
     "puppeteer": "^24.7.2",
     "react": "^19.1.0",
@@ -42,7 +42,7 @@
   "devDependencies": {
     "@react-router/dev": "^7.5.2",
     "@tailwindcss/vite": "^4.1.4",
-    "@types/node": "^22.15.2",
+    "@types/node": "^22.15.3",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@typescript-eslint/eslint-plugin": "^8.31.0",
