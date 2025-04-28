@@ -1,8 +1,8 @@
-import { useFormContext } from "@rvf/react";
-import { useOversettelse, definerTekster } from "~/utils/i18n";
-import type { InnloggetSkjema } from "./schema";
-import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
 import { Radio, RadioGroup } from "@navikt/ds-react";
+import { useFormContext } from "@rvf/react";
+import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
+import type { InnloggetSkjema } from "./schema";
 import { tilInnloggetBarnSkjema } from "./utils";
 
 export function Motpart() {

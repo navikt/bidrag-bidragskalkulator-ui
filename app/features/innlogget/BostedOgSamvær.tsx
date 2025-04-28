@@ -1,14 +1,14 @@
 import { Radio, RadioGroup } from "@navikt/ds-react";
-import { useFormContext, useFieldArray } from "@rvf/react";
-import { useOversettelse, definerTekster } from "~/utils/i18n";
-import type { InnloggetSkjema } from "./schema";
+import { useFieldArray, useFormContext } from "@rvf/react";
+import { Slider } from "~/components/ui/slider";
+import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
+import type { InnloggetSkjema } from "./schema";
 import {
   finnBarnBasertPåIdent,
   finnMotpartBasertPåIdent,
   SAMVÆR_STANDARDVERDI,
 } from "./utils";
-import { Slider } from "~/components/ui/slider";
 
 export const BostedOgSamvær = () => {
   const personinformasjon = usePersoninformasjon();

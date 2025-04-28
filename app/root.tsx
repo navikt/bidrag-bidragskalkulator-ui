@@ -1,4 +1,7 @@
+import { Page } from "@navikt/ds-react";
+import { injectDecoratorClientSide } from "@navikt/nav-dekoratoren-moduler";
 import parse from "html-react-parser";
+import { useEffect } from "react";
 import {
   data,
   Links,
@@ -10,10 +13,6 @@ import {
   type HeadersArgs,
   type LoaderFunctionArgs,
 } from "react-router";
-
-import { Page } from "@navikt/ds-react";
-import { injectDecoratorClientSide } from "@navikt/nav-dekoratoren-moduler";
-import { useEffect } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { env } from "./config/env.server";

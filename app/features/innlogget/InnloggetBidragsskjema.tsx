@@ -1,10 +1,10 @@
 import { Button } from "@navikt/ds-react";
 import { FormProvider, type FormApi } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { type InnloggetSkjema } from "./schema";
-import { Motpart } from "./Motpart";
 import { BostedOgSamvær } from "./BostedOgSamvær";
 import { Inntektsopplysninger } from "./Inntektsopplysninger";
+import { Motpart } from "./Motpart";
+import { type InnloggetSkjema } from "./schema";
 
 type Props = {
   form: FormApi<InnloggetSkjema>;

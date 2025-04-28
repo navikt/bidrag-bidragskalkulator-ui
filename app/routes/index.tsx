@@ -7,20 +7,20 @@ import type {
   MetaArgs,
 } from "react-router";
 import { Link as ReactRouterLink, useActionData } from "react-router";
-import { IntroPanel } from "~/features/innlogget/IntroPanel";
-import { Resultatpanel } from "~/features/innlogget/Resultatpanel";
 import { hentBidragsutregning } from "~/features/innlogget/beregning/api.server";
 import { InnloggetBidragsskjema } from "~/features/innlogget/InnloggetBidragsskjema";
+import { IntroPanel } from "~/features/innlogget/IntroPanel";
 import { hentPersoninformasjonAutentisert } from "~/features/innlogget/personinformasjon/api.server";
 import { usePersoninformasjon } from "~/features/innlogget/personinformasjon/usePersoninformasjon";
+import { Resultatpanel } from "~/features/innlogget/Resultatpanel";
 import {
   type InnloggetSkjema,
   type InnloggetSkjemaValidert,
   getInnloggetSkjema,
 } from "~/features/innlogget/schema";
 import { getInnloggetSkjemaStandardverdi } from "~/features/innlogget/utils";
-import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 import { sporHendelse } from "~/utils/analytics";
+import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
 export function meta({ matches }: MetaArgs) {
   const rootData = matches.find((match) => match.pathname === "/")?.data as {

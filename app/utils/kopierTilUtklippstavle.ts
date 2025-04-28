@@ -3,9 +3,7 @@
  *
  * @param tekst Tekst som skal kopieres til utklippstavle.
  */
-export async function kopierTilUtklippstavle(
-  tekst: string
-): Promise<void> {
+export async function kopierTilUtklippstavle(tekst: string): Promise<void> {
   try {
     await navigator.clipboard.writeText(tekst);
   } catch (err) {

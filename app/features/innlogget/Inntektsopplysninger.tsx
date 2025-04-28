@@ -1,8 +1,8 @@
 import { useFormContext } from "@rvf/react";
-import { useOversettelse, definerTekster } from "~/utils/i18n";
+import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
-import type { InnloggetSkjema } from "./schema";
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
+import type { InnloggetSkjema } from "./schema";
 import { finnMotpartBasertPåIdent } from "./utils";
 
 export const Inntektsopplysninger = () => {
