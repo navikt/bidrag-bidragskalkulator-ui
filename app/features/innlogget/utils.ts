@@ -19,7 +19,7 @@ export const getInnloggetSkjemaStandardverdi = (
   const harKunEnMotpart = personinformasjon.barnRelasjon.length === 1;
 
   const motpartIdent = harKunEnMotpart
-    ? personinformasjon.barnRelasjon[0].motpart?.ident ?? ""
+    ? (personinformasjon.barnRelasjon[0].motpart?.ident ?? "")
     : "";
 
   const barn = harKunEnMotpart

@@ -1,9 +1,9 @@
 import { env } from "process";
-import { definerTekster, Språk, oversett } from "~/utils/i18n";
+import { definerTekster, oversett, Språk } from "~/utils/i18n";
 import {
   Bidragsutregningskjema,
-  type Bidragsutregningsgrunnlag,
   type Bidragsutregning,
+  type Bidragsutregningsgrunnlag,
 } from "./schema";
 
 export const hentBidragsutregningFraApi = async ({

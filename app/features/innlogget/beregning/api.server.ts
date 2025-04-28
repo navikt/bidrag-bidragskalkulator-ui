@@ -1,9 +1,9 @@
-import { hentSpråkFraCookie } from "~/utils/i18n";
-import { getInnloggetSkjema } from "../schema";
 import { parseFormData } from "@rvf/react";
 import { validationError } from "@rvf/react-router";
 import { hentBidragsutregningFraApi } from "~/features/beregning/api.server";
 import type { Bidragsutregningsgrunnlag } from "~/features/beregning/schema";
+import { hentSpråkFraCookie } from "~/utils/i18n";
+import { getInnloggetSkjema } from "../schema";
 import { kalkulerBidragstype, kalkulerSamværsklasse } from "../utils";
 
 export async function hentBidragsutregning(request: Request) {

@@ -39,8 +39,8 @@ function Slider({
   const verdi = value
     ? [Number(value)]
     : defaultValue
-    ? [Number(defaultValue)]
-    : [];
+      ? [Number(defaultValue)]
+      : [];
 
   const handleChange = (value: number[]) => {
     onChange(value.length > 0 ? value[0].toString() : "");

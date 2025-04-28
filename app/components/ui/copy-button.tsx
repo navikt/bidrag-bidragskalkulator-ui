@@ -112,20 +112,20 @@ export const CopyButton = ({
   };
 
   const copyIcon = active
-    ? activeIcon ?? (
+    ? (activeIcon ?? (
         <CheckmarkIcon
           aria-hidden={!!text}
           title={text ? undefined : activeText}
           className={cn("navds-copybutton__icon")}
         />
-      )
-    : icon ?? (
+      ))
+    : (icon ?? (
         <FilesIcon
           aria-hidden={!!text}
           title={text ? undefined : title || activeText}
           className={cn("navds-copybutton__icon")}
         />
-      );
+      ));
 
   return (
     <Button

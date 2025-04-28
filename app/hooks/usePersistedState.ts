@@ -73,8 +73,8 @@ export function usePersistedState<T>(
       return item
         ? JSON.parse(item)
         : typeof initialValue === "function"
-        ? (initialValue as () => T)()
-        : initialValue;
+          ? (initialValue as () => T)()
+          : initialValue;
     } catch (error) {
       console.error(`Error reading localStorage key "${key}":`, error);
       return typeof initialValue === "function"
