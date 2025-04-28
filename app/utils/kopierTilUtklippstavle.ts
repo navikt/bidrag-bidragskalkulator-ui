@@ -10,7 +10,7 @@ export async function kopierTilUtklippstavle(tekst: string): Promise<void> {
     if (process.env.NODE_ENV !== "production") {
       console.error(
         "Kunne ikke kopiere til utklippstavle med Clipboard APIet",
-        err
+        err,
       );
     }
 

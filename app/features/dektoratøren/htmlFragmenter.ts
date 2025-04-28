@@ -21,7 +21,7 @@ export function lagDekoratørHtmlFragmenter(språk: Språk) {
         {
           title: oversett(
             språk,
-            breadcrumbTekster.barnebidragskalkulator.label
+            breadcrumbTekster.barnebidragskalkulator.label,
           ),
           url: "https://barnebidragskalkulator.nav.no",
         },

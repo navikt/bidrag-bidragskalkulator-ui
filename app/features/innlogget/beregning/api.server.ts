@@ -29,7 +29,7 @@ export async function hentBidragsutregning(request: Request) {
         barn.bosted,
         barn.samvær,
         inntektForelder1,
-        inntektForelder2
+        inntektForelder2,
       );
 
       return {

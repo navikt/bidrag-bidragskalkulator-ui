@@ -25,7 +25,7 @@ export const Bidragsutregningskjema = z.object({
       barnetsAlder: z.number(),
       bidragstype: z.enum(["PLIKTIG", "MOTTAKER"]),
       underholdskostnad: z.number(),
-    })
+    }),
   ),
 });
 

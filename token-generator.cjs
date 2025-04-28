@@ -38,11 +38,11 @@ const ask = (query) =>
           return false;
         }
       },
-      { timeout: 60000 }
+      { timeout: 60000 },
     );
 
     const responseJson = await page.evaluate(() =>
-      JSON.parse(document.body.innerText)
+      JSON.parse(document.body.innerText),
     );
     const token = responseJson.access_token;
 

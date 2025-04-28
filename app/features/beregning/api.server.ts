@@ -22,7 +22,7 @@ export const hentBidragsutregningFraApi = async ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify(requestData),
-      }
+      },
     );
 
     if (!response.ok) {

@@ -29,10 +29,10 @@ const envParse = envSchema.safeParse(process.env);
 if (!envParse.success) {
   console.error(
     "❌ Manglende eller ugyldige miljøvariabler:",
-    envParse.error.format()
+    envParse.error.format(),
   );
   throw new Error(
-    "Ugyldige miljøvariabler: " + envParse.error.format().toString()
+    "Ugyldige miljøvariabler: " + envParse.error.format().toString(),
   );
 }
 

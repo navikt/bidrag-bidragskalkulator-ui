@@ -81,7 +81,7 @@ export function useOversettelse() {
   const språk = useOversettelseContext();
   const t = useCallback(
     (tekst: OversettelseObject) => oversett(språk, tekst),
-    [språk]
+    [språk],
   );
   return {
     t,

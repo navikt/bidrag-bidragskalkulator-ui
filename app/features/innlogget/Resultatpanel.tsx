@@ -126,14 +126,14 @@ export const Resultatpanel = ({
                       ? t(
                           tekster.detaljer.motta(
                             resultat.barnetsAlder,
-                            resultat.sum
-                          )
+                            resultat.sum,
+                          ),
                         )
                       : t(
                           tekster.detaljer.betale(
                             resultat.barnetsAlder,
-                            resultat.sum
-                          )
+                            resultat.sum,
+                          ),
                         )}
                   </ListItem>
                 ))}
@@ -149,8 +149,8 @@ export const Resultatpanel = ({
                 {t(
                   tekster.detaljer.underholdskostnadPerBarn(
                     resultat.barnetsAlder,
-                    resultat.underholdskostnad
-                  )
+                    resultat.underholdskostnad,
+                  ),
                 )}
               </ListItem>
             ))}
@@ -173,24 +173,24 @@ const tekster = definerTekster({
   overskrift: {
     betale: (sum) => ({
       nb: `Du skal betale ${formatterSum(
-        sum as number
+        sum as number,
       )} i barnebidrag per måned.`,
       en: `You should pay ${formatterSum(
-        sum as number
+        sum as number,
       )} in child support per month.`,
       nn: `Du skal betale ${formatterSum(
-        sum as number
+        sum as number,
       )} i fostringstilskot per måned.`,
     }),
     motta: (sum) => ({
       nb: `Du skal motta ${formatterSum(
-        sum as number
+        sum as number,
       )} i barnebidrag per måned.`,
       en: `You should receive ${formatterSum(
-        sum as number
+        sum as number,
       )} in child support per month.`,
       nn: `Du skal motta ${formatterSum(
-        sum as number
+        sum as number,
       )} i fostringstilskot per måned.`,
     }),
   },

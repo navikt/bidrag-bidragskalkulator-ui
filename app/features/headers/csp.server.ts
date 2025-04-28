@@ -8,6 +8,6 @@ export function lagCspHeader() {
       "connect-src": ["'self'", "https://umami.nav.no"],
       "style-src-elem": ["'self'"],
     },
-    { env: env.ENVIRONMENT === "local" ? "dev" : env.ENVIRONMENT }
+    { env: env.ENVIRONMENT === "local" ? "dev" : env.ENVIRONMENT },
   );
 }

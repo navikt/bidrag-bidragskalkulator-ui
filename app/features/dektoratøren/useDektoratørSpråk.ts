@@ -20,7 +20,7 @@ export function useDekoratørSpråk(eksterntSpråk: Språk) {
         {
           title: oversett(
             språk,
-            breadcrumbTekster.barnebidragskalkulator.label
+            breadcrumbTekster.barnebidragskalkulator.label,
           ),
           url: "https://barnebidragskalkulator.nav.no",
         },
