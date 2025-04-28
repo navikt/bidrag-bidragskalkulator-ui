@@ -64,7 +64,7 @@ function Slider({
         max={max}
         className={cn(
           "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 mt-4",
-          className
+          className,
         )}
         onValueChange={handleChange}
         {...props}
@@ -73,7 +73,7 @@ function Slider({
           data-slot="slider-track"
           className={cn(
             "relative grow overflow-hidden rounded-full h-2 w-full",
-            error ? "bg-red-200 outline-1 outline-red-500" : "bg-gray-300"
+            error ? "bg-red-200 outline-1 outline-red-500" : "bg-gray-300",
           )}
         >
           <SliderPrimitive.Range
@@ -94,7 +94,7 @@ function Slider({
             "border-primary ring-ring/50 block size-5 shrink-0 rounded-full border-none shadow-sm transition-[color,box-shadow] hover:ring-4  focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50",
             error
               ? "bg-red-500 hover:ring-red-500 focus-visible:ring-red-500"
-              : "bg-blue-500 hover:ring-blue-500 focus-visible:ring-blue-500"
+              : "bg-blue-500 hover:ring-blue-500 focus-visible:ring-blue-500",
           )}
         />
       </SliderPrimitive.Root>

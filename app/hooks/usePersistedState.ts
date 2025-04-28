@@ -56,7 +56,7 @@ import { useEffect, useState } from "react";
  */
 export function usePersistedState<T>(
   key: string,
-  initialValue: T | (() => T)
+  initialValue: T | (() => T),
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
   // Get stored value from localStorage or use initialValue
   const getStoredValue = (): T => {

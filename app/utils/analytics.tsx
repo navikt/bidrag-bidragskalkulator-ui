@@ -21,7 +21,7 @@ type EventType =
  */
 export async function sporHendelse(
   event: EventType,
-  data?: Record<string, unknown>
+  data?: Record<string, unknown>,
 ) {
   if (process.env.NODE_ENV === "development") {
     console.info(`[DEV] hendelse sporet: ${event}`, data);

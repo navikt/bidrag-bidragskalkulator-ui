@@ -14,7 +14,7 @@ export function Motpart() {
 
   const vedEndreMotpart = (motpartIdent: string) => {
     const barnRelasjon = personinformasjon.barnerelasjoner.find(
-      (relasjon) => relasjon.motpart?.ident === motpartIdent
+      (relasjon) => relasjon.motpart?.ident === motpartIdent,
     );
 
     const fellesBarn = barnRelasjon?.fellesBarn ?? [];

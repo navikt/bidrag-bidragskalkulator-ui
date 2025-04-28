@@ -18,7 +18,7 @@ export const tilInnloggetBarnSkjema = (person: Barn): InnloggetBarnSkjema => {
 };
 
 export const getInnloggetSkjemaStandardverdi = (
-  personinformasjon: Personinformasjon
+  personinformasjon: Personinformasjon,
 ): InnloggetSkjema => {
   const harKunEnMotpart = personinformasjon.barnerelasjoner.length === 1;
 
@@ -28,7 +28,7 @@ export const getInnloggetSkjemaStandardverdi = (
 
   const barn = harKunEnMotpart
     ? personinformasjon.barnerelasjoner[0].fellesBarn.map(
-        tilInnloggetBarnSkjema
+        tilInnloggetBarnSkjema,
       )
     : [];
 
@@ -45,7 +45,7 @@ export const getInnloggetSkjemaStandardverdi = (
  */
 export function kalkulerSamværsklasse(
   samværsgrad: number,
-  bostatus: FastBosted
+  bostatus: FastBosted,
 ): Samværsklasse {
   if (bostatus === "DELT_FAST_BOSTED") {
     return "DELT_BOSTED";
@@ -72,7 +72,7 @@ export function kalkulerBidragstype(
   bostatus: FastBosted,
   samvær: number,
   inntektForelder1: number,
-  inntektForelder2: number
+  inntektForelder2: number,
 ): "MOTTAKER" | "PLIKTIG" {
   if (bostatus === "DELT_FAST_BOSTED") {
     return inntektForelder1 > inntektForelder2 ? "PLIKTIG" : "MOTTAKER";
@@ -82,7 +82,7 @@ export function kalkulerBidragstype(
 
 export const finnBarnBasertPåIdent = (
   ident: string,
-  personinformasjon: Personinformasjon
+  personinformasjon: Personinformasjon,
 ) => {
   return personinformasjon.barnerelasjoner
     .flatMap((relasjon) => relasjon.fellesBarn)
@@ -91,9 +91,9 @@ export const finnBarnBasertPåIdent = (
 
 export const finnMotpartBasertPåIdent = (
   ident: string,
-  personinformasjon: Personinformasjon
+  personinformasjon: Personinformasjon,
 ) => {
   return personinformasjon.barnerelasjoner.find(
-    (relasjon) => relasjon.motpart?.ident === ident
+    (relasjon) => relasjon.motpart?.ident === ident,
   )?.motpart;
 };
