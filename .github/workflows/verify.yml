@@ -1,4 +1,4 @@
-name: Verify
+name: Verifiser
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   verify:
-    name: Verify code quality
+    name: Verifiser kodekvalitet
     runs-on: ubuntu-latest
 
     steps:
@@ -33,6 +33,9 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
+
+      - name: Run Prettier
+        run: npm run prettier
 
       - name: Run TypeScript type checking
         run: npm run typecheck

@@ -10,6 +10,7 @@
     "typecheck": "react-router typegen && tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "prettier": "prettier --check .",
     "generate-token": "node ./token-generator.cjs"
   },
   "dependencies": {
