@@ -22,10 +22,9 @@ const RelasjonSchema = z.object({
  * Schemaet for responsen fra personinformasjon API-et.
  */
 export const PersoninformasjonSchema = z.object({
-  påloggetBruker: PersonSchema.and(
-    z.object({ inntekt: z.number().int().nonnegative().nullable() })
-  ),
-  relasjoner: z.array(RelasjonSchema),
+  person: PersonSchema,
+  inntekt: z.number().int().nonnegative().nullable(),
+  barnerelasjoner: z.array(RelasjonSchema),
 });
 
 export type Barn = z.infer<typeof BarnSchema>;
