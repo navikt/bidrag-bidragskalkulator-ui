@@ -1,9 +1,11 @@
 import { z } from "zod";
 import { definerTekster, oversett, Språk } from "~/utils/i18n";
 
+const fastBosted = z.enum(["DELT_FAST_BOSTED", "IKKE_DELT_FAST_BOSTED"]);
+
 export const InnloggetBarnSkjemaSchema = z.object({
   ident: z.string().length(11),
-  bosted: z.enum(["HOS_FORELDER_1", "HOS_FORELDER_2", "DELT_BOSTED", ""]),
+  bosted: z.enum([...fastBosted.options, ""]),
   samvær: z.string(),
   alder: z.string(),
 });
@@ -16,55 +18,24 @@ export const InnloggetSkjemaSchema = z.object({
 });
 
 export const getInnloggetBarnSkjema = (språk: Språk) => {
-  return z
-    .object({
-      ident: z
-        .string()
-        .length(11, oversett(språk, tekster.feilmeldinger.barnIdent.ugyldig)),
-      bosted: z.enum(["HOS_FORELDER_1", "DELT_BOSTED", "HOS_FORELDER_2"], {
-        message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
-      }),
-      samvær: z
-        .string()
-        .nonempty(oversett(språk, tekster.feilmeldinger.samvær.påkrevd))
-        .pipe(
-          z.coerce
-            .number()
-            .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
-            .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum))
-        ),
-      alder: z.string().pipe(z.coerce.number().nonnegative()),
-    })
-    .refine(
-      ({ bosted, samvær }) => {
-        if (bosted === "HOS_FORELDER_1" && samvær < 15) {
-          return false;
-        }
-        return true;
-      },
-      {
-        message: oversett(
-          språk,
-          tekster.feilmeldinger.samvær.minimumHosForelder1
-        ),
-        path: ["samvær"],
-      }
-    )
-    .refine(
-      ({ bosted, samvær }) => {
-        if (bosted === "HOS_FORELDER_2" && samvær > 15) {
-          return false;
-        }
-        return true;
-      },
-      {
-        message: oversett(
-          språk,
-          tekster.feilmeldinger.samvær.maksimumHosForelder2
-        ),
-        path: ["samvær"],
-      }
-    );
+  return z.object({
+    ident: z
+      .string()
+      .length(11, oversett(språk, tekster.feilmeldinger.barnIdent.ugyldig)),
+    bosted: z.enum(fastBosted.options, {
+      message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
+    }),
+    samvær: z
+      .string()
+      .nonempty(oversett(språk, tekster.feilmeldinger.samvær.påkrevd))
+      .pipe(
+        z.coerce
+          .number()
+          .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
+          .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum))
+      ),
+    alder: z.string().pipe(z.coerce.number().nonnegative()),
+  });
 };
 
 export const getInnloggetSkjema = (språk: Språk) => {
@@ -98,6 +69,7 @@ export const getInnloggetSkjema = (språk: Språk) => {
   });
 };
 
+export type FastBosted = z.infer<typeof fastBosted>;
 export type InnloggetBarnSkjema = z.infer<typeof InnloggetBarnSkjemaSchema>;
 export type InnloggetSkjema = z.infer<typeof InnloggetSkjemaSchema>;
 export type InnloggetSkjemaValidert = z.infer<

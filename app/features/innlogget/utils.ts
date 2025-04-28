@@ -1,6 +1,10 @@
 import type { Samværsklasse } from "../beregning/schema";
 import type { Barn, Personinformasjon } from "./personinformasjon/schema";
-import type { InnloggetBarnSkjema, InnloggetSkjema } from "./schema";
+import type {
+  FastBosted,
+  InnloggetBarnSkjema,
+  InnloggetSkjema,
+} from "./schema";
 
 export const SAMVÆR_STANDARDVERDI = "15";
 
@@ -39,9 +43,9 @@ export const getInnloggetSkjemaStandardverdi = (
  */
 export function kalkulerSamværsklasse(
   samværsgrad: number,
-  bostatus: string
+  bostatus: FastBosted
 ): Samværsklasse {
-  if (bostatus === "DELT_BOSTED") {
+  if (bostatus === "DELT_FAST_BOSTED") {
     return "DELT_BOSTED";
   }
   if (samværsgrad === 0 || samværsgrad === 30) {
@@ -63,14 +67,15 @@ export function kalkulerSamværsklasse(
  * Avgjør om forelderen er mottaker eller pliktig basert på samværsgrad
  */
 export function kalkulerBidragstype(
-  bostatus: "HOS_FORELDER_1" | "HOS_FORELDER_2" | "DELT_BOSTED",
+  bostatus: FastBosted,
+  samvær: number,
   inntektForelder1: number,
   inntektForelder2: number
 ): "MOTTAKER" | "PLIKTIG" {
-  if (bostatus === "DELT_BOSTED") {
+  if (bostatus === "DELT_FAST_BOSTED") {
     return inntektForelder1 > inntektForelder2 ? "PLIKTIG" : "MOTTAKER";
   }
-  return bostatus === "HOS_FORELDER_1" ? "MOTTAKER" : "PLIKTIG";
+  return samvær >= 15 ? "MOTTAKER" : "PLIKTIG";
 }
 
 export const finnBarnBasertPåIdent = (
