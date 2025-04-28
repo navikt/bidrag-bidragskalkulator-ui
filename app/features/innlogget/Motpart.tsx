@@ -13,7 +13,7 @@ export function Motpart() {
   const { onChange, ...formInputProps } = form.getInputProps("motpartIdent");
 
   const vedEndreMotpart = (motpartIdent: string) => {
-    const barnRelasjon = personinformasjon.barnRelasjon.find(
+    const barnRelasjon = personinformasjon.barnerelasjoner.find(
       (relasjon) => relasjon.motpart?.ident === motpartIdent
     );
 
@@ -21,11 +21,11 @@ export function Motpart() {
     const barnFormValue = fellesBarn.map(tilInnloggetBarnSkjema);
 
     form.setValue("barn", barnFormValue);
-    form.setValue("motpartInntekt", "");
+    form.setValue("inntektMotpart", "");
     onChange?.(motpartIdent);
   };
 
-  if (personinformasjon.barnRelasjon.length === 1) {
+  if (personinformasjon.barnerelasjoner.length === 1) {
     return null;
   }
 
@@ -36,7 +36,7 @@ export function Motpart() {
       onChange={vedEndreMotpart}
       error={form.field("motpartIdent").error()}
     >
-      {personinformasjon.barnRelasjon.map((relasjon) => (
+      {personinformasjon.barnerelasjoner.map((relasjon) => (
         <Radio key={relasjon.motpart?.ident} value={relasjon.motpart?.ident}>
           {relasjon.motpart?.fulltNavn}
         </Radio>

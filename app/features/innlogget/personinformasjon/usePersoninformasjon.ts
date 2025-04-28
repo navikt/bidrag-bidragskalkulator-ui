@@ -1,18 +1,12 @@
-import { useLoaderData } from "react-router";
-import { PersoninformasjonSchema, type Personinformasjon } from "./schema";
+import { useRouteLoaderData } from "react-router";
+import type { loader } from "~/routes/index";
 
-export function usePersoninformasjon(): Personinformasjon {
-  const data = useLoaderData();
+export const usePersoninformasjon = () => {
+  const loaderData = useRouteLoaderData<typeof loader>("routes/index");
 
-  if (!data) {
+  if (!loaderData) {
     throw new Error("Loader data ikke funnet");
   }
 
-  const parsed = PersoninformasjonSchema.safeParse(data?.personinformasjon);
-
-  if (!parsed.success) {
-    throw new Error("Personinformasjon er ikke gyldig");
-  }
-
-  return parsed.data;
-}
+  return loaderData;
+};

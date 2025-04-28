@@ -1,6 +1,7 @@
 import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
+
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
 import type { InnloggetSkjema } from "./schema";
 import { finnMotpartBasertPåIdent } from "./utils";
@@ -26,12 +27,12 @@ export const Inntektsopplysninger = () => {
       />
 
       <FormattertTallTextField
-        {...form.field("motpartInntekt").getControlProps()}
+        {...form.field("inntektMotpart").getControlProps()}
         label={t(
           tekster.hvaErInntektenTilDenAndreForelderen(motpart?.fornavn ?? "")
         )}
         description={t(tekster.hvaErInntektenTilDenAndreForelderenBeskrivelse)}
-        error={form.field("motpartInntekt").error()}
+        error={form.field("inntektMotpart").error()}
         htmlSize={18}
       />
     </div>

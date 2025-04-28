@@ -18,7 +18,7 @@ export async function hentBidragsutregning(request: Request) {
 
   const skjemaData = parsedFormData.data;
   const inntektForelder1 = skjemaData.inntektDeg;
-  const inntektForelder2 = skjemaData.motpartInntekt;
+  const inntektForelder2 = skjemaData.inntektMotpart;
 
   const requestData: Bidragsutregningsgrunnlag = {
     inntektForelder1,
