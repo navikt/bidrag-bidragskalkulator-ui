@@ -32,7 +32,7 @@ export const getInnloggetBarnSkjema = (språk: Språk) => {
         z.coerce
           .number()
           .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
-          .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum))
+          .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum)),
       ),
     alder: z.string().pipe(z.coerce.number().nonnegative()),
   });
@@ -55,7 +55,7 @@ export const getInnloggetSkjema = (språk: Språk) => {
         z.coerce
           .number()
           .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
-          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner))
+          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
       ),
     inntektMotpart: z
       .string()
@@ -64,7 +64,7 @@ export const getInnloggetSkjema = (språk: Språk) => {
         z.coerce
           .number()
           .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
-          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner))
+          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
       ),
   });
 };

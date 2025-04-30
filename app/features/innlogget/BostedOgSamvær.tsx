@@ -23,7 +23,7 @@ export const BostedOgSamvær = () => {
       {barnArray.map((key, barnField) => {
         const barnInfo = finnBarnBasertPåIdent(
           barnField.value("ident"),
-          personinformasjon
+          personinformasjon,
         );
 
         const samvær = barnField.value("samvær") ?? SAMVÆR_STANDARDVERDI;
@@ -72,7 +72,7 @@ export const BostedOgSamvær = () => {
                   },
                   {
                     label: t(
-                      tekster.samvær.beskrivelser.halvpartenAvTidenHosDeg
+                      tekster.samvær.beskrivelser.halvpartenAvTidenHosDeg,
                     ),
                     value: 15,
                   },

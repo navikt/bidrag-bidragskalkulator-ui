@@ -13,7 +13,7 @@ export const Inntektsopplysninger = () => {
 
   const motpart = finnMotpartBasertPåIdent(
     form.value("motpartIdent"),
-    personinformasjon
+    personinformasjon,
   );
 
   return (
@@ -29,7 +29,7 @@ export const Inntektsopplysninger = () => {
       <FormattertTallTextField
         {...form.field("inntektMotpart").getControlProps()}
         label={t(
-          tekster.hvaErInntektenTilDenAndreForelderen(motpart?.fornavn ?? "")
+          tekster.hvaErInntektenTilDenAndreForelderen(motpart?.fornavn ?? ""),
         )}
         description={t(tekster.hvaErInntektenTilDenAndreForelderenBeskrivelse)}
         error={form.field("inntektMotpart").error()}
