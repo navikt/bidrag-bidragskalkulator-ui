@@ -14,7 +14,6 @@ import {
 } from "@navikt/ds-react/ExpansionCard";
 import { ListItem } from "@navikt/ds-react/List";
 import { useRef } from "react";
-import { CopyButton } from "~/components/ui/copy-button";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
@@ -23,14 +22,9 @@ import type { Bidragsutregning } from "../beregning/schema";
 type ResultatpanelProps = {
   data: Bidragsutregning | { error: string };
   ref: React.RefObject<HTMLDivElement | null>;
-  delingsurl?: string;
 };
 
-export const Resultatpanel = ({
-  data,
-  ref,
-  delingsurl,
-}: ResultatpanelProps) => {
+export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
   const { t } = useOversettelse();
   const beregningsdetaljerAntallSporingerRef = useRef(0);
 
