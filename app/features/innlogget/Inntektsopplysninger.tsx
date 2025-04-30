@@ -53,16 +53,16 @@ const tekster = definerTekster({
   beregnBarnebidraget: {
     nb: "Beregn barnebidraget",
     en: "Calculate child support",
-    nn: "Beregn fostringstilskotet",
+    nn: "Rekn ut fostringstilskot",
   },
   hvaErInntektenDinBeskrivelse: {
     nb: "Oppgi all inntekt per år før skatt.",
     en: "Enter all annual income before taxes.",
-    nn: "Oppgi all inntekt per år før skatt.",
+    nn: "Oppgje all inntekt per år før skatt.",
   },
   hvaErInntektenTilDenAndreForelderenBeskrivelse: {
     nb: "Oppgi all inntekt per år før skatt",
     en: "Enter all annual income before taxes.",
-    nn: "Oppgi all inntekt per år før skatt",
+    nn: "Oppgje all inntekt per år før skatt",
   },
 });

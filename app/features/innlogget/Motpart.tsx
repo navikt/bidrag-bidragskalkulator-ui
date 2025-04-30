@@ -50,7 +50,7 @@ const tekster = definerTekster({
     label: {
       nb: "Velg medforelder",
       en: "Select co-parent",
-      nn: "Velg medforelder",
+      nn: "Vel medforelder",
     },
   },
 });

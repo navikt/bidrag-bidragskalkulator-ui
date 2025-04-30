@@ -82,7 +82,7 @@ const tekster = definerTekster({
       påkrevd: {
         nb: "Velg medforelder",
         en: "Choose co-parent",
-        nn: "Velg medforelder",
+        nn: "Vel medforelder",
       },
       ugyldig: {
         nb: "Ugyldig verdi",
@@ -116,7 +116,7 @@ const tekster = definerTekster({
       minimumHosForelder1: {
         nb: "Barnet kan ikke ha færrest netter hos deg når barnet bor hos deg.",
         en: "The child cannot have fewer nights with you when the child lives with you.",
-        nn: "Barnet kan ikkje ha færrest netter hos deg når barnet bur hos deg.",
+        nn: "Barnet kan ikkje ha færrast netter hos deg når barnet bur hos deg.",
       },
       maksimumHosForelder2: {
         nb: "Barnet kan ikke ha flest netter hos deg når barnet bor hos den andre forelderen.",
@@ -128,7 +128,7 @@ const tekster = definerTekster({
       påkrevd: {
         nb: "Fyll ut hvor barnet bor",
         en: "Fill in where the child lives",
-        nn: "Fyll ut kjeres barnet bor",
+        nn: "Fyll ut kvar barnet bur",
       },
     },
     barn: {

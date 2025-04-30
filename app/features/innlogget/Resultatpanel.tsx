@@ -14,7 +14,6 @@ import {
 } from "@navikt/ds-react/ExpansionCard";
 import { ListItem } from "@navikt/ds-react/List";
 import { useRef } from "react";
-import { CopyButton } from "~/components/ui/copy-button";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
@@ -23,14 +22,9 @@ import type { Bidragsutregning } from "../beregning/schema";
 type ResultatpanelProps = {
   data: Bidragsutregning | { error: string };
   ref: React.RefObject<HTMLDivElement | null>;
-  delingsurl?: string;
 };
 
-export const Resultatpanel = ({
-  data,
-  ref,
-  delingsurl,
-}: ResultatpanelProps) => {
+export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
   const { t } = useOversettelse();
   const beregningsdetaljerAntallSporingerRef = useRef(0);
 
@@ -77,22 +71,6 @@ export const Resultatpanel = ({
         {t(tekster.lagPrivatAvtale)}
       </Button>
 
-      {delingsurl && (
-        <>
-          <BodyLong spacing>{t(tekster.callToActionDelingsUrl)}</BodyLong>
-          <CopyButton
-            variant="secondary-neutral"
-            size="medium"
-            copyText={delingsurl}
-            text={t(tekster.delBeregning.vanlig)}
-            activeText={t(tekster.delBeregning.kopiert)}
-            onClick={() => sporHendelse("delbar lenke kopiert")}
-            className="mb-6"
-          />
-        </>
-      )}
-
-      <BodyLong spacing>{t(tekster.callToActionGammelKalkulator)}</BodyLong>
       <BodyLong spacing>{t(tekster.hvisManIkkeKommerTilEnighet)}</BodyLong>
       <ExpansionCard
         aria-labelledby="detaljer"
@@ -180,7 +158,7 @@ const tekster = definerTekster({
       )} in child support per month.`,
       nn: `Du skal betale ${formatterSum(
         sum as number,
-      )} i fostringstilskot per måned.`,
+      )} i fostringstilskot per månad.`,
     }),
     motta: (sum) => ({
       nb: `Du skal motta ${formatterSum(
@@ -191,7 +169,7 @@ const tekster = definerTekster({
       )} in child support per month.`,
       nn: `Du skal motta ${formatterSum(
         sum as number,
-      )} i fostringstilskot per måned.`,
+      )} i fostringstilskot per månad.`,
     }),
   },
   nullBidrag: {
@@ -202,7 +180,7 @@ const tekster = definerTekster({
   hvordanAvtale: {
     nb: "Den endelige summen på barnebidraget avtaler du med den andre forelderen. Da står dere fritt til å endre avtalen på et senere tidspunkt, om ting som inntekt eller samvær skulle endre seg. Om du vil, kan du opprette en slik avtale her:",
     en: "The final amount of child support is agreed upon with the other parent. You are free to change the agreement at a later time if things like income or custody change. If you want, you can create such an agreement here:",
-    nn: "Den endelige summen på fostringstilskotet avtaler du med den andre forelderen. Du står fritt til å endre avtalen på et senere tidspunkt, om ting som inntekt eller samvær skulle endre seg. Om du vil, kan du opprette en slik avtale her:",
+    nn: "Den endelege summen på fostringstilskotet er noko du avtalar med den andre forelderen. Du står fritt til å endre avtalen på eit seinare tidspunkt, viss ting som inntekt eller samvær endrar seg. Om du vil, kan du opprette ein slik avtale her:",
   },
   hvisManIkkeKommerTilEnighet: {
     nb: (
@@ -228,13 +206,13 @@ const tekster = definerTekster({
     ),
     nn: (
       <>
-        Om dere ikkje blir einige, kan dere søkje Nav om hjelp til å fastsetje
-        fostringstilskotet. Dette gjer dere ved å søkje om{" "}
+        Om de ikkje blir einige, kan de søkje Nav om hjelp til å fastsetje
+        forstringstilskotet. Det gjer de ved å søkje om{" "}
         <Link href="https://www.nav.no/fyllut/nav540005" target="_blank">
-          fastsetting av fostringstilskot
+          fastsetjing av fostringstilskot
         </Link>
-        . Vær oppmerksam på at det koster 1314 kroner, og at
-        saksbehandlingstiden er 5 måneder.
+        . Ver merksam på at det kostar 1314 kroner, og at sakshandsamingstida er
+        5 månadar.
       </>
     ),
   },
@@ -242,12 +220,12 @@ const tekster = definerTekster({
     overskrift: {
       nb: "Hvordan bidraget er beregnet",
       en: "How the child support is calculated",
-      nn: "Korleis fostringstilskotet er rekna ut",
+      nn: "Korleis er fostringstilskotet rekna ut?",
     },
     underholdskostnadBeskrivelse: {
       nb: `Det viktigste grunnlaget for beregningen er hva et barn koster – også kjent som underholdskostnader. Disse summene hentes fra SIFOs referansebudsjetter, og oppdateres hvert år. Kostnaden i deres tilfelle er:`,
       en: `The most important basis for the calculation is what a child costs – also known as child support costs. These amounts are taken from SIFOs reference budgets and are updated annually. The cost in their case is:`,
-      nn: `Det viktigaste grunnlaget for beregningen er kva eit barn kostar – også kjent som underholdskostnadar. Disse summane hentes frå SIFOs referansebudsjettar, og oppdateres kvart år. Kostnaden i deires tilfelle er:`,
+      nn: `Fostringstilskotet over er ei utrekning av det du skal betale eller motta per månad for kvart av borna. For kvart av borna ser utrekninga slik ut:`,
     },
     underholdskostnadPerBarn: (alder, kostnad) => ({
       nb: (
@@ -265,19 +243,19 @@ const tekster = definerTekster({
       nn: (
         <>
           {alder}-åringen kostar{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> kroner i måneden.
+          <strong>{formatterSum(kostnad as number)}</strong> kroner i månaden.
         </>
       ),
     }),
     underholdskostnadSplitt: {
       nb: "Dette er summen som skal deles mellom deg og den andre forelderen. Hvordan det splittes opp, avhenger av inntekt og samvær, i tillegg til en rekke andre forhold.",
       en: "This is the amount that should be divided between you and the other parent. How it is split depends on income and custody, in addition to a number of other factors.",
-      nn: "Dette er summen som skal delast mellom deg og den andre forelderen. Kvifor det splittast, avheng av inntekt og samvær, i tillegg til ein rekkje andre forhold.",
+      nn: "Desse summane skal du og den andre forelderen dele mellom dykk. Korleis fordelinga mellom dykk blir, er avhengig av inntekt og samver, i tillegg til ei rekkje andre forhold. ",
     },
     utregningPerBarn: {
       nb: "Barnebidraget over er en summering av hva du skal betale eller motta per måned for hvert av barna. Per barn ser beregningen slik ut:",
       en: "The child support above is a summary of what you should pay or receive per month for each of the children. For each child, the calculation looks like this:",
-      nn: "Barnebidraget over er ein summering av kva du skal betale eller motta per månad for kvar av barna. For kvar av barna ser beregningen slik ut:",
+      nn: "Det viktigaste grunnlaget for utrekninga er kva eit barn kostar, kjent som underhaldskostnadar. Desse summane er henta frå referansebudsjettet til SIFO, og dei blir oppdaterte kvart år. Kostnaden for borna dine er:",
     },
     motta: (alder, kostnad) => ({
       nb: (
@@ -298,7 +276,7 @@ const tekster = definerTekster({
         <>
           For {alder}-åringen skal du motta{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i fostringstilskot
-          per måned.
+          per månad.
         </>
       ),
     }),
@@ -321,65 +299,14 @@ const tekster = definerTekster({
         <>
           For {alder}-åringen skal du betale{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i fostringstilskot
-          per måned.
+          per månad.
         </>
       ),
     }),
-  },
-  callToActionDelingsUrl: {
-    nb: "Du kan dele beregningen med den andre forelderen ved å kopiere lenken til beregningen:",
-    en: "You can share the calculation with the other parent by copying the link to the calculation:",
-    nn: "Du kan dele beregningen med den andre forelderen ved å kopiere lenken til beregningen:",
-  },
-  callToActionGammelKalkulator: {
-    nb: (
-      <>
-        Forslaget er basert på noen få opplysninger, som gjør det enkelt å få en
-        omtrentlig sum. Om du ønsker en mer presis beregning, kan du bruke{" "}
-        <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
-          den gamle bidragskalkulatoren
-        </Link>{" "}
-        til å legge inn flere opplysninger.
-      </>
-    ),
-    en: (
-      <>
-        The proposal is based on a few pieces of information, making it easy to
-        get an approximate sum. If you want a more precise calculation, you can
-        use the{" "}
-        <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
-          old child support calculator
-        </Link>{" "}
-        to enter more information.
-      </>
-    ),
-    nn: (
-      <>
-        Forslaget er basert på nokon få opplysningar, som gjør det enkelt å få
-        ein omtrentleg sum. Om du ynskjer ein meir presis berekning, kan du
-        bruke{" "}
-        <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
-          den gamle bidragskalkulatoren
-        </Link>{" "}
-        til å leggje inn fleire opplysningar.
-      </>
-    ),
   },
   lagPrivatAvtale: {
     nb: "Lag privat avtale",
     en: "Make a private agreement",
     nn: "Lag ein privat avtale",
-  },
-  delBeregning: {
-    vanlig: {
-      nb: "Kopier lenke",
-      en: "Copy link",
-      nn: "Kopier lenke",
-    },
-    kopiert: {
-      nb: "Kopiert!",
-      en: "Copied!",
-      nn: "Kopiert!",
-    },
   },
 });
