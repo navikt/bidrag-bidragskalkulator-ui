@@ -3,8 +3,7 @@ type EventType =
   | "skjema innsending feilet"
   | "skjema fullført"
   | "beregningsdetaljer utvidet"
-  | "beregningsdetaljer kollapset"
-  | "delbar lenke kopiert";
+  | "beregningsdetaljer kollapset";
 
 /**
  * Sporer en hendelse
