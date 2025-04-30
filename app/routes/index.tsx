@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Heading, Link } from "@navikt/ds-react";
+import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import { isValidationErrorResponse, useForm } from "@rvf/react-router";
 import { useEffect, useRef, useState } from "react";
 import type {
@@ -6,11 +6,7 @@ import type {
   LoaderFunctionArgs,
   MetaArgs,
 } from "react-router";
-import {
-  Link as ReactRouterLink,
-  useActionData,
-  useLoaderData,
-} from "react-router";
+import { useActionData, useLoaderData } from "react-router";
 import { hentBidragsutregning } from "~/features/innlogget/beregning/api.server";
 import { InnloggetBidragsskjema } from "~/features/innlogget/InnloggetBidragsskjema";
 import { IntroPanel } from "~/features/innlogget/IntroPanel";
@@ -50,9 +46,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     request,
     navigerTilUrlEtterAutentisering: "/",
   });
-  if (respons instanceof Response) {
-    return respons;
-  }
 
   return respons;
 }
@@ -64,7 +57,9 @@ export default function InnloggetBarnebidragskalkulator() {
   const personinformasjon = useLoaderData<typeof loader>();
   const [erEndretSidenUtregning, settErEndretSidenUtregning] = useState(false);
 
-  const harMotpart = personinformasjon.barnerelasjoner.length > 0;
+  const harBarn =
+    personinformasjon.barnerelasjoner.flatMap((relasjon) => relasjon.fellesBarn)
+      .length > 0;
 
   const { språk } = useOversettelse();
 
@@ -114,15 +109,12 @@ export default function InnloggetBarnebidragskalkulator() {
 
         <IntroPanel />
 
-        {harMotpart && <InnloggetBidragsskjema form={form} />}
+        {harBarn && <InnloggetBidragsskjema form={form} />}
 
-        {!harMotpart && (
+        {!harBarn && (
           <Alert variant="info">
             <div className="space-y-4">
-              <BodyLong>{t(tekster.ingenMotpart.info)}</BodyLong>
-              <Link as={ReactRouterLink} to="/">
-                {t(tekster.ingenMotpart.lenke)}
-              </Link>
+              <BodyLong>{t(tekster.ingenBarn.info)}</BodyLong>
             </div>
           </Alert>
         )}
@@ -164,16 +156,11 @@ const tekster = definerTekster({
     en: "Child support calculator",
     nn: <>Fostringstilskots&shy;kalkulator</>,
   },
-  ingenMotpart: {
+  ingenBarn: {
     info: {
-      nb: "Vi finner ingen medforelder i systemet. Om du ønsker bruke kalkulatoren, kan du fylle ut skjema selv.",
-      en: "We cannot find any co-parent in the system. If you want to use the calculator, you can fill out the form yourself.",
-      nn: "Vi finn ingen medforelder i systemet. Om du ønskjer å bruke kalkulatoren, kan du fylle ut skjema sjølv.",
-    },
-    lenke: {
-      nb: "Fyll ut skjema selv",
-      en: "Fill out the form yourself",
-      nn: "Fyll ut skjema sjølv",
+      nb: "Vi finner ingen barn å beregne bidrag for.",
+      en: "We cannot find any children to calculate support for.",
+      nn: "Vi finn ingen barn å rekne bidrag for.",
     },
   },
 });
