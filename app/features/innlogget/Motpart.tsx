@@ -14,7 +14,7 @@ export function Motpart() {
 
   const vedEndreMotpart = (motpartIdent: string) => {
     const barnRelasjon = personinformasjon.barnerelasjoner.find(
-      (relasjon) => relasjon.motpart?.ident === motpartIdent,
+      (relasjon) => relasjon.motpart?.ident === motpartIdent
     );
 
     const fellesBarn = barnRelasjon?.fellesBarn ?? [];
@@ -50,7 +50,7 @@ const tekster = definerTekster({
     label: {
       nb: "Velg medforelder",
       en: "Select co-parent",
-      nn: "Velg medforelder",
+      nn: "Vel medforelder",
     },
   },
 });

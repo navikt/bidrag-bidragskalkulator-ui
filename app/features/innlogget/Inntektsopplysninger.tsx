@@ -13,7 +13,7 @@ export const Inntektsopplysninger = () => {
 
   const motpart = finnMotpartBasertPåIdent(
     form.value("motpartIdent"),
-    personinformasjon,
+    personinformasjon
   );
 
   return (
@@ -29,7 +29,7 @@ export const Inntektsopplysninger = () => {
       <FormattertTallTextField
         {...form.field("inntektMotpart").getControlProps()}
         label={t(
-          tekster.hvaErInntektenTilDenAndreForelderen(motpart?.fornavn ?? ""),
+          tekster.hvaErInntektenTilDenAndreForelderen(motpart?.fornavn ?? "")
         )}
         description={t(tekster.hvaErInntektenTilDenAndreForelderenBeskrivelse)}
         error={form.field("inntektMotpart").error()}
@@ -53,16 +53,16 @@ const tekster = definerTekster({
   beregnBarnebidraget: {
     nb: "Beregn barnebidraget",
     en: "Calculate child support",
-    nn: "Beregn fostringstilskotet",
+    nn: "Rekn ut fostringstilskot",
   },
   hvaErInntektenDinBeskrivelse: {
     nb: "Oppgi all inntekt per år før skatt.",
     en: "Enter all annual income before taxes.",
-    nn: "Oppgi all inntekt per år før skatt.",
+    nn: "Oppgje all inntekt per år før skatt.",
   },
   hvaErInntektenTilDenAndreForelderenBeskrivelse: {
     nb: "Oppgi all inntekt per år før skatt",
     en: "Enter all annual income before taxes.",
-    nn: "Oppgi all inntekt per år før skatt",
+    nn: "Oppgje all inntekt per år før skatt",
   },
 });

@@ -23,7 +23,7 @@ export const BostedOgSamvær = () => {
       {barnArray.map((key, barnField) => {
         const barnInfo = finnBarnBasertPåIdent(
           barnField.value("ident"),
-          personinformasjon,
+          personinformasjon
         );
 
         const samvær = barnField.value("samvær") ?? SAMVÆR_STANDARDVERDI;
@@ -72,7 +72,7 @@ export const BostedOgSamvær = () => {
                   },
                   {
                     label: t(
-                      tekster.samvær.beskrivelser.halvpartenAvTidenHosDeg,
+                      tekster.samvær.beskrivelser.halvpartenAvTidenHosDeg
                     ),
                     value: 15,
                   },
@@ -96,18 +96,18 @@ const tekster = definerTekster({
     label: (navn) => ({
       nb: `Hvor skal ${navn} bo fast?`,
       en: `Where will ${navn} have a permanent address?`,
-      nn: `Kvar skal ${navn} bo fast?`,
+      nn: `Kvar skal ${navn} bu fast?`,
     }),
     valg: {
       velg: {
         nb: "Velg hvor barnet skal bo",
         en: "Select where the child will live",
-        nn: "Velg kvar barnet skal bo",
+        nn: "Velg kvar barnet skal bu",
       },
       DELT_FAST_BOSTED: {
         nb: "Vi har avtale om delt fast bosted",
         en: "We have an agreement on shared custody",
-        nn: "Vi har avtale om delt bosted",
+        nn: "Vi har avtale om delt bustad",
       },
       IKKE_DELT_FAST_BOSTED: {
         nb: "Vi har ikke avtale om delt fast bosted",
@@ -117,7 +117,7 @@ const tekster = definerTekster({
       hosDenAndre: (navn) => ({
         nb: `Barnet bor hos ${navn}`,
         en: `The child lives with ${navn}`,
-        nn: `Barnet bor hos ${navn}`,
+        nn: `Barnet bur hos ${navn}`,
       }),
     },
   },
@@ -125,12 +125,12 @@ const tekster = definerTekster({
     label: {
       nb: "Hvor mye vil barnet være sammen med deg?",
       en: "How much will the child stay with you?",
-      nn: "Kor mykje vil barnet være saman med deg?",
+      nn: "Kor mykje vil barnet vere saman med deg?",
     },
     beskrivelse: {
       nb: "Estimer hvor mange netter barnet vil være hos deg i snitt per måned",
       en: "Estimate how many nights the child will stay with you on average per month",
-      nn: "Estimer kor mange netter barnet vil være hos deg i snitt per måned",
+      nn: "Estimer kor mange netter barnet vil vere hos deg i snitt per månad",
     },
     netter: (antall) => ({
       nb: `${antall} netter`,
