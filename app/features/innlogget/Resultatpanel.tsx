@@ -101,17 +101,9 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
                 {data.resultater.map((resultat, index) => (
                   <ListItem key={index}>
                     {resultat.bidragstype === "MOTTAKER"
-                      ? t(
-                          tekster.detaljer.motta(
-                            resultat.barnetsAlder,
-                            resultat.sum,
-                          ),
-                        )
+                      ? t(tekster.detaljer.motta(resultat.alder, resultat.sum))
                       : t(
-                          tekster.detaljer.betale(
-                            resultat.barnetsAlder,
-                            resultat.sum,
-                          ),
+                          tekster.detaljer.betale(resultat.alder, resultat.sum),
                         )}
                   </ListItem>
                 ))}
@@ -126,7 +118,7 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
               <ListItem key={index}>
                 {t(
                   tekster.detaljer.underholdskostnadPerBarn(
-                    resultat.barnetsAlder,
+                    resultat.alder,
                     resultat.underholdskostnad,
                   ),
                 )}

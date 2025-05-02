@@ -10,7 +10,7 @@ export type Samværsklasse =
 
 export type Bidragsutregningsgrunnlag = {
   barn: {
-    alder: number;
+    ident: string;
     samværsklasse: Samværsklasse;
     bidragstype: "MOTTAKER" | "PLIKTIG";
   }[];
@@ -18,15 +18,17 @@ export type Bidragsutregningsgrunnlag = {
   inntektForelder2: number;
 };
 
-export const Bidragsutregningskjema = z.object({
+export const BidragsutregningSchema = z.object({
   resultater: z.array(
     z.object({
+      ident: z.string(),
+      fulltNavn: z.string(),
+      alder: z.number(),
       sum: z.number(),
-      barnetsAlder: z.number(),
       bidragstype: z.enum(["PLIKTIG", "MOTTAKER"]),
       underholdskostnad: z.number(),
     }),
   ),
 });
 
-export type Bidragsutregning = z.infer<typeof Bidragsutregningskjema>;
+export type Bidragsutregning = z.infer<typeof BidragsutregningSchema>;

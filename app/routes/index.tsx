@@ -39,7 +39,7 @@ export function meta({ matches }: MetaArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  return hentBidragsutregning(request);
+  return medToken(request, hentBidragsutregning);
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
