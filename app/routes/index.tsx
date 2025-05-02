@@ -7,10 +7,11 @@ import type {
   MetaArgs,
 } from "react-router";
 import { useActionData, useLoaderData } from "react-router";
+import { medToken } from "~/features/autentisering/api.server";
 import { hentBidragsutregning } from "~/features/innlogget/beregning/api.server";
 import { InnloggetBidragsskjema } from "~/features/innlogget/InnloggetBidragsskjema";
 import { IntroPanel } from "~/features/innlogget/IntroPanel";
-import { hentPersoninformasjonAutentisert } from "~/features/innlogget/personinformasjon/api.server";
+import { hentPersoninformasjon } from "~/features/innlogget/personinformasjon/api.server";
 import { Resultatpanel } from "~/features/innlogget/Resultatpanel";
 import {
   type InnloggetSkjema,
@@ -42,12 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const respons = await hentPersoninformasjonAutentisert({
-    request,
-    navigerTilUrlEtterAutentisering: "/",
-  });
-
-  return respons;
+  return medToken(request, hentPersoninformasjon);
 }
 
 export default function InnloggetBarnebidragskalkulator() {
