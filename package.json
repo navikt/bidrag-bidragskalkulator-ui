@@ -19,7 +19,7 @@
     "@navikt/ds-css": "^7.21.0",
     "@navikt/ds-react": "^7.21.0",
     "@navikt/ds-tailwind": "^7.21.0",
-    "@navikt/nav-dekoratoren-moduler": "^3.2.2",
+    "@navikt/nav-dekoratoren-moduler": "^3.2.3",
     "@navikt/oasis": "^3.8.0",
     "@radix-ui/react-slider": "^1.3.2",
     "@react-router/node": "^7.5.3",
@@ -32,14 +32,14 @@
     "csp-header": "^6.1.0",
     "html-react-parser": "^5.2.3",
     "isbot": "^5.1.27",
-    "lucide-react": "^0.503.0",
-    "puppeteer": "^24.7.2",
+    "lucide-react": "^0.507.0",
+    "puppeteer": "^24.8.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router": "^7.5.3",
     "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.24.3"
+    "zod": "^3.24.4"
   },
   "devDependencies": {
     "@react-router/dev": "^7.5.3",
@@ -49,7 +49,7 @@
     "@types/react-dom": "^19.1.3",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
-    "eslint": "^9.25.1",
+    "eslint": "^9.26.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "prettier": "3.5.3",
@@ -57,7 +57,7 @@
     "react-router-devtools": "^5.0.0",
     "tailwindcss": "^4.1.5",
     "typescript": "^5.8.3",
-    "vite": "^6.3.4",
+    "vite": "^6.3.5",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }
