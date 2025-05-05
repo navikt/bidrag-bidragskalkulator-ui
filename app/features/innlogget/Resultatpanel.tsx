@@ -101,9 +101,17 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
                 {data.resultater.map((resultat, index) => (
                   <ListItem key={index}>
                     {resultat.bidragstype === "MOTTAKER"
-                      ? t(tekster.detaljer.motta(resultat.alder, resultat.sum))
+                      ? t(
+                          tekster.detaljer.motta(
+                            resultat.fulltNavn,
+                            resultat.sum,
+                          ),
+                        )
                       : t(
-                          tekster.detaljer.betale(resultat.alder, resultat.sum),
+                          tekster.detaljer.betale(
+                            resultat.fulltNavn,
+                            resultat.sum,
+                          ),
                         )}
                   </ListItem>
                 ))}
@@ -118,7 +126,7 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
               <ListItem key={index}>
                 {t(
                   tekster.detaljer.underholdskostnadPerBarn(
-                    resultat.alder,
+                    resultat.fulltNavn,
                     resultat.underholdskostnad,
                   ),
                 )}
@@ -219,23 +227,23 @@ const tekster = definerTekster({
       en: `The most important basis for the calculation is what a child costs – also known as child support costs. These amounts are taken from SIFOs reference budgets and are updated annually. The cost in their case is:`,
       nn: `Fostringstilskotet over er ei utrekning av det du skal betale eller motta per månad for kvart av borna. For kvart av borna ser utrekninga slik ut:`,
     },
-    underholdskostnadPerBarn: (alder, kostnad) => ({
+    underholdskostnadPerBarn: (navn, kostnad) => ({
       nb: (
         <>
-          {alder}-åringen koster{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> kroner i måneden.
+          {navn} koster <strong>{formatterSum(kostnad as number)}</strong>{" "}
+          kroner i måneden.
         </>
       ),
       en: (
         <>
-          The {alder}-year-old costs{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> per month.
+          {navn} costs <strong>{formatterSum(kostnad as number)}</strong> per
+          month.
         </>
       ),
       nn: (
         <>
-          {alder}-åringen kostar{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> kroner i månaden.
+          {navn} kostar <strong>{formatterSum(kostnad as number)}</strong>{" "}
+          kroner i månaden.
         </>
       ),
     }),
@@ -249,47 +257,47 @@ const tekster = definerTekster({
       en: "The child support above is a summary of what you should pay or receive per month for each of the children. For each child, the calculation looks like this:",
       nn: "Det viktigaste grunnlaget for utrekninga er kva eit barn kostar, kjent som underhaldskostnadar. Desse summane er henta frå referansebudsjettet til SIFO, og dei blir oppdaterte kvart år. Kostnaden for borna dine er:",
     },
-    motta: (alder, kostnad) => ({
+    motta: (navn, kostnad) => ({
       nb: (
         <>
-          For {alder}-åringen skal du motta{" "}
+          For {navn} skal du motta{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
       en: (
         <>
-          For the {alder}-year-old, you should receive{" "}
+          For {navn}, you should receive{" "}
           <strong>{formatterSum(kostnad as number)}</strong> in child support
           per month.
         </>
       ),
       nn: (
         <>
-          For {alder}-åringen skal du motta{" "}
+          For {navn} skal du motta{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i fostringstilskot
           per månad.
         </>
       ),
     }),
-    betale: (alder, kostnad) => ({
+    betale: (navn, kostnad) => ({
       nb: (
         <>
-          For {alder}-åringen skal du betale{" "}
+          For {navn} skal du betale{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
       en: (
         <>
-          For the {alder}-year-old, you should pay{" "}
+          For {navn}, you should pay{" "}
           <strong>{formatterSum(kostnad as number)}</strong> in child support
           per month.
         </>
       ),
       nn: (
         <>
-          For {alder}-åringen skal du betale{" "}
+          For {navn} skal du betale{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i fostringstilskot
           per månad.
         </>
