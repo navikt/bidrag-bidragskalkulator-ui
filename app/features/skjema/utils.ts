@@ -1,4 +1,4 @@
-import type { Samværsklasse } from "../beregning/schema";
+import type { Samværsklasse } from "./beregning/schema";
 import type { Barn, Personinformasjon } from "./personinformasjon/schema";
 import type {
   FastBosted,

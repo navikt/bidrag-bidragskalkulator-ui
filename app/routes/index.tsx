@@ -8,17 +8,17 @@ import type {
 } from "react-router";
 import { useActionData, useLoaderData } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
-import { hentBidragsutregning } from "~/features/innlogget/beregning/api.server";
-import { InnloggetBidragsskjema } from "~/features/innlogget/InnloggetBidragsskjema";
-import { IntroPanel } from "~/features/innlogget/IntroPanel";
-import { hentPersoninformasjon } from "~/features/innlogget/personinformasjon/api.server";
-import { Resultatpanel } from "~/features/innlogget/Resultatpanel";
+import { hentBidragsutregning } from "~/features/skjema/beregning/api.server";
+import { InnloggetBidragsskjema } from "~/features/skjema/InnloggetBidragsskjema";
+import { IntroPanel } from "~/features/skjema/IntroPanel";
+import { hentPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
+import { Resultatpanel } from "~/features/skjema/Resultatpanel";
 import {
   type InnloggetSkjema,
   type InnloggetSkjemaValidert,
   getInnloggetSkjema,
-} from "~/features/innlogget/schema";
-import { getInnloggetSkjemaStandardverdi } from "~/features/innlogget/utils";
+} from "~/features/skjema/schema";
+import { getInnloggetSkjemaStandardverdi } from "~/features/skjema/utils";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 

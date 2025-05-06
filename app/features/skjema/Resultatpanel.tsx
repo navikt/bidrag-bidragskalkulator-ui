@@ -17,7 +17,7 @@ import { useRef } from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
-import type { Bidragsutregning } from "../beregning/schema";
+import type { Bidragsutregning } from "./beregning/schema";
 
 type ResultatpanelProps = {
   data: Bidragsutregning | { error: string };
