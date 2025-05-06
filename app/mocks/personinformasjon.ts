@@ -1,4 +1,4 @@
-import type { Personinformasjon } from "~/features/innlogget/personinformasjon/schema";
+import type { Personinformasjon } from "~/features/skjema/personinformasjon/schema";
 
 export const PERSON_MED_EN_MOTPART_TO_BARN: Personinformasjon = {
   person: {
