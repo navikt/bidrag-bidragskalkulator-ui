@@ -103,13 +103,13 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
                     {resultat.bidragstype === "MOTTAKER"
                       ? t(
                           tekster.detaljer.motta(
-                            resultat.fulltNavn,
+                            resultat.fornavn,
                             resultat.sum,
                           ),
                         )
                       : t(
                           tekster.detaljer.betale(
-                            resultat.fulltNavn,
+                            resultat.fornavn,
                             resultat.sum,
                           ),
                         )}
@@ -126,7 +126,7 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
               <ListItem key={index}>
                 {t(
                   tekster.detaljer.underholdskostnadPerBarn(
-                    resultat.fulltNavn,
+                    resultat.fornavn,
                     resultat.underholdskostnad,
                   ),
                 )}

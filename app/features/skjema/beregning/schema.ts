@@ -23,6 +23,7 @@ export const BidragsutregningSchema = z.object({
     z.object({
       ident: z.string(),
       fulltNavn: z.string(),
+      fornavn: z.string(),
       alder: z.number(),
       sum: z.number(),
       bidragstype: z.enum(["PLIKTIG", "MOTTAKER"]),
