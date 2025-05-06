@@ -7,7 +7,6 @@ export const InnloggetBarnSkjemaSchema = z.object({
   ident: z.string().length(11),
   bosted: z.enum([...fastBosted.options, ""]),
   samvær: z.string(),
-  alder: z.string(),
 });
 
 export const InnloggetSkjemaSchema = z.object({
@@ -34,7 +33,6 @@ export const getInnloggetBarnSkjema = (språk: Språk) => {
           .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
           .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum)),
       ),
-    alder: z.string().pipe(z.coerce.number().nonnegative()),
   });
 };
 

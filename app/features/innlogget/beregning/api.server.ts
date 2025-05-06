@@ -6,7 +6,7 @@ import { hentSpråkFraCookie } from "~/utils/i18n";
 import { getInnloggetSkjema } from "../schema";
 import { kalkulerBidragstype, kalkulerSamværsklasse } from "../utils";
 
-export async function hentBidragsutregning(request: Request) {
+export const hentBidragsutregning = async (token: string, request: Request) => {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
   const skjema = getInnloggetSkjema(språk);
@@ -33,7 +33,7 @@ export async function hentBidragsutregning(request: Request) {
       );
 
       return {
-        alder: barn.alder,
+        ident: barn.ident,
         samværsklasse,
         bidragstype,
       };
@@ -43,5 +43,6 @@ export async function hentBidragsutregning(request: Request) {
   return hentBidragsutregningFraApi({
     requestData,
     språk,
+    token,
   });
-}
+};

@@ -1,7 +1,7 @@
 import { env } from "process";
 import { definerTekster, oversett, Språk } from "~/utils/i18n";
 import {
-  Bidragsutregningskjema,
+  BidragsutregningSchema,
   type Bidragsutregning,
   type Bidragsutregningsgrunnlag,
 } from "./schema";
@@ -9,9 +9,11 @@ import {
 export const hentBidragsutregningFraApi = async ({
   requestData,
   språk,
+  token,
 }: {
   requestData: Bidragsutregningsgrunnlag;
   språk: Språk;
+  token: string;
 }): Promise<Bidragsutregning | { error: string }> => {
   try {
     const response = await fetch(
@@ -20,6 +22,7 @@ export const hentBidragsutregningFraApi = async ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(requestData),
       },
@@ -31,7 +34,7 @@ export const hentBidragsutregningFraApi = async ({
       };
     }
     const json = await response.json();
-    const parsed = Bidragsutregningskjema.safeParse(json);
+    const parsed = BidragsutregningSchema.safeParse(json);
 
     if (!parsed.success) {
       return {

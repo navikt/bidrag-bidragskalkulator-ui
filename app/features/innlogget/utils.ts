@@ -13,7 +13,6 @@ export const tilInnloggetBarnSkjema = (person: Barn): InnloggetBarnSkjema => {
     ident: person.ident,
     bosted: "",
     samvær: SAMVÆR_STANDARDVERDI,
-    alder: String(person.alder),
   };
 };
 
