@@ -5,6 +5,14 @@ type EventType =
   | "beregningsdetaljer utvidet"
   | "beregningsdetaljer kollapset";
 
+type Sporingsdata = Record<string, unknown> & {
+  /**
+   * Versjon av sporingsdata. Hvis vi endrer strukturen på data for ett eller flere
+   * events må denne oppdateres, og spørringer i dashboards tilpasses.
+   */
+  versjon: 1;
+};
+
 /**
  * Sporer en hendelse
  *
@@ -20,14 +28,21 @@ type EventType =
  */
 export async function sporHendelse(
   event: EventType,
-  data?: Record<string, unknown>,
+  data: Record<string, unknown> = {},
 ) {
+  const sporingsdata: Sporingsdata = {
+    ...data,
+    versjon: 1,
+  };
+
   if (process.env.NODE_ENV === "development") {
-    console.info(`[DEV] hendelse sporet: ${event}`, data);
+    console.info(`[DEV] hendelse sporet: ${event}`, sporingsdata);
     return;
   }
 
-  return window.umami ? window.umami.track(event, data) : Promise.resolve();
+  return window.umami
+    ? window.umami.track(event, sporingsdata)
+    : Promise.resolve();
 }
 
 type AnalyticsProps = {
