@@ -8,10 +8,10 @@ import {
   oversett,
   Språk,
 } from "~/utils/i18n";
+import { finnAvrundetTall } from "~/utils/tall";
 import { getInnloggetSkjema } from "../schema";
 import {
   finnAldersgruppe,
-  finnAvrundetTall,
   kalkulerBidragstype,
   kalkulerSamværsklasse,
 } from "../utils";

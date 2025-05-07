@@ -114,19 +114,3 @@ export const finnAldersgruppe = (alder: number): Aldersgruppe => {
   }
   return "15+";
 };
-
-/**
- * Finner det nærmeste avrundede tallet basert på tierpotens
- * @param tall Tallet som skal avrundes
- * @param tierpotens Bestemmer hvilken tierpotens som skal brukes for avrunding
- * @returns Det nærmeste avrundede tallet
- * @example
- * // Avrunder 1234 til nærmeste 10
- * finnAvrundetTall(1234, 1); // 1230
- * // Avrunder 1234 til nærmeste 1000
- * finnAvrundetTall(1234, 3); // 1000
- */
-export const finnAvrundetTall = (tall: number, tierpotens: number) => {
-  const factor = Math.pow(10, tierpotens);
-  return Math.round(tall / factor) * factor;
-};
