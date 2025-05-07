@@ -8,6 +8,11 @@ import type {
 
 export const SAMVÆR_STANDARDVERDI = "15";
 
+/**
+ * Aldersgrupper som tilsvarer gruppering brukt i underholdskostnader
+ */
+type Aldersgruppe = "0-5" | "6-10" | "11-14" | "15+";
+
 export const tilInnloggetBarnSkjema = (person: Barn): InnloggetBarnSkjema => {
   return {
     ident: person.ident,
@@ -95,4 +100,33 @@ export const finnMotpartBasertPåIdent = (
   return personinformasjon.barnerelasjoner.find(
     (relasjon) => relasjon.motpart?.ident === ident,
   )?.motpart;
+};
+
+export const finnAldersgruppe = (alder: number): Aldersgruppe => {
+  if (alder <= 5) {
+    return "0-5";
+  }
+  if (alder <= 10) {
+    return "6-10";
+  }
+  if (alder <= 14) {
+    return "11-14";
+  }
+  return "15+";
+};
+
+/**
+ * Finner det nærmeste avrundede tallet basert på tierpotens
+ * @param tall Tallet som skal avrundes
+ * @param tierpotens Bestemmer hvilken tierpotens som skal brukes for avrunding
+ * @returns Det nærmeste avrundede tallet
+ * @example
+ * // Avrunder 1234 til nærmeste 10
+ * finnAvrundetTall(1234, 1); // 1230
+ * // Avrunder 1234 til nærmeste 1000
+ * finnAvrundetTall(1234, 3); // 1000
+ */
+export const finnAvrundetTall = (tall: number, tierpotens: number) => {
+  const factor = Math.pow(10, tierpotens);
+  return Math.round(tall / factor) * factor;
 };

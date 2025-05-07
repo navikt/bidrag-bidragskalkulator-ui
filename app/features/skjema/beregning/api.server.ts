@@ -1,6 +1,7 @@
 import { parseFormData } from "@rvf/react";
 import { validationError } from "@rvf/react-router";
 import { env } from "process";
+import { sporHendelse } from "~/utils/analytics";
 import {
   definerTekster,
   hentSpråkFraCookie,
@@ -8,7 +9,12 @@ import {
   Språk,
 } from "~/utils/i18n";
 import { getInnloggetSkjema } from "../schema";
-import { kalkulerBidragstype, kalkulerSamværsklasse } from "../utils";
+import {
+  finnAldersgruppe,
+  finnAvrundetTall,
+  kalkulerBidragstype,
+  kalkulerSamværsklasse,
+} from "../utils";
 import {
   BidragsutregningSchema,
   type Bidragsutregning,
@@ -109,9 +115,34 @@ export const hentBidragsutregning = async (token: string, request: Request) => {
     }),
   };
 
-  return hentBidragsutregningFraApi({
+  const respons = await hentBidragsutregningFraApi({
     requestData,
     språk,
     token,
   });
+
+  if ("error" in respons) {
+    return respons;
+  }
+
+  const sporingsdataPerBarn = respons.resultater.map((barnResultat) => {
+    const barnInput = requestData.barn.find(
+      (barnInput) => barnInput.ident === barnResultat.ident,
+    );
+
+    return {
+      aldersgruppe: finnAldersgruppe(barnResultat.alder),
+      bidragstype: barnResultat.bidragstype,
+      sum: barnResultat.sum,
+      samværsklasse: barnInput?.samværsklasse,
+    };
+  });
+
+  sporHendelse("skjema fullført", {
+    resultat: sporingsdataPerBarn,
+    inntektForelder1: finnAvrundetTall(requestData.inntektForelder1, 4),
+    inntektForelder2: finnAvrundetTall(requestData.inntektForelder2, 4),
+  });
+
+  return respons;
 };

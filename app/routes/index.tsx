@@ -71,7 +71,6 @@ export default function InnloggetBarnebidragskalkulator() {
         block: "center",
       });
       settErEndretSidenUtregning(false);
-      sporHendelse("skjema fullført");
     },
     onInvalidSubmit: () => {
       sporHendelse("skjema validering feilet", {
