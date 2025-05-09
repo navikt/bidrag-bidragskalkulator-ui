@@ -32,13 +32,13 @@ spec:
         - host: www.nav.no
         
   liveness:
-    path: "/api/internal/isalive"
+    path: "/barnebidrag/kalkulator/api/internal/isalive"
     initialDelay: 15
     timeout: 1
     periodSeconds: 5
     failureThreshold: 10
   readiness:
-    path: "/api/internal/isready"
+    path: "/barnebidrag/kalkulator/api/internal/isready"
     initialDelay: 15
     timeout: 1
   idporten:
