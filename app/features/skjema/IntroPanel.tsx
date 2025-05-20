@@ -16,7 +16,7 @@ export function IntroPanel() {
       <BodyLong spacing>{t(tekster.innhold1)}</BodyLong>
       <BodyLong>
         {forhåndsvalgtMotpart
-          ? t(tekster.innhold2MedNavn(forhåndsvalgtMotpart.fornavn))
+          ? t(tekster.innhold2MedNavn(forhåndsvalgtMotpart.fulltNavn))
           : t(tekster.innhold2)}
       </BodyLong>
     </GuidePanel>
