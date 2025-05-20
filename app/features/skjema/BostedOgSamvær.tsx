@@ -133,14 +133,14 @@ const tekster = definerTekster({
       nn: "Estimer kor mange netter barnet vil vere hos deg i snitt per månad",
     },
     netter: (antall) => ({
-      nb: `${antall} netter`,
-      en: `${antall} nights`,
-      nn: `${antall} netter`,
+      nb: `${antall} netter hos deg`,
+      en: `${antall} nights with you`,
+      nn: `${antall} netter hos deg`,
     }),
     enNatt: {
-      nb: "1 natt",
-      en: "1 night",
-      nn: "1 natt",
+      nb: "1 natt hos deg",
+      en: "1 night with you",
+      nn: "1 natt hos deg",
     },
     beskrivelser: {
       ingenNetterHosDeg: {
