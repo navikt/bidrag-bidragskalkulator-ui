@@ -6,7 +6,7 @@ Kalkulatoren er under aktiv utvikling, så det er ikke sikkert at alt fungerer s
 
 ## Deployments
 
-Man deployer automatisk til dev- og prod-miljøene når man merger en pull request til main-branchen.
+Man deployer manuelt til dev- og prod-miljøene ved behov.
 
 ### Manuell deploy til dev
 
