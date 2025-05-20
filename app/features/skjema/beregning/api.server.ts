@@ -92,6 +92,16 @@ export const hentBidragsutregning = async (token: string, request: Request) => {
   const requestData: Bidragsutregningsgrunnlag = {
     inntektForelder1,
     inntektForelder2,
+    dittBoforhold: {
+      antallBarnBorFast: 0,
+      antallBarnDeltBosted: 0,
+      borMedAnnenVoksen: false,
+    },
+    medforelderBoforhold: {
+      antallBarnBorFast: 0,
+      antallBarnDeltBosted: 0,
+      borMedAnnenVoksen: false,
+    },
     barn: skjemaData.barn.map((barn) => {
       const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
       const bidragstype = kalkulerBidragstype(

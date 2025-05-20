@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+type Boforhold = {
+  antallBarnBorFast: number; // Antall barn under 18 år som bor fast hos forelderen
+  antallBarnDeltBosted: number; // Antall barn under 18 år med delt bosted hos forelderen
+  borMedAnnenVoksen: boolean;
+};
+
 export type Samværsklasse =
   | "SAMVÆRSKLASSE_0"
   | "SAMVÆRSKLASSE_1"
@@ -16,6 +22,8 @@ export type Bidragsutregningsgrunnlag = {
   }[];
   inntektForelder1: number;
   inntektForelder2: number;
+  dittBoforhold: Boforhold | null; // Boforhold for den påloggede personen. Må være satt hvis bidragstype for minst ett barn er PLIKTIG
+  medforelderBoforhold: Boforhold | null; // Boforhold for den andre forelderen. Må være satt hvis bidragstype for minst ett barn er MOTTAKER
 };
 
 export const BidragsutregningSchema = z.object({
