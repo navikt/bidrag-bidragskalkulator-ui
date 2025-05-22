@@ -3,7 +3,8 @@ type EventType =
   | "skjema innsending feilet"
   | "skjema fullført"
   | "beregningsdetaljer utvidet"
-  | "beregningsdetaljer kollapset";
+  | "beregningsdetaljer kollapset"
+  | "inntektsinformasjon utvidet";
 
 type Sporingsdata = Record<string, unknown> & {
   /**

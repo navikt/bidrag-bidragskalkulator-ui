@@ -3,6 +3,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
 
 import { BodyLong, ReadMore } from "@navikt/ds-react";
+import { sporHendelse } from "~/utils/analytics";
 import type { InnloggetSkjema } from "./schema";
 
 export const Inntektsopplysninger = () => {
@@ -18,7 +19,14 @@ export const Inntektsopplysninger = () => {
         error={form.field("inntektDeg").error()}
         htmlSize={18}
       />
-      <ReadMore header={t(tekster.inntektsinformasjon.overskrift)}>
+      <ReadMore
+        header={t(tekster.inntektsinformasjon.overskrift)}
+        onOpenChange={(open) => {
+          if (open) {
+            sporHendelse("inntektsinformasjon utvidet");
+          }
+        }}
+      >
         <BodyLong>{t(tekster.inntektsinformasjon.beskrivelse)}</BodyLong>
       </ReadMore>
 
