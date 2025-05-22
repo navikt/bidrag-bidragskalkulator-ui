@@ -3,7 +3,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
 
 import { BodyLong, ReadMore } from "@navikt/ds-react";
-import { sporHendelse } from "~/utils/analytics";
+import { sporHendelseEnGang } from "~/utils/analytics";
 import type { InnloggetSkjema } from "./schema";
 
 export const Inntektsopplysninger = () => {
@@ -23,7 +23,7 @@ export const Inntektsopplysninger = () => {
         header={t(tekster.inntektsinformasjon.overskrift)}
         onOpenChange={(open) => {
           if (open) {
-            sporHendelse("inntektsinformasjon utvidet");
+            sporHendelseEnGang("inntektsinformasjon utvidet");
           }
         }}
       >

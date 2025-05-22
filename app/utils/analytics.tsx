@@ -46,6 +46,24 @@ export async function sporHendelse(
     : Promise.resolve();
 }
 
+const sporingsregister: Set<EventType> = new Set();
+
+/**
+ * Sporer en hendelse, men maks en gang per sidelast.
+ */
+export function sporHendelseEnGang(
+  event: EventType,
+  data: Record<string, unknown> = {},
+) {
+  if (sporingsregister.has(event)) {
+    return;
+  }
+
+  sporingsregister.add(event);
+
+  return sporHendelse(event, data);
+}
+
 type AnalyticsProps = {
   umamiWebsiteId: string;
 };

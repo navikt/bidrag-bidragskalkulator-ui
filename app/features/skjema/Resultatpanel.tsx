@@ -13,8 +13,7 @@ import {
   ExpansionCardTitle,
 } from "@navikt/ds-react/ExpansionCard";
 import { ListItem } from "@navikt/ds-react/List";
-import { useRef } from "react";
-import { sporHendelse } from "~/utils/analytics";
+import { sporHendelseEnGang } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import type { Bidragsutregning } from "./beregning/schema";
@@ -27,7 +26,7 @@ type ResultatpanelProps = {
 
 export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
   const { t } = useOversettelse();
-  const beregningsdetaljerAntallSporingerRef = useRef(0);
+
   const personinformasjon = usePersoninformasjon();
   const alleBarn = personinformasjon.barnerelasjoner.flatMap(
     (barnRelasjon) => barnRelasjon.fellesBarn,
@@ -81,14 +80,11 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
         aria-labelledby="detaljer"
         size="small"
         onToggle={(open) => {
-          // Vi ønsker å unngå å spore at man åpner og lukker og åpner og lukker osv.
-          if (beregningsdetaljerAntallSporingerRef.current > 2) {
-            return;
-          }
-          beregningsdetaljerAntallSporingerRef.current++;
-          open
-            ? sporHendelse("beregningsdetaljer utvidet")
-            : sporHendelse("beregningsdetaljer kollapset");
+          sporHendelseEnGang(
+            open
+              ? "beregningsdetaljer utvidet"
+              : "beregningsdetaljer kollapset",
+          );
         }}
       >
         <ExpansionCardHeader>
