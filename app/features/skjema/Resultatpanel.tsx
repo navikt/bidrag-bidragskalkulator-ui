@@ -18,6 +18,7 @@ import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import type { Bidragsutregning } from "./beregning/schema";
+import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
 
 type ResultatpanelProps = {
   data: Bidragsutregning | { error: string };
@@ -27,6 +28,10 @@ type ResultatpanelProps = {
 export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
   const { t } = useOversettelse();
   const beregningsdetaljerAntallSporingerRef = useRef(0);
+  const personinformasjon = usePersoninformasjon();
+  const alleBarn = personinformasjon.barnerelasjoner.flatMap(
+    (barnRelasjon) => barnRelasjon.fellesBarn,
+  );
 
   if ("error" in data) {
     return (
@@ -122,16 +127,22 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
             {t(tekster.detaljer.underholdskostnadBeskrivelse)}
           </BodyLong>
           <List>
-            {data.resultater.map((resultat, index) => (
-              <ListItem key={index}>
-                {t(
-                  tekster.detaljer.underholdskostnadPerBarn(
-                    resultat.fornavn,
-                    resultat.underholdskostnad,
-                  ),
-                )}
-              </ListItem>
-            ))}
+            {data.resultater.map((resultat, index) => {
+              const barn = alleBarn.find(
+                (barn) => barn.ident === resultat.ident,
+              );
+
+              return (
+                <ListItem key={index}>
+                  {t(
+                    tekster.detaljer.underholdskostnadPerBarn(
+                      resultat.fornavn,
+                      barn?.underholdskostnad ?? 0,
+                    ),
+                  )}
+                </ListItem>
+              );
+            })}
           </List>
           <BodyLong spacing>
             {t(tekster.detaljer.underholdskostnadSplitt)}
