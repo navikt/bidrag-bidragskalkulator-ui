@@ -11,6 +11,7 @@ const BarnSchema = z.object({
   fornavn: z.string(),
   fulltNavn: z.string(),
   alder: z.number().int().nonnegative(),
+  underholdskostnad: z.number().int().nonnegative(),
 });
 
 const RelasjonSchema = z.object({
