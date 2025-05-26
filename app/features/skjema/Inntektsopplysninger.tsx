@@ -2,6 +2,8 @@ import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
 
+import { BodyLong, ReadMore } from "@navikt/ds-react";
+import { sporHendelseEnGang } from "~/utils/analytics";
 import type { InnloggetSkjema } from "./schema";
 
 export const Inntektsopplysninger = () => {
@@ -12,16 +14,28 @@ export const Inntektsopplysninger = () => {
     <div className="flex flex-col gap-4">
       <FormattertTallTextField
         {...form.field("inntektDeg").getControlProps()}
-        label={t(tekster.hvaErInntektenDin)}
-        description={t(tekster.hvaErInntektenDinBeskrivelse)}
+        label={t(tekster.dinInntekt.label)}
+        description={t(tekster.dinInntekt.beskrivelse)}
         error={form.field("inntektDeg").error()}
         htmlSize={18}
       />
+      <ReadMore
+        header={t(tekster.inntektsinformasjon.overskrift)}
+        onOpenChange={(open) => {
+          if (open) {
+            sporHendelseEnGang("inntektsinformasjon utvidet");
+          }
+        }}
+      >
+        <BodyLong spacing>
+          {t(tekster.inntektsinformasjon.beskrivelseDel1)}
+        </BodyLong>
+        <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel2)}</BodyLong>
+      </ReadMore>
 
       <FormattertTallTextField
         {...form.field("inntektMotpart").getControlProps()}
         label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
-        description={t(tekster.hvaErInntektenTilDenAndreForelderenBeskrivelse)}
         error={form.field("inntektMotpart").error()}
         htmlSize={18}
       />
@@ -30,29 +44,43 @@ export const Inntektsopplysninger = () => {
 };
 
 const tekster = definerTekster({
-  hvaErInntektenDin: {
-    nb: "Hva er inntekten din?",
-    en: "What is your income?",
-    nn: "Kva er inntekta di?",
+  dinInntekt: {
+    label: {
+      nb: "Hva er årsinntekten din?",
+      en: "What is your annual income?",
+      nn: "Kva er årsinntekta di?",
+    },
+    beskrivelse: {
+      nb: "Inntekten din hentes fra Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
+      en: "Your income is fetched from The Norwegian Tax Administration, and is all income registered on you in the last 12 months. Adjust the amount if it does not match.",
+      nn: "Inntekta di hentes frå Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
+    },
+  },
+  inntektsinformasjon: {
+    overskrift: {
+      nb: "Hva skal tas med i inntekten din?",
+      en: "What should be included in your income?",
+      nn: "Kva skal takast med i inntekta di?",
+    },
+    beskrivelseDel1: {
+      nb: "Inntekten din inkluderer personinntekt og netto positive kapitalinntekter over 10 000 kroner. For bidragsmottakere skal det i tillegg tas med utvidet barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet.",
+      en: "Your income includes personal income and net positive capital income over 10,000 kroner. For support recipients, extended child benefit, extra small child supplement, and cash benefit for the support child.",
+      nn: "Inntekta di inkluderar personinntekt og netto positive kapitalinntekter over 10 000 kroner. For bidragsmottakarar skal det i tillegg takast med utvida barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet.",
+    },
+    beskrivelseDel2: {
+      nb: "Inntekter som ikke skal oppgis på skattemeldingen, skal ikke tas med i beregningsgrunnlaget, for eksempel skattefrie husleieinntekter.",
+      en: "Income that shall not be reported on the tax return shall not be included in the calculation basis, for example tax-exempt rental income.",
+      nn: "Inntekter som ikkje skal oppgjevast på skattemeldinga, skal ikkje takast med i utrekningsgrunnlaget, til dømes skattefrie husleigeinntekter.",
+    },
   },
   hvaErInntektenTilDenAndreForelderen: {
-    nb: `Hva er inntekten til den andre forelderen?`,
-    en: `What is the other parent's income?`,
-    nn: `Kva er inntekta til den andre forelderen?`,
+    nb: `Hva er årsinntekten til den andre forelderen?`,
+    en: `What is the other parent's annual income?`,
+    nn: `Kva er årsinntekta til den andre forelderen?`,
   },
   beregnBarnebidraget: {
     nb: "Beregn barnebidraget",
     en: "Calculate child support",
     nn: "Rekn ut fostringstilskot",
-  },
-  hvaErInntektenDinBeskrivelse: {
-    nb: "Oppgi all inntekt per år før skatt.",
-    en: "Enter all annual income before taxes.",
-    nn: "Oppgje all inntekt per år før skatt.",
-  },
-  hvaErInntektenTilDenAndreForelderenBeskrivelse: {
-    nb: "Oppgi all inntekt per år før skatt",
-    en: "Enter all annual income before taxes.",
-    nn: "Oppgje all inntekt per år før skatt",
   },
 });

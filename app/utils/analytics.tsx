@@ -3,7 +3,8 @@ type EventType =
   | "skjema innsending feilet"
   | "skjema fullført"
   | "beregningsdetaljer utvidet"
-  | "beregningsdetaljer kollapset";
+  | "beregningsdetaljer kollapset"
+  | "inntektsinformasjon utvidet";
 
 type Sporingsdata = Record<string, unknown> & {
   /**
@@ -43,6 +44,24 @@ export async function sporHendelse(
   return window.umami
     ? window.umami.track(event, sporingsdata)
     : Promise.resolve();
+}
+
+const sporingsregister: Set<EventType> = new Set();
+
+/**
+ * Sporer en hendelse, men maks en gang per sidelast.
+ */
+export function sporHendelseEnGang(
+  event: EventType,
+  data: Record<string, unknown> = {},
+) {
+  if (sporingsregister.has(event)) {
+    return;
+  }
+
+  sporingsregister.add(event);
+
+  return sporHendelse(event, data);
 }
 
 type AnalyticsProps = {
