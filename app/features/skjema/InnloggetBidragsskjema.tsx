@@ -13,14 +13,18 @@ type Props = {
 export function InnloggetBidragsskjema({ form }: Props) {
   const { t } = useOversettelse();
 
-  const harValgtMotpart = Boolean(form.value("barn"));
+  const harValgtMotpart = form.value("barn").length > 0;
 
   return (
     <FormProvider scope={form.scope()}>
       <form {...form.getFormProps()} className="flex flex-col gap-4">
         <Motpart />
-        {harValgtMotpart && <BostedOgSamvær />}
-        <Inntektsopplysninger />
+        {harValgtMotpart && (
+          <>
+            <BostedOgSamvær />
+            <Inntektsopplysninger />
+          </>
+        )}
 
         <Button
           type="submit"
