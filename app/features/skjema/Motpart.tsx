@@ -1,14 +1,30 @@
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
-import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
+import type { Barn } from "./personinformasjon/schema";
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
 import type { InnloggetSkjema } from "./schema";
 import { tilInnloggetBarnSkjema } from "./utils";
 
+const hentBeskrivelseBarn = (barn: Barn[], språk: Språk) => {
+  const fornavn = barn.map((barn) => barn.fornavn);
+
+  // Create a formatter that uses "og" between the last two items and commas between the rest
+  const formatter = new Intl.ListFormat(
+    språk === Språk.NorwegianNynorsk ? Språk.NorwegianBokmål : språk,
+    {
+      style: "long",
+      type: "conjunction",
+    },
+  );
+
+  return formatter.format(fornavn);
+};
+
 export function Motpart() {
   const personinformasjon = usePersoninformasjon();
   const form = useFormContext<InnloggetSkjema>();
-  const { t } = useOversettelse();
+  const { t, språk } = useOversettelse();
 
   const { onChange, ...formInputProps } = form.getInputProps("motpartIdent");
 
@@ -38,7 +54,7 @@ export function Motpart() {
     >
       {personinformasjon.barnerelasjoner.map((relasjon) => (
         <Radio key={relasjon.motpart?.ident} value={relasjon.motpart?.ident}>
-          {relasjon.motpart?.fulltNavn}
+          {hentBeskrivelseBarn(relasjon.fellesBarn, språk)}
         </Radio>
       ))}
     </RadioGroup>
@@ -48,9 +64,9 @@ export function Motpart() {
 const tekster = definerTekster({
   velgMotpart: {
     label: {
-      nb: "Velg medforelder",
-      en: "Select co-parent",
-      nn: "Vel medforelder",
+      nb: "Velg hvilke barn du vil beregne barnebidrag for",
+      nn: "Velg kva barn du vil rekne ut fostringstilskot for",
+      en: "Select which children you want to calculate child support for",
     },
   },
 });

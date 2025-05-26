@@ -1,9 +1,7 @@
 import { z } from "zod";
 
 const PersonSchema = z.object({
-  ident: z.string(),
-  fornavn: z.string(),
-  fulltNavn: z.string(),
+  ident: z.string(), // kan være hva som helst
 });
 
 const BarnSchema = z.object({
