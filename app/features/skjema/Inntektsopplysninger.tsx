@@ -14,8 +14,8 @@ export const Inntektsopplysninger = () => {
     <div className="flex flex-col gap-4">
       <FormattertTallTextField
         {...form.field("inntektDeg").getControlProps()}
-        label={t(tekster.hvaErInntektenDin)}
-        description={t(tekster.hvaErInntektenDinBeskrivelse)}
+        label={t(tekster.dinInntekt.label)}
+        description={t(tekster.dinInntekt.beskrivelse)}
         error={form.field("inntektDeg").error()}
         htmlSize={18}
       />
@@ -36,7 +36,6 @@ export const Inntektsopplysninger = () => {
       <FormattertTallTextField
         {...form.field("inntektMotpart").getControlProps()}
         label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
-        description={t(tekster.hvaErInntektenTilDenAndreForelderenBeskrivelse)}
         error={form.field("inntektMotpart").error()}
         htmlSize={18}
       />
@@ -45,15 +44,17 @@ export const Inntektsopplysninger = () => {
 };
 
 const tekster = definerTekster({
-  hvaErInntektenDin: {
-    nb: "Hva er inntekten din?",
-    en: "What is your income?",
-    nn: "Kva er inntekta di?",
-  },
-  hvaErInntektenDinBeskrivelse: {
-    nb: "Inntekten din hentes fra Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
-    en: "Your income is fetched from The Norwegian Tax Administration, and is all income registered on you in the last 12 months. Adjust the amount if it does not match.",
-    nn: "Inntekta di hentes frå Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
+  dinInntekt: {
+    label: {
+      nb: "Hva er inntekten din?",
+      en: "What is your income?",
+      nn: "Kva er inntekta di?",
+    },
+    beskrivelse: {
+      nb: "Inntekten din hentes fra Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
+      en: "Your income is fetched from The Norwegian Tax Administration, and is all income registered on you in the last 12 months. Adjust the amount if it does not match.",
+      nn: "Inntekta di hentes frå Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
+    },
   },
   inntektsinformasjon: {
     overskrift: {
@@ -81,10 +82,5 @@ const tekster = definerTekster({
     nb: "Beregn barnebidraget",
     en: "Calculate child support",
     nn: "Rekn ut fostringstilskot",
-  },
-  hvaErInntektenTilDenAndreForelderenBeskrivelse: {
-    nb: "Oppgi inntekten til den andre forelderen",
-    en: "Enter the income of the other parent.",
-    nn: "Oppgje inntekten til den andre forelderen",
   },
 });
