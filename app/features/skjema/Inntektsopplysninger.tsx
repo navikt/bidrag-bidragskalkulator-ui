@@ -2,19 +2,11 @@ import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
 
-import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
 import type { InnloggetSkjema } from "./schema";
-import { finnMotpartBasertPåIdent } from "./utils";
 
 export const Inntektsopplysninger = () => {
-  const personinformasjon = usePersoninformasjon();
   const form = useFormContext<InnloggetSkjema>();
   const { t } = useOversettelse();
-
-  const motpart = finnMotpartBasertPåIdent(
-    form.value("motpartIdent"),
-    personinformasjon,
-  );
 
   return (
     <div className="flex flex-col gap-4">
@@ -28,9 +20,7 @@ export const Inntektsopplysninger = () => {
 
       <FormattertTallTextField
         {...form.field("inntektMotpart").getControlProps()}
-        label={t(
-          tekster.hvaErInntektenTilDenAndreForelderen(motpart?.fornavn ?? ""),
-        )}
+        label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
         description={t(tekster.hvaErInntektenTilDenAndreForelderenBeskrivelse)}
         error={form.field("inntektMotpart").error()}
         htmlSize={18}
@@ -45,11 +35,11 @@ const tekster = definerTekster({
     en: "What is your income?",
     nn: "Kva er inntekta di?",
   },
-  hvaErInntektenTilDenAndreForelderen: (navn) => ({
-    nb: `Hva er inntekten til ${navn}?`,
-    en: `What is ${navn}'s income?`,
-    nn: `Kva er inntekta til ${navn}?`,
-  }),
+  hvaErInntektenTilDenAndreForelderen: {
+    nb: `Hva er inntekten til den andre forelderen?`,
+    en: `What is the other parent's income?`,
+    nn: `Kva er inntekta til den andre forelderen?`,
+  },
   beregnBarnebidraget: {
     nb: "Beregn barnebidraget",
     en: "Calculate child support",
