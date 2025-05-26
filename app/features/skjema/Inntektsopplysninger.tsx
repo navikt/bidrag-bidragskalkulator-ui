@@ -46,9 +46,9 @@ export const Inntektsopplysninger = () => {
 const tekster = definerTekster({
   dinInntekt: {
     label: {
-      nb: "Hva er inntekten din?",
-      en: "What is your income?",
-      nn: "Kva er inntekta di?",
+      nb: "Hva er årsinntekten din?",
+      en: "What is your annual income?",
+      nn: "Kva er årsinntekta di?",
     },
     beskrivelse: {
       nb: "Inntekten din hentes fra Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
@@ -74,9 +74,9 @@ const tekster = definerTekster({
     },
   },
   hvaErInntektenTilDenAndreForelderen: {
-    nb: `Hva er inntekten til den andre forelderen?`,
-    en: `What is the other parent's income?`,
-    nn: `Kva er inntekta til den andre forelderen?`,
+    nb: `Hva er årsinntekten til den andre forelderen?`,
+    en: `What is the other parent's annual income?`,
+    nn: `Kva er årsinntekta til den andre forelderen?`,
   },
   beregnBarnebidraget: {
     nb: "Beregn barnebidraget",
