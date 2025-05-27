@@ -1,9 +1,9 @@
 import { Button } from "@navikt/ds-react";
 import { FormProvider, type FormApi } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { Inntektsopplysninger } from "./Inntektsopplysninger";
-import { ManuellBarnSkjema } from "./manuell/ManuellBarnSkjema";
-import { type ManueltSkjema } from "./schema";
+import { Inntektsopplysninger } from "../Inntektsopplysninger";
+import { type ManueltSkjema } from "../schema";
+import { ManuellBarnSkjema } from "./ManuellBarnSkjema";
 
 type Props = {
   form: FormApi<ManueltSkjema>;

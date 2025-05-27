@@ -10,8 +10,8 @@ import { useActionData, useLoaderData } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
 import { hentManuellBidragsutregning } from "~/features/skjema/beregning/api.server";
 import { IntroPanel } from "~/features/skjema/IntroPanel";
+import { ManueltBidragsskjema } from "~/features/skjema/manuell/ManueltBidragsskjema";
 import { ManueltResultatpanel } from "~/features/skjema/manuell/ManueltResultatpanel";
-import { ManueltBidragsskjema } from "~/features/skjema/ManueltBidragsskjema";
 import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
 import {
   type ManueltSkjema,
