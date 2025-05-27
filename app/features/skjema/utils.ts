@@ -48,7 +48,13 @@ export const hentManueltSkjemaStandardverdi = (
   personinformasjon: ManuellPersoninformasjon,
 ): ManueltSkjema => {
   return {
-    barn: [],
+    barn: [
+      {
+        alder: "",
+        bosted: "",
+        samvær: SAMVÆR_STANDARDVERDI,
+      },
+    ],
     inntektDeg: String(personinformasjon.inntekt ?? ""),
     inntektMotpart: "",
   };

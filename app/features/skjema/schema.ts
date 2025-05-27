@@ -17,7 +17,7 @@ export const InnloggetSkjemaSchema = z.object({
 });
 
 export const ManueltBarnSkjemaSchema = z.object({
-  alder: z.number(),
+  alder: z.number().or(z.literal("")),
   bosted: z.enum([...fastBosted.options, ""]),
   samvær: z.string(),
 });
