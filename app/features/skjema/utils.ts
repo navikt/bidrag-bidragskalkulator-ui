@@ -1,9 +1,14 @@
 import type { Samværsklasse } from "./beregning/schema";
-import type { Barn, Personinformasjon } from "./personinformasjon/schema";
+import type {
+  Barn,
+  ManuellPersoninformasjon,
+  Personinformasjon,
+} from "./personinformasjon/schema";
 import type {
   FastBosted,
   InnloggetBarnSkjema,
   InnloggetSkjema,
+  ManueltSkjema,
 } from "./schema";
 
 export const SAMVÆR_STANDARDVERDI = "15";
@@ -34,6 +39,16 @@ export const getInnloggetSkjemaStandardverdi = (
   return {
     motpartIdent,
     barn,
+    inntektDeg: String(personinformasjon.inntekt ?? ""),
+    inntektMotpart: "",
+  };
+};
+
+export const hentManueltSkjemaStandardverdi = (
+  personinformasjon: ManuellPersoninformasjon,
+): ManueltSkjema => {
+  return {
+    barn: [],
     inntektDeg: String(personinformasjon.inntekt ?? ""),
     inntektMotpart: "",
   };

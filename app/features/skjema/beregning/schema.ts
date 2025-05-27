@@ -26,6 +26,18 @@ export type Bidragsutregningsgrunnlag = {
   medforelderBoforhold: Boforhold | null; // Boforhold for den andre forelderen. Må være satt hvis bidragstype for minst ett barn er MOTTAKER
 };
 
+export type ManueltBidragsutregningsgrunnlag = {
+  barn: {
+    alder: number;
+    samværsklasse: Samværsklasse;
+    bidragstype: "MOTTAKER" | "PLIKTIG";
+  }[];
+  inntektForelder1: number;
+  inntektForelder2: number;
+  dittBoforhold: Boforhold | null; // Boforhold for den påloggede personen. Må være satt hvis bidragstype for minst ett barn er PLIKTIG
+  medforelderBoforhold: Boforhold | null; // Boforhold for den andre forelderen. Må være satt hvis bidragstype for minst ett barn er MOTTAKER
+};
+
 export const BidragsutregningSchema = z.object({
   resultater: z.array(
     z.object({
@@ -38,4 +50,17 @@ export const BidragsutregningSchema = z.object({
   ),
 });
 
+export const ManuellBidragsutregningSchema = z.object({
+  resultater: z.array(
+    z.object({
+      alder: z.number(),
+      sum: z.number(),
+      bidragstype: z.enum(["PLIKTIG", "MOTTAKER"]),
+    }),
+  ),
+});
+
 export type Bidragsutregning = z.infer<typeof BidragsutregningSchema>;
+export type ManuellBidragsutregning = z.infer<
+  typeof ManuellBidragsutregningSchema
+>;

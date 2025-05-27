@@ -7,12 +7,15 @@ import {
   oversett,
   Språk,
 } from "~/utils/i18n";
-import { getInnloggetSkjema } from "../schema";
+import { lagInnloggetSkjema, lagManueltSkjema } from "../schema";
 import { kalkulerBidragstype, kalkulerSamværsklasse } from "../utils";
 import {
   BidragsutregningSchema,
+  ManuellBidragsutregningSchema,
   type Bidragsutregning,
   type Bidragsutregningsgrunnlag,
+  type ManuellBidragsutregning,
+  type ManueltBidragsutregningsgrunnlag,
 } from "./schema";
 
 export const hentBidragsutregningFraApi = async ({
@@ -60,6 +63,51 @@ export const hentBidragsutregningFraApi = async ({
   }
 };
 
+export const hentManuellBidragsutregningFraApi = async ({
+  requestData,
+  språk,
+  token,
+}: {
+  requestData: ManueltBidragsutregningsgrunnlag;
+  språk: Språk;
+  token: string;
+}): Promise<ManuellBidragsutregning | { error: string }> => {
+  try {
+    const response = await fetch(
+      `${env.SERVER_URL}/api/v1/beregning/barnebidrag`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestData),
+      },
+    );
+
+    if (!response.ok) {
+      return {
+        error: oversett(språk, tekster.feil.beregning),
+      };
+    }
+    const json = await response.json();
+    const parsed = ManuellBidragsutregningSchema.safeParse(json);
+
+    if (!parsed.success) {
+      return {
+        error: oversett(språk, tekster.feil.ugyldigSvar),
+      };
+    }
+
+    return parsed.data;
+  } catch (error) {
+    console.error(error);
+    return {
+      error: oversett(språk, tekster.feil.beregning),
+    };
+  }
+};
+
 const tekster = definerTekster({
   feil: {
     beregning: {
@@ -78,7 +126,7 @@ const tekster = definerTekster({
 export const hentBidragsutregning = async (token: string, request: Request) => {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
-  const skjema = getInnloggetSkjema(språk);
+  const skjema = lagInnloggetSkjema(språk);
   const parsedFormData = await parseFormData(request, skjema);
 
   if (parsedFormData.error) {
@@ -120,6 +168,60 @@ export const hentBidragsutregning = async (token: string, request: Request) => {
   };
 
   return hentBidragsutregningFraApi({
+    requestData,
+    språk,
+    token,
+  });
+};
+
+export const hentManuellBidragsutregning = async (
+  token: string,
+  request: Request,
+) => {
+  const cookieHeader = request.headers.get("Cookie");
+  const språk = hentSpråkFraCookie(cookieHeader);
+  const skjema = lagManueltSkjema(språk);
+  const parsedFormData = await parseFormData(request, skjema);
+
+  if (parsedFormData.error) {
+    return validationError(parsedFormData.error, parsedFormData.submittedData);
+  }
+
+  const skjemaData = parsedFormData.data;
+  const inntektForelder1 = skjemaData.inntektDeg;
+  const inntektForelder2 = skjemaData.inntektMotpart;
+
+  const requestData: ManueltBidragsutregningsgrunnlag = {
+    inntektForelder1,
+    inntektForelder2,
+    dittBoforhold: {
+      antallBarnBorFast: 0,
+      antallBarnDeltBosted: 0,
+      borMedAnnenVoksen: false,
+    },
+    medforelderBoforhold: {
+      antallBarnBorFast: 0,
+      antallBarnDeltBosted: 0,
+      borMedAnnenVoksen: false,
+    },
+    barn: skjemaData.barn.map((barn) => {
+      const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
+      const bidragstype = kalkulerBidragstype(
+        barn.bosted,
+        barn.samvær,
+        inntektForelder1,
+        inntektForelder2,
+      );
+
+      return {
+        alder: barn.alder,
+        samværsklasse,
+        bidragstype,
+      };
+    }),
+  };
+
+  return hentManuellBidragsutregningFraApi({
     requestData,
     språk,
     token,

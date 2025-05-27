@@ -16,7 +16,19 @@ export const InnloggetSkjemaSchema = z.object({
   inntektMotpart: z.string(),
 });
 
-export const getInnloggetBarnSkjema = (språk: Språk) => {
+export const ManueltBarnSkjemaSchema = z.object({
+  alder: z.number(),
+  bosted: z.enum([...fastBosted.options, ""]),
+  samvær: z.string(),
+});
+
+export const ManueltSkjemaSchema = z.object({
+  barn: z.array(ManueltBarnSkjemaSchema),
+  inntektDeg: z.string(),
+  inntektMotpart: z.string(),
+});
+
+export const lagInnloggetBarnSkjema = (språk: Språk) => {
   return z.object({
     ident: z
       .string()
@@ -36,14 +48,72 @@ export const getInnloggetBarnSkjema = (språk: Språk) => {
   });
 };
 
-export const getInnloggetSkjema = (språk: Språk) => {
+export const lagInnloggetSkjema = (språk: Språk) => {
   return z.object({
     motpartIdent: z
       .string()
       .nonempty(oversett(språk, tekster.feilmeldinger.motpartIdent.påkrevd))
       .length(11, oversett(språk, tekster.feilmeldinger.motpartIdent.ugyldig)),
     barn: z
-      .array(getInnloggetBarnSkjema(språk))
+      .array(lagInnloggetBarnSkjema(språk))
+      .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
+      .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
+    inntektDeg: z
+      .string()
+      .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
+      .pipe(
+        z.coerce
+          .number()
+          .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
+          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
+      ),
+    inntektMotpart: z
+      .string()
+      .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
+      .pipe(
+        z.coerce
+          .number()
+          .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
+          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
+      ),
+  });
+};
+
+export const lagManueltBarnSkjema = (språk: Språk) => {
+  return z.object({
+    alder: z
+      .number({
+        invalid_type_error: oversett(
+          språk,
+          tekster.feilmeldinger.barn.alder.tall,
+        ),
+        required_error: oversett(
+          språk,
+          tekster.feilmeldinger.barn.alder.påkrevd,
+        ),
+      })
+      .min(0, oversett(språk, tekster.feilmeldinger.barn.alder.minimum))
+      .max(25, oversett(språk, tekster.feilmeldinger.barn.alder.maksimum))
+      .int(oversett(språk, tekster.feilmeldinger.barn.alder.heltall)),
+    bosted: z.enum(fastBosted.options, {
+      message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
+    }),
+    samvær: z
+      .string()
+      .nonempty(oversett(språk, tekster.feilmeldinger.samvær.påkrevd))
+      .pipe(
+        z.coerce
+          .number()
+          .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
+          .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum)),
+      ),
+  });
+};
+
+export const lagManueltSkjema = (språk: Språk) => {
+  return z.object({
+    barn: z
+      .array(lagManueltBarnSkjema(språk))
       .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
       .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
     inntektDeg: z
@@ -71,7 +141,12 @@ export type FastBosted = z.infer<typeof fastBosted>;
 export type InnloggetBarnSkjema = z.infer<typeof InnloggetBarnSkjemaSchema>;
 export type InnloggetSkjema = z.infer<typeof InnloggetSkjemaSchema>;
 export type InnloggetSkjemaValidert = z.infer<
-  ReturnType<typeof getInnloggetSkjema>
+  ReturnType<typeof lagInnloggetSkjema>
+>;
+export type ManueltBarnSkjema = z.infer<typeof ManueltBarnSkjemaSchema>;
+export type ManueltSkjema = z.infer<typeof ManueltSkjemaSchema>;
+export type ManueltSkjemaValidert = z.infer<
+  ReturnType<typeof lagManueltSkjema>
 >;
 
 const tekster = definerTekster({
@@ -130,6 +205,33 @@ const tekster = definerTekster({
       },
     },
     barn: {
+      alder: {
+        påkrevd: {
+          nb: "Fyll ut alder",
+          en: "Fill in age",
+          nn: "Fyll ut alder",
+        },
+        minimum: {
+          nb: "Barnet må være minst 0 år",
+          en: "The child must be at least 0 years old",
+          nn: "Barnet må vere minst 0 år",
+        },
+        maksimum: {
+          nb: "Barnet kan ikke være eldre enn 25 år",
+          en: "The child cannot be older than 25 years",
+          nn: "Barnet kan ikkje vere eldre enn 25 år",
+        },
+        tall: {
+          nb: "Alder må være et tall",
+          en: "Age must be a number",
+          nn: "Alder må vere eit tal",
+        },
+        heltall: {
+          nb: "Alder må være et heltall",
+          en: "Age must be a whole number",
+          nn: "Alder må vere eit heiltal",
+        },
+      },
       minimum: {
         nb: "Minst ett barn må legges til",
         en: "At least one child must be added",
