@@ -74,7 +74,7 @@ export const hentManuellBidragsutregningFraApi = async ({
 }): Promise<ManuellBidragsutregning | { error: string }> => {
   try {
     const response = await fetch(
-      `${env.SERVER_URL}/api/v1/beregning/barnebidrag`,
+      `${env.SERVER_URL}/api/v1/beregning/anonym/barnebidrag`,
       {
         method: "POST",
         headers: {
@@ -86,6 +86,7 @@ export const hentManuellBidragsutregningFraApi = async ({
     );
 
     if (!response.ok) {
+      console.error(await response.text());
       return {
         error: oversett(språk, tekster.feil.beregning),
       };

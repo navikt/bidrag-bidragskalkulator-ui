@@ -17,7 +17,7 @@ export const InnloggetSkjemaSchema = z.object({
 });
 
 export const ManueltBarnSkjemaSchema = z.object({
-  alder: z.number().or(z.literal("")),
+  alder: z.string(),
   bosted: z.enum([...fastBosted.options, ""]),
   samvær: z.string(),
 });
@@ -82,7 +82,7 @@ export const lagInnloggetSkjema = (språk: Språk) => {
 export const lagManueltBarnSkjema = (språk: Språk) => {
   return z.object({
     alder: z
-      .number({
+      .string({
         invalid_type_error: oversett(
           språk,
           tekster.feilmeldinger.barn.alder.tall,
@@ -92,9 +92,13 @@ export const lagManueltBarnSkjema = (språk: Språk) => {
           tekster.feilmeldinger.barn.alder.påkrevd,
         ),
       })
-      .min(0, oversett(språk, tekster.feilmeldinger.barn.alder.minimum))
-      .max(25, oversett(språk, tekster.feilmeldinger.barn.alder.maksimum))
-      .int(oversett(språk, tekster.feilmeldinger.barn.alder.heltall)),
+      .pipe(
+        z.coerce
+          .number()
+          .min(0, oversett(språk, tekster.feilmeldinger.barn.alder.minimum))
+          .max(25, oversett(språk, tekster.feilmeldinger.barn.alder.maksimum))
+          .int(oversett(språk, tekster.feilmeldinger.barn.alder.heltall)),
+      ),
     bosted: z.enum(fastBosted.options, {
       message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
     }),

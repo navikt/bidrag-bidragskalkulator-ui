@@ -9,10 +9,10 @@ import type {
 import { useActionData, useLoaderData } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
 import { hentManuellBidragsutregning } from "~/features/skjema/beregning/api.server";
-import { InnloggetBidragsskjema } from "~/features/skjema/InnloggetBidragsskjema";
 import { IntroPanel } from "~/features/skjema/IntroPanel";
+import { ManueltResultatpanel } from "~/features/skjema/manuell/ManueltResultatpanel";
+import { ManueltBidragsskjema } from "~/features/skjema/ManueltBidragsskjema";
 import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
-import { Resultatpanel } from "~/features/skjema/Resultatpanel";
 import {
   type ManueltSkjema,
   type ManueltSkjemaValidert,
@@ -52,8 +52,6 @@ export default function ManuellBarnebidragskalkulator() {
   const { t } = useOversettelse();
   const personinformasjon = useLoaderData<typeof loader>();
   const [erEndretSidenUtregning, settErEndretSidenUtregning] = useState(false);
-
-  const harBarn = false;
 
   const { språk } = useOversettelse();
 
@@ -103,15 +101,7 @@ export default function ManuellBarnebidragskalkulator() {
 
         <IntroPanel />
 
-        {harBarn && <InnloggetBidragsskjema form={form} />}
-
-        {!harBarn && (
-          <Alert variant="info">
-            <div className="space-y-4">
-              <BodyLong>{t(tekster.ingenBarn.info)}</BodyLong>
-            </div>
-          </Alert>
-        )}
+        <ManueltBidragsskjema form={form} />
 
         {isValidationErrorResponse(actionData) && (
           <div className="mt-6">
@@ -125,7 +115,7 @@ export default function ManuellBarnebidragskalkulator() {
       </div>
       {skjemarespons && !erEndretSidenUtregning && (
         <div className="max-w-3xl mx-auto p-4 mt-8">
-          <Resultatpanel data={skjemarespons} ref={resultatRef} />
+          <ManueltResultatpanel data={skjemarespons} ref={resultatRef} />
         </div>
       )}
     </>

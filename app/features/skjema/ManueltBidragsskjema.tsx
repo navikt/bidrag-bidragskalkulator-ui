@@ -1,9 +1,8 @@
 import { Button } from "@navikt/ds-react";
 import { FormProvider, type FormApi } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { BostedOgSamvær } from "./BostedOgSamvær";
 import { Inntektsopplysninger } from "./Inntektsopplysninger";
-import { Motpart } from "./Motpart";
+import { ManuellBarnSkjema } from "./manuell/ManuellBarnSkjema";
 import { type ManueltSkjema } from "./schema";
 
 type Props = {
@@ -13,18 +12,11 @@ type Props = {
 export function ManueltBidragsskjema({ form }: Props) {
   const { t } = useOversettelse();
 
-  const harValgtMotpart = form.value("barn").length > 0;
-
   return (
     <FormProvider scope={form.scope()}>
       <form {...form.getFormProps()} className="flex flex-col gap-4">
-        <Motpart />
-        {harValgtMotpart && (
-          <>
-            <BostedOgSamvær />
-            <Inntektsopplysninger />
-          </>
-        )}
+        <ManuellBarnSkjema />
+        <Inntektsopplysninger />
 
         <Button
           type="submit"
