@@ -14,9 +14,15 @@ export const InnloggetSkjemaSchema = z.object({
   barn: z.array(InnloggetBarnSkjemaSchema),
   deg: z.object({
     inntekt: z.string(),
+    antallBarnBorFast: z.string(),
+    antallBarnDeltBosted: z.string(),
+    borMedAnnenVoksen: z.boolean(),
   }),
   medforelder: z.object({
     inntekt: z.string(),
+    antallBarnBorFast: z.string(),
+    antallBarnDeltBosted: z.string(),
+    borMedAnnenVoksen: z.boolean(),
   }),
 });
 
@@ -30,9 +36,15 @@ export const ManueltSkjemaSchema = z.object({
   barn: z.array(ManueltBarnSkjemaSchema),
   deg: z.object({
     inntekt: z.string(),
+    antallBarnBorFast: z.string(),
+    antallBarnDeltBosted: z.string(),
+    borMedAnnenVoksen: z.boolean(),
   }),
   medforelder: z.object({
     inntekt: z.string(),
+    antallBarnBorFast: z.string(),
+    antallBarnDeltBosted: z.string(),
+    borMedAnnenVoksen: z.boolean(),
   }),
 });
 
@@ -56,6 +68,77 @@ export const lagInnloggetBarnSkjema = (språk: Språk) => {
   });
 };
 
+export const lagForelderSkjema = (språk: Språk) => {
+  return z.object({
+    inntekt: z
+      .string()
+      .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
+      .pipe(
+        z.coerce
+          .number()
+          .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
+          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
+      ),
+    antallBarnBorFast: z
+      .string()
+      .nonempty(
+        oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.påkrevd,
+        ),
+      )
+      .pipe(
+        z.coerce
+          .number({
+            invalid_type_error: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.tall,
+            ),
+          })
+          .min(
+            0,
+            oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast
+                .minimum,
+            ),
+          ),
+      ),
+    antallBarnDeltBosted: z
+      .string()
+      .nonempty(
+        oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted.påkrevd,
+        ),
+      )
+      .pipe(
+        z.coerce
+          .number({
+            invalid_type_error: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
+                .tall,
+            ),
+          })
+          .min(
+            0,
+            oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
+                .minimum,
+            ),
+          ),
+      ),
+    borMedAnnenVoksen: z.boolean({
+      required_error: oversett(
+        språk,
+        tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen.påkrevd,
+      ),
+    }),
+  });
+};
+
 export const lagInnloggetSkjema = (språk: Språk) => {
   return z.object({
     motpartIdent: z
@@ -66,28 +149,8 @@ export const lagInnloggetSkjema = (språk: Språk) => {
       .array(lagInnloggetBarnSkjema(språk))
       .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
       .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
-    deg: z.object({
-      inntekt: z
-        .string()
-        .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
-        .pipe(
-          z.coerce
-            .number()
-            .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
-            .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
-        ),
-    }),
-    medforelder: z.object({
-      inntekt: z
-        .string()
-        .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
-        .pipe(
-          z.coerce
-            .number()
-            .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
-            .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
-        ),
-    }),
+    deg: lagForelderSkjema(språk),
+    medforelder: lagForelderSkjema(språk),
   });
 };
 
@@ -130,28 +193,8 @@ export const lagManueltSkjema = (språk: Språk) => {
       .array(lagManueltBarnSkjema(språk))
       .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
       .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
-    deg: z.object({
-      inntekt: z
-        .string()
-        .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
-        .pipe(
-          z.coerce
-            .number()
-            .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
-            .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
-        ),
-    }),
-    medforelder: z.object({
-      inntekt: z
-        .string()
-        .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
-        .pipe(
-          z.coerce
-            .number()
-            .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
-            .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
-        ),
-    }),
+    deg: lagForelderSkjema(språk),
+    medforelder: lagForelderSkjema(språk),
   });
 };
 
@@ -276,6 +319,49 @@ const tekster = definerTekster({
         nb: "Fyll ut inntekt i hele kroner",
         en: "Fill in income in whole kroner",
         nn: "Fyll ut inntekt i heile kroner",
+      },
+    },
+    husstandsmedlemmer: {
+      antallBarnBorFast: {
+        påkrevd: {
+          nb: "Fyll ut antall barn ",
+          en: "Fill in the number of children ",
+          nn: "Fyll ut talet på barn ",
+        },
+        tall: {
+          nb: "Antall barn må være et tall",
+          en: "Number of children must be a number",
+          nn: "Antall barn må vere eit tal",
+        },
+        minimum: {
+          nb: "Fyll ut et positivt antall",
+          en: "Fill in a positive number",
+          nn: "Fyll ut eit positivt tal",
+        },
+      },
+      antallBarnDeltBosted: {
+        påkrevd: {
+          nb: "Fyll ut antall barn",
+          en: "Fill in the number of children",
+          nn: "Fyll ut talet på barn",
+        },
+        tall: {
+          nb: "Antall barn må være et tall",
+          en: "Number of children must be a number",
+          nn: "Antall barn må vere eit tal",
+        },
+        minimum: {
+          nb: "Fyll ut et positivt antall",
+          en: "Fill in a positive number",
+          nn: "Fyll ut eit positivt tal",
+        },
+      },
+      borMedAnnenVoksen: {
+        påkrevd: {
+          nb: "Velg et alternativ",
+          en: "Choose an option",
+          nn: "Vel eit alternativ",
+        },
       },
     },
   },
