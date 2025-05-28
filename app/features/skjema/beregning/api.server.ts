@@ -135,8 +135,8 @@ export const hentBidragsutregning = async (token: string, request: Request) => {
   }
 
   const skjemaData = parsedFormData.data;
-  const inntektForelder1 = skjemaData.inntektDeg;
-  const inntektForelder2 = skjemaData.inntektMotpart;
+  const inntektForelder1 = skjemaData.deg.inntekt;
+  const inntektForelder2 = skjemaData.medforelder.inntekt;
 
   const requestData: Bidragsutregningsgrunnlag = {
     inntektForelder1,
@@ -189,8 +189,8 @@ export const hentManuellBidragsutregning = async (
   }
 
   const skjemaData = parsedFormData.data;
-  const inntektForelder1 = skjemaData.inntektDeg;
-  const inntektForelder2 = skjemaData.inntektMotpart;
+  const inntektForelder1 = skjemaData.deg.inntekt;
+  const inntektForelder2 = skjemaData.medforelder.inntekt;
 
   const requestData: ManueltBidragsutregningsgrunnlag = {
     inntektForelder1,

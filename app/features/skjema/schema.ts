@@ -12,8 +12,12 @@ export const InnloggetBarnSkjemaSchema = z.object({
 export const InnloggetSkjemaSchema = z.object({
   motpartIdent: z.string().length(11),
   barn: z.array(InnloggetBarnSkjemaSchema),
-  inntektDeg: z.string(),
-  inntektMotpart: z.string(),
+  deg: z.object({
+    inntekt: z.string(),
+  }),
+  medforelder: z.object({
+    inntekt: z.string(),
+  }),
 });
 
 export const ManueltBarnSkjemaSchema = z.object({
@@ -24,8 +28,12 @@ export const ManueltBarnSkjemaSchema = z.object({
 
 export const ManueltSkjemaSchema = z.object({
   barn: z.array(ManueltBarnSkjemaSchema),
-  inntektDeg: z.string(),
-  inntektMotpart: z.string(),
+  deg: z.object({
+    inntekt: z.string(),
+  }),
+  medforelder: z.object({
+    inntekt: z.string(),
+  }),
 });
 
 export const lagInnloggetBarnSkjema = (språk: Språk) => {
@@ -58,24 +66,28 @@ export const lagInnloggetSkjema = (språk: Språk) => {
       .array(lagInnloggetBarnSkjema(språk))
       .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
       .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
-    inntektDeg: z
-      .string()
-      .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
-      .pipe(
-        z.coerce
-          .number()
-          .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
-          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
-      ),
-    inntektMotpart: z
-      .string()
-      .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
-      .pipe(
-        z.coerce
-          .number()
-          .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
-          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
-      ),
+    deg: z.object({
+      inntekt: z
+        .string()
+        .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
+        .pipe(
+          z.coerce
+            .number()
+            .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
+            .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
+        ),
+    }),
+    medforelder: z.object({
+      inntekt: z
+        .string()
+        .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
+        .pipe(
+          z.coerce
+            .number()
+            .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
+            .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
+        ),
+    }),
   });
 };
 
@@ -118,24 +130,28 @@ export const lagManueltSkjema = (språk: Språk) => {
       .array(lagManueltBarnSkjema(språk))
       .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
       .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
-    inntektDeg: z
-      .string()
-      .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
-      .pipe(
-        z.coerce
-          .number()
-          .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
-          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
-      ),
-    inntektMotpart: z
-      .string()
-      .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
-      .pipe(
-        z.coerce
-          .number()
-          .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
-          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
-      ),
+    deg: z.object({
+      inntekt: z
+        .string()
+        .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
+        .pipe(
+          z.coerce
+            .number()
+            .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
+            .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
+        ),
+    }),
+    medforelder: z.object({
+      inntekt: z
+        .string()
+        .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
+        .pipe(
+          z.coerce
+            .number()
+            .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
+            .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
+        ),
+    }),
   });
 };
 
