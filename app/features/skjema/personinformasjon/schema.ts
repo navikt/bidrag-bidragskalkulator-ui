@@ -26,6 +26,15 @@ export const PersoninformasjonSchema = z.object({
   barnerelasjoner: z.array(RelasjonSchema),
 });
 
+export const ManuellPersoninformasjonSchema = z.object({
+  person: PersonSchema,
+  inntekt: z.number().int().nonnegative().nullable(),
+});
+
 export type Barn = z.infer<typeof BarnSchema>;
 
 export type Personinformasjon = z.infer<typeof PersoninformasjonSchema>;
+
+export type ManuellPersoninformasjon = z.infer<
+  typeof ManuellPersoninformasjonSchema
+>;

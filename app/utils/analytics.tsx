@@ -4,7 +4,9 @@ type EventType =
   | "skjema fullført"
   | "beregningsdetaljer utvidet"
   | "beregningsdetaljer kollapset"
-  | "inntektsinformasjon utvidet";
+  | "inntektsinformasjon utvidet"
+  | "barn lagt til"
+  | "barn fjernet";
 
 type Sporingsdata = Record<string, unknown> & {
   /**

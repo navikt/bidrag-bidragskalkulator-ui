@@ -8,17 +8,17 @@ import type {
 } from "react-router";
 import { useActionData, useLoaderData } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
-import { hentManuellBidragsutregning } from "~/features/skjema/beregning/api.server";
+import { hentBidragsutregning } from "~/features/skjema/beregning/api.server";
+import { InnloggetBidragsskjema } from "~/features/skjema/InnloggetBidragsskjema";
 import { IntroPanel } from "~/features/skjema/IntroPanel";
-import { ManueltBidragsskjema } from "~/features/skjema/manuell/ManueltBidragsskjema";
-import { ManueltResultatpanel } from "~/features/skjema/manuell/ManueltResultatpanel";
-import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
+import { hentPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
+import { Resultatpanel } from "~/features/skjema/Resultatpanel";
 import {
-  type ManueltSkjema,
-  type ManueltSkjemaValidert,
-  lagManueltSkjema,
+  type InnloggetSkjema,
+  type InnloggetSkjemaValidert,
+  lagInnloggetSkjema,
 } from "~/features/skjema/schema";
-import { hentManueltSkjemaStandardverdi } from "~/features/skjema/utils";
+import { getInnloggetSkjemaStandardverdi } from "~/features/skjema/utils";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
@@ -39,27 +39,31 @@ export function meta({ matches }: MetaArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  return medToken(request, hentManuellBidragsutregning);
+  return medToken(request, hentBidragsutregning);
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return medToken(request, hentManuellPersoninformasjon);
+  return medToken(request, hentPersoninformasjon);
 }
 
-export default function ManuellBarnebidragskalkulator() {
+export default function InnloggetBarnebidragskalkulator() {
   const actionData = useActionData<typeof action>();
   const resultatRef = useRef<HTMLDivElement>(null);
   const { t } = useOversettelse();
   const personinformasjon = useLoaderData<typeof loader>();
   const [erEndretSidenUtregning, settErEndretSidenUtregning] = useState(false);
 
+  const harBarn =
+    personinformasjon.barnerelasjoner.flatMap((relasjon) => relasjon.fellesBarn)
+      .length > 0;
+
   const { språk } = useOversettelse();
 
-  const form = useForm<ManueltSkjema, ManueltSkjemaValidert>({
-    schema: lagManueltSkjema(språk),
+  const form = useForm<InnloggetSkjema, InnloggetSkjemaValidert>({
+    schema: lagInnloggetSkjema(språk),
     submitSource: "state",
     method: "post",
-    defaultValues: hentManueltSkjemaStandardverdi(personinformasjon),
+    defaultValues: getInnloggetSkjemaStandardverdi(personinformasjon),
     onSubmitSuccess: () => {
       resultatRef.current?.focus({ preventScroll: true });
       resultatRef.current?.scrollIntoView({
@@ -101,7 +105,15 @@ export default function ManuellBarnebidragskalkulator() {
 
         <IntroPanel />
 
-        <ManueltBidragsskjema form={form} />
+        {harBarn && <InnloggetBidragsskjema form={form} />}
+
+        {!harBarn && (
+          <Alert variant="info">
+            <div className="space-y-4">
+              <BodyLong>{t(tekster.ingenBarn.info)}</BodyLong>
+            </div>
+          </Alert>
+        )}
 
         {isValidationErrorResponse(actionData) && (
           <div className="mt-6">
@@ -115,7 +127,7 @@ export default function ManuellBarnebidragskalkulator() {
       </div>
       {skjemarespons && !erEndretSidenUtregning && (
         <div className="max-w-3xl mx-auto p-4 mt-8">
-          <ManueltResultatpanel data={skjemarespons} ref={resultatRef} />
+          <Resultatpanel data={skjemarespons} ref={resultatRef} />
         </div>
       )}
     </>
