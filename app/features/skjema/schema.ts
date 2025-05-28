@@ -16,13 +16,13 @@ export const InnloggetSkjemaSchema = z.object({
     inntekt: z.string(),
     antallBarnBorFast: z.string(),
     antallBarnDeltBosted: z.string(),
-    borMedAnnenVoksen: z.boolean(),
+    borMedAnnenVoksen: z.enum(["true", "false", ""]),
   }),
   medforelder: z.object({
     inntekt: z.string(),
     antallBarnBorFast: z.string(),
     antallBarnDeltBosted: z.string(),
-    borMedAnnenVoksen: z.boolean(),
+    borMedAnnenVoksen: z.enum(["true", "false", ""]),
   }),
 });
 
@@ -38,13 +38,13 @@ export const ManueltSkjemaSchema = z.object({
     inntekt: z.string(),
     antallBarnBorFast: z.string(),
     antallBarnDeltBosted: z.string(),
-    borMedAnnenVoksen: z.boolean(),
+    borMedAnnenVoksen: z.enum(["true", "false", ""]),
   }),
   medforelder: z.object({
     inntekt: z.string(),
     antallBarnBorFast: z.string(),
     antallBarnDeltBosted: z.string(),
-    borMedAnnenVoksen: z.boolean(),
+    borMedAnnenVoksen: z.enum(["true", "false", ""]),
   }),
 });
 
@@ -130,12 +130,14 @@ export const lagForelderSkjema = (språk: Språk) => {
             ),
           ),
       ),
-    borMedAnnenVoksen: z.boolean({
-      required_error: oversett(
-        språk,
-        tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen.påkrevd,
-      ),
-    }),
+    borMedAnnenVoksen: z
+      .enum(["true", "false"], {
+        message: oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen.påkrevd,
+        ),
+      })
+      .pipe(z.coerce.boolean()),
   });
 };
 
@@ -161,7 +163,6 @@ export const lagManueltBarnSkjema = (språk: Språk) => {
       .nonempty(oversett(språk, tekster.feilmeldinger.barn.alder.påkrevd))
       .pipe(
         z.coerce
-
           .number({
             invalid_type_error: oversett(
               språk,
