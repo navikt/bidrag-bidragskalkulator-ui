@@ -4,19 +4,19 @@ import { FormattertTallTextField } from "./FormattertTallTextField";
 
 import { BodyLong, ReadMore } from "@navikt/ds-react";
 import { sporHendelseEnGang } from "~/utils/analytics";
-import type { InnloggetSkjema } from "./schema";
+import type { InnloggetSkjema, ManueltSkjema } from "./schema";
 
 export const Inntektsopplysninger = () => {
-  const form = useFormContext<InnloggetSkjema>();
+  const form = useFormContext<ManueltSkjema | InnloggetSkjema>();
   const { t } = useOversettelse();
 
   return (
     <div className="flex flex-col gap-4">
       <FormattertTallTextField
-        {...form.field("inntektDeg").getControlProps()}
+        {...form.field("deg.inntekt").getControlProps()}
         label={t(tekster.dinInntekt.label)}
         description={t(tekster.dinInntekt.beskrivelse)}
-        error={form.field("inntektDeg").error()}
+        error={form.field("deg.inntekt").error()}
         htmlSize={18}
       />
       <ReadMore
@@ -34,9 +34,9 @@ export const Inntektsopplysninger = () => {
       </ReadMore>
 
       <FormattertTallTextField
-        {...form.field("inntektMotpart").getControlProps()}
+        {...form.field("medforelder.inntekt").getControlProps()}
         label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
-        error={form.field("inntektMotpart").error()}
+        error={form.field("medforelder.inntekt").error()}
         htmlSize={18}
       />
     </div>

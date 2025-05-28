@@ -39,8 +39,12 @@ export const getInnloggetSkjemaStandardverdi = (
   return {
     motpartIdent,
     barn,
-    inntektDeg: String(personinformasjon.inntekt ?? ""),
-    inntektMotpart: "",
+    deg: {
+      inntekt: String(personinformasjon.inntekt ?? ""),
+    },
+    medforelder: {
+      inntekt: "",
+    },
   };
 };
 
@@ -55,8 +59,12 @@ export const hentManueltSkjemaStandardverdi = (
         samvær: SAMVÆR_STANDARDVERDI,
       },
     ],
-    inntektDeg: String(personinformasjon.inntekt ?? ""),
-    inntektMotpart: "",
+    deg: {
+      inntekt: String(personinformasjon.inntekt ?? ""),
+    },
+    medforelder: {
+      inntekt: "",
+    },
   };
 };
 
