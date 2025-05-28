@@ -25,6 +25,11 @@ export const ManuellBarnSkjema = () => {
       samvær: SAMVÆR_STANDARDVERDI,
     });
     sporHendelse("barn lagt til", { antall: barnArray.length() + 1 });
+
+    setTimeout(() => {
+      const nyttBarnIndex = barnArray.length();
+      finnFokuserbartInputPåBarn(nyttBarnIndex)?.focus();
+    }, 0);
   };
 
   return (
@@ -40,14 +45,20 @@ export const ManuellBarnSkjema = () => {
         const borHosEnForelder =
           barnField.value("bosted") === "IKKE_DELT_FAST_BOSTED";
 
-        const overskrift =
-          barnArray.length() > 1
-            ? t(tekster.overskrift.flereBarn(index + 1))
-            : t(tekster.overskrift.ettBarn);
+        const overskrift = t(tekster.overskrift.barn(index + 1));
 
         const handleFjernBarn = () => {
           barnArray.remove(index);
           sporHendelse("barn fjernet", { antall: barnArray.length() - 1 });
+
+          setTimeout(() => {
+            // Dette er den gamle lengden – den blir ikke oppdatert av en eller annen grunn
+            const antallBarnFørSletting = barnArray.length();
+            if (antallBarnFørSletting > 1) {
+              const sisteIndex = antallBarnFørSletting - 2;
+              finnFokuserbartInputPåBarn(sisteIndex)?.focus();
+            }
+          }, 0);
         };
 
         return (
@@ -55,7 +66,7 @@ export const ManuellBarnSkjema = () => {
             key={key}
             className="border p-4 rounded-md space-y-4 focus:outline-none focus-visible:outline-1"
           >
-            <h3 className="font-bold text-xl">{overskrift}</h3>
+            <h3 className="font-bold text-xl sr-only">{overskrift}</h3>
             <TextField
               {...barnField.field("alder").getInputProps()}
               label={t(tekster.alder.label)}
@@ -63,6 +74,7 @@ export const ManuellBarnSkjema = () => {
               htmlSize={8}
               inputMode="numeric"
               autoComplete="off"
+              autoFocus={index > 0}
             />
             <RadioGroup
               {...barnField.field("bosted").getInputProps()}
@@ -135,20 +147,23 @@ export const ManuellBarnSkjema = () => {
   );
 };
 
+// Dette er en hjelpefunksjon for å finne det første fokuserbare input-elementet på et barn
+// Man burde egentlig brukt refs til det, men jeg klarer ikke å forstå hvordan man skal få det til med
+// react-validated-form
+const finnFokuserbartInputPåBarn = (index: number) => {
+  return document.querySelector(
+    `input[name="barn[${index}].alder"]`,
+  ) as HTMLInputElement;
+};
+
 const tekster = definerTekster({
   overskrift: {
-    flereBarn: (nummer) => ({
+    barn: (nummer) => ({
       nb: `Barn ${nummer}`,
       en: `Child ${nummer}`,
       nn: `Barn ${nummer}`,
     }),
-    ettBarn: {
-      nb: "Barn",
-      en: "Child",
-      nn: "Barn",
-    },
   },
-
   alder: {
     label: {
       nb: "Hvor gammelt er barnet?",

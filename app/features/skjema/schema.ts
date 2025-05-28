@@ -82,19 +82,17 @@ export const lagInnloggetSkjema = (språk: Språk) => {
 export const lagManueltBarnSkjema = (språk: Språk) => {
   return z.object({
     alder: z
-      .string({
-        invalid_type_error: oversett(
-          språk,
-          tekster.feilmeldinger.barn.alder.tall,
-        ),
-        required_error: oversett(
-          språk,
-          tekster.feilmeldinger.barn.alder.påkrevd,
-        ),
-      })
+      .string()
+      .nonempty(oversett(språk, tekster.feilmeldinger.barn.alder.påkrevd))
       .pipe(
         z.coerce
-          .number()
+
+          .number({
+            invalid_type_error: oversett(
+              språk,
+              tekster.feilmeldinger.barn.alder.tall,
+            ),
+          })
           .min(0, oversett(språk, tekster.feilmeldinger.barn.alder.minimum))
           .max(25, oversett(språk, tekster.feilmeldinger.barn.alder.maksimum))
           .int(oversett(språk, tekster.feilmeldinger.barn.alder.heltall)),
