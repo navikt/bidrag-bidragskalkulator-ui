@@ -66,20 +66,17 @@ export const hentBidragsutregningFraApi = async ({
 export const hentManuellBidragsutregningFraApi = async ({
   requestData,
   språk,
-  token,
 }: {
   requestData: ManueltBidragsutregningsgrunnlag;
   språk: Språk;
-  token: string;
 }): Promise<ManuellBidragsutregning | { error: string }> => {
   try {
     const response = await fetch(
-      `${env.SERVER_URL}/api/v1/beregning/anonym/barnebidrag`,
+      `${env.SERVER_URL}/api/v1/beregning/barnebidrag/åpen`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(requestData),
       },
@@ -175,10 +172,7 @@ export const hentBidragsutregning = async (token: string, request: Request) => {
   });
 };
 
-export const hentManuellBidragsutregning = async (
-  token: string,
-  request: Request,
-) => {
+export const hentManuellBidragsutregning = async (request: Request) => {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
   const skjema = lagManueltSkjema(språk);
@@ -225,6 +219,5 @@ export const hentManuellBidragsutregning = async (
   return hentManuellBidragsutregningFraApi({
     requestData,
     språk,
-    token,
   });
 };
