@@ -41,9 +41,15 @@ export const getInnloggetSkjemaStandardverdi = (
     barn,
     deg: {
       inntekt: String(personinformasjon.inntekt ?? ""),
+      antallBarnBorFast: "",
+      antallBarnDeltBosted: "",
+      borMedAnnenVoksen: "",
     },
     medforelder: {
       inntekt: "",
+      antallBarnBorFast: "",
+      antallBarnDeltBosted: "",
+      borMedAnnenVoksen: "",
     },
   };
 };
@@ -61,9 +67,15 @@ export const hentManueltSkjemaStandardverdi = (
     ],
     deg: {
       inntekt: String(personinformasjon.inntekt ?? ""),
+      antallBarnBorFast: "",
+      antallBarnDeltBosted: "",
+      borMedAnnenVoksen: "",
     },
     medforelder: {
       inntekt: "",
+      antallBarnBorFast: "",
+      antallBarnDeltBosted: "",
+      borMedAnnenVoksen: "",
     },
   };
 };
