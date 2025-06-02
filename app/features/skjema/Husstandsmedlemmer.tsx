@@ -69,9 +69,9 @@ const tekster = definerTekster({
         en: "Number of children living with you",
       },
       beskrivelse: {
-        nb: "Oppgi antall barn under 18 som bor fast hos deg. Bidragsbarna skal ikke telles med her.",
-        nn: "Oppgi antall barn under 18 som bur fast hjå deg. Bidragsbarna skal ikkje teljast med her.",
-        en: "Enter the number of children under 18 who live with you. Children for whom you pay child support should not be included here.",
+        nb: "Oppgi antall barn under 18 som bor fast hos deg. Felles barn skal ikke telles med her.",
+        nn: "Oppgi antall barn under 18 som bur fast hjå deg. Felles barn skal ikkje teljast med her.",
+        en: "Enter the number of children under 18 who live with you. Shared children should not be included here.",
       },
     },
     antallBarnDeltBosted: {
@@ -81,9 +81,9 @@ const tekster = definerTekster({
         en: "Number of children under 18 years with shared custody living with you",
       },
       beskrivelse: {
-        nb: "Oppgi antall barn under 18 som har delt bosted hos deg. Bidragsbarna skal ikke telles med her.",
-        nn: "Oppgi antall barn under 18 som har delt bustad hjå deg. Bidragsbarna skal ikkje teljast med her.",
-        en: "Enter the number of children under 18 who have shared custody living with you. Children for whom you pay child support should not be included here.",
+        nb: "Oppgi antall barn under 18 som har delt bosted hos deg. Felles barn skal ikke telles med her.",
+        nn: "Oppgi antall barn under 18 som har delt bustad hjå deg. Felles barn skal ikkje teljast med her.",
+        en: "Enter the number of children under 18 who have shared custody living with you. Shared children should not be included here.",
       },
     },
     borMedAnnenVoksen: {
@@ -112,26 +112,26 @@ const tekster = definerTekster({
     },
     antallBarnBorFast: {
       label: {
-        nb: "Antall barn under 18 år som bor fast hos den andre forelderen",
-        nn: "Antal barn under 18 år som bur fast hjå den andre forelderen",
-        en: "Number of children under 18 years living with the other parent",
+        nb: "Antall barn som bor fast hos den andre forelderen",
+        nn: "Antal barn som bur fast hjå den andre forelderen",
+        en: "Number of children living with the other parent",
       },
       beskrivelse: {
-        nb: "Oppgi antall barn under 18 som bor fast hos den andre forelderen. Bidragsbarna skal ikke telles med her.",
-        nn: "Oppgi antall barn under 18 som bur fast hjå den andre forelderen. Bidragsbarna skal ikkje teljast med her.",
-        en: "Enter the number of children under 18 who live with the other parent. Children for whom you pay child support should not be included here.",
+        nb: "Oppgi antall barn under 18 som bor fast hos den andre forelderen. Felles barn skal ikke telles med her.",
+        nn: "Oppgi antall barn under 18 som bur fast hjå den andre forelderen. Felles barn skal ikkje teljast med her.",
+        en: "Enter the number of children under 18 who live with the other parent. Shared children should not be included here.",
       },
     },
     antallBarnDeltBosted: {
       label: {
-        nb: "Antall barn under 18 år med delt bosted hos den andre forelderen",
-        nn: "Antal barn under 18 år med delt bustad hjå den andre forelderen",
-        en: "Number of children under 18 years with shared custody living with the other parent",
+        nb: "Antall barn med delt bosted hos den andre forelderen",
+        nn: "Antal barn med delt bustad hjå den andre forelderen",
+        en: "Number of children with shared custody living with the other parent",
       },
       beskrivelse: {
-        nb: "Oppgi antall barn under 18 som har delt bosted hos den andre forelderen. Bidragsbarna skal ikke telles med her.",
-        nn: "Oppgi antall barn under 18 som har delt bustad hjå den andre forelderen. Bidragsbarna skal ikkje teljast med her.",
-        en: "Enter the number of children under 18 who have shared custody living with the other parent. Children for whom you pay child support should not be included here.",
+        nb: "Oppgi antall barn under 18 som har delt bosted hos den andre forelderen. Felles barn skal ikke telles med her.",
+        nn: "Oppgi antall barn under 18 som har delt bustad hjå den andre forelderen. Felles barn skal ikkje teljast med her.",
+        en: "Enter the number of children under 18 who have shared custody living with the other parent. Shared children should not be included here.",
       },
     },
     borMedAnnenVoksen: {
