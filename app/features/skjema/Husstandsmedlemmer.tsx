@@ -2,76 +2,53 @@ import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
 
-import { Radio, RadioGroup } from "@navikt/ds-react";
+import { Radio, RadioGroup, Stack } from "@navikt/ds-react";
 import type { ManueltSkjema } from "./schema";
 
 const BOR_MED_ANNEN_VOKSEN_ALTERNATIVER = ["true", "false"] as const;
 
-export const Husstandsmedlemmer = () => {
+type Props = {
+  part: "deg" | "medforelder";
+};
+
+export const Husstandsmedlemmer = ({ part }: Props) => {
   const form = useFormContext<ManueltSkjema>();
   const { t } = useOversettelse();
 
   return (
-    <div className="flex flex-col gap-4">
-      <fieldset className="flex flex-col gap-4 p-0">
-        <legend className="sr-only">{t(tekster.deg.tittel)}</legend>
+    <div className="border p-4 rounded-md">
+      <fieldset className="p-0 flex flex-col gap-4">
+        <legend className="text-xl mb-5">{t(tekster[part].tittel)}</legend>
         <FormattertTallTextField
-          {...form.field("deg.antallBarnBorFast").getControlProps()}
-          label={t(tekster.deg.antallBarnBorFast.label)}
-          error={form.field("deg.antallBarnBorFast").error()}
+          {...form.field(`${part}.antallBarnBorFast`).getControlProps()}
+          label={t(tekster[part].antallBarnBorFast.label)}
+          error={form.field(`${part}.antallBarnBorFast`).error()}
+          description={t(tekster[part].antallBarnBorFast.beskrivelse)}
           htmlSize={8}
         />
 
         <FormattertTallTextField
-          {...form.field("deg.antallBarnDeltBosted").getControlProps()}
-          label={t(tekster.deg.antallBarnDeltBosted.label)}
-          error={form.field("deg.antallBarnDeltBosted").error()}
-          htmlSize={8}
-        />
-
-        <RadioGroup
-          {...form.field("deg.borMedAnnenVoksen").getInputProps()}
-          error={form.field("deg.borMedAnnenVoksen").error()}
-          legend={t(tekster.deg.borMedAnnenVoksen.label)}
-        >
-          {BOR_MED_ANNEN_VOKSEN_ALTERNATIVER.map((alternativ) => {
-            return (
-              <Radio value={alternativ} key={alternativ}>
-                {t(tekster.deg.borMedAnnenVoksen[alternativ])}
-              </Radio>
-            );
-          })}
-        </RadioGroup>
-      </fieldset>
-
-      <fieldset className="flex flex-col gap-4 p-0">
-        <legend className="sr-only">{t(tekster.medforelder.tittel)}</legend>
-        <FormattertTallTextField
-          {...form.field("medforelder.antallBarnBorFast").getControlProps()}
-          label={t(tekster.medforelder.antallBarnBorFast.label)}
-          error={form.field("medforelder.antallBarnBorFast").error()}
-          htmlSize={8}
-        />
-
-        <FormattertTallTextField
-          {...form.field("medforelder.antallBarnDeltBosted").getControlProps()}
-          label={t(tekster.medforelder.antallBarnDeltBosted.label)}
-          error={form.field("medforelder.antallBarnDeltBosted").error()}
+          {...form.field(`${part}.antallBarnDeltBosted`).getControlProps()}
+          label={t(tekster[part].antallBarnDeltBosted.label)}
+          error={form.field(`${part}.antallBarnDeltBosted`).error()}
+          description={t(tekster[part].antallBarnDeltBosted.beskrivelse)}
           htmlSize={8}
         />
 
         <RadioGroup
-          {...form.field("medforelder.borMedAnnenVoksen").getInputProps()}
-          error={form.field("medforelder.borMedAnnenVoksen").error()}
-          legend={t(tekster.medforelder.borMedAnnenVoksen.label)}
+          {...form.field(`${part}.borMedAnnenVoksen`).getInputProps()}
+          error={form.field(`${part}.borMedAnnenVoksen`).error()}
+          legend={t(tekster[part].borMedAnnenVoksen.label)}
         >
-          {BOR_MED_ANNEN_VOKSEN_ALTERNATIVER.map((alternativ) => {
-            return (
-              <Radio value={alternativ} key={alternativ}>
-                {t(tekster.medforelder.borMedAnnenVoksen[alternativ])}
-              </Radio>
-            );
-          })}
+          <Stack gap="0 6" direction={{ xs: "column", sm: "row" }} wrap={false}>
+            {BOR_MED_ANNEN_VOKSEN_ALTERNATIVER.map((alternativ) => {
+              return (
+                <Radio value={alternativ} key={alternativ}>
+                  {t(tekster[part].borMedAnnenVoksen[alternativ])}
+                </Radio>
+              );
+            })}
+          </Stack>
         </RadioGroup>
       </fieldset>
     </div>
@@ -87,9 +64,14 @@ const tekster = definerTekster({
     },
     antallBarnBorFast: {
       label: {
-        nb: "Antall barn under 18 år som bor fast hos deg",
-        nn: "Antal barn under 18 år som bur fast hjå deg",
-        en: "Number of children under 18 years living with you",
+        nb: "Antall barn som bor fast hos deg",
+        nn: "Antal barn som bur fast hjå deg",
+        en: "Number of children living with you",
+      },
+      beskrivelse: {
+        nb: "Oppgi antall barn under 18 som bor fast hos deg. Bidragsbarna skal ikke telles med her.",
+        nn: "Oppgi antall barn under 18 som bur fast hjå deg. Bidragsbarna skal ikkje teljast med her.",
+        en: "Enter the number of children under 18 who live with you. Children for whom you pay child support should not be included here.",
       },
     },
     antallBarnDeltBosted: {
@@ -97,6 +79,11 @@ const tekster = definerTekster({
         nb: "Antall barn under 18 år med delt bosted hos deg",
         nn: "Antal barn under 18 år med delt bustad hjå deg",
         en: "Number of children under 18 years with shared custody living with you",
+      },
+      beskrivelse: {
+        nb: "Oppgi antall barn under 18 som har delt bosted hos deg. Bidragsbarna skal ikke telles med her.",
+        nn: "Oppgi antall barn under 18 som har delt bustad hjå deg. Bidragsbarna skal ikkje teljast med her.",
+        en: "Enter the number of children under 18 who have shared custody living with you. Children for whom you pay child support should not be included here.",
       },
     },
     borMedAnnenVoksen: {
@@ -119,8 +106,8 @@ const tekster = definerTekster({
   },
   medforelder: {
     tittel: {
-      nb: "Den andre forelderens husstand",
-      nn: "Den andre forelderens husstand",
+      nb: "Medforelderens husstand",
+      nn: "Medforelderens husstand",
       en: "Other parent's household",
     },
     antallBarnBorFast: {
@@ -129,12 +116,22 @@ const tekster = definerTekster({
         nn: "Antal barn under 18 år som bur fast hjå den andre forelderen",
         en: "Number of children under 18 years living with the other parent",
       },
+      beskrivelse: {
+        nb: "Oppgi antall barn under 18 som bor fast hos den andre forelderen. Bidragsbarna skal ikke telles med her.",
+        nn: "Oppgi antall barn under 18 som bur fast hjå den andre forelderen. Bidragsbarna skal ikkje teljast med her.",
+        en: "Enter the number of children under 18 who live with the other parent. Children for whom you pay child support should not be included here.",
+      },
     },
     antallBarnDeltBosted: {
       label: {
         nb: "Antall barn under 18 år med delt bosted hos den andre forelderen",
         nn: "Antal barn under 18 år med delt bustad hjå den andre forelderen",
         en: "Number of children under 18 years with shared custody living with the other parent",
+      },
+      beskrivelse: {
+        nb: "Oppgi antall barn under 18 som har delt bosted hos den andre forelderen. Bidragsbarna skal ikke telles med her.",
+        nn: "Oppgi antall barn under 18 som har delt bustad hjå den andre forelderen. Bidragsbarna skal ikkje teljast med her.",
+        en: "Enter the number of children under 18 who have shared custody living with the other parent. Children for whom you pay child support should not be included here.",
       },
     },
     borMedAnnenVoksen: {

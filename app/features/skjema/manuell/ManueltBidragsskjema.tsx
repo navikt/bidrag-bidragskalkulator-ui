@@ -17,8 +17,9 @@ export function ManueltBidragsskjema({ form }: Props) {
     <FormProvider scope={form.scope()}>
       <form {...form.getFormProps()} className="flex flex-col gap-4">
         <ManuellBarnSkjema />
+        <Husstandsmedlemmer part="deg" />
+        <Husstandsmedlemmer part="medforelder" />
         <Inntektsopplysninger />
-        <Husstandsmedlemmer />
 
         <Button
           type="submit"
