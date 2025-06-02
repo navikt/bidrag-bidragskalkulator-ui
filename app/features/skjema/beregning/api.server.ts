@@ -132,22 +132,17 @@ export const hentBidragsutregning = async (token: string, request: Request) => {
   }
 
   const skjemaData = parsedFormData.data;
-  const inntektForelder1 = skjemaData.deg.inntekt;
-  const inntektForelder2 = skjemaData.medforelder.inntekt;
+
+  const { inntekt: inntektForelder1, ...dittBoforhold } =
+    parsedFormData.data.deg;
+  const { inntekt: inntektForelder2, ...medforelderBoforhold } =
+    parsedFormData.data.medforelder;
 
   const requestData: Bidragsutregningsgrunnlag = {
     inntektForelder1,
     inntektForelder2,
-    dittBoforhold: {
-      antallBarnBorFast: 0,
-      antallBarnDeltBosted: 0,
-      borMedAnnenVoksen: false,
-    },
-    medforelderBoforhold: {
-      antallBarnBorFast: 0,
-      antallBarnDeltBosted: 0,
-      borMedAnnenVoksen: false,
-    },
+    dittBoforhold,
+    medforelderBoforhold,
     barn: skjemaData.barn.map((barn) => {
       const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
       const bidragstype = kalkulerBidragstype(
@@ -183,22 +178,17 @@ export const hentManuellBidragsutregning = async (request: Request) => {
   }
 
   const skjemaData = parsedFormData.data;
-  const inntektForelder1 = skjemaData.deg.inntekt;
-  const inntektForelder2 = skjemaData.medforelder.inntekt;
+
+  const { inntekt: inntektForelder1, ...dittBoforhold } =
+    parsedFormData.data.deg;
+  const { inntekt: inntektForelder2, ...medforelderBoforhold } =
+    parsedFormData.data.medforelder;
 
   const requestData: ManueltBidragsutregningsgrunnlag = {
     inntektForelder1,
     inntektForelder2,
-    dittBoforhold: {
-      antallBarnBorFast: 0,
-      antallBarnDeltBosted: 0,
-      borMedAnnenVoksen: false,
-    },
-    medforelderBoforhold: {
-      antallBarnBorFast: 0,
-      antallBarnDeltBosted: 0,
-      borMedAnnenVoksen: false,
-    },
+    dittBoforhold,
+    medforelderBoforhold,
     barn: skjemaData.barn.map((barn) => {
       const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
       const bidragstype = kalkulerBidragstype(
