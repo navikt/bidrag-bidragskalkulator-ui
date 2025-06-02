@@ -137,7 +137,7 @@ export const lagForelderSkjema = (språk: Språk) => {
           tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen.påkrevd,
         ),
       })
-      .pipe(z.coerce.boolean()),
+      .transform((value) => value === "true"),
   });
 };
 
