@@ -70,7 +70,7 @@ npm run generate-token
 Automatisk login + forhåndsvalgt miljø (dev/lokalt)
 
 ```bash
-npm run generate-token personiden miljø
+npm run generate-token personident miljø
 ```
 
 For eksempel
@@ -82,7 +82,7 @@ npm run generate-token 11528433741 dev
 Automatisk login med fødselsnummer + manuell miljøvalg
 
 ```bash
-npm run generate-token personiden
+npm run generate-token personident
 ```
 
 For eksempel
