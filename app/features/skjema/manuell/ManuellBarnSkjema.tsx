@@ -51,7 +51,6 @@ export const ManuellBarnSkjema = () => {
           return (
             <React.Fragment key={key}>
               <EnkeltbarnSkjema
-                key={key}
                 barnIndex={index}
                 onFjernBarn={
                   antallBarn > 1 ? () => handleFjernBarn(index) : undefined
