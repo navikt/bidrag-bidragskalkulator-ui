@@ -4,6 +4,8 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+permissions:
+  contents: read
 jobs:
   test:
     timeout-minutes: 60
@@ -17,6 +19,8 @@ jobs:
         run: npm ci
       - name: Installere headless-nettleser
         run: npx playwright install --with-deps
+      - name: Generer et gyldig token
+        run: npm run generate-token ${{ vars.PERSONIDENT_FOR_E2E_TEST }} dev
       - name: Kjør ende-til-ende-tester
         run: npm run test:e2e
       - name: Opprett rapport
