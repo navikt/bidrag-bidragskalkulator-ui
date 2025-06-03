@@ -1,10 +1,23 @@
 import { PersonCrossIcon } from "@navikt/aksel-icons";
-import { Button, Radio, RadioGroup, TextField } from "@navikt/ds-react";
+import {
+  BodyLong,
+  Button,
+  Radio,
+  RadioGroup,
+  ReadMore,
+  TextField,
+} from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
+import { useState } from "react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { formatterSum } from "~/utils/tall";
+import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
 import type { FastBosted, ManueltSkjema } from "../schema";
-import { SAMVÆR_STANDARDVERDI } from "../utils";
+import {
+  SAMVÆR_STANDARDVERDI,
+  tilUnderholdskostnadsgruppeMedLabel,
+} from "../utils";
 
 const BOSTED_OPTIONS: FastBosted[] = [
   "DELT_FAST_BOSTED",
@@ -17,12 +30,17 @@ type Props = {
 };
 
 export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
+  const [fremhevUnderholdskostnad, settFremhevUnderholdskostnad] =
+    useState(false);
+  const { underholdskostnader } = usePersoninformasjon();
   const { t } = useOversettelse();
   const form = useFormContext<ManueltSkjema>();
 
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
 
+  const alder = barnField.value("alder");
   const samvær = barnField.value("samvær") ?? SAMVÆR_STANDARDVERDI;
+
   const samværsgradBeskrivelse =
     samvær === "1"
       ? t(tekster.samvær.enNatt)
@@ -33,17 +51,53 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
+  const handleChangeAlder = () => settFremhevUnderholdskostnad(false);
+
+  const handleBlurAlder = (event: React.FocusEvent<HTMLInputElement>) => {
+    const alder = event.target.value;
+    if (!!alder) {
+      settFremhevUnderholdskostnad(true);
+    }
+  };
+
+  const underholdskostnadsgrupper =
+    tilUnderholdskostnadsgruppeMedLabel(underholdskostnader);
+
   return (
     <fieldset className="p-0 space-y-4">
       <legend className="sr-only">{overskrift}</legend>
       <TextField
-        {...barnField.field("alder").getInputProps()}
-        label={t(tekster.alder.label)}
+        {...barnField.field("alder").getInputProps({
+          onBlur: handleBlurAlder,
+          onChange: handleChangeAlder,
+          label: t(tekster.alder.label),
+        })}
         error={barnField.field("alder").error()}
         htmlSize={8}
         inputMode="numeric"
         autoComplete="off"
       />
+
+      <ReadMore header={t(tekster.alder.lesMer.tittel)}>
+        <BodyLong className="mb-2">
+          {t(tekster.alder.lesMer.beskrivelse)}
+        </BodyLong>
+        <ul>
+          {underholdskostnadsgrupper.map(
+            ({ label, underholdskostnad, aldre }) => {
+              const fremhevGruppe =
+                fremhevUnderholdskostnad && aldre.includes(Number(alder));
+              return (
+                <li key={label}>
+                  <span
+                    className={fremhevGruppe ? "font-bold" : undefined}
+                  >{`${label}: ${formatterSum(underholdskostnad)}`}</span>
+                </li>
+              );
+            },
+          )}
+        </ul>
+      </ReadMore>
 
       <RadioGroup
         {...barnField.field("bosted").getInputProps()}
@@ -113,6 +167,18 @@ const tekster = definerTekster({
       nb: "Hvor gammelt er barnet?",
       en: "How old is the child?",
       nn: "Hvor gammalt er barnet?",
+    },
+    lesMer: {
+      tittel: {
+        nb: "Hvorfor vi spør om alder",
+        en: "Why we ask about age",
+        nn: "Kvifor vi spør om alder",
+      },
+      beskrivelse: {
+        nb: "Når Nav fastsetter barnebidrag, må vi se på hva det koster å forsørge et barn ut fra alder. Dette kalles underholdskostnaden. Beløpet for underholdskostnaden for barn i ulike aldre er i dag:",
+        en: "When Nav determines child support, we look at the cost of supporting a child based on their age. This is called the maintenance cost. The amount for the maintenance cost for children of different ages is currently:",
+        nn: "Når Nav fastset barnebidrag, må vi sjå på kva det kostar å forsørgje eit barn ut frå alder. Dette kallar vi underhaldskostnaden. Beløpet for underhaldskostnaden for barn i ulike aldrar er i dag:",
+      },
     },
   },
   bosted: {

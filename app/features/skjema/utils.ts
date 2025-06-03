@@ -54,6 +54,74 @@ export const getInnloggetSkjemaStandardverdi = (
   };
 };
 
+type Underholdskostnadsgrupper = {
+  underholdskostnad: number;
+  aldre: number[];
+}[];
+
+const tilUnderholdskostnadsgrupper = (
+  underholdskostnader: Record<string, number>,
+): Underholdskostnadsgrupper => {
+  const underholdskostnadAldreListe = Object.entries(underholdskostnader)
+    .map(([alder, underholdskostnad]) => [Number(alder), underholdskostnad])
+    .sort(([a], [b]) => a - b);
+
+  const initiellListe: Underholdskostnadsgrupper = [];
+
+  const aldersgrupperOgUnderholdskostnad = underholdskostnadAldreListe.reduce(
+    (underholdskostnadsgrupper, [alder, underholdskostnad]) => {
+      const forrigeGruppe =
+        underholdskostnadsgrupper[underholdskostnadsgrupper.length - 1];
+
+      const harSammeKostnadSomForrige =
+        forrigeGruppe?.underholdskostnad === underholdskostnad;
+
+      if (harSammeKostnadSomForrige) {
+        return [
+          ...underholdskostnadsgrupper.slice(0, -1),
+          {
+            underholdskostnad: underholdskostnad,
+            aldre: [...forrigeGruppe.aldre, alder],
+          },
+        ];
+      }
+
+      return [
+        ...underholdskostnadsgrupper,
+        {
+          underholdskostnad: underholdskostnad,
+          aldre: [alder],
+        },
+      ];
+    },
+    initiellListe,
+  );
+
+  return aldersgrupperOgUnderholdskostnad;
+};
+
+export const tilUnderholdskostnadsgruppeMedLabel = (
+  underholdskostnader: Record<string, number>,
+): { label: string; underholdskostnad: number; aldre: number[] }[] => {
+  const grupper = tilUnderholdskostnadsgrupper(underholdskostnader);
+
+  return grupper.map(({ aldre, underholdskostnad }) => {
+    const lavesteAlder = Math.min(...aldre);
+    const høyesteAlder = Math.max(...aldre);
+
+    const label =
+      lavesteAlder === høyesteAlder
+        ? `${lavesteAlder} år`
+        : `${lavesteAlder}-${høyesteAlder} år`;
+
+    return {
+      label,
+      underholdskostnad,
+      aldre,
+    };
+  });
+};
+
 export const hentManueltSkjemaStandardverdi = (
   personinformasjon: ManuellPersoninformasjon,
 ): ManueltSkjema => {
