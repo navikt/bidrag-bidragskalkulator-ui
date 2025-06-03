@@ -34,8 +34,8 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
   return (
-    <div className="border p-4 rounded-md space-y-4 focus:outline-none focus-visible:outline-1">
-      <h3 className="font-bold text-xl sr-only">{overskrift}</h3>
+    <fieldset className="p-0 space-y-4">
+      <legend className="sr-only">{overskrift}</legend>
       <TextField
         {...barnField.field("alder").getInputProps()}
         label={t(tekster.alder.label)}
@@ -96,7 +96,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
           {t(tekster.fjernBarn)}
         </Button>
       )}
-    </div>
+    </fieldset>
   );
 };
 

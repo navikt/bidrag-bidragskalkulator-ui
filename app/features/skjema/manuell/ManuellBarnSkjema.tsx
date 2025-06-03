@@ -1,6 +1,7 @@
 import { PlusIcon } from "@navikt/aksel-icons";
 import { Button } from "@navikt/ds-react";
 import { useFieldArray, useFormContext } from "@rvf/react";
+import React from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import type { ManueltSkjema } from "../schema";
@@ -43,20 +44,23 @@ export const ManuellBarnSkjema = () => {
   };
 
   return (
-    <>
-      {barnArray.map((key, _, index) => {
-        return (
-          <EnkeltbarnSkjema
-            key={key}
-            barnIndex={index}
-            onFjernBarn={
-              antallBarn > 1 ? () => handleFjernBarn(index) : undefined
-            }
-          />
-        );
-      })}
+    <div className="border p-4 rounded-md space-y-4">
+      <fieldset className="p-0">
+        <legend className="text-xl mb-6">{t(tekster.overskrift)}</legend>
+        {barnArray.map((key, _, index) => {
+          return (
+            <React.Fragment key={key}>
+              <EnkeltbarnSkjema
+                barnIndex={index}
+                onFjernBarn={
+                  antallBarn > 1 ? () => handleFjernBarn(index) : undefined
+                }
+              />
+              <hr className="my-8 border-gray-300" />
+            </React.Fragment>
+          );
+        })}
 
-      <div>
         <Button
           type="button"
           variant="secondary"
@@ -66,8 +70,8 @@ export const ManuellBarnSkjema = () => {
         >
           {t(tekster.leggTilBarn)}
         </Button>
-      </div>
-    </>
+      </fieldset>
+    </div>
   );
 };
 
@@ -81,6 +85,11 @@ const finnFokuserbartInputPåBarn = (index: number) => {
 };
 
 const tekster = definerTekster({
+  overskrift: {
+    nb: "Felles barn",
+    en: "Common children",
+    nn: "Felles barn",
+  },
   leggTilBarn: {
     nb: "Legg til barn",
     en: "Add child",
