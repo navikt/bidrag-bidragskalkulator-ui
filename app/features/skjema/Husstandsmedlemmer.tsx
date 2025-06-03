@@ -76,9 +76,9 @@ const tekster = definerTekster({
     },
     antallBarnDeltBosted: {
       label: {
-        nb: "Antall barn under 18 år med delt bosted hos deg",
-        nn: "Antal barn under 18 år med delt bustad hjå deg",
-        en: "Number of children under 18 years with shared custody living with you",
+        nb: "Antall barn med delt bosted hos deg",
+        nn: "Antal barn med delt bustad hjå deg",
+        en: "Number of children with shared custody living with you",
       },
       beskrivelse: {
         nb: "Oppgi antall barn under 18 som har delt bosted hos deg. Felles barn skal ikke telles med her.",
