@@ -49,7 +49,7 @@ export const ManuellBarnSkjema = () => {
           <EnkeltbarnSkjema
             key={key}
             barnIndex={index}
-            handleFjernBarn={
+            onFjernBarn={
               antallBarn > 1 ? () => handleFjernBarn(index) : undefined
             }
           />

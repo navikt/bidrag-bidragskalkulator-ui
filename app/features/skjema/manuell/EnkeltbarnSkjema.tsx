@@ -13,10 +13,10 @@ const BOSTED_OPTIONS: FastBosted[] = [
 
 type Props = {
   barnIndex: number;
-  handleFjernBarn?: () => void;
+  onFjernBarn?: () => void;
 };
 
-export const EnkeltbarnSkjema = ({ barnIndex, handleFjernBarn }: Props) => {
+export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
   const { t } = useOversettelse();
   const form = useFormContext<ManueltSkjema>();
 
@@ -85,12 +85,12 @@ export const EnkeltbarnSkjema = ({ barnIndex, handleFjernBarn }: Props) => {
           valueDescription={samværsgradBeskrivelse}
         />
       )}
-      {handleFjernBarn && (
+      {onFjernBarn && (
         <Button
           type="button"
           size="small"
           variant="secondary"
-          onClick={handleFjernBarn}
+          onClick={onFjernBarn}
           icon={<PersonCrossIcon />}
         >
           {t(tekster.fjernBarn)}
