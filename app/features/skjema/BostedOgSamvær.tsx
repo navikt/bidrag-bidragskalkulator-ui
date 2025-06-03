@@ -37,10 +37,7 @@ export const BostedOgSamvær = () => {
           barnField.value("bosted") === "IKKE_DELT_FAST_BOSTED";
 
         return (
-          <div
-            key={key}
-            className="border p-4 rounded-md space-y-4 focus:outline-none focus-visible:outline-1"
-          >
+          <div key={key} className="border p-4 rounded-md space-y-4">
             <h3 className="font-bold text-xl">{`${barnInfo?.fulltNavn} (${barnInfo?.alder})`}</h3>
             <RadioGroup
               {...barnField.field("bosted").getInputProps()}
