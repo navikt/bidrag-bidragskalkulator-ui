@@ -151,7 +151,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
           size="small"
           variant="secondary"
           onClick={onFjernBarn}
-          icon={<PersonCrossIcon />}
+          icon={<PersonCrossIcon aria-hidden />}
         >
           {t(tekster.fjernBarn)}
         </Button>
