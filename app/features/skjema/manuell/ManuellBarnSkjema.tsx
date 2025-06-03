@@ -44,9 +44,9 @@ export const ManuellBarnSkjema = () => {
   };
 
   return (
-    <div className="border p-4 rounded-md space-y-4 focus:outline-none focus-visible:outline-1">
+    <div className="border p-4 rounded-md space-y-4">
       <fieldset className="p-0">
-        <legend className="text-xl mb-6">Felles barn</legend>
+        <legend className="text-xl mb-6">{t(tekster.overskrift)}</legend>
         {barnArray.map((key, _, index) => {
           return (
             <React.Fragment key={key}>
@@ -85,6 +85,11 @@ const finnFokuserbartInputPåBarn = (index: number) => {
 };
 
 const tekster = definerTekster({
+  overskrift: {
+    nb: "Felles barn",
+    en: "Common children",
+    nn: "Felles barn",
+  },
   leggTilBarn: {
     nb: "Legg til barn",
     en: "Add child",
