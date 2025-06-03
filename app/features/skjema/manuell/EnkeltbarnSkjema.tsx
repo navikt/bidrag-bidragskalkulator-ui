@@ -145,7 +145,7 @@ const tekster = definerTekster({
   },
   underholdskostnad: (alder, sum) => ({
     nb: `Når Nav fastsetter barnebidrag, må vi se på hva det koster å forsørge et barn ut fra alder. Dette kalles underholdskostnaden. Underholdskostnaden for et barn på ${alder} år er i dag ${sum}.`,
-    en: `When NAV determines child support, we look at the cost of supporting a child based on their age. This is called the maintenance cost. The maintenance cost for a child aged ${alder} years is currently ${sum}.`,
+    en: `When Nav determines child support, we look at the cost of supporting a child based on their age. This is called the maintenance cost. The maintenance cost for a child aged ${alder} years is currently ${sum}.`,
     nn: `Når Nav fastset barnebidrag, må vi sjå på kva det kostar å forsørgje eit barn ut frå alder. Dette kallar vi underhaldningskostnaden. Underhaldningskostnaden for eit barn på ${alder} år er i dag ${sum}.`,
   }),
   bosted: {
