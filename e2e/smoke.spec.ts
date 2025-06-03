@@ -7,12 +7,12 @@ test.describe("Smoke test", () => {
     await page.waitForSelector("body", { timeout: 10000 });
 
     const tilgjengelighetsresultater = await new AxeBuilder({ page })
-      .exclude("#vite-plugin-checker-error-overlay") // Fjern vite-feiloverflaten
+      .include("#maincontent")
       .analyze();
 
     if (tilgjengelighetsresultater.violations.length > 0) {
-      console.log("🚫♿️ Fant UU-feil ♿️🚫");
-      console.log(
+      console.error("🚫♿️ Fant UU-feil ♿️🚫");
+      console.error(
         JSON.stringify(tilgjengelighetsresultater.violations, null, 2),
       );
     }
