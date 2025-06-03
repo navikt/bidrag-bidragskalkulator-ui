@@ -85,7 +85,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, handleFjernBarn }: Props) => {
           valueDescription={samværsgradBeskrivelse}
         />
       )}
-      {!!handleFjernBarn && (
+      {handleFjernBarn && (
         <Button
           type="button"
           size="small"
