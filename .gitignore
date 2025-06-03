@@ -1,8 +1,15 @@
+# Generic files
 .DS_Store
-/node_modules/
+.env
+node_modules
 
 # React Router
 /.react-router/
 /build/
 
-.env
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
