@@ -69,9 +69,9 @@ const tekster = definerTekster({
         en: "Number of children living with you",
       },
       beskrivelse: {
-        nb: "Oppgi antall barn under 18 som bor fast hos deg. Felles barn skal ikke telles med her.",
-        nn: "Oppgi antall barn under 18 som bur fast hjå deg. Felles barn skal ikkje teljast med her.",
-        en: "Enter the number of children under 18 who live with you. Shared children should not be included here.",
+        nb: "Oppgi antall barn under 18 som bor fast hos deg. Felles barn med den du ønsker å avtale barnebidrag med, skal ikke telles med her.",
+        nn: "Oppgi antall barn under 18 som bur fast hjå deg. Felles barn med den du ønskjer å avtale barnebidrag med, skal ikkje teljast med her.",
+        en: "Enter the number of children under 18 who live with you. Shared children with the other parent should not be included here.",
       },
     },
     antallBarnDeltBosted: {
@@ -81,9 +81,9 @@ const tekster = definerTekster({
         en: "Number of children with shared custody living with you",
       },
       beskrivelse: {
-        nb: "Oppgi antall barn under 18 som har delt bosted hos deg. Felles barn skal ikke telles med her.",
-        nn: "Oppgi antall barn under 18 som har delt bustad hjå deg. Felles barn skal ikkje teljast med her.",
-        en: "Enter the number of children under 18 who have shared custody living with you. Shared children should not be included here.",
+        nb: "Oppgi antall barn under 18 som har delt bosted hos deg. Felles barn med den du ønsker å avtale barnebidrag med, skal ikke telles med her.",
+        nn: "Oppgi antall barn under 18 som har delt bustad hjå deg. Felles barn med den du ønskjer å avtale barnebidrag med, skal ikkje teljast med her.",
+        en: "Enter the number of children under 18 who have shared custody living with you. Shared children with the other parent should not be included here.",
       },
     },
     borMedAnnenVoksen: {
@@ -117,9 +117,9 @@ const tekster = definerTekster({
         en: "Number of children living with the other parent",
       },
       beskrivelse: {
-        nb: "Oppgi antall barn under 18 som bor fast hos den andre forelderen. Felles barn skal ikke telles med her.",
-        nn: "Oppgi antall barn under 18 som bur fast hjå den andre forelderen. Felles barn skal ikkje teljast med her.",
-        en: "Enter the number of children under 18 who live with the other parent. Shared children should not be included here.",
+        nb: "Oppgi antall barn under 18 som bor fast hos den andre forelderen. Felles barn med den du ønsker å avtale barnebidrag med, skal ikke telles med her.",
+        nn: "Oppgi antall barn under 18 som bur fast hjå den andre forelderen. Felles barn med den du ønskjer å avtale barnebidrag med, skal ikkje teljast med her.",
+        en: "Enter the number of children under 18 who live with the other parent. Shared children with you should not be included here.",
       },
     },
     antallBarnDeltBosted: {
@@ -129,9 +129,9 @@ const tekster = definerTekster({
         en: "Number of children with shared custody living with the other parent",
       },
       beskrivelse: {
-        nb: "Oppgi antall barn under 18 som har delt bosted hos den andre forelderen. Felles barn skal ikke telles med her.",
-        nn: "Oppgi antall barn under 18 som har delt bustad hjå den andre forelderen. Felles barn skal ikkje teljast med her.",
-        en: "Enter the number of children under 18 who have shared custody living with the other parent. Shared children should not be included here.",
+        nb: "Oppgi antall barn under 18 som har delt bosted hos den andre forelderen. Felles barn med den du ønsker å avtale barnebidrag med, skal ikke telles med her.",
+        nn: "Oppgi antall barn under 18 som har delt bustad hjå den andre forelderen. Felles barn med den du ønskjer å avtale barnebidrag med, skal ikkje teljast med her.",
+        en: "Enter the number of children under 18 who have shared custody living with the other parent. Shared children with you should not be included here.",
       },
     },
     borMedAnnenVoksen: {
