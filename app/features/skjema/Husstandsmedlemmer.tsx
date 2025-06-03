@@ -19,22 +19,6 @@ export const Husstandsmedlemmer = ({ part }: Props) => {
     <div className="border p-4 rounded-md">
       <fieldset className="p-0 flex flex-col gap-4">
         <legend className="text-xl mb-5">{t(tekster[part].tittel)}</legend>
-        <FormattertTallTextField
-          {...form.field(`${part}.antallBarnBorFast`).getControlProps()}
-          label={t(tekster[part].antallBarnBorFast.label)}
-          error={form.field(`${part}.antallBarnBorFast`).error()}
-          description={t(tekster[part].antallBarnBorFast.beskrivelse)}
-          htmlSize={8}
-        />
-
-        <FormattertTallTextField
-          {...form.field(`${part}.antallBarnDeltBosted`).getControlProps()}
-          label={t(tekster[part].antallBarnDeltBosted.label)}
-          error={form.field(`${part}.antallBarnDeltBosted`).error()}
-          description={t(tekster[part].antallBarnDeltBosted.beskrivelse)}
-          htmlSize={8}
-        />
-
         <RadioGroup
           {...form.field(`${part}.borMedAnnenVoksen`).getInputProps()}
           error={form.field(`${part}.borMedAnnenVoksen`).error()}
@@ -50,6 +34,22 @@ export const Husstandsmedlemmer = ({ part }: Props) => {
             })}
           </Stack>
         </RadioGroup>
+
+        <FormattertTallTextField
+          {...form.field(`${part}.antallBarnBorFast`).getControlProps()}
+          label={t(tekster[part].antallBarnBorFast.label)}
+          error={form.field(`${part}.antallBarnBorFast`).error()}
+          description={t(tekster[part].antallBarnBorFast.beskrivelse)}
+          htmlSize={8}
+        />
+
+        <FormattertTallTextField
+          {...form.field(`${part}.antallBarnDeltBosted`).getControlProps()}
+          label={t(tekster[part].antallBarnDeltBosted.label)}
+          error={form.field(`${part}.antallBarnDeltBosted`).error()}
+          description={t(tekster[part].antallBarnDeltBosted.beskrivelse)}
+          htmlSize={8}
+        />
       </fieldset>
     </div>
   );
