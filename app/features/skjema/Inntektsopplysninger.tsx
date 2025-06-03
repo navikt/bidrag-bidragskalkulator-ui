@@ -63,9 +63,9 @@ const tekster = definerTekster({
       nn: "Kva skal takast med i inntekta di?",
     },
     beskrivelseDel1: {
-      nb: "Inntekten din inkluderer personinntekt og netto positive kapitalinntekter over 10 000 kroner. For bidragsmottakere skal det i tillegg tas med utvidet barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet.",
-      en: "Your income includes personal income and net positive capital income over 10,000 kroner. For support recipients, extended child benefit, extra small child supplement, and cash benefit for the support child.",
-      nn: "Inntekta di inkluderar personinntekt og netto positive kapitalinntekter over 10 000 kroner. For bidragsmottakarar skal det i tillegg takast med utvida barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet.",
+      nb: "Inntekten din inkluderer personinntekt og kapitalinntekter over 10 000 kroner. For bidragsmottakere skal det i tillegg tas med utvidet barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet.",
+      en: "Your income includes personal income and capital income over 10,000 kroner. For support recipients, extended child benefit, extra small child supplement, and cash benefit for the support child.",
+      nn: "Inntekta di inkluderar personinntekt og kapitalinntekter over 10 000 kroner. For bidragsmottakarar skal det i tillegg takast med utvida barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet.",
     },
     beskrivelseDel2: {
       nb: "Inntekter som ikke skal oppgis på skattemeldingen, skal ikke tas med i beregningsgrunnlaget, for eksempel skattefrie husleieinntekter.",

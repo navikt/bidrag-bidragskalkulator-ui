@@ -86,9 +86,9 @@ const finnFokuserbartInputPåBarn = (index: number) => {
 
 const tekster = definerTekster({
   overskrift: {
-    nb: "Felles barn",
-    en: "Common children",
-    nn: "Felles barn",
+    nb: "Felles barn med den du ønsker å avtale barnebidrag med",
+    en: "Shared children with the parent you want to agree on child support with",
+    nn: "Felles barn med den du ønsker å avtale fostringstilskot med",
   },
   leggTilBarn: {
     nb: "Legg til barn",
