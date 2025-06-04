@@ -58,9 +58,9 @@ const tekster = definerTekster({
   },
   inntektsinformasjon: {
     overskrift: {
-      nb: "Hva skal tas med i inntekten din?",
-      en: "What should be included in your income?",
-      nn: "Kva skal takast med i inntekta di?",
+      nb: "Hva som skal tas med i inntekten din",
+      en: "What should be included in your income",
+      nn: "Kva som skal takast med i inntekta di",
     },
     beskrivelseDel1: {
       nb: "Inntekten din inkluderer personinntekt og kapitalinntekter over 10\u00A0000 kroner. For bidragsmottakere skal det i tillegg tas med utvidet barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet.",
