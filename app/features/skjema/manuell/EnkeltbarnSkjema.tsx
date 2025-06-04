@@ -1,8 +1,11 @@
 import { PersonCrossIcon } from "@navikt/aksel-icons";
-import { Button, Radio, RadioGroup, TextField } from "@navikt/ds-react";
+import { Box, Button, Radio, RadioGroup, TextField } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
+import { useState } from "react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { formatterSum } from "~/utils/tall";
+import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
 import type { FastBosted, ManueltSkjema } from "../schema";
 import { SAMVÆR_STANDARDVERDI } from "../utils";
 
@@ -17,12 +20,17 @@ type Props = {
 };
 
 export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
+  const [visUnderholdskostnad, settVisUnderholdskostnad] = useState(false);
+  const { underholdskostnader } = usePersoninformasjon();
   const { t } = useOversettelse();
   const form = useFormContext<ManueltSkjema>();
 
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
 
+  const alder = barnField.value("alder");
   const samvær = barnField.value("samvær") ?? SAMVÆR_STANDARDVERDI;
+
+  const underholdskostnad = underholdskostnader[alder];
   const samværsgradBeskrivelse =
     samvær === "1"
       ? t(tekster.samvær.enNatt)
@@ -33,17 +41,35 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
+  const handleChangeAlder = () => settVisUnderholdskostnad(false);
+
+  const handleBlurAlder = (event: React.FocusEvent<HTMLInputElement>) => {
+    const alder = event.target.value;
+    if (!!alder) {
+      settVisUnderholdskostnad(true);
+    }
+  };
+
   return (
     <fieldset className="p-0 space-y-4">
       <legend className="sr-only">{overskrift}</legend>
       <TextField
-        {...barnField.field("alder").getInputProps()}
-        label={t(tekster.alder.label)}
+        {...barnField.field("alder").getInputProps({
+          onBlur: handleBlurAlder,
+          onChange: handleChangeAlder,
+          label: t(tekster.alder.label),
+        })}
         error={barnField.field("alder").error()}
         htmlSize={8}
         inputMode="numeric"
         autoComplete="off"
       />
+
+      {visUnderholdskostnad && typeof underholdskostnad === "number" && (
+        <Box padding="4" background="surface-info-subtle">
+          {t(tekster.underholdskostnad(alder, formatterSum(underholdskostnad)))}
+        </Box>
+      )}
 
       <RadioGroup
         {...barnField.field("bosted").getInputProps()}
@@ -115,6 +141,11 @@ const tekster = definerTekster({
       nn: "Hvor gammalt er barnet?",
     },
   },
+  underholdskostnad: (alder, sum) => ({
+    nb: `Når Nav fastsetter barnebidrag, må vi se på hva det koster å forsørge et barn ut fra alder. Dette kalles underholdskostnaden. Underholdskostnaden for et barn på ${alder} år er i dag ${sum}.`,
+    en: `When Nav determines child support, we look at the cost of supporting a child based on their age. This is called the maintenance cost. The maintenance cost for a child aged ${alder} years is currently ${sum}.`,
+    nn: `Når Nav fastset barnebidrag, må vi sjå på kva det kostar å forsørgje eit barn ut frå alder. Dette kallar vi underhaldningskostnaden. Underhaldningskostnaden for eit barn på ${alder} år er i dag ${sum}.`,
+  }),
   bosted: {
     label: {
       nb: "Hvor skal barnet bo fast?",
