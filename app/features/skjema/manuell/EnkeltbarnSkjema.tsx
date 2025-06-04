@@ -41,10 +41,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
-  const handleChangeAlder = (event: React.ChangeEvent<HTMLInputElement>) => {
-    barnField.field("alder").getInputProps().onChange?.(event);
-    settVisUnderholdskostnad(false);
-  };
+  const handleChangeAlder = () => settVisUnderholdskostnad(false);
 
   const handleBlurAlder = (event: React.FocusEvent<HTMLInputElement>) => {
     const alder = event.target.value;
@@ -57,14 +54,15 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
     <fieldset className="p-0 space-y-4">
       <legend className="sr-only">{overskrift}</legend>
       <TextField
-        {...barnField.field("alder").getInputProps()}
-        label={t(tekster.alder.label)}
+        {...barnField.field("alder").getInputProps({
+          onBlur: handleBlurAlder,
+          onChange: handleChangeAlder,
+          label: t(tekster.alder.label),
+        })}
         error={barnField.field("alder").error()}
         htmlSize={8}
         inputMode="numeric"
         autoComplete="off"
-        onBlur={handleBlurAlder}
-        onChange={handleChangeAlder}
       />
 
       {visUnderholdskostnad && typeof underholdskostnad === "number" && (
