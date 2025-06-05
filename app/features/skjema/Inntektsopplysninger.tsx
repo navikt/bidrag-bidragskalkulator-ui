@@ -11,39 +11,47 @@ export const Inntektsopplysninger = () => {
   const { t } = useOversettelse();
 
   return (
-    <div className="flex flex-col gap-4">
-      <FormattertTallTextField
-        {...form.field("deg.inntekt").getControlProps()}
-        label={t(tekster.dinInntekt.label)}
-        description={t(tekster.dinInntekt.beskrivelse)}
-        error={form.field("deg.inntekt").error()}
-        htmlSize={18}
-      />
-      <ReadMore
-        header={t(tekster.inntektsinformasjon.overskrift)}
-        onOpenChange={(open) => {
-          if (open) {
-            sporHendelseEnGang("inntektsinformasjon utvidet");
-          }
-        }}
-      >
-        <BodyLong spacing>
-          {t(tekster.inntektsinformasjon.beskrivelseDel1)}
-        </BodyLong>
-        <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel2)}</BodyLong>
-      </ReadMore>
+    <div className="border rounded-md p-4">
+      <fieldset className="p-0 space-y-4">
+        <legend className="text-xl mb-5">{t(tekster.overskrift)}</legend>
+        <FormattertTallTextField
+          {...form.field("deg.inntekt").getControlProps()}
+          label={t(tekster.dinInntekt.label)}
+          description={t(tekster.dinInntekt.beskrivelse)}
+          error={form.field("deg.inntekt").error()}
+          htmlSize={18}
+        />
+        <ReadMore
+          header={t(tekster.inntektsinformasjon.overskrift)}
+          onOpenChange={(open) => {
+            if (open) {
+              sporHendelseEnGang("inntektsinformasjon utvidet");
+            }
+          }}
+        >
+          <BodyLong spacing>
+            {t(tekster.inntektsinformasjon.beskrivelseDel1)}
+          </BodyLong>
+          <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel2)}</BodyLong>
+        </ReadMore>
 
-      <FormattertTallTextField
-        {...form.field("medforelder.inntekt").getControlProps()}
-        label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
-        error={form.field("medforelder.inntekt").error()}
-        htmlSize={18}
-      />
+        <FormattertTallTextField
+          {...form.field("medforelder.inntekt").getControlProps()}
+          label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
+          error={form.field("medforelder.inntekt").error()}
+          htmlSize={18}
+        />
+      </fieldset>
     </div>
   );
 };
 
 const tekster = definerTekster({
+  overskrift: {
+    nb: "Inntektsopplysninger",
+    en: "Income information",
+    nn: "Inntektsopplysningar",
+  },
   dinInntekt: {
     label: {
       nb: "Hva er årsinntekten din?",
