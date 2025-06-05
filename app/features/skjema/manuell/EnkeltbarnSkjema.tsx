@@ -200,14 +200,14 @@ const tekster = definerTekster({
         nn: "Velg kvar barnet skal bu",
       },
       DELT_FAST_BOSTED: {
-        nb: "Vi har avtale om delt fast bosted",
-        en: "We have an agreement on shared custody",
-        nn: "Vi har avtale om delt bustad",
+        nb: "Vi har avtale om fast bosted hos begge (delt fast bosted)",
+        en: "We have an agreement on permanent residence with both of us (shared permanent residence)",
+        nn: "Vi har avtale om fast bustad hos begge (delt fast bustad)",
       },
       IKKE_DELT_FAST_BOSTED: {
-        nb: "Vi har ikke avtale om delt fast bosted",
-        en: "The child lives permanently with one of us",
-        nn: "Barnet bur fast hos ein av oss",
+        nb: "Vi har avtale om fast bosted hos én og samvær med den andre",
+        en: "We have an agreement on permanent residence with one and visitation with the other",
+        nn: "Vi har avtale om fast bustad hos éin og samvær med den andre",
       },
       hosDenAndre: (navn) => ({
         nb: `Barnet bor hos ${navn}`,
