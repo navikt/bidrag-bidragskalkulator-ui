@@ -102,6 +102,10 @@ const tilUnderholdskostnadsgrupper = (
 
 export const tilUnderholdskostnadsgruppeMedLabel = (
   underholdskostnader: Record<string, number>,
+  tekster: {
+    årEntall: string;
+    årFlertall: string;
+  },
 ): { label: string; underholdskostnad: number; aldre: number[] }[] => {
   const grupper = tilUnderholdskostnadsgrupper(underholdskostnader);
 
@@ -111,8 +115,8 @@ export const tilUnderholdskostnadsgruppeMedLabel = (
 
     const label =
       lavesteAlder === høyesteAlder
-        ? `${lavesteAlder} år`
-        : `${lavesteAlder}-${høyesteAlder} år`;
+        ? `${lavesteAlder} ${lavesteAlder === 1 ? tekster.årEntall : tekster.årFlertall}`
+        : `${lavesteAlder}-${høyesteAlder} ${tekster.årFlertall}`;
 
     return {
       label,

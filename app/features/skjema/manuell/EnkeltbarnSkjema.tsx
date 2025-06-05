@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
@@ -60,8 +60,14 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
     }
   };
 
-  const underholdskostnadsgrupper =
-    tilUnderholdskostnadsgruppeMedLabel(underholdskostnader);
+  const underholdskostnadsgrupper = useMemo(
+    () =>
+      tilUnderholdskostnadsgruppeMedLabel(underholdskostnader, {
+        årEntall: t(tekster.år.entall),
+        årFlertall: t(tekster.år.flertall),
+      }),
+    [underholdskostnader, t],
+  );
 
   return (
     <fieldset className="p-0 space-y-4">
@@ -247,6 +253,18 @@ const tekster = definerTekster({
         en: "All the nights with you",
         nn: "Alle netter hos deg",
       },
+    },
+  },
+  år: {
+    entall: {
+      nb: "år",
+      en: "year",
+      nn: "år",
+    },
+    flertall: {
+      nb: "år",
+      en: "years",
+      nn: "år",
     },
   },
   fjernBarn: {
