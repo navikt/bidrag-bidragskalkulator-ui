@@ -181,9 +181,9 @@ const tekster = definerTekster({
         nn: "Kvifor vi spør om alder",
       },
       beskrivelse: {
-        nb: "Når Nav fastsetter barnebidrag, må vi se på hva det koster å forsørge et barn ut fra alder. Dette kalles underholdskostnaden. Beløpet for underholdskostnaden for barn i ulike aldre er i dag:",
-        en: "When Nav determines child support, we look at the cost of supporting a child based on their age. This is called the maintenance cost. The amount for the maintenance cost for children of different ages is currently:",
-        nn: "Når Nav fastset barnebidrag, må vi sjå på kva det kostar å forsørgje eit barn ut frå alder. Dette kallar vi underhaldskostnaden. Beløpet for underhaldskostnaden for barn i ulike aldrar er i dag:",
+        nb: "Det viktigste grunnlaget for beregningen er hva et barn koster – også kjent som underholdskostnader. Disse summene hentes fra SIFOs referansebudsjetter, og oppdateres hvert år. Beløpet for underholdskostnaden for barn i ulike aldre er i dag:",
+        en: "The most important basis for the calculation is what a child costs – also known as child support costs. These amounts are taken from SIFOs reference budgets and are updated annually. The amount for the maintenance cost for children of different ages is currently:",
+        nn: "Det viktigaste grunnlaget for berekninga er kva eit barn kostar – også kjent som underhaldskostnader. Desse summane hentar vi frå SIFOs referansebudsjett, og oppdaterer kvart år. Beløpet for underhaldskostnaden for barn i ulike aldrar er i dag:",
       },
     },
   },
