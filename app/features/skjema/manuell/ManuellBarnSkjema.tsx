@@ -66,7 +66,7 @@ export const ManuellBarnSkjema = () => {
           variant="secondary"
           size="small"
           onClick={handleLeggTilBarn}
-          icon={<PlusIcon />}
+          icon={<PlusIcon aria-hidden />}
         >
           {t(tekster.leggTilBarn)}
         </Button>
