@@ -56,17 +56,20 @@ function parseArgumenter() {
 }
 
 async function hentToken(personident, serverUrl) {
-  const url = `${serverUrl}/api/v1/mock-login?ident=${personident}`;
+  const url = `${serverUrl}/api/internal/mock-login?ident=${personident}`;
   const response = await fetch(url);
   const data = await response.json();
   return data.token;
 }
 
 async function velgServerUrl(valgtMiljo) {
+  const LOKAL_URL = "http://localhost:5173";
+  const DEV_URL = "https://www.ekstern.dev.nav.no/barnebidrag/kalkulator";
+
   if (valgtMiljo === "dev") {
-    return "https://bidragskalkulator-api.intern.dev.nav.no";
+    return DEV_URL;
   } else if (valgtMiljo === "lokalt") {
-    return "http://localhost:8080";
+    return LOKAL_URL;
   }
 
   console.log("\n📡 Det er 2 miljø du kan velge mellom: dev eller lokalt.");
@@ -76,9 +79,9 @@ async function velgServerUrl(valgtMiljo) {
   while (true) {
     const choice = await spør("Velg 1 eller 2: ");
     if (choice === "1") {
-      return "http://localhost:8080";
+      return LOKAL_URL;
     } else if (choice === "2") {
-      return "https://bidragskalkulator-api.intern.dev.nav.no";
+      return DEV_URL;
     } else {
       console.log("❗ Ugyldig valg. Vennligst skriv 1 eller 2.");
     }
