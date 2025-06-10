@@ -181,9 +181,9 @@ const tekster = definerTekster({
         nn: "Kvifor vi spør om alder",
       },
       beskrivelse: {
-        nb: "Det viktigste grunnlaget for beregningen er hva et barn koster – også kjent som underholdskostnader. Disse summene hentes fra SIFOs referansebudsjetter, og oppdateres hvert år. Beløpet for underholdskostnaden for barn i ulike aldre er i dag:",
-        en: "The most important basis for the calculation is what a child costs – also known as child support costs. These amounts are taken from SIFOs reference budgets and are updated annually. The amount for the maintenance cost for children of different ages is currently:",
-        nn: "Det viktigaste grunnlaget for berekninga er kva eit barn kostar – også kjent som underhaldskostnader. Desse summane hentar vi frå SIFOs referansebudsjett, og oppdaterer kvart år. Beløpet for underhaldskostnaden for barn i ulike aldrar er i dag:",
+        nb: "Det viktigste grunnlaget for beregningen er hva et barn koster – også kjent som underholdskostnader. Disse summene hentes fra SIFOs referansebudsjetter, og oppdateres hvert år. Underholdskostnaden for barn i ulike aldre er i dag:",
+        en: "The most important basis for the calculation is what a child costs – also known as child support costs. These amounts are taken from SIFOs reference budgets and are updated annually. The maintenance cost for children of different ages is currently:",
+        nn: "Det viktigaste grunnlaget for berekninga er kva eit barn kostar – også kjent som underhaldskostnader. Desse summane hentar vi frå SIFOs referansebudsjett, og oppdaterer kvart år. Underhaldskostnaden for barn i ulike aldrar er i dag:",
       },
     },
   },
