@@ -85,7 +85,7 @@ export const ManueltResultatpanel = ({
         }}
       >
         <ExpansionCardHeader>
-          <ExpansionCardTitle as="h3" size="small" id="detaljer">
+          <ExpansionCardTitle as="h2" size="small" id="detaljer">
             {t(tekster.detaljer.overskrift)}
           </ExpansionCardTitle>
         </ExpansionCardHeader>
