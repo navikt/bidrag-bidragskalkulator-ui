@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 test.describe("Smoke test", () => {
-  test("Det initielle bildet er tilgjenglig utformet", async ({ page }) => {
+  test("Det initielle bildet er tilgjengelig utformet", async ({ page }) => {
     await page.goto("/");
     await page.waitForSelector("body", { timeout: 10000 });
 
