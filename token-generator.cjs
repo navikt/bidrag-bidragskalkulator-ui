@@ -60,7 +60,7 @@ async function hentToken(personident, valgtMiljø) {
     valgtMiljø === "lokalt"
       ? "http://localhost:5173"
       : "https://www.ekstern.dev.nav.no";
-  const url = `${serverUrl}/barnebidrag/kalkulator/api/internal/mock-login?ident=${personident}`;
+  const url = `${serverUrl}/barnebidrag/kalkulator/api/mock-login?ident=${personident}`;
   console.info("🔑 Henter token fra:", url);
   try {
     const response = await fetch(url);
