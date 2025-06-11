@@ -31,6 +31,9 @@ jobs:
         run: npm run generate-token ${{ vars.PERSONIDENT_FOR_E2E_TEST }} dev
       - name: Kjør ende-til-ende-tester
         run: npm run test:e2e
+        env:
+          UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID }}
+          INGRESS: ${{ vars.INGRESS }}
       - name: Opprett rapport
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
