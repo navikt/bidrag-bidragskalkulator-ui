@@ -108,6 +108,7 @@ function skrivTilEnvFil(token, serverUrl) {
   const envFile = ".env";
   const tokenEnvName = "BIDRAG_BIDRAGSKALKULATOR_TOKEN";
   const serverEnvName = "SERVER_URL";
+  const enviromentEnvName = "ENVIRONMENT";
 
   let envContent = fs.existsSync(envFile)
     ? fs.readFileSync(envFile, "utf8")
@@ -123,6 +124,7 @@ function skrivTilEnvFil(token, serverUrl) {
 
   envContent = setEnvVar(envContent, tokenEnvName, token);
   envContent = setEnvVar(envContent, serverEnvName, serverUrl);
+  envContent = setEnvVar(envContent, enviromentEnvName, "local");
   fs.writeFileSync(envFile, envContent.trim() + "\n");
 
   console.log("✅ Token og Server-URL lagret i .env");
