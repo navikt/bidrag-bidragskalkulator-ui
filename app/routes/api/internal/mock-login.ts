@@ -16,6 +16,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return data({ error: "ident query parameter er påkrevd" }, { status: 400 });
   }
 
+  console.info("🔑 Mock-login for personident:", personident);
+
   const token = await hentToken(personident);
 
   return data({ token }, { status: 200 });
@@ -23,7 +25,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 async function hentToken(personident: string) {
   const response = await fetch(
-    `${process.env.SERVER_URL}/api/v1/mock-login?ident=${personident}`,
+    `${env.SERVER_URL}/api/v1/mock-login?ident=${personident}`,
   );
   const data = await response.json();
   return data.token;
