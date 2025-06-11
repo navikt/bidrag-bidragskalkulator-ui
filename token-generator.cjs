@@ -11,7 +11,7 @@ const readline = require("readline");
       throw new Error("token ble ikke funnet i responsen");
     }
 
-    skrivTilEnvFil(token, serverUrl);
+    oppdaterEnvFil(token, serverUrl);
   } catch (err) {
     console.error("❌ Feil:", err.message);
   }
@@ -104,28 +104,62 @@ async function velgServerUrl(valgtMiljo) {
   }
 }
 
-function skrivTilEnvFil(token, serverUrl) {
-  const envFile = ".env";
-  const tokenEnvName = "BIDRAG_BIDRAGSKALKULATOR_TOKEN";
-  const serverEnvName = "SERVER_URL";
-  const enviromentEnvName = "ENVIRONMENT";
+function oppdaterEnvFil(token, serverUrl) {
+  const envs = parseEnvFil();
+  envs.BIDRAG_BIDRAGSKALKULATOR_TOKEN = token;
+  envs.SERVER_URL = serverUrl;
+  envs.ENVIRONMENT = "local";
 
-  let envContent = fs.existsSync(envFile)
-    ? fs.readFileSync(envFile, "utf8")
-    : "";
-
-  const setEnvVar = (content, key, value) => {
-    const line = `${key}=${value}`;
-    const regex = new RegExp(`^${key}=.*$`, "m");
-    return regex.test(content)
-      ? content.replace(regex, line)
-      : content.trim() + `\n${line}`;
-  };
-
-  envContent = setEnvVar(envContent, tokenEnvName, token);
-  envContent = setEnvVar(envContent, serverEnvName, serverUrl);
-  envContent = setEnvVar(envContent, enviromentEnvName, "local");
-  fs.writeFileSync(envFile, envContent.trim() + "\n");
-
+  skrivEnvFil(envs);
   console.log("✅ Token og Server-URL lagret i .env");
+}
+
+function parseEnvFil() {
+  if (!fs.existsSync(".env")) {
+    return {};
+  }
+
+  const envContent = fs.readFileSync(".env", "utf8");
+  const envVars = {};
+
+  envContent.split("\n").forEach((line) => {
+    line = line.trim();
+
+    // Hopp over tomme linjer og kommentarer
+    if (!line || line.startsWith("#")) {
+      return;
+    }
+
+    const equalsIndex = line.indexOf("=");
+    if (equalsIndex === -1) {
+      return;
+    }
+
+    const key = line.substring(0, equalsIndex).trim();
+    let value = line.substring(equalsIndex + 1).trim();
+
+    // Fjern quotes hvis de finnes
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+
+    envVars[key] = value;
+  });
+
+  return envVars;
+}
+
+function skrivEnvFil(envVars) {
+  const envLines = Object.entries(envVars).map(([key, value]) => {
+    // Legg til quotes hvis verdien inneholder mellomrom eller spesialtegn
+    const needsQuotes = /[\s#=]/.test(value);
+    const quotedValue = needsQuotes ? `"${value}"` : value;
+    return `${key}=${quotedValue}`;
+  });
+
+  const envContent = envLines.join("\n") + "\n";
+  fs.writeFileSync(".env", envContent);
 }
