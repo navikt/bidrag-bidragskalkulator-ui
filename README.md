@@ -88,6 +88,68 @@ npm run token:local
 npm run token:dev
 ```
 
+## Testing
+
+### End-to-End Testing
+
+The application uses Playwright for end-to-end testing with comprehensive API mocking support.
+
+#### Running Tests
+
+```bash
+# Run tests with real backend
+npm run test:e2e
+
+# Run tests with mocked backend
+MOCK_BACKEND=true npm run test:e2e
+
+# Run tests with debug output for mocks
+MOCK_BACKEND=true DEBUG_MOCKS=true npm run test:e2e
+
+# Run specific test file
+MOCK_BACKEND=true npx playwright test beregning.spec.ts
+```
+
+#### API Mocking
+
+When `MOCK_BACKEND=true` is set, all external API calls are automatically mocked using Playwright's built-in route interception. This provides:
+
+- **Reliable testing**: No dependency on external services
+- **Fast execution**: No network delays
+- **Error simulation**: Test error conditions easily
+- **Offline development**: Work without backend connectivity
+
+For detailed mocking documentation, see [e2e/mocks/README.md](e2e/mocks/README.md).
+
+**Example with custom mock data:**
+
+```typescript
+import { setupMocks, mockScenarios } from "./mocks";
+
+test("high income calculation", async ({ page }) => {
+  await setupMocks(page, {
+    personinformasjon: { inntekt: 1500000 },
+    bidragsutregning: {
+      resultater: [
+        {
+          sum: 5000, // Higher amount
+          bidragstype: "PLIKTIG",
+        },
+      ],
+    },
+  });
+
+  await page.goto("/");
+  // Test logic here
+});
+
+// Or use pre-defined scenarios
+test("error handling", async ({ page }) => {
+  await setupMocks(page, mockScenarios.calculationError);
+  // Test error conditions
+});
+```
+
 ## Kjør lokalt
 
 Du kan kjøre applikasjonen lokalt ved å bruke følgende kommando:
