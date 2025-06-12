@@ -5,7 +5,7 @@ const readline = require("readline");
   try {
     const { personident, valgtMiljø } = parseArgumenter();
     const serverUrl = await velgServerUrl(valgtMiljø);
-    const token = await hentToken(personident, valgtMiljø);
+    const token = await hentTokenFraTokenX(personident);
 
     if (!token) {
       throw new Error("token ble ikke funnet i responsen");
@@ -55,25 +55,23 @@ function parseArgumenter() {
   return { personident, valgtMiljø };
 }
 
-async function hentToken(personident, valgtMiljø) {
-  const serverUrl =
-    valgtMiljø === "lokalt"
-      ? "http://localhost:5173"
-      : "https://www.ekstern.dev.nav.no";
-  const url = `${serverUrl}/barnebidrag/kalkulator/api/mock-login?ident=${personident}`;
-  console.info("🔑 Henter token fra:", url);
+async function hentTokenFraTokenX(personident) {
+  const url = "https://tokenx-token-generator.intern.dev.nav.no/api/public/obo";
+  const formData = new FormData();
+  formData.append("pid", personident);
+  formData.append("aud", "dev-gcp:bidrag:bidrag-bidragskalkulator-api");
+  console.info("🔑 Henter token fra TokenX");
   try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.token;
-  } catch (err) {
-    if (err.message.includes("fetch failed")) {
-      console.error(
-        "❌ Feil ved henting av token. Har du startet dev-serveren?",
-      );
-      throw err;
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    console.error("❌ Feil ved henting av token:", err.message);
+    return response.text();
+  } catch (err) {
+    console.error("❌ Feil ved henting av token fra TokenX:", err.message);
     return null;
   }
 }
