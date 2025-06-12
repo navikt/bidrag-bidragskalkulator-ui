@@ -6,6 +6,7 @@ type EventType =
   | "beregningsdetaljer kollapset"
   | "inntektsinformasjon utvidet"
   | "barn lagt til"
+  | "lag privat avtale klikket"
   | "barn fjernet";
 
 type Sporingsdata = Record<string, unknown> & {
