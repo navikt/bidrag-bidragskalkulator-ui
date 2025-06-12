@@ -1,134 +1,146 @@
-const puppeteer = require("puppeteer");
 const fs = require("fs");
 const readline = require("readline");
+const Arg = require("arg");
+const { input, select } = require("@inquirer/prompts");
 
-const ask = (query) =>
-  new Promise((resolve) => {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-    rl.question(query, (answer) => {
-      rl.close();
-      resolve(answer.trim().toLowerCase());
-    });
-  });
-
-const [, , arg1, arg2] = process.argv;
-let personident = null;
-let valgtMiljo = null;
-
-if (!arg1) {
-  // Interaktiv modus uten argumenter
-} else if (/^\d{11}$/.test(arg1) && !arg2) {
-  personident = arg1; // kun PID, miljø velges manuelt
-} else if (/^\d{11}$/.test(arg1) && ["dev", "lokalt"].includes(arg2)) {
-  personident = arg1;
-  valgtMiljo = arg2;
-} else if (!/^\d{11}$/.test(arg1)) {
-  console.error("❌ Må angi fødselsnummer som første argument (11 siffer).");
-  process.exit(1);
-} else {
-  console.error(
-    "❌ Ugyldig eller manglende miljøargument. Bruk 'lokalt' eller 'dev'.",
-  );
-  process.exit(1);
-}
-
-const isInteractive = !personident;
-const tokenUrl =
-  "https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:bidrag:bidrag-bidragskalkulator-api";
-
-(async () => {
-  const browser = await puppeteer.launch({
-    headless: !isInteractive,
-    defaultViewport: null,
-  });
-  const page = await browser.newPage();
-
+(async function kjør() {
   try {
-    await page.goto(tokenUrl, { waitUntil: "networkidle2" });
+    const { ident, miljø } = await hentInput();
+    const serverUrl = await velgServerUrl(miljø);
+    const token = await hentTokenFraTokenX(ident);
 
-    if (personident) {
-      await page.waitForSelector('a[href="/authorize/testid2"]');
-      await page.click('a[href="/authorize/testid2"]');
-
-      await page.waitForSelector("#pid");
-      await page.type("#pid", personident);
-
-      await page.waitForFunction(
-        () => document.querySelector("#pid").value.length === 11,
-      );
-      await page.click("#submit");
-    } else {
-      console.log("🔑 Vennligst logg inn via nettleseren som ble åpnet.");
+    if (!token) {
+      throw new Error("token ble ikke funnet i responsen");
     }
 
-    await page.waitForFunction(
-      () => {
-        try {
-          JSON.parse(document.body.innerText);
-          return true;
-        } catch {
-          return false;
-        }
-      },
-      { timeout: 60000 },
-    );
-
-    const responseJson = await page.evaluate(() =>
-      JSON.parse(document.body.innerText),
-    );
-    const token = responseJson.access_token;
-    if (!token) throw new Error("access_token ble ikke funnet i responsen");
-
-    await browser.close();
-
-    // Miljøvalg
-    let serverUrl = "";
-    const serverEnvName = "SERVER_URL";
-    const tokenEnvName = "BIDRAG_BIDRAGSKALKULATOR_TOKEN";
-
-    if (valgtMiljo === "dev") {
-      serverUrl = "https://bidragskalkulator-api.intern.dev.nav.no";
-    } else if (valgtMiljo === "lokalt") {
-      serverUrl = "http://localhost:8080";
-    } else {
-      console.log("\n📡 Det er 2 miljø du kan velge mellom: dev eller lokalt.");
-      console.log("1) lokalt");
-      console.log("2) dev-miljøet");
-      while (!serverUrl) {
-        const choice = await ask("Velg 1 eller 2: ");
-        if (choice === "1") {
-          serverUrl = "http://localhost:8080";
-        } else if (choice === "2") {
-          serverUrl = "https://bidragskalkulator-api.intern.dev.nav.no";
-        } else {
-          console.log("❗ Ugyldig valg. Vennligst skriv 1 eller 2.");
-        }
-      }
-    }
-
-    // Skriv til .env
-    const envFile = ".env";
-    let envContent = fs.existsSync(envFile)
-      ? fs.readFileSync(envFile, "utf8")
-      : "";
-    const setEnvVar = (content, key, value) => {
-      const line = `${key}=${value}`;
-      const regex = new RegExp(`^${key}=.*$`, "m");
-      return regex.test(content)
-        ? content.replace(regex, line)
-        : content.trim() + `\n${line}`;
-    };
-
-    envContent = setEnvVar(envContent, tokenEnvName, token);
-    envContent = setEnvVar(envContent, serverEnvName, serverUrl);
-    fs.writeFileSync(envFile, envContent.trim() + "\n");
-
-    console.log("✅ Token og Server-URL lagret i .env");
+    oppdaterEnvFil(token, serverUrl);
   } catch (err) {
-    await browser.close();
     console.error("❌ Feil:", err.message);
   }
 })();
+
+async function hentInput() {
+  const arg = Arg({
+    "--ident": String,
+    "--miljø": String,
+    "-i": "--ident",
+    "-m": "--miljø",
+    "-e": "--miljø",
+  });
+
+  let ident = arg["--ident"];
+  if (!ident) {
+    ident = await input({
+      message: "Skriv inn fødselsnummer (11 siffer):",
+      required: true,
+      validate: (input) => {
+        if (/^\d{11}$/.test(input)) {
+          return true;
+        }
+        return "❌ Må angi gyldig fødselsnummer (11 siffer).";
+      },
+    });
+  }
+
+  let miljø = arg["--miljø"];
+  if (!miljø || !["lokalt", "dev"].includes(miljø)) {
+    miljø = await select({
+      message: "Hvilken server vil du bruke?",
+      choices: [
+        { name: "Lokal server", value: "lokalt" },
+        { name: "Dev-miljøet", value: "dev" },
+      ],
+    });
+  }
+  return { ident, miljø };
+}
+
+async function hentTokenFraTokenX(personident) {
+  const url = "https://tokenx-token-generator.intern.dev.nav.no/api/public/obo";
+  const formData = new FormData();
+  formData.append("pid", personident);
+  formData.append("aud", "dev-gcp:bidrag:bidrag-bidragskalkulator-api");
+  console.info("🔑 Henter token fra TokenX");
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.text();
+  } catch (err) {
+    console.error("❌ Feil ved henting av token fra TokenX:", err.message);
+    return null;
+  }
+}
+
+async function velgServerUrl(valgtMiljø) {
+  if (valgtMiljø === "lokalt") {
+    return "http://localhost:8080";
+  } else {
+    return "https://bidragskalkulator-api.intern.dev.nav.no";
+  }
+}
+
+function oppdaterEnvFil(token, serverUrl) {
+  const envs = parseEnvFil();
+  envs.BIDRAG_BIDRAGSKALKULATOR_TOKEN = token;
+  envs.SERVER_URL = serverUrl;
+  envs.ENVIRONMENT = "local";
+
+  skrivEnvFil(envs);
+  console.log("✅ Token og Server-URL lagret i .env");
+}
+
+function parseEnvFil() {
+  if (!fs.existsSync(".env")) {
+    return {};
+  }
+
+  const envContent = fs.readFileSync(".env", "utf8");
+  const envVars = {};
+
+  envContent.split("\n").forEach((line) => {
+    line = line.trim();
+
+    // Hopp over tomme linjer og kommentarer
+    if (!line || line.startsWith("#")) {
+      return;
+    }
+
+    // Hopp over linjer som ikke inneholder '='
+    const equalsIndex = line.indexOf("=");
+    if (equalsIndex === -1) {
+      return;
+    }
+
+    const key = line.substring(0, equalsIndex).trim();
+    let value = line.substring(equalsIndex + 1).trim();
+
+    // Fjern quotes hvis de finnes
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+
+    envVars[key] = value;
+  });
+
+  return envVars;
+}
+
+function skrivEnvFil(envVars) {
+  const envlinjer = Object.entries(envVars).map(([key, value]) => {
+    // Legg til quotes hvis verdien inneholder mellomrom eller spesialtegn
+    const trengerQuotes = /[\s#=]/.test(value);
+    const verdiMedQuotes = trengerQuotes ? `"${value}"` : value;
+    return `${key}=${verdiMedQuotes}`;
+  });
+
+  const envFilInnhold = envlinjer.join("\n") + "\n";
+  fs.writeFileSync(".env", envFilInnhold);
+}

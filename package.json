@@ -12,7 +12,10 @@
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write .",
-    "generate-token": "node ./token-generator.cjs"
+    "token": "node ./token-generator.cjs",
+    "token:dev": "node ./token-generator.cjs -i 18489011049 -m dev",
+    "token:local": "node ./token-generator.cjs -i 18489011049 -m lokalt",
+    "test:e2e": "npx playwright test"
   },
   "dependencies": {
     "@navikt/aksel-icons": "^7.22.0",
@@ -33,7 +36,6 @@
     "html-react-parser": "^5.2.5",
     "isbot": "^5.1.28",
     "lucide-react": "^0.513.0",
-    "puppeteer": "^24.10.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router": "^7.6.2",
@@ -42,6 +44,9 @@
     "zod": "^3.25.51"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@inquirer/prompts": "^7.5.3",
+    "@playwright/test": "^1.52.0",
     "@react-router/dev": "^7.6.2",
     "@tailwindcss/vite": "^4.1.8",
     "@types/node": "^22.15.29",
@@ -49,9 +54,12 @@
     "@types/react-dom": "^19.1.5",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
+    "arg": "^5.0.2",
+    "axe-core": "^4.10.3",
     "eslint": "^9.28.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "playwright": "^1.52.0",
     "prettier": "3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "react-router-devtools": "^5.0.6",

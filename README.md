@@ -61,37 +61,36 @@ cp .env.example .env
 
 Genererer token og setter nødvendige miljøvariabler basert på om applikasjonen skal kjøres mot lokal backend eller mot dev-miljøet.
 
-Interaktiv (manuell login + miljøvalg)
+Hvis du vil bli spurt om personident og miljø, kan du kjøre:
 
 ```bash
-npm run generate-token
+npm run token
 ```
 
-Automatisk login + forhåndsvalgt miljø (dev/lokalt)
+Du kan også automatisere dette ved å sende inn personident og miljø som argumenter:
 
 ```bash
-npm run generate-token personident miljø
-```
-
-For eksempel
-
-```bash
-npm run generate-token 11528433741 dev
-```
-
-Automatisk login med fødselsnummer + manuell miljøvalg
-
-```bash
-npm run generate-token personident
+npm run token -- --ident personident --miljø miljø
+# Eller
+npm run token -- -i personident -m miljø
 ```
 
 For eksempel
 
 ```bash
-npm run generate-token 11528433741
+npm run token --ident 11528433741 --miljø dev
 ```
 
-Kjør lokalt:
+Om hvilken testperson du bruker ikke er så viktig, kan du bruke disse to scriptene for å generere tokens mot henholdsvis lokal server og dev-miljøet:
+
+```bash
+npm run token:local
+npm run token:dev
+```
+
+## Kjør lokalt
+
+Du kan kjøre applikasjonen lokalt ved å bruke følgende kommando:
 
 ```bash
 npm run dev
