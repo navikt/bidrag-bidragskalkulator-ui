@@ -13,7 +13,7 @@ import {
   ExpansionCardTitle,
 } from "@navikt/ds-react/ExpansionCard";
 import { ListItem } from "@navikt/ds-react/List";
-import { sporHendelseEnGang } from "~/utils/analytics";
+import { sporHendelse, sporHendelseEnGang } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import type { ManuellBidragsutregning } from "../beregning/schema";
@@ -68,6 +68,7 @@ export const ManueltResultatpanel = ({
         href="https://www.nav.no/fyllut/nav550060?sub=paper"
         variant="primary"
         className="mb-6"
+        onClick={() => sporHendelse("lag privat avtale klikket")}
       >
         {t(tekster.lagPrivatAvtale)}
       </Button>
