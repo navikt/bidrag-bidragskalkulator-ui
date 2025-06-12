@@ -64,21 +64,28 @@ Genererer token og setter nødvendige miljøvariabler basert på om applikasjone
 Hvis du vil bli spurt om personident og miljø, kan du kjøre:
 
 ```bash
-npm run generate-token
+npm run token
 ```
 
 Du kan også automatisere dette ved å sende inn personident og miljø som argumenter:
 
 ```bash
-npm run generate-token --ident personident --miljø miljø
+npm run token -- --ident personident --miljø miljø
 # Eller
-npm run generate-token -i personident -m miljø
+npm run token -- -i personident -m miljø
 ```
 
 For eksempel
 
 ```bash
-npm run generate-token --ident 11528433741 --miljø dev
+npm run token --ident 11528433741 --miljø dev
+```
+
+Om hvilken testperson du bruker ikke er så viktig, kan du bruke disse to scriptene for å generere tokens mot henholdsvis lokal server og dev-miljøet:
+
+```bash
+npm run token:local
+npm run token:dev
 ```
 
 ## Kjør lokalt

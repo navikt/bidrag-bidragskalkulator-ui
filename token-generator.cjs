@@ -110,6 +110,7 @@ function parseEnvFil() {
       return;
     }
 
+    // Hopp over linjer som ikke inneholder '='
     const equalsIndex = line.indexOf("=");
     if (equalsIndex === -1) {
       return;
@@ -133,13 +134,13 @@ function parseEnvFil() {
 }
 
 function skrivEnvFil(envVars) {
-  const envLines = Object.entries(envVars).map(([key, value]) => {
+  const envlinjer = Object.entries(envVars).map(([key, value]) => {
     // Legg til quotes hvis verdien inneholder mellomrom eller spesialtegn
-    const needsQuotes = /[\s#=]/.test(value);
-    const quotedValue = needsQuotes ? `"${value}"` : value;
-    return `${key}=${quotedValue}`;
+    const trengerQuotes = /[\s#=]/.test(value);
+    const verdiMedQuotes = trengerQuotes ? `"${value}"` : value;
+    return `${key}=${verdiMedQuotes}`;
   });
 
-  const envContent = envLines.join("\n") + "\n";
-  fs.writeFileSync(".env", envContent);
+  const envFilInnhold = envlinjer.join("\n") + "\n";
+  fs.writeFileSync(".env", envFilInnhold);
 }
