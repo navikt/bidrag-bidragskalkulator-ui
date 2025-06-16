@@ -1,0 +1,140 @@
+import { Heading } from "@navikt/ds-react";
+import { isValidationErrorResponse, useForm } from "@rvf/react-router";
+import { useEffect, useRef, useState } from "react";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaArgs,
+} from "react-router";
+import { useActionData, useLoaderData, useSearchParams } from "react-router";
+import { medToken } from "~/features/autentisering/api.server";
+import { IntroPanel } from "~/features/privatAvtale/IntroPanel";
+import { PrivatAvtaleSkjema } from "~/features/privatAvtale/PrivatAvtaleSkjema";
+import {
+  lagPrivatAvtaleSkjema,
+  type PrivatAvtaleSkjema as PrivatAvtaleSkjemaType,
+  type PrivatAvtaleSkjemaValidert,
+} from "~/features/privatAvtale/schema";
+import { hentPrivatAvtaleSkjemaStandardverdi } from "~/features/privatAvtale/utils";
+import { hentManuellBidragsutregning } from "~/features/skjema/beregning/api.server";
+import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
+import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
+
+export function meta({ matches }: MetaArgs) {
+  const rootData = matches.find((match) => match.pathname === "/")?.data as {
+    språk: Språk;
+  };
+
+  const språk = rootData?.språk ?? Språk.NorwegianBokmål;
+
+  return [
+    { title: oversett(språk, tekster.meta.tittel) },
+    {
+      name: "description",
+      content: oversett(språk, tekster.meta.beskrivelse),
+    },
+  ];
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  return hentManuellBidragsutregning(request);
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  return medToken(request, hentManuellPersoninformasjon);
+}
+
+export default function ManuellBarnebidragskalkulator() {
+  const actionData = useActionData<typeof action>();
+  const resultatRef = useRef<HTMLDivElement>(null);
+  const { t } = useOversettelse();
+  const personinformasjon = useLoaderData<typeof loader>();
+  const [erEndretSidenUtregning, settErEndretSidenUtregning] = useState(false);
+
+  const [urlSøkeparametre] = useSearchParams();
+  const kalkulatorResultater = urlSøkeparametre.get("kalkulator");
+
+  const forhåndsvalgteBarn = kalkulatorResultater
+    ? JSON.parse(kalkulatorResultater)
+    : [];
+
+  console.log("xxx", urlSøkeparametre.get("kalkulator"));
+
+  const { språk } = useOversettelse();
+
+  const form = useForm<PrivatAvtaleSkjemaType, PrivatAvtaleSkjemaValidert>({
+    schema: lagPrivatAvtaleSkjema(språk),
+    submitSource: "state",
+    method: "post",
+    defaultValues: hentPrivatAvtaleSkjemaStandardverdi(
+      personinformasjon,
+      forhåndsvalgteBarn,
+    ),
+    onSubmitSuccess: () => {
+      // resultatRef.current?.focus({ preventScroll: true });
+      // resultatRef.current?.scrollIntoView({
+      //   behavior: "smooth",
+      //   block: "center",
+      // });
+      // settErEndretSidenUtregning(false);
+      // sporHendelse("skjema fullført");
+    },
+    onInvalidSubmit: () => {
+      // TODO
+      // sporHendelse("skjema validering feilet", {
+      //   førsteFeil:
+      //     document.activeElement instanceof HTMLInputElement
+      //       ? document.activeElement.name
+      //       : null,
+      // });
+    },
+    onSubmitFailure: (error) => {
+      // TODO
+      // sporHendelse("skjema innsending feilet", { feil: String(error) });
+    },
+  });
+
+  useEffect(() => {
+    const unsubscribe = form.subscribe.value(() => {
+      settErEndretSidenUtregning(true);
+    });
+    return () => unsubscribe();
+  }, [form]);
+
+  const skjemarespons =
+    !actionData || isValidationErrorResponse(actionData) ? null : actionData;
+
+  return (
+    <>
+      <div className="max-w-xl mx-auto p-4 mt-8 flex flex-col gap-4">
+        <Heading size="xlarge" level="1" spacing align="center">
+          {t(tekster.overskrift)}
+        </Heading>
+
+        <IntroPanel />
+
+        <PrivatAvtaleSkjema form={form} />
+      </div>
+    </>
+  );
+}
+
+const tekster = definerTekster({
+  meta: {
+    tittel: {
+      nb: "Barnebidrag - lag privat avtale",
+      en: "Child support - create private agreement",
+      nn: "Fostringstilskot - lag privat avtale",
+    },
+    beskrivelse: {
+      nb: "Barnebidragskalkulatoren hjelper deg å regne ut hvor stort et barnebidrag er.",
+      en: "The child support calculator helps you calculate how much child support you are entitled to.",
+      nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut hvor stort eit fostringstilskot er.",
+    },
+  },
+  overskrift: {
+    nb: "Barnebidrag - lag privat avtale",
+    en: "Child support - create private agreement",
+    nn: "Fostringstilskot - lag privat avtale",
+  },
+});

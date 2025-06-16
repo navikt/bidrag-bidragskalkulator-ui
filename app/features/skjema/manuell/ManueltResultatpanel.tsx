@@ -65,7 +65,7 @@ export const ManueltResultatpanel = ({
 
       <Button
         as="a"
-        href="https://www.nav.no/fyllut/nav550060?sub=paper"
+        href={`/barnebidrag/kalkulator/privat-avtale?kalkulator=${JSON.stringify(data.resultater)}`}
         variant="primary"
         className="mb-6"
       >
