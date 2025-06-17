@@ -3,7 +3,7 @@ import type {
   MockManuellBidragsutregning,
   MockManuellPersoninformasjon,
   MockPersoninformasjon,
-} from "./types";
+} from "./typer";
 
 /**
  * Default mock data for person information endpoint
@@ -84,8 +84,8 @@ export const defaultManuellBidragsutregning: MockManuellBidragsutregning = {
   resultater: [
     {
       alder: 8,
-      sum: 2500,
-      bidragstype: "PLIKTIG",
+      sum: 700,
+      bidragstype: "MOTTAKER",
     },
   ],
 };

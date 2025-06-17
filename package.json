@@ -16,7 +16,7 @@
     "token:dev": "node ./token-generator.cjs -i 18489011049 -m dev",
     "token:local": "node ./token-generator.cjs -i 18489011049 -m lokalt",
     "test:e2e": "npx playwright test",
-    "test:e2e:mock": "MOCK_BACKEND=true npx playwright test"
+    "test:e2e:mock": "SERVER_URL=\"http://localhost:3001\" MOCK_BACKEND=true npx playwright test"
   },
   "dependencies": {
     "@navikt/aksel-icons": "^7.22.0",

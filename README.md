@@ -101,13 +101,7 @@ The application uses Playwright for end-to-end testing with comprehensive API mo
 npm run test:e2e
 
 # Run tests with mocked backend
-MOCK_BACKEND=true npm run test:e2e
-
-# Run tests with debug output for mocks
-MOCK_BACKEND=true DEBUG_MOCKS=true npm run test:e2e
-
-# Run specific test file
-MOCK_BACKEND=true npx playwright test beregning.spec.ts
+npm run test:e2e:mock
 ```
 
 #### API Mocking
@@ -124,10 +118,10 @@ For detailed mocking documentation, see [e2e/mocks/README.md](e2e/mocks/README.m
 **Example with custom mock data:**
 
 ```typescript
-import { setupMocks, mockScenarios } from "./mocks";
+import { settOppMocker, mockScenarios } from "./mocks";
 
 test("high income calculation", async ({ page }) => {
-  await setupMocks(page, {
+  await settOppMocker(page, {
     personinformasjon: { inntekt: 1500000 },
     bidragsutregning: {
       resultater: [
@@ -145,7 +139,7 @@ test("high income calculation", async ({ page }) => {
 
 // Or use pre-defined scenarios
 test("error handling", async ({ page }) => {
-  await setupMocks(page, mockScenarios.calculationError);
+  await settOppMocker(page, mockScenarios.calculationError);
   // Test error conditions
 });
 ```

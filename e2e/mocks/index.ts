@@ -8,6 +8,7 @@ export {
   generateManuellPersoninformasjon,
   generatePersoninformasjon,
 } from "./data";
-export { mockApiEndpoints, mockScenarios } from "./endpoints";
-export { isMockingEnabled, setupMocks } from "./setup";
-export type { MockConfig } from "./types";
+
+export { startMockServer, stopMockServer } from "./server";
+
+export type { MockConfig } from "./typer";
