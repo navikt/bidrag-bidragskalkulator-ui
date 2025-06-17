@@ -30,8 +30,6 @@ export const FødselsnummerTextField = (props: FødselsnummerTextFieldProps) => 
   );
 };
 
-FødselsnummerTextField.displayName = "FødselsnummerTextField";
-
 const formatterTall = (verdi: string | number | undefined): string => {
   if (!verdi) return "";
 

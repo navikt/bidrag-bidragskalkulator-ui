@@ -32,8 +32,6 @@ export const FormattertTallTextField = (
   );
 };
 
-FormattertTallTextField.displayName = "FormattertTallTextField";
-
 const formatterTall = (verdi: string | number | undefined): string => {
   if (!verdi) return "";
 

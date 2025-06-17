@@ -51,5 +51,3 @@ export const InternalFormatterbartTextField = ({
     />
   );
 };
-
-InternalFormatterbartTextField.displayName = "InternalFormatterbartTextField";
