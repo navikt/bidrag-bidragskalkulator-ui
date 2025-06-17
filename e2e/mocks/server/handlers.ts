@@ -1,8 +1,8 @@
 import type { IncomingMessage, ServerResponse } from "http";
 import {
-  generatePersoninformasjon,
-  generateBidragsutregning as generererBidragsutregning,
-  generateManuellBidragsutregning as generererManuellBidragsutregning,
+  genererPersoninformasjon,
+  genererBidragsutregning as generererBidragsutregning,
+  genererManuellBidragsutregning as generererManuellBidragsutregning,
 } from "../data";
 import { handlePostRequest, sendJsonRespons } from "./utils";
 
@@ -14,7 +14,7 @@ export function handlePersonInformasjon(
   _: IncomingMessage,
   res: ServerResponse,
 ) {
-  const mockData = generatePersoninformasjon();
+  const mockData = genererPersoninformasjon();
   sendJsonRespons(res, 200, mockData);
 }
 

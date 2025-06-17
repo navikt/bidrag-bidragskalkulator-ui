@@ -3,10 +3,10 @@ export {
   defaultManuellBidragsutregning,
   defaultManuellPersoninformasjon,
   defaultPersoninformasjon,
-  generateBidragsutregning,
-  generateManuellBidragsutregning,
-  generateManuellPersoninformasjon,
-  generatePersoninformasjon,
+  genererBidragsutregning as generateBidragsutregning,
+  genererManuellBidragsutregning as generateManuellBidragsutregning,
+  genererManuellPersoninformasjon as generateManuellPersoninformasjon,
+  genererPersoninformasjon as generatePersoninformasjon,
 } from "./data";
 
 export { startMockServer, stopMockServer } from "./server";
