@@ -41,11 +41,10 @@ const formatterTall = (verdi: string | number | undefined): string => {
 
   if (begrensetVerdi.length <= 6) {
     return begrensetVerdi;
-  } else {
-    const første6 = begrensetVerdi.slice(0, 6);
-    const siste5 = begrensetVerdi.slice(6);
-    return `${første6} ${siste5}`;
   }
+  const dato = begrensetVerdi.slice(0, 6);
+  const personnummer = begrensetVerdi.slice(6);
+  return `${dato} ${personnummer}`;
 };
 
 const avformatterTall = (verdi: string): string => {
