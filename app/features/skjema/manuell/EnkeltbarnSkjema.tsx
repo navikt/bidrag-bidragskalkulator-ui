@@ -1,6 +1,8 @@
 import { PersonCrossIcon } from "@navikt/aksel-icons";
 import {
+  Alert,
   BodyLong,
+  BodyShort,
   Button,
   Radio,
   RadioGroup,
@@ -15,6 +17,7 @@ import { formatterSum } from "~/utils/tall";
 import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
 import type { FastBosted, ManueltSkjema } from "../schema";
 import {
+  kalkulerSamværsklasse,
   SAMVÆR_STANDARDVERDI,
   tilUnderholdskostnadsgruppeMedLabel,
 } from "../utils";
@@ -46,8 +49,11 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
       ? t(tekster.samvær.enNatt)
       : t(tekster.samvær.netter(samvær));
 
-  const borHosEnForelder =
-    barnField.value("bosted") === "IKKE_DELT_FAST_BOSTED";
+  const bosted = barnField.value("bosted");
+  const borHosEnForelder = bosted === "IKKE_DELT_FAST_BOSTED";
+  const harAvtaleOmFastDeltBosted = bosted === "DELT_FAST_BOSTED";
+  // TODO: Fiks typefeil
+  const samværsklasse = kalkulerSamværsklasse(Number(samvær), bosted as any);
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
@@ -68,6 +74,11 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
       }),
     [underholdskostnader, t],
   );
+
+  const visSamværsfradragInformasjon = alder !== "" && borHosEnForelder;
+  const visDeltFastBostedInformasjon =
+    alder !== "" && harAvtaleOmFastDeltBosted;
+  const erBidragspliktig = borHosEnForelder && Number(samvær) > 15;
 
   return (
     <fieldset className="p-0 space-y-4">
@@ -142,9 +153,33 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
               value: 30,
             },
           ]}
-          valueDescription={samværsgradBeskrivelse}
+          valueDescription={
+            samværsgradBeskrivelse +
+            ` (${t(tekster.samvær.samværsklasse[samværsklasse])})`
+          }
         />
       )}
+      {visDeltFastBostedInformasjon ? (
+        <Alert variant="info">
+          <BodyShort>{t(tekster.fradragsinformasjon.deltFastBosted)}</BodyShort>
+        </Alert>
+      ) : visSamværsfradragInformasjon ? (
+        <Alert variant="info">
+          <BodyShort>
+            {t(
+              erBidragspliktig
+                ? tekster.fradragsinformasjon.samværsfradrag.mottaker(
+                    samværsklasse,
+                    "1 000 kr", // TODO: Finn riktig verdi
+                  )
+                : tekster.fradragsinformasjon.samværsfradrag.pliktig(
+                    samværsklasse,
+                    "1 000 kr", // TODO: Finn riktig verdi
+                  ),
+            )}
+          </BodyShort>
+        </Alert>
+      ) : null}
       {onFjernBarn && (
         <Button
           type="button"
@@ -253,6 +288,57 @@ const tekster = definerTekster({
         en: "All the nights with you",
         nn: "Alle netter hos deg",
       },
+    },
+    samværsklasse: {
+      SAMVÆRSKLASSE_0: {
+        nb: "samværsklasse 0",
+        en: "visitation class 0",
+        nn: "samværsklasse 0",
+      },
+      SAMVÆRSKLASSE_1: {
+        nb: "samværsklasse 1",
+        en: "visitation class 1",
+        nn: "samværsklasse 1",
+      },
+      SAMVÆRSKLASSE_2: {
+        nb: "samværsklasse 2",
+        en: "visitation class 2",
+        nn: "samværsklasse 2",
+      },
+      SAMVÆRSKLASSE_3: {
+        nb: "samværsklasse 3",
+        en: "visitation class 3",
+        nn: "samværsklasse 3",
+      },
+      SAMVÆRSKLASSE_4: {
+        nb: "samværsklasse 4",
+        en: "visitation class 4",
+        nn: "samværsklasse 4",
+      },
+      DELT_BOSTED: {
+        nb: "delt bosted",
+        en: "shared residence",
+        nn: "delt bustad",
+      },
+    },
+  },
+  fradragsinformasjon: {
+    deltFastBosted: {
+      nb: "Når man har avtale om delt fast bosted, baseres ikke barnebidraget på hvor mye man bor sammen med barnet, men heller forskjellen i inntekt mellom foreldrene.",
+      en: "When there is an agreement on shared permanent residence, child support is not based on how much one lives with the child, but rather the difference in income between the parents.",
+      nn: "Når ein har avtale om delt fast bustad, er ikkje barnebidraget basert på kor mykje ein bur saman med barnet, men heller forskjellen i inntekt mellom foreldra.",
+    },
+    samværsfradrag: {
+      mottaker: (samværsklasse, fradrag) => ({
+        nb: `Når barnet bor fast hos deg, kan medforelderen ha rett til et samværsfradrag. Dette fradraget er ${fradrag} i ${samværsklasse}.`,
+        en: `When the child lives permanently with you, the other parent may be entitled to a visitation deduction. This deduction is ${fradrag} in ${samværsklasse}.`,
+        nn: `Når barnet bur fast hos deg, kan medforelderen ha rett til eit samværsfradrag. Dette frådraget er ${fradrag} i ${samværsklasse}.`,
+      }),
+      pliktig: (samværsklasse, fradrag) => ({
+        nb: `Når barnet bor fast hos den andre forelderen, kan du ha rett til et samværsfradrag. Dette fradraget er ${fradrag} i ${samværsklasse}.`,
+        en: `When the child lives permanently with the other parent, you may be entitled to a visitation deduction. This deduction is ${fradrag} in ${samværsklasse}.`,
+        nn: `Når barnet bur fast hos den andre forelderen, kan du ha rett til eit samværsfradrag. Dette frådraget er ${fradrag} i ${samværsklasse}.`,
+      }),
     },
   },
   år: {
