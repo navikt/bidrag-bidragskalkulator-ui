@@ -45,11 +45,11 @@ export const InternalFormatterbartTextField = ({
 
   return (
     <TextField
+      {...rest}
       type="text"
       value={formatterer(value ? String(value) : "")}
       onChange={handleChange}
       inputMode="numeric"
-      {...rest}
     />
   );
 };
