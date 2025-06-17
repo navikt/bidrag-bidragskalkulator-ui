@@ -29,6 +29,8 @@ jobs:
         run: npx playwright install --with-deps
       - name: Kjør ende-til-ende-tester
         run: npm run test:e2e:mock
+        env:
+          BIDRAG_BIDRAGSKALKULATOR_TOKEN: "token"
       - name: Opprett rapport
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
