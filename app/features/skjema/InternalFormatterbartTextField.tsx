@@ -38,8 +38,6 @@ export const InternalFormatterbartTextField = ({
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const formattertVerdi = formatterer(e.target.value);
     const uformattertVerdi = avformatterer(formattertVerdi);
-
-    e.target.value = formattertVerdi;
     onChange(uformattertVerdi);
   };
 
