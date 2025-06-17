@@ -12,7 +12,7 @@ export type InternalFormatterbartTextFieldProps = Omit<
 };
 
 /**
- * InternalFormatterbartTextField er en komponent som formaterer et tall med den gitte formatterer og avformatterer-funksjonen..
+ * InternalFormatterbartTextField er en komponent som formaterer et tall med den gitte formatterer og avformatterer-funksjonen.
  * onChange-callbacken blir kalt med den uformatterte verdien.
  *
  * Ellers fungerer det som et vanlig TextField.
