@@ -10,5 +10,3 @@ export {
 } from "./data";
 
 export { startMockServer, stopMockServer } from "./server";
-
-export type { MockConfig } from "./typer";

@@ -1,14 +1,16 @@
 import type {
-  MockBidragsutregning,
-  MockManuellBidragsutregning,
-  MockManuellPersoninformasjon,
-  MockPersoninformasjon,
-} from "./typer";
+  Bidragsutregning,
+  ManuellBidragsutregning,
+} from "~/features/skjema/beregning/schema";
+import type {
+  ManuellPersoninformasjon,
+  Personinformasjon,
+} from "~/features/skjema/personinformasjon/schema";
 
 /**
  * Default mock data for personinformasjon endepunkt
  */
-export const defaultPersoninformasjon: MockPersoninformasjon = {
+export const defaultPersoninformasjon: Personinformasjon = {
   person: {
     ident: "12345678901",
   },
@@ -45,7 +47,7 @@ export const defaultPersoninformasjon: MockPersoninformasjon = {
 /**
  * Default mock data for manuell personinformasjon endepunkt
  */
-export const defaultManuellPersoninformasjon: MockManuellPersoninformasjon = {
+export const defaultManuellPersoninformasjon: ManuellPersoninformasjon = {
   person: {
     ident: "12345678901",
   },
@@ -58,7 +60,7 @@ export const defaultManuellPersoninformasjon: MockManuellPersoninformasjon = {
 /**
  * Default mock data for bidragkalkuleringsendpoint
  */
-export const defaultBidragsutregning: MockBidragsutregning = {
+export const defaultBidragsutregning: Bidragsutregning = {
   resultater: [
     {
       ident: "11111111111",
@@ -80,7 +82,7 @@ export const defaultBidragsutregning: MockBidragsutregning = {
 /**
  * Default mock data for manual bidragkalkuleringsendpoint
  */
-export const defaultManuellBidragsutregning: MockManuellBidragsutregning = {
+export const defaultManuellBidragsutregning: ManuellBidragsutregning = {
   resultater: [
     {
       alder: 8,
@@ -94,8 +96,8 @@ export const defaultManuellBidragsutregning: MockManuellBidragsutregning = {
  * Genererer mock personinformasjon med mulighet for å overstyre verdier
  */
 export function genererPersoninformasjon(
-  overrides?: Partial<MockPersoninformasjon>,
-): MockPersoninformasjon {
+  overrides?: Partial<Personinformasjon>,
+): Personinformasjon {
   return {
     ...defaultPersoninformasjon,
     ...overrides,
@@ -112,8 +114,8 @@ export function genererPersoninformasjon(
  * Genererer mock manuell personinformasjon med mulighet for å overstyre verdier
  */
 export function genererManuellPersoninformasjon(
-  overrides?: Partial<MockManuellPersoninformasjon>,
-): MockManuellPersoninformasjon {
+  overrides?: Partial<ManuellPersoninformasjon>,
+): ManuellPersoninformasjon {
   return {
     ...defaultManuellPersoninformasjon,
     ...overrides,
@@ -128,8 +130,8 @@ export function genererManuellPersoninformasjon(
  * Genererer mock autentisert bidragsutregning med mulighet for å overstyre verdier
  */
 export function genererBidragsutregning(
-  overrides?: Partial<MockBidragsutregning>,
-): MockBidragsutregning {
+  overrides?: Partial<Bidragsutregning>,
+): Bidragsutregning {
   return {
     ...defaultBidragsutregning,
     ...overrides,
@@ -141,8 +143,8 @@ export function genererBidragsutregning(
  * Genererer mock manuell bidragsutregning med mulighet for å overstyre verdier
  */
 export function genererManuellBidragsutregning(
-  overrides?: Partial<MockManuellBidragsutregning>,
-): MockManuellBidragsutregning {
+  overrides?: Partial<ManuellBidragsutregning>,
+): ManuellBidragsutregning {
   return {
     ...defaultManuellBidragsutregning,
     ...overrides,
