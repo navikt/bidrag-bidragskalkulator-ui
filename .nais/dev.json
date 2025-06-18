@@ -2,5 +2,5 @@
   "SERVER_URL": "http://bidrag-bidragskalkulator-api",
   "ENVIRONMENT": "dev",
   "UMAMI_WEBSITE_ID": "d360c8df-aca3-4a5f-b07f-82dae9df3052",
-  "INGRESS": "https://www.ekstern.dev.nav.no/barnebidrag/kalkulator"
+  "INGRESS": "https://www.ekstern.dev.nav.no/barnebidrag/tjenester"
 }

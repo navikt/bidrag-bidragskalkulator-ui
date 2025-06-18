@@ -10,7 +10,7 @@ export default defineConfig({
   globalSetup: "./e2e/global-setup.ts",
   globalTeardown: "./e2e/global-teardown.ts",
   use: {
-    baseURL: "http://localhost:5173/barnebidrag/kalkulator",
+    baseURL: "http://localhost:5173/barnebidrag/tjenester",
     trace: "on-first-retry",
   },
   projects: [
@@ -22,7 +22,7 @@ export default defineConfig({
 
   webServer: {
     command: "npm run dev",
-    url: "http://localhost:5173/barnebidrag/kalkulator/api/internal/isready",
+    url: "http://localhost:5173/barnebidrag/tjenester/api/internal/isready",
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
     env: {
