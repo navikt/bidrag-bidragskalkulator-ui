@@ -85,6 +85,11 @@ Om hvilken testperson du bruker ikke er så viktig, kan du bruke disse to script
 
 ```bash
 npm run token:local
+```
+
+eller
+
+```bash
 npm run token:dev
 ```
 
@@ -118,6 +123,18 @@ Du kan kjøre applikasjonen lokalt ved å bruke følgende kommando:
 ```bash
 npm run dev
 # Kjører på http://localhost:5173/barnebidrag/tjenester/
+```
+
+Det er også mulig å bruke et skript for å først generere token (for samme testperson som er brukt i `token:local` og `token:dev`) og så kjøre applikasjonen:
+
+```bash
+npm run start:local
+```
+
+eller
+
+```bash
+npm run start:dev
 ```
 
 ### Kjøre backend lokalt
