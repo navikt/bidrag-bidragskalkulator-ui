@@ -32,7 +32,7 @@ export const ManueltResultatpanel = ({
   if ("error" in data) {
     return (
       <Alert variant="error">
-        <Heading size="small" spacing ref={ref} tabIndex={-1}>
+        <Heading size="small" spacing ref={ref} tabIndex={-1} level="2">
           {t(tekster.noeGikkFeil)}
         </Heading>
         <BodyLong>{data.error}</BodyLong>
@@ -64,7 +64,7 @@ export const ManueltResultatpanel = ({
     <Alert variant="info">
       <Heading
         size="small"
-        spacing
+        level="2"
         ref={ref}
         tabIndex={-1}
         className="focus:outline-0"
