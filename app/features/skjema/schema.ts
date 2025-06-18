@@ -67,25 +67,7 @@ export const lagInnloggetBarnSkjema = (språk: Språk) => {
           .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
           .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum)),
       ),
-    barnetilsynsutgift: z
-      .string({
-        required_error: oversett(
-          språk,
-          tekster.feilmeldinger.barnetilsynsutgift.påkrevd,
-        ),
-      })
-      .pipe(
-        z.coerce
-          .number()
-          .min(
-            0,
-            oversett(språk, tekster.feilmeldinger.barnetilsynsutgift.minimum),
-          )
-          .max(
-            10000,
-            oversett(språk, tekster.feilmeldinger.barnetilsynsutgift.maksimum),
-          ),
-      ),
+    barnetilsynsutgift: lagBarnetilsynsutgiftSchema(språk),
   });
 };
 
@@ -206,26 +188,30 @@ export const lagManueltBarnSkjema = (språk: Språk) => {
           .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
           .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum)),
       ),
-    barnetilsynsutgift: z
-      .string({
-        required_error: oversett(
-          språk,
-          tekster.feilmeldinger.barnetilsynsutgift.påkrevd,
-        ),
-      })
-      .pipe(
-        z.coerce
-          .number()
-          .min(
-            0,
-            oversett(språk, tekster.feilmeldinger.barnetilsynsutgift.minimum),
-          )
-          .max(
-            10000,
-            oversett(språk, tekster.feilmeldinger.barnetilsynsutgift.maksimum),
-          ),
-      ),
+    barnetilsynsutgift: lagBarnetilsynsutgiftSchema(språk),
   });
+};
+
+const lagBarnetilsynsutgiftSchema = (språk: Språk) => {
+  return z
+    .string({
+      required_error: oversett(
+        språk,
+        tekster.feilmeldinger.barnetilsynsutgift.påkrevd,
+      ),
+    })
+    .pipe(
+      z.coerce
+        .number()
+        .min(
+          0,
+          oversett(språk, tekster.feilmeldinger.barnetilsynsutgift.minimum),
+        )
+        .max(
+          10000,
+          oversett(språk, tekster.feilmeldinger.barnetilsynsutgift.maksimum),
+        ),
+    );
 };
 
 export const lagManueltSkjema = (språk: Språk) => {
@@ -306,9 +292,9 @@ const tekster = definerTekster({
         nn: "Fyll ut kostnader til barnetilsyn",
       },
       minimum: {
-        nb: "Kostnader til barnetilsyn må være et positivt tall",
-        en: "Costs for child care must be a positive number",
-        nn: "Kostnader til barnetilsyn må vere eit positivt tal",
+        nb: "Kostnader til barnetilsyn må være mer enn 0",
+        en: "Costs for child care must be more than 0",
+        nn: "Kostnader til barnetilsyn må vere meir enn 0",
       },
       maksimum: {
         nb: "Kostnader for barnetilsyn kan ikke være mer enn 10 000 kr",
