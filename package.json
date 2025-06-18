@@ -15,6 +15,8 @@
     "token": "node ./token-generator.cjs",
     "token:dev": "node ./token-generator.cjs -i 18489011049 -m dev",
     "token:local": "node ./token-generator.cjs -i 18489011049 -m lokalt",
+    "start:dev": "npm run token:dev && npm run dev",
+    "start:local": "npm run token:local && npm run dev",
     "test:e2e": "npx playwright test",
     "test:e2e:mock": "SERVER_URL=\"http://localhost:3001\" MOCK_BACKEND=true npx playwright test"
   },
