@@ -18,6 +18,7 @@ export const tilInnloggetBarnSkjema = (person: Barn): InnloggetBarnSkjema => {
     ident: person.ident,
     bosted: "",
     samvær: SAMVÆR_STANDARDVERDI,
+    barnetilsynsutgift: "",
   };
 };
 
@@ -135,6 +136,7 @@ export const hentManueltSkjemaStandardverdi = (
         alder: "",
         bosted: "",
         samvær: SAMVÆR_STANDARDVERDI,
+        barnetilsynsutgift: "",
       },
     ],
     deg: {

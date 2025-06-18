@@ -156,6 +156,7 @@ export const hentBidragsutregning = async (token: string, request: Request) => {
         ident: barn.ident,
         samværsklasse,
         bidragstype,
+        barnetilsynsutgift: barn.barnetilsynsutgift ?? 0,
       };
     }),
   };
@@ -202,6 +203,7 @@ export const hentManuellBidragsutregning = async (request: Request) => {
         alder: barn.alder,
         samværsklasse,
         bidragstype,
+        barnetilsynsutgift: barn.barnetilsynsutgift ?? 0,
       };
     }),
   };

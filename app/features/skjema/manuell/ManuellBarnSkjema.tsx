@@ -20,6 +20,7 @@ export const ManuellBarnSkjema = () => {
       alder: "",
       bosted: "",
       samvær: SAMVÆR_STANDARDVERDI,
+      barnetilsynsutgift: "",
     });
     sporHendelse("barn lagt til", { antall: barnArray.length() + 1 });
 
