@@ -96,7 +96,7 @@ Bidragskalkulatoren har oppsett for ende-til-ende testing med Playwright, med og
 
 Mocking av backenden er i stor grad satt opp for å kunne kjøre testene i Github Actions, som en del av PR review-prosessen.
 
-Målet med disse testene er i stor grad å verifisere at de viktigste funksjonene i applikasjonen fungerer som forventet, og at det ikke er noen regressjoner ved endringer i koden. Dette gjelder spesielt med tanke på universell utforming og tilgjengelighet.
+Målet med disse testene er i stor grad å verifisere at de viktigste funksjonene i applikasjonen fungerer som forventet, og at det ikke er noen regresjoner ved endringer i koden. Dette gjelder spesielt med tanke på universell utforming og tilgjengelighet.
 
 Det anbefales å kjøre testene lokalt (mot dev-server, eller mot lokal server) før du lager en PR, for å sikre at alt fungerer som forventet. I PRen vil man kjøre testene med mocking av backenden.
 
