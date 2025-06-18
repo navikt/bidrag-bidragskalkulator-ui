@@ -2,5 +2,5 @@ import type { Config } from "@react-router/dev/config";
 
 export default {
   ssr: true,
-  basename: "/barnebidrag/kalkulator/",
+  basename: "/barnebidrag/tjenester/",
 } satisfies Config;

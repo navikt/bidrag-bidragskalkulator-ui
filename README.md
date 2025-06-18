@@ -30,9 +30,9 @@ Man kan deploye direkte til prod ved å lage en ny release i GitHub:
 
 Når releasen er publisert, vil applikasjonen automatisk deployes til prod-miljøet.
 
-**Dev-miljøet finner du på https://www.ekstern.dev.nav.no/barnebidrag/kalkulator/**
+**Dev-miljøet finner du på https://www.ekstern.dev.nav.no/barnebidrag/tjenester/**
 
-**Prod-miljøet finner du på https://www.nav.no/barnebidrag/kalkulator/**
+**Prod-miljøet finner du på https://www.nav.no/barnebidrag/tjenester/**
 
 ## Lokal utvikling
 
@@ -117,7 +117,7 @@ Du kan kjøre applikasjonen lokalt ved å bruke følgende kommando:
 
 ```bash
 npm run dev
-# Kjører på http://localhost:5173/barnebidrag/kalkulator/
+# Kjører på http://localhost:5173/barnebidrag/tjenester/
 ```
 
 ### Kjøre backend lokalt
