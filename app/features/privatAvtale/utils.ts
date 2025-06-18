@@ -1,6 +1,6 @@
 import type { BidragsutregningBarn } from "../skjema/beregning/schema";
 import type { ManuellPersoninformasjon } from "../skjema/personinformasjon/schema";
-import type { PrivatAvtaleSkjema } from "./schema";
+import type { PrivatAvtaleSkjema } from "./skjemaSchema";
 
 type Barn = PrivatAvtaleSkjema["barn"][number];
 

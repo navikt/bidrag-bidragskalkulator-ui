@@ -24,7 +24,7 @@ export const PrivatAvtaleSkjemaSchema = z.object({
   innhold: z.string(),
 });
 
-export const lagValidertPersonSkjema = (
+export const lagValidertPersonSkjemaSchema = (
   språk: Språk,
   part: "deg" | "medforelder",
 ) => {
@@ -42,10 +42,10 @@ export const lagValidertPersonSkjema = (
   });
 };
 
-export const lagPrivatAvtaleSkjema = (språk: Språk) => {
+export const lagPrivatAvtaleSkjemaSchema = (språk: Språk) => {
   return z.object({
-    deg: lagValidertPersonSkjema(språk, "deg"),
-    medforelder: lagValidertPersonSkjema(språk, "medforelder"),
+    deg: lagValidertPersonSkjemaSchema(språk, "deg"),
+    medforelder: lagValidertPersonSkjemaSchema(språk, "medforelder"),
     fraDato: z.string(), // TODO
     nyAvtale: z.enum(["true", "false", ""]), // TODO
     medInnkreving: z.enum(["true", "false", ""]), // TODO
@@ -85,7 +85,7 @@ export const lagPrivatAvtaleSkjema = (språk: Språk) => {
 
 export type PrivatAvtaleSkjema = z.infer<typeof PrivatAvtaleSkjemaSchema>;
 export type PrivatAvtaleSkjemaValidert = z.infer<
-  ReturnType<typeof lagPrivatAvtaleSkjema>
+  ReturnType<typeof lagPrivatAvtaleSkjemaSchema>
 >;
 
 const tekster = definerTekster({

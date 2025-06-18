@@ -2,7 +2,7 @@ import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 import { TextField } from "@navikt/ds-react";
-import type { PrivatAvtaleSkjema } from "./schema";
+import type { PrivatAvtaleSkjema } from "./skjemaSchema";
 
 type Props = {
   part: "deg" | "medforelder";

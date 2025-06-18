@@ -8,15 +8,15 @@ import type {
 } from "react-router";
 import { useActionData, useLoaderData, useSearchParams } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
+import { hentPrivatAvtaledokument } from "~/features/privatAvtale/api.server";
 import { IntroPanel } from "~/features/privatAvtale/IntroPanel";
-import { PrivatAvtaleSkjema } from "~/features/privatAvtale/PrivatAvtaleSkjema";
+import { PrivatAvtaleSkjema } from "~/features/privatAvtale/PrivatAvtaleskjema";
 import {
-  lagPrivatAvtaleSkjema,
+  lagPrivatAvtaleSkjemaSchema,
   type PrivatAvtaleSkjema as PrivatAvtaleSkjemaType,
   type PrivatAvtaleSkjemaValidert,
-} from "~/features/privatAvtale/schema";
+} from "~/features/privatAvtale/skjemaSchema";
 import { hentPrivatAvtaleSkjemaStandardverdi } from "~/features/privatAvtale/utils";
-import { hentManuellBidragsutregning } from "~/features/skjema/beregning/api.server";
 import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
@@ -37,7 +37,7 @@ export function meta({ matches }: MetaArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  return hentManuellBidragsutregning(request);
+  return medToken(request, hentPrivatAvtaledokument);
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -63,7 +63,7 @@ export default function ManuellBarnebidragskalkulator() {
   const { språk } = useOversettelse();
 
   const form = useForm<PrivatAvtaleSkjemaType, PrivatAvtaleSkjemaValidert>({
-    schema: lagPrivatAvtaleSkjema(språk),
+    schema: lagPrivatAvtaleSkjemaSchema(språk),
     submitSource: "state",
     method: "post",
     defaultValues: hentPrivatAvtaleSkjemaStandardverdi(

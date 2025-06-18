@@ -2,7 +2,7 @@ import { PersonCrossIcon } from "@navikt/aksel-icons";
 import { Button, TextField } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import type { PrivatAvtaleSkjema } from "./schema";
+import type { PrivatAvtaleSkjema } from "./skjemaSchema";
 
 type Props = {
   barnIndex: number;

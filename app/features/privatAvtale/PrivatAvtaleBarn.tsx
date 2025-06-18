@@ -5,7 +5,7 @@ import React from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { PrivatAvtaleEnkeltbarnSkjema } from "./PrivatAvtaleEnkeltbarn";
-import type { PrivatAvtaleSkjema } from "./schema";
+import type { PrivatAvtaleSkjema } from "./skjemaSchema";
 
 export const PrivatAvtaleBarn = () => {
   const { t } = useOversettelse();
