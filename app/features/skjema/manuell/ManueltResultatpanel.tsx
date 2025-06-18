@@ -47,6 +47,19 @@ export const ManueltResultatpanel = ({
     return sum - neste.sum;
   }, 0);
 
+  const bidragstyper = data.resultater.map((resultat) => resultat.bidragstype);
+  const isMottaker = bidragstyper.includes("MOTTAKER");
+  const isPliktig = bidragstyper.includes("PLIKTIG");
+
+  const bidragstype =
+    isMottaker && isPliktig
+      ? "MOTTAKER_OG_PLIKTIG"
+      : isMottaker
+        ? "MOTTAKER"
+        : isPliktig
+          ? "PLIKTIG"
+          : "INGEN";
+
   return (
     <Alert variant="info">
       <Heading
@@ -68,7 +81,11 @@ export const ManueltResultatpanel = ({
         href="https://www.nav.no/fyllut/nav550060?sub=paper"
         variant="primary"
         className="mb-6"
-        onClick={() => sporHendelse("lag privat avtale klikket")}
+        onClick={() =>
+          sporHendelse("lag privat avtale klikket", {
+            bidragstype,
+          })
+        }
       >
         {t(tekster.lagPrivatAvtale)}
       </Button>
