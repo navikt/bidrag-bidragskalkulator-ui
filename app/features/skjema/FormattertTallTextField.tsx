@@ -1,5 +1,6 @@
-import { TextField, type TextFieldProps } from "@navikt/ds-react";
-import { type ChangeEvent, type Ref } from "react";
+import { type TextFieldProps } from "@navikt/ds-react";
+import { type Ref } from "react";
+import { InternalFormatterbartTextField } from "./InternalFormatterbartTextField";
 
 export type FormattertTallTextFieldProps = Omit<TextFieldProps, "onChange"> & {
   onChange: (value: string) => void;
@@ -7,7 +8,7 @@ export type FormattertTallTextFieldProps = Omit<TextFieldProps, "onChange"> & {
 };
 
 /**
- * FormattertTallTextField er en komponent som formaterer et tall med tusenvis
+ * FormattertTallTextField er en komponent som formaterer et tall med mellomrom som tusenskilletegn
  * og komma som desimaltegn. onChange-callbacken blir kalt med den uformatterte verdien.
  *
  * Ellers fungerer det som et vanlig TextField.
@@ -19,31 +20,17 @@ export type FormattertTallTextFieldProps = Omit<TextFieldProps, "onChange"> & {
  * />
  * ```
  */
-export const FormattertTallTextField = ({
-  onChange,
-  value,
-  ...rest
-}: FormattertTallTextFieldProps) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const formattertVerdi = formatterTall(e.target.value);
-    const uformattertVerdi = avformatterTall(formattertVerdi);
-
-    e.target.value = formattertVerdi;
-    onChange(uformattertVerdi);
-  };
-
+export const FormattertTallTextField = (
+  props: FormattertTallTextFieldProps,
+) => {
   return (
-    <TextField
-      type="text"
-      value={formatterTall(value)}
-      onChange={handleChange}
-      inputMode="numeric"
-      {...rest}
+    <InternalFormatterbartTextField
+      {...props}
+      formatterer={formatterTall}
+      avformatterer={avformatterTall}
     />
   );
 };
-
-FormattertTallTextField.displayName = "FormattertTallTextField";
 
 const formatterTall = (verdi: string | number | undefined): string => {
   if (!verdi) return "";
