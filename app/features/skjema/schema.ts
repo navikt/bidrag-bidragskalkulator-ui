@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { definerTekster, oversett, Språk } from "~/utils/i18n";
 
-const fastBosted = z.enum(["DELT_FAST_BOSTED", "IKKE_DELT_FAST_BOSTED"]);
+const fastBosted = z.enum(["DELT_FAST_BOSTED", "HOS_MEG", "HOS_MEDFORELDER"]);
 
 export const InnloggetBarnSkjemaSchema = z.object({
   ident: z.string().length(11),

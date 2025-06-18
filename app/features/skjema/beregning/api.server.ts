@@ -147,7 +147,6 @@ export const hentBidragsutregning = async (token: string, request: Request) => {
       const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
       const bidragstype = kalkulerBidragstype(
         barn.bosted,
-        barn.samvær,
         inntektForelder1,
         inntektForelder2,
       );
@@ -194,7 +193,6 @@ export const hentManuellBidragsutregning = async (request: Request) => {
       const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
       const bidragstype = kalkulerBidragstype(
         barn.bosted,
-        barn.samvær,
         inntektForelder1,
         inntektForelder2,
       );

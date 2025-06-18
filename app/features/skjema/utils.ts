@@ -184,14 +184,13 @@ export function kalkulerSamværsklasse(
  */
 export function kalkulerBidragstype(
   bostatus: FastBosted,
-  samvær: number,
   inntektForelder1: number,
   inntektForelder2: number,
 ): "MOTTAKER" | "PLIKTIG" {
   if (bostatus === "DELT_FAST_BOSTED") {
     return inntektForelder1 > inntektForelder2 ? "PLIKTIG" : "MOTTAKER";
   }
-  return samvær >= 15 ? "MOTTAKER" : "PLIKTIG";
+  return bostatus === "HOS_MEG" ? "MOTTAKER" : "PLIKTIG";
 }
 
 export const finnBarnBasertPåIdent = (
