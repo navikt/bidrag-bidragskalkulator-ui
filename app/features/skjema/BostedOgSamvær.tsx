@@ -2,6 +2,7 @@ import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useFieldArray, useFormContext } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { FormattertTallTextField } from "./FormattertTallTextField";
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
 import type { FastBosted, InnloggetSkjema } from "./schema";
 import { finnBarnBasertPåIdent, SAMVÆR_STANDARDVERDI } from "./utils";
@@ -27,6 +28,9 @@ export const BostedOgSamvær = () => {
         );
 
         const samvær = barnField.value("samvær") ?? SAMVÆR_STANDARDVERDI;
+        const alder = barnInfo?.alder ?? "";
+        const visSpørsmålOmBarnetilsynsutgift =
+          alder !== "" && Number(alder) < 11;
 
         const samværsgradBeskrivelse =
           samvær === "1"
@@ -79,6 +83,15 @@ export const BostedOgSamvær = () => {
                   },
                 ]}
                 valueDescription={samværsgradBeskrivelse}
+              />
+            )}
+            {visSpørsmålOmBarnetilsynsutgift && (
+              <FormattertTallTextField
+                {...barnField.field("barnetilsynsutgift").getControlProps()}
+                label={t(tekster.barnetilsynsutgift.label)}
+                description={t(tekster.barnetilsynsutgift.description)}
+                htmlSize={18}
+                error={barnField.field("barnetilsynsutgift").error()}
               />
             )}
           </div>
@@ -155,6 +168,18 @@ const tekster = definerTekster({
         en: "All the nights with you",
         nn: "Alle netter hos deg",
       },
+    },
+  },
+  barnetilsynsutgift: {
+    label: {
+      nb: "Kostnad for barnetilsyn",
+      en: "Child care costs",
+      nn: "Kostnad for barnetilsyn",
+    },
+    description: {
+      nb: "Barnetilsyn inkluderer barnehage (uten penger til kost, bleier og lignende), SFO, AKS eller dagmamma",
+      en: "Childcare includes kindergarten (excluding expenses for food, diapers etc), SFO, AKS or nanny",
+      nn: "Barnetilsyn inkluderer barnehage (uten penger til kost, bleier og lignende), SFO, AKS eller dagmamma",
     },
   },
 });
