@@ -292,9 +292,9 @@ const tekster = definerTekster({
         nn: "Fyll ut kostnader til barnetilsyn",
       },
       minimum: {
-        nb: "Kostnader til barnetilsyn må være mer enn 0",
-        en: "Costs for child care must be more than 0",
-        nn: "Kostnader til barnetilsyn må vere meir enn 0",
+        nb: "Kostnader til barnetilsyn må være minst 0",
+        en: "Costs for child care must be at least 0",
+        nn: "Kostnader til barnetilsyn må vere minst 0",
       },
       maksimum: {
         nb: "Kostnader for barnetilsyn kan ikke være mer enn 10 000 kr",
