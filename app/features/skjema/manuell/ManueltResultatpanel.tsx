@@ -32,7 +32,7 @@ export const ManueltResultatpanel = ({
   if ("error" in data) {
     return (
       <Alert variant="error">
-        <Heading size="small" spacing ref={ref} tabIndex={-1} level="2">
+        <Heading level="2" size="small" spacing ref={ref} tabIndex={-1}>
           {t(tekster.noeGikkFeil)}
         </Heading>
         <BodyLong>{data.error}</BodyLong>
@@ -63,8 +63,8 @@ export const ManueltResultatpanel = ({
   return (
     <Alert variant="info">
       <Heading
-        size="small"
         level="2"
+        size="small"
         ref={ref}
         tabIndex={-1}
         className="focus:outline-0"
@@ -103,7 +103,7 @@ export const ManueltResultatpanel = ({
         }}
       >
         <ExpansionCardHeader>
-          <ExpansionCardTitle as="h2" size="small" id="detaljer">
+          <ExpansionCardTitle as="h3" size="small" id="detaljer">
             {t(tekster.detaljer.overskrift)}
           </ExpansionCardTitle>
         </ExpansionCardHeader>
