@@ -22,7 +22,7 @@ export default defineConfig({
 
   webServer: {
     command: "npm run dev",
-    url: "http://localhost:5173/barnebidrag/kalkulator/api/internal/isready",
+    url: "http://localhost:5173/barnebidrag/tjenester/api/internal/isready",
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
     env: {

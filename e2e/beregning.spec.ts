@@ -3,7 +3,7 @@ import { sjekkTilgjengelighet } from "./uu-utils";
 
 test.describe("Beregningstest", () => {
   test("En enkel beregning er tilgjengelig", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/barnebidrag/tjenester/kalkulator");
     await page.waitForSelector("body", { timeout: 10000 });
 
     await sjekkTilgjengelighet(page);
