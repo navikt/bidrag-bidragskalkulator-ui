@@ -12,6 +12,7 @@ import { useMemo, useState } from "react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
+import { FormattertTallTextField } from "../FormattertTallTextField";
 import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
 import type { FastBosted, ManueltSkjema } from "../schema";
 import {
@@ -40,6 +41,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
 
   const alder = barnField.value("alder");
   const samvær = barnField.value("samvær") ?? SAMVÆR_STANDARDVERDI;
+  const visSpørsmålOmBarnetilsynsutgift = alder !== "" && Number(alder) < 11;
 
   const samværsgradBeskrivelse =
     samvær === "1"
@@ -143,6 +145,15 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
             },
           ]}
           valueDescription={samværsgradBeskrivelse}
+        />
+      )}
+      {visSpørsmålOmBarnetilsynsutgift && (
+        <FormattertTallTextField
+          {...barnField.field("barnetilsynsutgift").getControlProps()}
+          label={t(tekster.barnetilsynsutgift.label)}
+          description={t(tekster.barnetilsynsutgift.description)}
+          htmlSize={18}
+          error={barnField.field("barnetilsynsutgift").error()}
         />
       )}
       {onFjernBarn && (
@@ -253,6 +264,18 @@ const tekster = definerTekster({
         en: "All the nights with you",
         nn: "Alle netter hos deg",
       },
+    },
+  },
+  barnetilsynsutgift: {
+    label: {
+      nb: "Kostnad for barnetilsyn",
+      en: "Child care costs",
+      nn: "Kostnad for barnetilsyn",
+    },
+    description: {
+      nb: "Barnetilsyn inkluderer barnehage (uten penger til kost, bleier og lignende), SFO, AKS eller dagmamma",
+      en: "Childcare includes kindergarten (excluding expenses for food, diapers etc), SFO, AKS or nanny",
+      nn: "Barnetilsyn inkluderer barnehage (uten penger til kost, bleier og lignende), SFO, AKS eller dagmamma",
     },
   },
   år: {

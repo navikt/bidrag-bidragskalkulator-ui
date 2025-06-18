@@ -7,6 +7,7 @@ export const InnloggetBarnSkjemaSchema = z.object({
   ident: z.string().length(11),
   bosted: z.enum([...fastBosted.options, ""]),
   samvær: z.string(),
+  barnetilsynsutgift: z.string(),
 });
 
 export const InnloggetSkjemaSchema = z.object({
@@ -30,6 +31,7 @@ export const ManueltBarnSkjemaSchema = z.object({
   alder: z.string(),
   bosted: z.enum([...fastBosted.options, ""]),
   samvær: z.string(),
+  barnetilsynsutgift: z.string(),
 });
 
 export const ManueltSkjemaSchema = z.object({
@@ -65,6 +67,7 @@ export const lagInnloggetBarnSkjema = (språk: Språk) => {
           .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
           .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum)),
       ),
+    barnetilsynsutgift: lagBarnetilsynsutgiftSchema(språk),
   });
 };
 
@@ -185,7 +188,30 @@ export const lagManueltBarnSkjema = (språk: Språk) => {
           .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
           .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum)),
       ),
+    barnetilsynsutgift: lagBarnetilsynsutgiftSchema(språk),
   });
+};
+
+const lagBarnetilsynsutgiftSchema = (språk: Språk) => {
+  return z
+    .string({
+      required_error: oversett(
+        språk,
+        tekster.feilmeldinger.barnetilsynsutgift.påkrevd,
+      ),
+    })
+    .pipe(
+      z.coerce
+        .number()
+        .min(
+          0,
+          oversett(språk, tekster.feilmeldinger.barnetilsynsutgift.minimum),
+        )
+        .max(
+          10000,
+          oversett(språk, tekster.feilmeldinger.barnetilsynsutgift.maksimum),
+        ),
+    );
 };
 
 export const lagManueltSkjema = (språk: Språk) => {
@@ -257,6 +283,23 @@ const tekster = definerTekster({
         nb: "Barnet kan ikke ha flest netter hos deg når barnet bor hos den andre forelderen.",
         en: "The child cannot spend most nights with you when the child lives with the other parent.",
         nn: "Barnet kan ikkje ha flest netter hos deg når barnet bur hos den andre forelderen.",
+      },
+    },
+    barnetilsynsutgift: {
+      påkrevd: {
+        nb: "Fyll ut kostnader til barnetilsyn",
+        en: "Fill in costs for child care",
+        nn: "Fyll ut kostnader til barnetilsyn",
+      },
+      minimum: {
+        nb: "Kostnader til barnetilsyn må være minst 0",
+        en: "Costs for child care must be at least 0",
+        nn: "Kostnader til barnetilsyn må vere minst 0",
+      },
+      maksimum: {
+        nb: "Kostnader for barnetilsyn kan ikke være mer enn 10 000 kr",
+        en: "Costs for child care cannot exceed 10,000 NOK",
+        nn: "Kostnader for barnetilsyn kan ikkje vere meir enn 10 000 kr",
       },
     },
     bostatus: {

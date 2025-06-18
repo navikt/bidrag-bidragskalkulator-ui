@@ -12,6 +12,7 @@ test.describe("Beregningstest", () => {
     await page
       .getByLabel("Vi har avtale om fast bosted hos begge (delt fast bosted)")
       .check();
+    await page.getByLabel("Kostnad for barnetilsyn").fill("1000");
 
     const dinHusstand = page.getByRole("group", { name: "Din husstand" });
     await dinHusstand.getByLabel("Nei").check();

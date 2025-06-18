@@ -19,6 +19,7 @@ export type Bidragsutregningsgrunnlag = {
     ident: string;
     samværsklasse: Samværsklasse;
     bidragstype: "MOTTAKER" | "PLIKTIG";
+    barnetilsynsutgift: number;
   }[];
   inntektForelder1: number;
   inntektForelder2: number;
@@ -31,6 +32,7 @@ export type ManueltBidragsutregningsgrunnlag = {
     alder: number;
     samværsklasse: Samværsklasse;
     bidragstype: "MOTTAKER" | "PLIKTIG";
+    barnetilsynsutgift: number;
   }[];
   inntektForelder1: number;
   inntektForelder2: number;
