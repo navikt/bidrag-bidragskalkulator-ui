@@ -47,7 +47,7 @@ test.describe("Beregningstest", () => {
 
     await sjekkTilgjengelighet(page);
 
-    await page.getByRole("button", { name: "Vis mer" }).click();
+    await page.getByRole("button", { name: "Vis mer" }).first().click();
 
     await sjekkTilgjengelighet(page);
   });
