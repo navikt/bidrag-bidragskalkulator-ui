@@ -13,6 +13,7 @@ import {
   ExpansionCardTitle,
 } from "@navikt/ds-react/ExpansionCard";
 import { ListItem } from "@navikt/ds-react/List";
+import { Link as RouterLink } from "react-router";
 import { sporHendelseEnGang } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
@@ -64,8 +65,8 @@ export const ManueltResultatpanel = ({
       <BodyLong spacing>{t(tekster.hvordanAvtale)}</BodyLong>
 
       <Button
-        as="a"
-        href={`/barnebidrag/kalkulator/privat-avtale?kalkulator=${JSON.stringify(data.resultater)}`}
+        as={RouterLink}
+        to={`/privat-avtale?kalkulator=${JSON.stringify(data.resultater)}`}
         variant="primary"
         className="mb-6"
       >
