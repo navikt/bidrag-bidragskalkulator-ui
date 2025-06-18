@@ -90,58 +90,25 @@ npm run token:dev
 
 ## Testing
 
-### End-to-End Testing
+### Ende-til-ende testing
 
-The application uses Playwright for end-to-end testing with comprehensive API mocking support.
+Bidragskalkulatoren har oppsett for ende-til-ende testing med Playwright, med og uten mocking av backenden.
 
-#### Running Tests
+Mocking av backenden er i stor grad satt opp for å kunne kjøre testene i Github Actions, som en del av PR review-prosessen.
+
+Målet med disse testene er i stor grad å verifisere at de viktigste funksjonene i applikasjonen fungerer som forventet, og at det ikke er noen regressjoner ved endringer i koden. Dette gjelder spesielt med tanke på universell utforming og tilgjengelighet.
+
+Det anbefales å kjøre testene lokalt (mot dev-server, eller mot lokal server) før du lager en PR, for å sikre at alt fungerer som forventet. I PRen vil man kjøre testene med mocking av backenden.
+
+#### Kjøring av tester
 
 ```bash
-# Run tests with real backend
+# Kjør tester mot dev-miljøet (da trenger du en gyldig token)
+npm run token:dev
 npm run test:e2e
 
-# Run tests with mocked backend
+# Kjør tester med mocking av backenden
 npm run test:e2e:mock
-```
-
-#### API Mocking
-
-When `MOCK_BACKEND=true` is set, all external API calls are automatically mocked using Playwright's built-in route interception. This provides:
-
-- **Reliable testing**: No dependency on external services
-- **Fast execution**: No network delays
-- **Error simulation**: Test error conditions easily
-- **Offline development**: Work without backend connectivity
-
-For detailed mocking documentation, see [e2e/mocks/README.md](e2e/mocks/README.md).
-
-**Example with custom mock data:**
-
-```typescript
-import { settOppMocker, mockScenarios } from "./mocks";
-
-test("high income calculation", async ({ page }) => {
-  await settOppMocker(page, {
-    personinformasjon: { inntekt: 1500000 },
-    bidragsutregning: {
-      resultater: [
-        {
-          sum: 5000, // Higher amount
-          bidragstype: "PLIKTIG",
-        },
-      ],
-    },
-  });
-
-  await page.goto("/");
-  // Test logic here
-});
-
-// Or use pre-defined scenarios
-test("error handling", async ({ page }) => {
-  await settOppMocker(page, mockScenarios.calculationError);
-  // Test error conditions
-});
 ```
 
 ## Kjør lokalt
