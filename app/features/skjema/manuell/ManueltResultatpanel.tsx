@@ -148,6 +148,9 @@ export const ManueltResultatpanel = ({
           </ExpansionCardHeader>
 
           <ExpansionCardContent>
+            <BodyLong spacing>{t(tekster.bidragetSkalDekke.del1)}</BodyLong>
+            <BodyLong spacing>{t(tekster.bidragetSkalDekke.del2)}</BodyLong>
+
             <List>
               <ListItem>{t(tekster.bidragetSkalDekke.liste1)}</ListItem>
               <ListItem>{t(tekster.bidragetSkalDekke.liste2)}</ListItem>
@@ -155,7 +158,7 @@ export const ManueltResultatpanel = ({
             </List>
 
             <Link
-              href="https://www.nav.no/barnebidrag#hva"
+              href={t(tekster.bidragetSkalDekke.lesMerLenke)}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -341,25 +344,40 @@ const tekster = definerTekster({
       en: "What the child support should cover",
       nn: "Kva fostringstilskotet skal dekke",
     },
+    del1: {
+      nb: "Når foreldrene inngår en privat avtale, bestemmer dere selv hva barnebidraget skal dekke.",
+      en: "When parents establish a private agreement, the parents decide between themselves what the child support shall cover.",
+      nn: "Når foreldra inngår ein privat avtale, bestemmer de sjølv kva fostringstilskotet skal dekke.",
+    },
+    del2: {
+      nb: "Når Nav fastsetter barnebidraget, skal bidraget dekke det som går inn under underholdskostnaden. Kort fortalt handler det om kostnadene til den daglige forsørgelsen av barnet. Dette inkluderer:",
+      en: "When Nav calculates the child support, the child support payment is intended to cover expenditures that are included in the maintenance cost. In short, these are costs that a parent incurs in connection caring for the child in their day-to-day life. This includes:",
+      nn: "Når Nav fastset fostringstilskotet, skal tilskotet dekke det som går inn under underhaldskostnaden. Kort fortalt handlar det om kostnadene til den daglege forsørginga av barnet. Dette inkluderer:",
+    },
     liste1: {
       nb: "forbruksutgifter (klær, sko, mat og drikke, fritidsaktiviteter med mer)",
-      en: "consumption expenses (clothes, shoes, food and drink, leisure activities, etc.)",
+      en: "consumer expenses (clothing, shoes, food & drinks, leisure activities, etc)",
       nn: "forbruksutgifter (klede, sko, mat og drikke, fritidsaktivitetar med meir)",
     },
     liste2: {
       nb: "boutgifter (barnets andel av boutgiftene)",
-      en: "housing expenses (the child's share of housing costs)",
+      en: "housing costs (child’s share of housing costs)",
       nn: "buutgifter (barnets andel av buutgiftene)",
     },
     liste3: {
       nb: "tilsynsutgifter (barnehage, skolefritidsordning, dagmamma)",
-      en: "supervision expenses (kindergarten, school leisure time program, nanny)",
+      en: "child-care costs (kindergarten, after-school programme (SFO), nanny)",
       nn: "tilsynsutgifter (barnehage, skulefritidsordning, dagmamma)",
     },
     lesMer: {
       nb: "Les mer om hva barnebidraget skal dekke",
       en: "Read more about what child support should cover",
       nn: "Les meir om kva fostringstilskotet skal dekke",
+    },
+    lesMerLenke: {
+      nb: "https://www.nav.no/barnebidrag#hva",
+      en: "https://www.nav.no/barnebidrag/en#what",
+      nn: "https://www.nav.no/barnebidrag#hva",
     },
   },
 });
