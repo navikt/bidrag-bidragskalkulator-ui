@@ -16,8 +16,7 @@ type Props = {
 };
 
 export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
-  const [fremhevUnderholdskostnad, settFremhevUnderholdskostnad] =
-    useState(false);
+  const [erAlderSatt, setAlderSatt] = useState(false);
   const { underholdskostnader } = usePersoninformasjon();
   const { t } = useOversettelse();
   const form = useFormContext<ManueltSkjema>();
@@ -25,16 +24,16 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
 
   const alder = barnField.value("alder");
-  const visSpørsmålOmBarnetilsynsutgift = alder !== "" && Number(alder) < 11;
+  const visSpørsmålOmBarnetilsynsutgift = erAlderSatt && Number(alder) < 11;
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
-  const handleChangeAlder = () => settFremhevUnderholdskostnad(false);
+  const handleChangeAlder = () => setAlderSatt(false);
 
   const handleBlurAlder = (event: React.FocusEvent<HTMLInputElement>) => {
     const alder = event.target.value;
     if (!!alder) {
-      settFremhevUnderholdskostnad(true);
+      setAlderSatt(true);
     }
   };
 
@@ -70,7 +69,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
           {underholdskostnadsgrupper.map(
             ({ label, underholdskostnad, aldre }) => {
               const fremhevGruppe =
-                fremhevUnderholdskostnad && aldre.includes(Number(alder));
+                erAlderSatt && aldre.includes(Number(alder));
               return (
                 <li key={label}>
                   <span
