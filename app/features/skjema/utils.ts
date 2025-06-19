@@ -1,3 +1,4 @@
+import type z from "zod";
 import type { Samværsklasse } from "./beregning/schema";
 import type {
   Barn,
@@ -159,7 +160,7 @@ export const hentManueltSkjemaStandardverdi = (
  */
 export function kalkulerSamværsklasse(
   samværsgrad: number,
-  bostatus: FastBosted,
+  bostatus: z.infer<typeof FastBosted>,
 ): Samværsklasse {
   if (bostatus === "DELT_FAST_BOSTED") {
     return "DELT_BOSTED";
@@ -183,15 +184,14 @@ export function kalkulerSamværsklasse(
  * Avgjør om forelderen er mottaker eller pliktig basert på samværsgrad
  */
 export function kalkulerBidragstype(
-  bostatus: FastBosted,
-  samvær: number,
+  bostatus: z.infer<typeof FastBosted>,
   inntektForelder1: number,
   inntektForelder2: number,
 ): "MOTTAKER" | "PLIKTIG" {
   if (bostatus === "DELT_FAST_BOSTED") {
     return inntektForelder1 > inntektForelder2 ? "PLIKTIG" : "MOTTAKER";
   }
-  return samvær >= 15 ? "MOTTAKER" : "PLIKTIG";
+  return bostatus === "HOS_MEG" ? "MOTTAKER" : "PLIKTIG";
 }
 
 export const finnBarnBasertPåIdent = (

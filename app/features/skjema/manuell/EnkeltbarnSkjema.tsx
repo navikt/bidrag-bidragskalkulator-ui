@@ -1,29 +1,14 @@
 import { PersonCrossIcon } from "@navikt/aksel-icons";
-import {
-  BodyLong,
-  Button,
-  Radio,
-  RadioGroup,
-  ReadMore,
-  TextField,
-} from "@navikt/ds-react";
+import { BodyLong, Button, ReadMore, TextField } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { useMemo, useState } from "react";
-import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import { FormattertTallTextField } from "../FormattertTallTextField";
 import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
-import type { FastBosted, ManueltSkjema } from "../schema";
-import {
-  SAMVÆR_STANDARDVERDI,
-  tilUnderholdskostnadsgruppeMedLabel,
-} from "../utils";
-
-const BOSTED_OPTIONS: FastBosted[] = [
-  "DELT_FAST_BOSTED",
-  "IKKE_DELT_FAST_BOSTED",
-];
+import { Samvær } from "../Samvær";
+import type { ManueltSkjema } from "../schema";
+import { tilUnderholdskostnadsgruppeMedLabel } from "../utils";
 
 type Props = {
   barnIndex: number;
@@ -31,8 +16,7 @@ type Props = {
 };
 
 export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
-  const [fremhevUnderholdskostnad, settFremhevUnderholdskostnad] =
-    useState(false);
+  const [erAlderSatt, setAlderSatt] = useState(false);
   const { underholdskostnader } = usePersoninformasjon();
   const { t } = useOversettelse();
   const form = useFormContext<ManueltSkjema>();
@@ -40,25 +24,16 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
 
   const alder = barnField.value("alder");
-  const samvær = barnField.value("samvær") ?? SAMVÆR_STANDARDVERDI;
-  const visSpørsmålOmBarnetilsynsutgift = alder !== "" && Number(alder) < 11;
-
-  const samværsgradBeskrivelse =
-    samvær === "1"
-      ? t(tekster.samvær.enNatt)
-      : t(tekster.samvær.netter(samvær));
-
-  const borHosEnForelder =
-    barnField.value("bosted") === "IKKE_DELT_FAST_BOSTED";
+  const visSpørsmålOmBarnetilsynsutgift = erAlderSatt && Number(alder) < 11;
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
-  const handleChangeAlder = () => settFremhevUnderholdskostnad(false);
+  const handleChangeAlder = () => setAlderSatt(false);
 
   const handleBlurAlder = (event: React.FocusEvent<HTMLInputElement>) => {
     const alder = event.target.value;
     if (!!alder) {
-      settFremhevUnderholdskostnad(true);
+      setAlderSatt(true);
     }
   };
 
@@ -94,7 +69,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
           {underholdskostnadsgrupper.map(
             ({ label, underholdskostnad, aldre }) => {
               const fremhevGruppe =
-                fremhevUnderholdskostnad && aldre.includes(Number(alder));
+                erAlderSatt && aldre.includes(Number(alder));
               return (
                 <li key={label}>
                   <span
@@ -107,46 +82,8 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
         </ul>
       </ReadMore>
 
-      <RadioGroup
-        {...barnField.field("bosted").getInputProps()}
-        error={barnField.field("bosted").error()}
-        legend={t(tekster.bosted.label)}
-      >
-        {BOSTED_OPTIONS.map((bosted) => {
-          return (
-            <Radio value={bosted} key={bosted}>
-              {t(tekster.bosted.valg[bosted])}
-            </Radio>
-          );
-        })}
-      </RadioGroup>
+      <Samvær barnIndex={barnIndex} />
 
-      {borHosEnForelder && (
-        <Slider
-          {...barnField.field("samvær").getControlProps()}
-          label={t(tekster.samvær.label)}
-          description={t(tekster.samvær.beskrivelse)}
-          error={barnField.field("samvær").error()}
-          min={0}
-          max={30}
-          step={1}
-          list={[
-            {
-              label: t(tekster.samvær.beskrivelser.ingenNetterHosDeg),
-              value: 0,
-            },
-            {
-              label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosDeg),
-              value: 15,
-            },
-            {
-              label: t(tekster.samvær.beskrivelser.alleNetterHosDeg),
-              value: 30,
-            },
-          ]}
-          valueDescription={samværsgradBeskrivelse}
-        />
-      )}
       {visSpørsmålOmBarnetilsynsutgift && (
         <FormattertTallTextField
           {...barnField.field("barnetilsynsutgift").getControlProps()}
@@ -195,74 +132,6 @@ const tekster = definerTekster({
         nb: "Det viktigste grunnlaget for beregningen er hvor mye det koster å forsørge et barn – også kjent som underholdskostnaden. Disse summene hentes fra SIFOs referansebudsjetter, og oppdateres hvert år. Underholdskostnaden for barn i ulike aldre er i dag:",
         en: "The main basis for the calculation is how much it costs to support a child – also known as the maintenance cost. These amounts are taken from SIFO's reference budgets and are updated every year. The maintenance cost for children of different ages today is:",
         nn: "Det viktigaste grunnlaget for beregninga er kor mykje det kostar å forsørgje eit barn – også kjent som underhaldskostnaden. Desse summene hentast frå SIFOs referansebudsjett, og oppdaterast kvart år. Underhaldskostnaden for barn i ulike aldrar er i dag:",
-      },
-    },
-  },
-  bosted: {
-    label: {
-      nb: "Hvor skal barnet bo fast?",
-      en: "Where will the child have a permanent address?",
-      nn: "Kvar skal barnet bu fast?",
-    },
-    valg: {
-      velg: {
-        nb: "Velg hvor barnet skal bo",
-        en: "Select where the child will live",
-        nn: "Velg kvar barnet skal bu",
-      },
-      DELT_FAST_BOSTED: {
-        nb: "Vi har avtale om fast bosted hos begge (delt fast bosted)",
-        en: "We have an agreement on permanent residence with both of us (shared permanent residence)",
-        nn: "Vi har avtale om fast bustad hos begge (delt fast bustad)",
-      },
-      IKKE_DELT_FAST_BOSTED: {
-        nb: "Vi har avtale om fast bosted hos én og samvær med den andre",
-        en: "We have an agreement on permanent residence with one and visitation with the other",
-        nn: "Vi har avtale om fast bustad hos éin og samvær med den andre",
-      },
-      hosDenAndre: (navn) => ({
-        nb: `Barnet bor hos ${navn}`,
-        en: `The child lives with ${navn}`,
-        nn: `Barnet bur hos ${navn}`,
-      }),
-    },
-  },
-  samvær: {
-    label: {
-      nb: "Hvor mye vil barnet være sammen med deg?",
-      en: "How much will the child stay with you?",
-      nn: "Kor mykje vil barnet vere saman med deg?",
-    },
-    beskrivelse: {
-      nb: "Estimer hvor mange netter barnet vil være hos deg i snitt per måned",
-      en: "Estimate how many nights the child will stay with you on average per month",
-      nn: "Estimer kor mange netter barnet vil vere hos deg i snitt per månad",
-    },
-    netter: (antall) => ({
-      nb: `${antall} netter hos deg`,
-      en: `${antall} nights with you`,
-      nn: `${antall} netter hos deg`,
-    }),
-    enNatt: {
-      nb: "1 natt hos deg",
-      en: "1 night with you",
-      nn: "1 natt hos deg",
-    },
-    beskrivelser: {
-      ingenNetterHosDeg: {
-        nb: "Ingen netter hos deg",
-        en: "No nights with you",
-        nn: "Ingen netter hos deg",
-      },
-      halvpartenAvTidenHosDeg: {
-        nb: "Halvparten av nettene hos deg",
-        en: "Half the nights with you",
-        nn: "Halvparten av nettene hos deg",
-      },
-      alleNetterHosDeg: {
-        nb: "Alle netter hos deg",
-        en: "All the nights with you",
-        nn: "Alle netter hos deg",
       },
     },
   },

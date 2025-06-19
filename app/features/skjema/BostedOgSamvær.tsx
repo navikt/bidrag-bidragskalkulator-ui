@@ -1,16 +1,10 @@
-import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useFieldArray, useFormContext } from "@rvf/react";
-import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
-import type { FastBosted, InnloggetSkjema } from "./schema";
-import { finnBarnBasertPåIdent, SAMVÆR_STANDARDVERDI } from "./utils";
-
-const BOSTED_OPTIONS: FastBosted[] = [
-  "DELT_FAST_BOSTED",
-  "IKKE_DELT_FAST_BOSTED",
-];
+import { Samvær } from "./Samvær";
+import type { InnloggetSkjema } from "./schema";
+import { finnBarnBasertPåIdent } from "./utils";
 
 export const BostedOgSamvær = () => {
   const personinformasjon = usePersoninformasjon();
@@ -21,70 +15,20 @@ export const BostedOgSamvær = () => {
 
   return (
     <>
-      {barnArray.map((key, barnField) => {
+      {barnArray.map((key, barnField, index) => {
         const barnInfo = finnBarnBasertPåIdent(
           barnField.value("ident"),
           personinformasjon,
         );
 
-        const samvær = barnField.value("samvær") ?? SAMVÆR_STANDARDVERDI;
         const alder = barnInfo?.alder ?? "";
         const visSpørsmålOmBarnetilsynsutgift =
           alder !== "" && Number(alder) < 11;
 
-        const samværsgradBeskrivelse =
-          samvær === "1"
-            ? t(tekster.samvær.enNatt)
-            : t(tekster.samvær.netter(samvær));
-
-        const borHosEnForelder =
-          barnField.value("bosted") === "IKKE_DELT_FAST_BOSTED";
-
         return (
           <div key={key} className="border p-4 rounded-md space-y-4">
             <h3 className="font-bold text-xl">{`${barnInfo?.fulltNavn} (${barnInfo?.alder})`}</h3>
-            <RadioGroup
-              {...barnField.field("bosted").getInputProps()}
-              error={barnField.field("bosted").error()}
-              legend={t(tekster.bosted.label(`${barnInfo?.fornavn}`))}
-            >
-              {BOSTED_OPTIONS.map((bosted) => {
-                return (
-                  <Radio value={bosted} key={bosted}>
-                    {t(tekster.bosted.valg[bosted])}
-                  </Radio>
-                );
-              })}
-            </RadioGroup>
-
-            {borHosEnForelder && (
-              <Slider
-                {...barnField.field("samvær").getControlProps()}
-                label={t(tekster.samvær.label)}
-                description={t(tekster.samvær.beskrivelse)}
-                error={barnField.field("samvær").error()}
-                min={0}
-                max={30}
-                step={1}
-                list={[
-                  {
-                    label: t(tekster.samvær.beskrivelser.ingenNetterHosDeg),
-                    value: 0,
-                  },
-                  {
-                    label: t(
-                      tekster.samvær.beskrivelser.halvpartenAvTidenHosDeg,
-                    ),
-                    value: 15,
-                  },
-                  {
-                    label: t(tekster.samvær.beskrivelser.alleNetterHosDeg),
-                    value: 30,
-                  },
-                ]}
-                valueDescription={samværsgradBeskrivelse}
-              />
-            )}
+            <Samvær barnIndex={index} />
             {visSpørsmålOmBarnetilsynsutgift && (
               <FormattertTallTextField
                 {...barnField.field("barnetilsynsutgift").getControlProps()}
