@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from "@navikt/aksel-icons";
 import {
   Alert,
   BodyLong,
@@ -82,6 +83,10 @@ export const ManueltResultatpanel = ({
         href="https://www.nav.no/fyllut/nav550060?sub=paper"
         variant="primary"
         className="mb-6"
+        target="_blank"
+        rel="noopener noreferrer"
+        icon={<ExternalLinkIcon title="Åpnes i ny fane" />}
+        iconPosition="right"
         onClick={() =>
           sporHendelse("lag privat avtale klikket", {
             bidragstype,
