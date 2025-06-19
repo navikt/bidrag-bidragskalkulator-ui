@@ -2,14 +2,8 @@ import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import type { FastBosted, ManueltSkjema } from "./schema";
+import { FastBosted, type ManueltSkjema } from "./schema";
 import { SAMVÆR_STANDARDVERDI } from "./utils";
-
-const BOSTED_VALG: FastBosted[] = [
-  "DELT_FAST_BOSTED",
-  "HOS_MEG",
-  "HOS_MEDFORELDER",
-];
 
 type SamværProps = {
   barnIndex: number;
@@ -39,7 +33,7 @@ export function Samvær({ barnIndex }: SamværProps) {
         error={barnField.field("bosted").error()}
         legend={t(tekster.bosted.label)}
       >
-        {BOSTED_VALG.map((bosted) => {
+        {FastBosted.options.map((bosted) => {
           return (
             <Radio value={bosted} key={bosted}>
               {t(tekster.bosted.valg[bosted])}

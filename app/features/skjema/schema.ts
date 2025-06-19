@@ -1,11 +1,15 @@
 import { z } from "zod";
 import { definerTekster, oversett, Språk } from "~/utils/i18n";
 
-const fastBosted = z.enum(["DELT_FAST_BOSTED", "HOS_MEG", "HOS_MEDFORELDER"]);
+export const FastBosted = z.enum([
+  "DELT_FAST_BOSTED",
+  "HOS_MEG",
+  "HOS_MEDFORELDER",
+]);
 
 export const InnloggetBarnSkjemaSchema = z.object({
   ident: z.string().length(11),
-  bosted: z.enum([...fastBosted.options, ""]),
+  bosted: z.enum([...FastBosted.options, ""]),
   samvær: z.string(),
   barnetilsynsutgift: z.string(),
 });
@@ -29,7 +33,7 @@ export const InnloggetSkjemaSchema = z.object({
 
 export const ManueltBarnSkjemaSchema = z.object({
   alder: z.string(),
-  bosted: z.enum([...fastBosted.options, ""]),
+  bosted: z.enum([...FastBosted.options, ""]),
   samvær: z.string(),
   barnetilsynsutgift: z.string(),
 });
@@ -55,7 +59,7 @@ export const lagInnloggetBarnSkjema = (språk: Språk) => {
     ident: z
       .string()
       .length(11, oversett(språk, tekster.feilmeldinger.barnIdent.ugyldig)),
-    bosted: z.enum(fastBosted.options, {
+    bosted: z.enum(FastBosted.options, {
       message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
     }),
     samvær: z
@@ -176,7 +180,7 @@ export const lagManueltBarnSkjema = (språk: Språk) => {
           .max(25, oversett(språk, tekster.feilmeldinger.barn.alder.maksimum))
           .int(oversett(språk, tekster.feilmeldinger.barn.alder.heltall)),
       ),
-    bosted: z.enum(fastBosted.options, {
+    bosted: z.enum(FastBosted.options, {
       message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
     }),
     samvær: z
@@ -225,7 +229,6 @@ export const lagManueltSkjema = (språk: Språk) => {
   });
 };
 
-export type FastBosted = z.infer<typeof fastBosted>;
 export type InnloggetBarnSkjema = z.infer<typeof InnloggetBarnSkjemaSchema>;
 export type InnloggetSkjema = z.infer<typeof InnloggetSkjemaSchema>;
 export type InnloggetSkjemaValidert = z.infer<
