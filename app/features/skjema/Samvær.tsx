@@ -3,7 +3,7 @@ import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FastBosted, type ManueltSkjema } from "./schema";
-import { SAMVÆR_STANDARDVERDI } from "./utils";
+import { kalkulerSamværsklasse, SAMVÆR_STANDARDVERDI } from "./utils";
 
 type SamværProps = {
   barnIndex: number;
@@ -12,15 +12,25 @@ export function Samvær({ barnIndex }: SamværProps) {
   const { t } = useOversettelse();
   const form = useFormContext<ManueltSkjema>();
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
-  const samvær = barnField.value("samvær") || SAMVÆR_STANDARDVERDI;
-  const samværsgradBeskrivelse =
-    samvær === "1"
-      ? t(tekster.samvær.enNatt)
-      : t(tekster.samvær.netter(samvær));
 
   const bosted = barnField.value("bosted");
   const borHosMeg = bosted === "HOS_MEG";
   const borHosMedforelder = bosted === "HOS_MEDFORELDER";
+
+  const samvær = barnField.value("samvær") || SAMVÆR_STANDARDVERDI;
+  const samværsklasse = bosted
+    ? kalkulerSamværsklasse(Number(samvær), bosted)
+    : "";
+  let samværsgradBeskrivelse =
+    samvær === "1"
+      ? t(tekster.samvær.enNatt)
+      : t(tekster.samvær.netter(samvær));
+
+  if (samværsklasse && (borHosMedforelder || borHosMeg)) {
+    samværsgradBeskrivelse += ` (${t(
+      tekster.samvær.samværsklasser[samværsklasse],
+    )})`;
+  }
 
   return (
     <>
@@ -161,6 +171,38 @@ const tekster = definerTekster({
         nb: "Alle netter hos deg",
         en: "All the nights with you",
         nn: "Alle netter hos deg",
+      },
+    },
+    samværsklasser: {
+      DELT_BOSTED: {
+        nb: "Delt bosted",
+        en: "Shared residence",
+        nn: "Delt bustad",
+      },
+      SAMVÆRSKLASSE_0: {
+        nb: "samværsklasse 0",
+        en: "visitation class 0",
+        nn: "samværsklasse 0",
+      },
+      SAMVÆRSKLASSE_1: {
+        nb: "samværsklasse 1",
+        en: "visitation class 1",
+        nn: "samværsklasse 1",
+      },
+      SAMVÆRSKLASSE_2: {
+        nb: "samværsklasse 2",
+        en: "visitation class 2",
+        nn: "samværsklasse 2",
+      },
+      SAMVÆRSKLASSE_3: {
+        nb: "samværsklasse 3",
+        en: "visitation class 3",
+        nn: "samværsklasse 3",
+      },
+      SAMVÆRSKLASSE_4: {
+        nb: "samværsklasse 4",
+        en: "visitation class 4",
+        nn: "samværsklasse 4",
       },
     },
   },
