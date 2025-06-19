@@ -6,6 +6,7 @@ import {
   Heading,
   Link,
   List,
+  VStack,
 } from "@navikt/ds-react";
 import {
   ExpansionCardContent,
@@ -91,43 +92,81 @@ export const ManueltResultatpanel = ({
       </Button>
 
       <BodyLong spacing>{t(tekster.hvisManIkkeKommerTilEnighet)}</BodyLong>
-      <ExpansionCard
-        aria-labelledby="detaljer"
-        size="small"
-        onToggle={(open) => {
-          sporHendelseEnGang(
-            open
-              ? "beregningsdetaljer utvidet"
-              : "beregningsdetaljer kollapset",
-          );
-        }}
-      >
-        <ExpansionCardHeader>
-          <ExpansionCardTitle as="h3" size="small" id="detaljer">
-            {t(tekster.detaljer.overskrift)}
-          </ExpansionCardTitle>
-        </ExpansionCardHeader>
-        <ExpansionCardContent>
-          {data.resultater.length > 1 && (
-            <>
-              <BodyLong spacing>
-                {t(tekster.detaljer.utregningPerBarn)}
-              </BodyLong>
-              <List>
-                {data.resultater.map((resultat, index) => (
-                  <ListItem key={index}>
-                    {resultat.bidragstype === "MOTTAKER"
-                      ? t(tekster.detaljer.motta(resultat.alder, resultat.sum))
-                      : t(
-                          tekster.detaljer.betale(resultat.alder, resultat.sum),
-                        )}
-                  </ListItem>
-                ))}
-              </List>
-            </>
-          )}
-        </ExpansionCardContent>
-      </ExpansionCard>
+
+      <VStack gap="3">
+        <ExpansionCard
+          aria-labelledby="detaljer"
+          size="small"
+          onToggle={(open) => {
+            sporHendelseEnGang(
+              open
+                ? "beregningsdetaljer utvidet"
+                : "beregningsdetaljer kollapset",
+            );
+          }}
+        >
+          <ExpansionCardHeader>
+            <ExpansionCardTitle as="h3" size="small" id="detaljer">
+              {t(tekster.detaljer.overskrift)}
+            </ExpansionCardTitle>
+          </ExpansionCardHeader>
+          <ExpansionCardContent>
+            {data.resultater.length > 1 && (
+              <>
+                <BodyLong spacing>
+                  {t(tekster.detaljer.utregningPerBarn)}
+                </BodyLong>
+                <List>
+                  {data.resultater.map((resultat, index) => (
+                    <ListItem key={index}>
+                      {resultat.bidragstype === "MOTTAKER"
+                        ? t(
+                            tekster.detaljer.motta(
+                              resultat.alder,
+                              resultat.sum,
+                            ),
+                          )
+                        : t(
+                            tekster.detaljer.betale(
+                              resultat.alder,
+                              resultat.sum,
+                            ),
+                          )}
+                    </ListItem>
+                  ))}
+                </List>
+              </>
+            )}
+          </ExpansionCardContent>
+        </ExpansionCard>
+
+        <ExpansionCard aria-labelledby="hva-dekkes" size="small">
+          <ExpansionCardHeader>
+            <ExpansionCardTitle as="h3" size="small" id="hva-dekkes">
+              {t(tekster.bidragetSkalDekke.tittel)}
+            </ExpansionCardTitle>
+          </ExpansionCardHeader>
+
+          <ExpansionCardContent>
+            <BodyLong spacing>{t(tekster.bidragetSkalDekke.del1)}</BodyLong>
+            <BodyLong spacing>{t(tekster.bidragetSkalDekke.del2)}</BodyLong>
+
+            <List>
+              <ListItem>{t(tekster.bidragetSkalDekke.liste1)}</ListItem>
+              <ListItem>{t(tekster.bidragetSkalDekke.liste2)}</ListItem>
+              <ListItem>{t(tekster.bidragetSkalDekke.liste3)}</ListItem>
+            </List>
+
+            <Link
+              href={t(tekster.bidragetSkalDekke.lesMerLenke)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t(tekster.bidragetSkalDekke.lesMer)}
+            </Link>
+          </ExpansionCardContent>
+        </ExpansionCard>
+      </VStack>
     </Alert>
   );
 };
@@ -293,5 +332,47 @@ const tekster = definerTekster({
     nb: "Lag privat avtale",
     en: "Make a private agreement",
     nn: "Lag ein privat avtale",
+  },
+  bidragetSkalDekke: {
+    tittel: {
+      nb: "Hva barnebidraget skal dekke",
+      en: "What the child support should cover",
+      nn: "Kva fostringstilskotet skal dekke",
+    },
+    del1: {
+      nb: "Når foreldrene inngår en privat avtale, bestemmer dere selv hva barnebidraget skal dekke.",
+      en: "When parents establish a private agreement, the parents decide between themselves what the child support shall cover.",
+      nn: "Når foreldra inngår ein privat avtale, bestemmer de sjølv kva fostringstilskotet skal dekke.",
+    },
+    del2: {
+      nb: "Når Nav fastsetter barnebidraget, skal bidraget dekke det som går inn under underholdskostnaden. Kort fortalt handler det om kostnadene til den daglige forsørgelsen av barnet. Dette inkluderer:",
+      en: "When Nav calculates the child support, the child support payment is intended to cover expenditures that are included in the maintenance cost. In short, these are costs that a parent incurs in connection caring for the child in their day-to-day life. This includes:",
+      nn: "Når Nav fastset fostringstilskotet, skal tilskotet dekke det som går inn under underhaldskostnaden. Kort fortalt handlar det om kostnadene til den daglege forsørginga av barnet. Dette inkluderer:",
+    },
+    liste1: {
+      nb: "forbruksutgifter (klær, sko, mat og drikke, fritidsaktiviteter med mer)",
+      en: "consumer expenses (clothing, shoes, food & drinks, leisure activities, etc)",
+      nn: "forbruksutgifter (klede, sko, mat og drikke, fritidsaktivitetar med meir)",
+    },
+    liste2: {
+      nb: "boutgifter (barnets andel av boutgiftene)",
+      en: "housing costs (child’s share of housing costs)",
+      nn: "buutgifter (barnets andel av buutgiftene)",
+    },
+    liste3: {
+      nb: "tilsynsutgifter (barnehage, skolefritidsordning, dagmamma)",
+      en: "child-care costs (kindergarten, after-school programme (SFO), nanny)",
+      nn: "tilsynsutgifter (barnehage, skulefritidsordning, dagmamma)",
+    },
+    lesMer: {
+      nb: "Les mer om hva barnebidraget skal dekke",
+      en: "Read more about what child support should cover",
+      nn: "Les meir om kva fostringstilskotet skal dekke",
+    },
+    lesMerLenke: {
+      nb: "https://www.nav.no/barnebidrag#hva",
+      en: "https://www.nav.no/barnebidrag/en#what",
+      nn: "https://www.nav.no/barnebidrag#hva",
+    },
   },
 });

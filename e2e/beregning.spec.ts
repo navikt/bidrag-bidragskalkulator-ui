@@ -47,7 +47,11 @@ test.describe("Beregningstest", () => {
 
     await sjekkTilgjengelighet(page);
 
-    await page.getByRole("button", { name: "Vis mer" }).click();
+    const lesMerKnapper = await page
+      .getByRole("button", { name: "Vis mer" })
+      .all();
+
+    lesMerKnapper.forEach((value) => value.click());
 
     await sjekkTilgjengelighet(page);
   });
