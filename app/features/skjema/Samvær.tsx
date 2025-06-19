@@ -42,7 +42,7 @@ export function Samvær({ barnIndex }: SamværProps) {
         })}
       </RadioGroup>
 
-      {borHosMeg ? (
+      {borHosMeg && (
         <Slider
           {...barnField.field("samvær").getControlProps()}
           label={t(tekster.samvær.label)}
@@ -63,7 +63,8 @@ export function Samvær({ barnIndex }: SamværProps) {
           ]}
           valueDescription={samværsgradBeskrivelse}
         />
-      ) : borHosMedforelder ? (
+      )}
+      {borHosMedforelder && (
         <Slider
           {...barnField.field("samvær").getControlProps()}
           label={t(tekster.samvær.label)}
@@ -84,7 +85,7 @@ export function Samvær({ barnIndex }: SamværProps) {
           ]}
           valueDescription={samværsgradBeskrivelse}
         />
-      ) : null}
+      )}
     </>
   );
 }
