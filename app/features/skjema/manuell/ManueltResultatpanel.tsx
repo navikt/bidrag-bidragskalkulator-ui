@@ -212,11 +212,6 @@ const tekster = definerTekster({
       en: "How the child support is calculated",
       nn: "Korleis er fostringstilskotet rekna ut?",
     },
-    underholdskostnadBeskrivelse: {
-      nb: `Det viktigste grunnlaget for beregningen er hva et barn koster – også kjent som underholdskostnader. Disse summene hentes fra SIFOs referansebudsjetter, og oppdateres hvert år. Kostnaden i deres tilfelle er:`,
-      en: `The most important basis for the calculation is what a child costs – also known as child support costs. These amounts are taken from SIFOs reference budgets and are updated annually. The cost in their case is:`,
-      nn: `Fostringstilskotet over er ei utrekning av det du skal betale eller motta per månad for kvart av borna. For kvart av borna ser utrekninga slik ut:`,
-    },
     underholdskostnadPerBarn: (alder, kostnad) => ({
       nb: (
         <>
