@@ -108,9 +108,9 @@ const tekster = definerTekster({
         nn: "Vi har avtale om fast bustad hos begge (delt fast bustad)",
       },
       HOS_MEG: {
-        nb: "Barnet bor fast hos meg, og har samvær med den andre",
-        en: "The child lives with me and has visitation with the other parent",
-        nn: "Barnet bur fast hos meg, og har samvær med den andre",
+        nb: "Barnet bor fast hos meg, og har samvær med medforelderen",
+        en: "The child lives with me and has visitation with the other co-parent",
+        nn: "Barnet bur fast hos meg, og har samvær med medforelderen",
       },
       HOS_MEDFORELDER: {
         nb: "Barnet bor fast hos medforelder, og har samvær med meg",
