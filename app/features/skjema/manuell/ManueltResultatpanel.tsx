@@ -80,12 +80,12 @@ export const ManueltResultatpanel = ({
 
       <Button
         as="a"
-        href="https://www.nav.no/fyllut/nav550060?sub=paper"
+        href={t(tekster.lagPrivatAvtale.lenke)}
         variant="primary"
         className="mb-6"
         target="_blank"
         rel="noopener noreferrer"
-        icon={<ExternalLinkIcon title="Åpnes i ny fane" />}
+        icon={<ExternalLinkIcon title={t(tekster.lagPrivatAvtale.nyFane)} />}
         iconPosition="right"
         onClick={() =>
           sporHendelse("lag privat avtale klikket", {
@@ -93,7 +93,7 @@ export const ManueltResultatpanel = ({
           })
         }
       >
-        {t(tekster.lagPrivatAvtale)}
+        {t(tekster.lagPrivatAvtale.tekst)}
       </Button>
 
       <BodyLong spacing>{t(tekster.hvisManIkkeKommerTilEnighet)}</BodyLong>
@@ -334,9 +334,21 @@ const tekster = definerTekster({
     }),
   },
   lagPrivatAvtale: {
-    nb: "Lag privat avtale",
-    en: "Make a private agreement",
-    nn: "Lag ein privat avtale",
+    lenke: {
+      nb: "https://www.nav.no/fyllut/nav550060?sub=paper",
+      en: "https://www.nav.no/fyllut/nav550060?lang=en&sub=paper",
+      nn: "https://www.nav.no/fyllut/nav550060?lang=nn-NO&sub=paper",
+    },
+    tekst: {
+      nb: "Lag privat avtale",
+      en: "Make a private agreement",
+      nn: "Lag ein privat avtale",
+    },
+    nyFane: {
+      nb: "Åpnes i ny fane",
+      en: "Opens in a new tab",
+      nn: "Opnast i ny fane",
+    },
   },
   bidragetSkalDekke: {
     tittel: {
