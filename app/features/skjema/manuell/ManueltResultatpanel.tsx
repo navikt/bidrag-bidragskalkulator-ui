@@ -111,32 +111,16 @@ export const ManueltResultatpanel = ({
             </ExpansionCardTitle>
           </ExpansionCardHeader>
           <ExpansionCardContent>
-            {data.resultater.length > 1 && (
-              <>
-                <BodyLong spacing>
-                  {t(tekster.detaljer.utregningPerBarn)}
-                </BodyLong>
-                <List>
-                  {data.resultater.map((resultat, index) => (
-                    <ListItem key={index}>
-                      {resultat.bidragstype === "MOTTAKER"
-                        ? t(
-                            tekster.detaljer.motta(
-                              resultat.alder,
-                              resultat.sum,
-                            ),
-                          )
-                        : t(
-                            tekster.detaljer.betale(
-                              resultat.alder,
-                              resultat.sum,
-                            ),
-                          )}
-                    </ListItem>
-                  ))}
-                </List>
-              </>
-            )}
+            <BodyLong spacing>{t(tekster.detaljer.utregningPerBarn)}</BodyLong>
+            <List>
+              {data.resultater.map((resultat, index) => (
+                <ListItem key={index}>
+                  {resultat.bidragstype === "MOTTAKER"
+                    ? t(tekster.detaljer.motta(resultat.alder, resultat.sum))
+                    : t(tekster.detaljer.betale(resultat.alder, resultat.sum))}
+                </ListItem>
+              ))}
+            </List>
           </ExpansionCardContent>
         </ExpansionCard>
 
@@ -279,7 +263,7 @@ const tekster = definerTekster({
     utregningPerBarn: {
       nb: "Barnebidraget over er en summering av hva du skal betale eller motta per måned for hvert av barna. Per barn ser beregningen slik ut:",
       en: "The child support above is a summary of what you should pay or receive per month for each of the children. For each child, the calculation looks like this:",
-      nn: "Det viktigaste grunnlaget for utrekninga er kva eit barn kostar, kjent som underhaldskostnadar. Desse summane er henta frå referansebudsjettet til SIFO, og dei blir oppdaterte kvart år. Kostnaden for borna dine er:",
+      nn: "Fostringstilskotet over er ei oppsummering av kva du skal betale eller motta per månad for kvart av barna. For kvart barn ser rekninga slik ut:",
     },
     motta: (alder, kostnad) => ({
       nb: (
