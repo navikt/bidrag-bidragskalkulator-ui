@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from "@navikt/aksel-icons";
 import {
   Alert,
   BodyLong,
@@ -79,16 +80,20 @@ export const ManueltResultatpanel = ({
 
       <Button
         as="a"
-        href="https://www.nav.no/fyllut/nav550060?sub=paper"
+        href={t(tekster.lagPrivatAvtale.lenke)}
         variant="primary"
         className="mb-6"
+        target="_blank"
+        rel="noopener noreferrer"
+        icon={<ExternalLinkIcon title={t(tekster.lagPrivatAvtale.nyFane)} />}
+        iconPosition="right"
         onClick={() =>
           sporHendelse("lag privat avtale klikket", {
             bidragstype,
           })
         }
       >
-        {t(tekster.lagPrivatAvtale)}
+        {t(tekster.lagPrivatAvtale.tekst)}
       </Button>
 
       <BodyLong spacing>{t(tekster.hvisManIkkeKommerTilEnighet)}</BodyLong>
@@ -111,32 +116,16 @@ export const ManueltResultatpanel = ({
             </ExpansionCardTitle>
           </ExpansionCardHeader>
           <ExpansionCardContent>
-            {data.resultater.length > 1 && (
-              <>
-                <BodyLong spacing>
-                  {t(tekster.detaljer.utregningPerBarn)}
-                </BodyLong>
-                <List>
-                  {data.resultater.map((resultat, index) => (
-                    <ListItem key={index}>
-                      {resultat.bidragstype === "MOTTAKER"
-                        ? t(
-                            tekster.detaljer.motta(
-                              resultat.alder,
-                              resultat.sum,
-                            ),
-                          )
-                        : t(
-                            tekster.detaljer.betale(
-                              resultat.alder,
-                              resultat.sum,
-                            ),
-                          )}
-                    </ListItem>
-                  ))}
-                </List>
-              </>
-            )}
+            <BodyLong spacing>{t(tekster.detaljer.utregningPerBarn)}</BodyLong>
+            <List>
+              {data.resultater.map((resultat, index) => (
+                <ListItem key={index}>
+                  {resultat.bidragstype === "MOTTAKER"
+                    ? t(tekster.detaljer.motta(resultat.alder, resultat.sum))
+                    : t(tekster.detaljer.betale(resultat.alder, resultat.sum))}
+                </ListItem>
+              ))}
+            </List>
           </ExpansionCardContent>
         </ExpansionCard>
 
@@ -279,7 +268,7 @@ const tekster = definerTekster({
     utregningPerBarn: {
       nb: "Barnebidraget over er en summering av hva du skal betale eller motta per måned for hvert av barna. Per barn ser beregningen slik ut:",
       en: "The child support above is a summary of what you should pay or receive per month for each of the children. For each child, the calculation looks like this:",
-      nn: "Det viktigaste grunnlaget for utrekninga er kva eit barn kostar, kjent som underhaldskostnadar. Desse summane er henta frå referansebudsjettet til SIFO, og dei blir oppdaterte kvart år. Kostnaden for borna dine er:",
+      nn: "Fostringstilskotet over er ei oppsummering av kva du skal betale eller motta per månad for kvart av barna. For kvart barn ser rekninga slik ut:",
     },
     motta: (alder, kostnad) => ({
       nb: (
@@ -329,9 +318,21 @@ const tekster = definerTekster({
     }),
   },
   lagPrivatAvtale: {
-    nb: "Lag privat avtale",
-    en: "Make a private agreement",
-    nn: "Lag ein privat avtale",
+    lenke: {
+      nb: "https://www.nav.no/fyllut/nav550060?sub=paper",
+      en: "https://www.nav.no/fyllut/nav550060?lang=en&sub=paper",
+      nn: "https://www.nav.no/fyllut/nav550060?lang=nn-NO&sub=paper",
+    },
+    tekst: {
+      nb: "Lag privat avtale",
+      en: "Make a private agreement",
+      nn: "Lag ein privat avtale",
+    },
+    nyFane: {
+      nb: "Åpnes i ny fane",
+      en: "Opens in a new tab",
+      nn: "Opnast i ny fane",
+    },
   },
   bidragetSkalDekke: {
     tittel: {
