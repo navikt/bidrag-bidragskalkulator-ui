@@ -44,6 +44,58 @@ export const defaultPersoninformasjon: Personinformasjon = {
     "24": 12288,
     "25": 12288,
   },
+  samværsfradrag: [
+    {
+      alderFra: 0,
+      alderTil: 5,
+      beløpFradrag: {
+        SAMVÆRSKLASSE_1: 317,
+        SAMVÆRSKLASSE_2: 1048,
+        SAMVÆRSKLASSE_3: 2847,
+        SAMVÆRSKLASSE_4: 3574,
+      },
+    },
+    {
+      alderFra: 6,
+      alderTil: 10,
+      beløpFradrag: {
+        SAMVÆRSKLASSE_1: 443,
+        SAMVÆRSKLASSE_2: 1467,
+        SAMVÆRSKLASSE_3: 3432,
+        SAMVÆRSKLASSE_4: 4308,
+      },
+    },
+    {
+      alderFra: 11,
+      alderTil: 14,
+      beløpFradrag: {
+        SAMVÆRSKLASSE_1: 547,
+        SAMVÆRSKLASSE_2: 1813,
+        SAMVÆRSKLASSE_3: 3914,
+        SAMVÆRSKLASSE_4: 4913,
+      },
+    },
+    {
+      alderFra: 15,
+      alderTil: 18,
+      beløpFradrag: {
+        SAMVÆRSKLASSE_1: 623,
+        SAMVÆRSKLASSE_2: 2063,
+        SAMVÆRSKLASSE_3: 4262,
+        SAMVÆRSKLASSE_4: 5351,
+      },
+    },
+    {
+      alderFra: 19,
+      alderTil: 99,
+      beløpFradrag: {
+        SAMVÆRSKLASSE_1: 623,
+        SAMVÆRSKLASSE_2: 2063,
+        SAMVÆRSKLASSE_3: 4262,
+        SAMVÆRSKLASSE_4: 5351,
+      },
+    },
+  ],
 };
 
 /**
@@ -82,6 +134,58 @@ export const defaultManuellPersoninformasjon: ManuellPersoninformasjon = {
     "24": 12288,
     "25": 12288,
   },
+  samværsfradrag: [
+    {
+      alderFra: 0,
+      alderTil: 5,
+      beløpFradrag: {
+        SAMVÆRSKLASSE_1: 317,
+        SAMVÆRSKLASSE_2: 1048,
+        SAMVÆRSKLASSE_3: 2847,
+        SAMVÆRSKLASSE_4: 3574,
+      },
+    },
+    {
+      alderFra: 6,
+      alderTil: 10,
+      beløpFradrag: {
+        SAMVÆRSKLASSE_1: 443,
+        SAMVÆRSKLASSE_2: 1467,
+        SAMVÆRSKLASSE_3: 3432,
+        SAMVÆRSKLASSE_4: 4308,
+      },
+    },
+    {
+      alderFra: 11,
+      alderTil: 14,
+      beløpFradrag: {
+        SAMVÆRSKLASSE_1: 547,
+        SAMVÆRSKLASSE_2: 1813,
+        SAMVÆRSKLASSE_3: 3914,
+        SAMVÆRSKLASSE_4: 4913,
+      },
+    },
+    {
+      alderFra: 15,
+      alderTil: 18,
+      beløpFradrag: {
+        SAMVÆRSKLASSE_1: 623,
+        SAMVÆRSKLASSE_2: 2063,
+        SAMVÆRSKLASSE_3: 4262,
+        SAMVÆRSKLASSE_4: 5351,
+      },
+    },
+    {
+      alderFra: 19,
+      alderTil: 99,
+      beløpFradrag: {
+        SAMVÆRSKLASSE_1: 623,
+        SAMVÆRSKLASSE_2: 2063,
+        SAMVÆRSKLASSE_3: 4262,
+        SAMVÆRSKLASSE_4: 5351,
+      },
+    },
+  ],
 };
 
 /**
