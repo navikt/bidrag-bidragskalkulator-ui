@@ -8,6 +8,7 @@ import type {
 } from "react-router";
 import { useActionData, useLoaderData } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
+import { BetaNotis } from "~/features/BetaNotis";
 import { hentManuellBidragsutregning } from "~/features/skjema/beregning/api.server";
 import { IntroPanel } from "~/features/skjema/IntroPanel";
 import { ManueltBidragsskjema } from "~/features/skjema/manuell/ManueltBidragsskjema";
@@ -94,6 +95,7 @@ export default function ManuellBarnebidragskalkulator() {
 
   return (
     <>
+      <BetaNotis />
       <div className="max-w-xl mx-auto p-4 mt-8 flex flex-col gap-4">
         <Heading size="xlarge" level="1" spacing align="center">
           {t(tekster.overskrift)}
