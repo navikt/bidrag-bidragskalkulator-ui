@@ -14,7 +14,7 @@ const tekster = definerTekster({
   notis: {
     nb: (
       <>
-        Dette er vår nye og forbedrede kalkulator for utregning av barnebidrag.{" "}
+        Dette er vår nye kalkulator for utregning av barnebidrag.{" "}
         <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
           Den gamle kalkulatoren
         </Link>{" "}
@@ -23,7 +23,7 @@ const tekster = definerTekster({
     ),
     en: (
       <>
-        This is our new and improved child support calculator.{" "}
+        This is our new child support calculator.{" "}
         <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
           The old calculator
         </Link>{" "}
@@ -32,8 +32,7 @@ const tekster = definerTekster({
     ),
     nn: (
       <>
-        Dette er vår nye og forbedra kalkulator for utregning av
-        fostringstilskot.{" "}
+        Dette er vår nye kalkulator for utregning av fostringstilskot.{" "}
         <Link href="https://tjenester.nav.no/bidragskalkulator/innledning?0">
           Den gamle kalkulatoren
         </Link>{" "}
