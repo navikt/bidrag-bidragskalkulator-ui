@@ -2,6 +2,7 @@ import { Alert, BodyShort, Radio, RadioGroup } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { formatterSum } from "~/utils/tall";
 import type { Samværsklasse } from "./beregning/schema";
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
 import { FastBosted, type ManueltSkjema } from "./schema";
@@ -140,14 +141,12 @@ const Samværsfradrag = ({
     return null;
   }
   const samværsklasseNummer = Number(samværsklasse.split("_").pop());
+
   return (
     <SamværsfradragInfo>
       {t(
         tekster.samværsfradrag[bostatus].SAMVÆRSKLASSE_1_TIL_4(
-          samværsfradrag.toLocaleString("no-NO", {
-            style: "currency",
-            currency: "NOK",
-          }),
+          formatterSum(samværsfradrag),
           samværsklasseNummer,
         ),
       )}
