@@ -91,7 +91,7 @@ export function Samvær({ barnIndex }: SamværProps) {
       )}
       {bosted && alder && (
         <Samværsfradrag
-          alder={alder}
+          alder={Number(alder)}
           samværsklasse={kalkulerSamværsklasse(Number(samvær), bosted)}
           bostatus={bosted}
         />
@@ -101,7 +101,7 @@ export function Samvær({ barnIndex }: SamværProps) {
 }
 
 type SamværsfradragProps = {
-  alder: string;
+  alder: number;
   samværsklasse: Samværsklasse;
   bostatus: "HOS_MEG" | "HOS_MEDFORELDER" | "DELT_FAST_BOSTED";
 };
@@ -112,38 +112,56 @@ const Samværsfradrag = ({
 }: SamværsfradragProps) => {
   const personinformasjon = usePersoninformasjon();
   const { t } = useOversettelse();
-  let tekst = null;
   if (bostatus === "DELT_FAST_BOSTED") {
-    tekst = t(tekster.samværsfradrag.DELT_FAST_BOSTED);
-  } else if (samværsklasse === "SAMVÆRSKLASSE_0") {
-    tekst = t(tekster.samværsfradrag[bostatus].SAMVÆRSKLASSE_0);
-  } else if (samværsklasse !== "DELT_BOSTED") {
-    const alderTall = Number(alder);
-    const samværsfradrag = personinformasjon.samværsfradrag.find(
-      (fradrag) =>
-        alderTall >= fradrag.alderFra && alderTall <= fradrag.alderTil,
-    )?.beløpFradrag[samværsklasse];
-
-    if (!samværsfradrag) {
-      return null;
-    }
-    const samværsklasseNummer = Number(samværsklasse.split("_").pop());
-    tekst = t(
-      tekster.samværsfradrag[bostatus].SAMVÆRSKLASSE_1_TIL_4(
-        samværsfradrag.toLocaleString("no-NO", {
-          style: "currency",
-          currency: "NOK",
-        }),
-        samværsklasseNummer,
-      ),
+    return (
+      <SamværsfradragInfo>
+        {t(tekster.samværsfradrag.DELT_FAST_BOSTED)}
+      </SamværsfradragInfo>
     );
   }
-  if (!tekst) {
+  if (samværsklasse === "SAMVÆRSKLASSE_0") {
+    return (
+      <SamværsfradragInfo>
+        {t(tekster.samværsfradrag[bostatus].SAMVÆRSKLASSE_0)}
+      </SamværsfradragInfo>
+    );
+  }
+  // Vil aldri skje, siden samværsklasse aldri vil være "DELT_BOSTED" når bostatus er "HOS_MEG" eller "HOS_MEDFORELDER"
+  // Dette løser kun en type-narrowing issue for TypeScript
+  if (samværsklasse === "DELT_BOSTED") {
     return null;
   }
+
+  const samværsfradrag = personinformasjon.samværsfradrag.find(
+    (fradrag) => alder >= fradrag.alderFra && alder <= fradrag.alderTil,
+  )?.beløpFradrag[samværsklasse];
+
+  if (!samværsfradrag) {
+    return null;
+  }
+  const samværsklasseNummer = Number(samværsklasse.split("_").pop());
+  return (
+    <SamværsfradragInfo>
+      {t(
+        tekster.samværsfradrag[bostatus].SAMVÆRSKLASSE_1_TIL_4(
+          samværsfradrag.toLocaleString("no-NO", {
+            style: "currency",
+            currency: "NOK",
+          }),
+          samværsklasseNummer,
+        ),
+      )}
+    </SamværsfradragInfo>
+  );
+};
+
+type SamværsfradragInfoProps = {
+  children: React.ReactNode;
+};
+const SamværsfradragInfo = ({ children }: SamværsfradragInfoProps) => {
   return (
     <Alert variant="info">
-      <BodyShort size="small">{tekst}</BodyShort>
+      <BodyShort size="small">{children}</BodyShort>
     </Alert>
   );
 };
@@ -235,6 +253,11 @@ const tekster = definerTekster({
         en: `When the child has visitation with the other parent, the other parent is entitled to a deduction for visitation, which varies based on the visitation class. In visitation class ${samværsklasse}, the deduction is ${samværsfradrag} per month.`,
         nn: `Når barnet har samvær med den andre forelderen, har den andre forelderen rett på fradrag for samvær, som varierer basert på hvilken samværsklasse samværet faller i. I samværsklasse ${samværsklasse} er fradraget ${samværsfradrag} per måned.`,
       }),
+      DELT_FAST_BOSTED: {
+        nb: "Når barnet har delt fast bosted, har ikke faktisk samvær noen betydning for barnebidraget.",
+        en: "When the child has shared permanent residence, actual visitation does not affect child support.",
+        nn: "Når barnet har delt fast bustad, har ikkje faktisk samvær nokon betydning for barnebidraget.",
+      },
     },
     HOS_MEDFORELDER: {
       SAMVÆRSKLASSE_0: {
@@ -248,6 +271,11 @@ const tekster = definerTekster({
         en: `When the child has visitation with you, you are entitled to a deduction for visitation, which varies based on the visitation class. In visitation class ${samværsklasse}, the deduction is ${samværsfradrag} per month.`,
         nn: `Når barnet har samvær med deg, har du rett på fradrag for samvær, som varierer basert på hvilken samværsklasse samværet faller i. I samværsklasse ${samværsklasse} er fradraget ${samværsfradrag} per måned.`,
       }),
+      DELT_FAST_BOSTED: {
+        nb: "Når barnet har delt fast bosted, har ikke faktisk samvær noen betydning for barnebidraget.",
+        en: "When the child has shared permanent residence, actual visitation does not affect child support.",
+        nn: "Når barnet har delt fast bustad, har ikkje faktisk samvær nokon betydning for barnebidraget.",
+      },
     },
     DELT_FAST_BOSTED: {
       nb: "Når barnet har delt fast bosted, har ikke faktisk samvær noen betydning for barnebidraget.",
