@@ -225,9 +225,9 @@ const tekster = definerTekster({
   },
   detaljer: {
     overskrift: {
-      nb: "Hvordan bidraget er beregnet",
+      nb: "Hvordan barnebidraget er beregnet",
       en: "How the child support is calculated",
-      nn: "Korleis er fostringstilskotet rekna ut?",
+      nn: "Korleis fostringstilskotet er rekna ut",
     },
     underholdskostnadPerBarn: (navn, kostnad) => ({
       nb: (
