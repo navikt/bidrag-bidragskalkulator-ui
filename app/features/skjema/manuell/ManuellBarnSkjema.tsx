@@ -1,11 +1,10 @@
 import { PlusIcon } from "@navikt/aksel-icons";
 import { Button } from "@navikt/ds-react";
-import { useFieldArray, useFormContext } from "@rvf/react";
+import { useField, useFieldArray, useFormContext } from "@rvf/react";
 import React from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import type { ManueltSkjema } from "../schema";
-import { SAMVÆR_STANDARDVERDI } from "../utils";
 import { EnkeltbarnSkjema } from "./EnkeltbarnSkjema";
 
 export const ManuellBarnSkjema = () => {
@@ -13,13 +12,14 @@ export const ManuellBarnSkjema = () => {
   const form = useFormContext<ManueltSkjema>();
 
   const barnArray = useFieldArray(form.scope("barn"));
+  const sisteBarn = useField(form.scope(`barn[${barnArray.length() - 1}]`));
   const antallBarn = barnArray.length();
 
   const handleLeggTilBarn = () => {
     barnArray.push({
       alder: "",
-      bosted: "",
-      samvær: SAMVÆR_STANDARDVERDI,
+      bosted: sisteBarn.value().bosted,
+      samvær: sisteBarn.value().samvær,
       barnetilsynsutgift: "",
     });
     sporHendelse("barn lagt til", { antall: barnArray.length() + 1 });
