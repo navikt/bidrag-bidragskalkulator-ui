@@ -134,6 +134,7 @@ export const hentManueltSkjemaStandardverdi = (
   return {
     barn: [
       {
+        navn: "",
         alder: "",
         bosted: "",
         samvær: SAMVÆR_STANDARDVERDI,
