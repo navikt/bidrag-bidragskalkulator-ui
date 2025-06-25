@@ -130,9 +130,9 @@ const tekster = definerTekster({
   },
   alder: {
     label: (navn) => ({
-      nb: `Hvor gammelt er ${navn || "barnet"}?`,
+      nb: `Hvor gammel er ${navn || "barnet"}?`,
       en: `How old is ${navn || "the child"}?`,
-      nn: `Hvor gammalt er ${navn || "barnet"}?`,
+      nn: `Hvor gammal er ${navn || "barnet"}?`,
     }),
     lesMer: {
       tittel: {
