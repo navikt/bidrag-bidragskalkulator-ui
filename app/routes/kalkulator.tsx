@@ -1,5 +1,9 @@
 import { Alert, BodyLong, Heading } from "@navikt/ds-react";
-import { isValidationErrorResponse, useForm } from "@rvf/react-router";
+import {
+  FormProvider,
+  isValidationErrorResponse,
+  useForm,
+} from "@rvf/react-router";
 import { useEffect, useRef, useState } from "react";
 import type {
   ActionFunctionArgs,
@@ -95,31 +99,32 @@ export default function ManuellBarnebidragskalkulator() {
 
   return (
     <>
-      <BetaNotis />
-      <div className="max-w-xl mx-auto p-4 mt-8 flex flex-col gap-4">
-        <Heading size="xlarge" level="1" spacing align="center">
-          {t(tekster.overskrift)}
-        </Heading>
+      <FormProvider scope={form.scope()}>
+        <BetaNotis />
+        <div className="max-w-xl mx-auto p-4 mt-8 flex flex-col gap-4">
+          <Heading size="xlarge" level="1" spacing align="center">
+            {t(tekster.overskrift)}
+          </Heading>
 
-        <IntroPanel />
+          <IntroPanel />
+          <ManueltBidragsskjema form={form} />
 
-        <ManueltBidragsskjema form={form} />
-
-        {isValidationErrorResponse(actionData) && (
-          <div className="mt-6">
-            <Alert variant="error">
-              <BodyLong ref={resultatRef} tabIndex={-1}>
-                {actionData.fieldErrors.root}
-              </BodyLong>
-            </Alert>
+          {isValidationErrorResponse(actionData) && (
+            <div className="mt-6">
+              <Alert variant="error">
+                <BodyLong ref={resultatRef} tabIndex={-1}>
+                  {actionData.fieldErrors.root}
+                </BodyLong>
+              </Alert>
+            </div>
+          )}
+        </div>
+        {skjemarespons && !erEndretSidenUtregning && (
+          <div className="max-w-3xl mx-auto p-4 mt-8">
+            <ManueltResultatpanel data={skjemarespons} ref={resultatRef} />
           </div>
         )}
-      </div>
-      {skjemarespons && !erEndretSidenUtregning && (
-        <div className="max-w-3xl mx-auto p-4 mt-8">
-          <ManueltResultatpanel data={skjemarespons} ref={resultatRef} />
-        </div>
-      )}
+      </FormProvider>
     </>
   );
 }

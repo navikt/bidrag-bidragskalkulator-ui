@@ -50,10 +50,15 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
     <fieldset className="p-0 space-y-4">
       <legend className="sr-only">{overskrift}</legend>
       <TextField
+        {...barnField.field("navn").getInputProps()}
+        label={t(tekster.navn.label)}
+        error={barnField.field("navn").error()}
+      />
+      <TextField
         {...barnField.field("alder").getInputProps({
           onBlur: handleBlurAlder,
           onChange: handleChangeAlder,
-          label: t(tekster.alder.label),
+          label: t(tekster.alder.label(barnField.field("navn").value())),
         })}
         error={barnField.field("alder").error()}
         htmlSize={8}
@@ -116,12 +121,19 @@ const tekster = definerTekster({
       nn: `Barn ${nummer}`,
     }),
   },
-  alder: {
+  navn: {
     label: {
-      nb: "Hvor gammelt er barnet?",
-      en: "How old is the child?",
-      nn: "Hvor gammalt er barnet?",
+      nb: "Hva heter barnet?",
+      en: "What is the child's name?",
+      nn: "Kva heiter barnet?",
     },
+  },
+  alder: {
+    label: (navn) => ({
+      nb: `Hvor gammelt er ${navn || "barnet"}?`,
+      en: `How old is ${navn || "the child"}?`,
+      nn: `Hvor gammalt er ${navn || "barnet"}?`,
+    }),
     lesMer: {
       tittel: {
         nb: "Hvorfor vi spør om alder",
