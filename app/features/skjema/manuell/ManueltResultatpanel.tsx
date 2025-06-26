@@ -15,10 +15,12 @@ import {
   ExpansionCardTitle,
 } from "@navikt/ds-react/ExpansionCard";
 import { ListItem } from "@navikt/ds-react/List";
+import { useFormContext } from "@rvf/react";
 import { sporHendelse, sporHendelseEnGang } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
-import type { ManuellBidragsutregning } from "../beregning/schema";
+import { type ManuellBidragsutregning } from "../beregning/schema";
+import type { ManueltSkjema } from "../schema";
 
 type ManueltResultatpanelProps = {
   data: ManuellBidragsutregning | { error: string };
@@ -30,6 +32,7 @@ export const ManueltResultatpanel = ({
   ref,
 }: ManueltResultatpanelProps) => {
   const { t } = useOversettelse();
+  const form = useFormContext<ManueltSkjema>();
 
   if ("error" in data) {
     return (
@@ -118,13 +121,26 @@ export const ManueltResultatpanel = ({
           <ExpansionCardContent>
             <BodyLong spacing>{t(tekster.detaljer.utregningPerBarn)}</BodyLong>
             <List>
-              {data.resultater.map((resultat, index) => (
-                <ListItem key={index}>
-                  {resultat.bidragstype === "MOTTAKER"
-                    ? t(tekster.detaljer.motta(resultat.alder, resultat.sum))
-                    : t(tekster.detaljer.betale(resultat.alder, resultat.sum))}
-                </ListItem>
-              ))}
+              {data.resultater.map((resultat, index) => {
+                const barn = form.field(`barn[${index}]`);
+                return (
+                  <ListItem key={index}>
+                    {resultat.bidragstype === "MOTTAKER"
+                      ? t(
+                          tekster.detaljer.motta(
+                            barn.value().navn,
+                            resultat.sum,
+                          ),
+                        )
+                      : t(
+                          tekster.detaljer.betale(
+                            barn.value().navn,
+                            resultat.sum,
+                          ),
+                        )}
+                  </ListItem>
+                );
+              })}
             </List>
           </ExpansionCardContent>
         </ExpansionCard>
@@ -270,24 +286,24 @@ const tekster = definerTekster({
       en: "The child support above is a summary of what you should pay or receive per month for each of the children. For each child, the calculation looks like this:",
       nn: "Fostringstilskotet over er ei oppsummering av kva du skal betale eller motta per månad for kvart av barna. For kvart barn ser rekninga slik ut:",
     },
-    motta: (alder, kostnad) => ({
+    motta: (navn, kostnad) => ({
       nb: (
         <>
-          For {alder}-åringen skal du motta{" "}
+          For {navn} skal du motta{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
       en: (
         <>
-          For the {alder} year old, you should receive{" "}
+          For {navn}, you should receive{" "}
           <strong>{formatterSum(kostnad as number)}</strong> in child support
           per month.
         </>
       ),
       nn: (
         <>
-          For {alder}-åringen skal du motta{" "}
+          For {navn} skal du motta{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i fostringstilskot
           per månad.
         </>

@@ -32,6 +32,7 @@ export const InnloggetSkjemaSchema = z.object({
 });
 
 export const ManueltBarnSkjemaSchema = z.object({
+  navn: z.string(),
   alder: z.string(),
   bosted: z.enum([...FastBosted.options, ""]),
   samvær: z.string(),
@@ -165,6 +166,9 @@ export const lagInnloggetSkjema = (språk: Språk) => {
 
 export const lagManueltBarnSkjema = (språk: Språk) => {
   return z.object({
+    navn: z
+      .string()
+      .nonempty(oversett(språk, tekster.feilmeldinger.barn.navn.påkrevd)),
     alder: z
       .string()
       .nonempty(oversett(språk, tekster.feilmeldinger.barn.alder.påkrevd))
@@ -313,6 +317,13 @@ const tekster = definerTekster({
       },
     },
     barn: {
+      navn: {
+        påkrevd: {
+          nb: "Fyll ut barnets navn",
+          en: "Fill in the child's name",
+          nn: "Fyll ut barnets namn",
+        },
+      },
       alder: {
         påkrevd: {
           nb: "Fyll ut alder",
