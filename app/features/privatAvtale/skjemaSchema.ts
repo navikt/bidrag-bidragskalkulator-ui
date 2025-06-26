@@ -209,7 +209,7 @@ const tekster = definerTekster({
       påkrevd: {
         nb: "Velg dato avtalen skal gjelde fra.",
         en: "Select the date the agreement should apply from.",
-        nn: "Vel datum avtalen skal gjelde frå.",
+        nn: "Vel dato avtalen skal gjelde frå.",
       },
       ugyldig: {
         nb: "Ugyldig dato",
