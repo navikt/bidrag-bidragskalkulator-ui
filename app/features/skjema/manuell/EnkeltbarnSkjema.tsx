@@ -52,6 +52,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
       <TextField
         {...barnField.field("navn").getInputProps()}
         label={t(tekster.navn.label)}
+        description={t(tekster.navn.description)}
         error={barnField.field("navn").error()}
         className="max-w-80"
       />
@@ -124,9 +125,14 @@ const tekster = definerTekster({
   },
   navn: {
     label: {
-      nb: "Hva heter barnet til fornavn?",
-      en: "What is the child's first name?",
-      nn: "Kva heiter barnet til fornamn?",
+      nb: "Hva heter barnet?",
+      en: "What is the child's name?",
+      nn: "Kva heiter barnet?",
+    },
+    description: {
+      nb: "Skriv inn barnets fulle navn",
+      en: "Enter the child's full name",
+      nn: "Skriv inn barnets fulle namn",
     },
   },
   alder: {
