@@ -53,6 +53,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
         {...barnField.field("navn").getInputProps()}
         label={t(tekster.navn.label)}
         error={barnField.field("navn").error()}
+        className="max-w-80"
       />
       <TextField
         {...barnField.field("alder").getInputProps({
