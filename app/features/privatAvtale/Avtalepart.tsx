@@ -54,7 +54,7 @@ const tekster = definerTekster({
     fornavn: {
       label: {
         nb: "Fornavn",
-        nn: "Etternamn",
+        nn: "Fornamn",
         en: "First name",
       },
     },
