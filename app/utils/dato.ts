@@ -1,19 +1,20 @@
 import { Språk } from "./i18n";
 
+const norskDatoformaterer = new Intl.DateTimeFormat(Språk.NorwegianBokmål, {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
 /**
  * @param dato
  * @returns dato som tekststreng på format `YYYY-MM-DD`
  */
 export const tilÅrMånedDag = (dato: Date): string => {
-  const formatter = new Intl.DateTimeFormat(Språk.NorwegianBokmål, {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
-  const [{ value: day }, , { value: month }, , { value: year }] =
-    formatter.formatToParts(dato);
+  const [{ value: dag }, , { value: måned }, , { value: år }] =
+    norskDatoformaterer.formatToParts(dato);
 
-  return `${year}-${month}-${day}`;
+  return `${år}-${måned}-${dag}`;
 };
 
 /**
