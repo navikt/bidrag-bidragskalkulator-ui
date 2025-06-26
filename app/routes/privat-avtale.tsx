@@ -1,6 +1,5 @@
 import { Heading } from "@navikt/ds-react";
 import { useForm } from "@rvf/react-router";
-import { useEffect, useRef, useState } from "react";
 import type { LoaderFunctionArgs, MetaArgs } from "react-router";
 import { useHref, useLoaderData, useSearchParams } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
@@ -36,16 +35,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function ManuellBarnebidragskalkulator() {
-  const [oppretterPdf, settOppretterPdf] = useState(false);
-  const [feilmeldingOpprettelsePdf, settFeilmeldingOpprettelsePdf] = useState<
-    string | undefined
-  >();
-
   const basename = useHref("/");
-  const resultatRef = useRef<HTMLDivElement>(null);
   const { t } = useOversettelse();
   const personinformasjon = useLoaderData<typeof loader>();
-  const [erEndretSidenUtregning, settErEndretSidenUtregning] = useState(false);
 
   const [urlSøkeparametre] = useSearchParams();
   const kalkulatorResultater = urlSøkeparametre.get("kalkulator");
@@ -64,9 +56,6 @@ export default function ManuellBarnebidragskalkulator() {
       forhåndsvalgteBarn,
     ),
     handleSubmit: async (skjemaData) => {
-      settOppretterPdf(true);
-      settFeilmeldingOpprettelsePdf(undefined);
-
       const respons = await fetch(`${basename}api/privat-avtale`, {
         method: "POST",
         headers: {
@@ -76,8 +65,7 @@ export default function ManuellBarnebidragskalkulator() {
       });
 
       if (!respons.ok) {
-        settOppretterPdf(false);
-        settFeilmeldingOpprettelsePdf("Kunne ikke opprette PDF");
+        // TODO
         return;
       }
 
@@ -92,17 +80,8 @@ export default function ManuellBarnebidragskalkulator() {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-
-      settOppretterPdf(false);
     },
   });
-
-  useEffect(() => {
-    const unsubscribe = form.subscribe.value(() => {
-      settErEndretSidenUtregning(true);
-    });
-    return () => unsubscribe();
-  }, [form]);
 
   return (
     <>
