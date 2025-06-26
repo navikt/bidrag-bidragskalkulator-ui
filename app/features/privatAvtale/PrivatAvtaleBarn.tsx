@@ -82,7 +82,7 @@ export const PrivatAvtaleBarn = () => {
 // react-validated-form
 const finnFokuserbartInputPåBarn = (index: number) => {
   return document.querySelector(
-    `input[name="barn[${index}].alder"]`,
+    `input[name="barn[${index}].fornavn"]`,
   ) as HTMLInputElement;
 };
 
