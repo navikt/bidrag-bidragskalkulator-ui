@@ -6,6 +6,8 @@ type Boforhold = {
   borMedAnnenVoksen: boolean;
 };
 
+export const BidragstypeSchema = z.enum(["MOTTAKER", "PLIKTIG"]);
+
 export type Samværsklasse =
   | "SAMVÆRSKLASSE_0"
   | "SAMVÆRSKLASSE_1"
@@ -18,7 +20,7 @@ export type Bidragsutregningsgrunnlag = {
   barn: {
     ident: string;
     samværsklasse: Samværsklasse;
-    bidragstype: "MOTTAKER" | "PLIKTIG";
+    bidragstype: Bidragstype;
     barnetilsynsutgift: number;
   }[];
   inntektForelder1: number;
@@ -31,7 +33,7 @@ export type ManueltBidragsutregningsgrunnlag = {
   barn: {
     alder: number;
     samværsklasse: Samværsklasse;
-    bidragstype: "MOTTAKER" | "PLIKTIG";
+    bidragstype: Bidragstype;
     barnetilsynsutgift: number;
   }[];
   inntektForelder1: number;
@@ -47,21 +49,23 @@ export const BidragsutregningSchema = z.object({
       fulltNavn: z.string(),
       fornavn: z.string(),
       sum: z.number(),
-      bidragstype: z.enum(["PLIKTIG", "MOTTAKER"]),
+      bidragstype: BidragstypeSchema,
     }),
   ),
+});
+
+export const BidragsutregningBarnSchema = z.object({
+  alder: z.number(),
+  sum: z.number(),
+  bidragstype: BidragstypeSchema,
 });
 
 export const ManuellBidragsutregningSchema = z.object({
-  resultater: z.array(
-    z.object({
-      alder: z.number(),
-      sum: z.number(),
-      bidragstype: z.enum(["PLIKTIG", "MOTTAKER"]),
-    }),
-  ),
+  resultater: z.array(BidragsutregningBarnSchema),
 });
 
+export type Bidragstype = z.infer<typeof BidragstypeSchema>;
+export type BidragsutregningBarn = z.infer<typeof BidragsutregningBarnSchema>;
 export type Bidragsutregning = z.infer<typeof BidragsutregningSchema>;
 export type ManuellBidragsutregning = z.infer<
   typeof ManuellBidragsutregningSchema
