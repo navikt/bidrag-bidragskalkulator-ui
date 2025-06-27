@@ -1,4 +1,11 @@
-import { Alert, BodyShort, Radio, RadioGroup } from "@navikt/ds-react";
+import {
+  Alert,
+  BodyLong,
+  BodyShort,
+  Radio,
+  RadioGroup,
+  ReadMore,
+} from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -6,7 +13,7 @@ import { formatterSum } from "~/utils/tall";
 import type { Samværsklasse } from "./beregning/schema";
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
 import { FastBosted, type ManueltSkjema } from "./schema";
-import { kalkulerSamværsklasse, SAMVÆR_STANDARDVERDI } from "./utils";
+import { SAMVÆR_STANDARDVERDI } from "./utils";
 
 type SamværProps = {
   barnIndex: number;
@@ -90,13 +97,25 @@ export function Samvær({ barnIndex }: SamværProps) {
           valueDescription={samværsgradBeskrivelse}
         />
       )}
-      {bosted && alder && (
+
+      <ReadMore header={t(tekster.bosted.lesMer.tittel)}>
+        <BodyLong className="mb-2">
+          {t(tekster.bosted.lesMer.beskrivelse1)}
+        </BodyLong>
+        <BodyLong>{t(tekster.bosted.lesMer.beskrivelse1)}</BodyLong>
+      </ReadMore>
+
+      <ReadMore header={t(tekster.samvær.lesMer.tittel)}>
+        <BodyLong>{t(tekster.samvær.lesMer.beskrivelse)}</BodyLong>
+      </ReadMore>
+
+      {/* {bosted && alder && (
         <Samværsfradrag
           alder={Number(alder)}
           samværsklasse={kalkulerSamværsklasse(Number(samvær), bosted)}
           bostatus={bosted}
         />
-      )}
+      )} */}
     </>
   );
 }
@@ -199,7 +218,25 @@ const tekster = definerTekster({
         nn: `Barnet bur hos ${navn}`,
       }),
     },
+    lesMer: {
+      tittel: {
+        nb: "Hvordan bosted og samvær påvirker barnebidraget",
+        en: "How residence and visitation affect child support",
+        nn: "Korleis bustad og samvær påverkar barnebidraget",
+      },
+      beskrivelse1: {
+        nb: "Når man har fast delt bosted vil ikke faktisk tid barnet er hos dere påvirke barnebidraget.",
+        en: "When you have shared permanent residence, the actual time the child spends with you does not affect child support.",
+        nn: "Når ein har delt fast bustad vil ikkje faktisk tid barnet er hos dykk påverke barnebidraget.",
+      },
+      beskrivelse2: {
+        nb: "Når barnet har fast bosted hos den ene forelderen, vil faktisk tid barnet er hos den andre forelderen påvirke barnebidraget.",
+        en: "When the child has a permanent residence with one parent, the actual time the child spends with the other parent will affect child support.",
+        nn: "Når barnet har fast bustad hos den eine forelderen, vil faktisk tid barnet er hos den andre forelderen påverke barnebidraget.",
+      },
+    },
   },
+
   samvær: {
     label: {
       nb: "Hvor mye vil barnet være sammen med deg?",
@@ -238,6 +275,18 @@ const tekster = definerTekster({
         nn: "Alle netter hos deg",
       },
     },
+    lesMer: {
+      tittel: {
+        nb: "Hvordan ferier påvirker samvær",
+        en: "How holidays affect visitation",
+        nn: "Korleis feriar påverkar samvær",
+      },
+      beskrivelse: {
+        nb: "Ferier påvirker barnebidraget lite så lenge dere deler feriene ganske likt som dere er sammen med barnet i hverdagen. Er det stor forskjell, for eksempel lite samvær i hverdagen og mye i feriene, bør dere oversette dette til ca. antall dager i måneden og legge det inn i kalkulatoren.",
+        en: "Holidays have little impact on child support as long as you share the holidays fairly evenly, just as you do with the child during the weekdays. If there is a significant difference, for example, little visitation during the weekdays and much during the holidays, you should translate this into approximately the number of days per month and enter it into the calculator.",
+        nn: "Feriar påverkar barnebidraget lite så lenge de deler feriane ganske likt som de er saman med barnet i kvardagen. Er det stor forskjell, for eksempel lite samvær i kvardagen og mykje i feriane, bør de oversette dette til ca. talet på dagar i månaden og legge det inn i kalkulatoren.",
+      },
+    },
   },
   samværsfradrag: {
     HOS_MEG: {
@@ -266,7 +315,6 @@ const tekster = definerTekster({
       },
       SAMVÆRSKLASSE_1_TIL_4: (samværsfradrag, samværsklasse) => ({
         nb: `Når barnet har samvær med deg, har du rett på fradrag for samvær, som varierer basert på hvilken samværsklasse samværet faller i. I samværsklasse ${samværsklasse} er fradraget ${samværsfradrag} per måned.`,
-
         en: `When the child has visitation with you, you are entitled to a deduction for visitation, which varies based on the visitation class. In visitation class ${samværsklasse}, the deduction is ${samværsfradrag} per month.`,
         nn: `Når barnet har samvær med deg, har du rett på fradrag for samvær, som varierer basert på hvilken samværsklasse samværet faller i. I samværsklasse ${samværsklasse} er fradraget ${samværsfradrag} per måned.`,
       }),
