@@ -42,12 +42,14 @@ export const ManueltBarnSkjemaSchema = z.object({
 export const ManueltSkjemaSchema = z.object({
   barn: z.array(ManueltBarnSkjemaSchema),
   deg: z.object({
+    navn: z.string(),
     inntekt: z.string(),
     antallBarnBorFast: z.string(),
     antallBarnDeltBosted: z.string(),
     borMedAnnenVoksen: z.enum(["true", "false", ""]),
   }),
   medforelder: z.object({
+    navn: z.string(),
     inntekt: z.string(),
     antallBarnBorFast: z.string(),
     antallBarnDeltBosted: z.string(),
@@ -76,8 +78,14 @@ export const lagInnloggetBarnSkjema = (språk: Språk) => {
   });
 };
 
-export const lagForelderSkjema = (språk: Språk) => {
+export const lagForelderSkjema = (
+  språk: Språk,
+  rolle: "deg" | "medforelder",
+) => {
   return z.object({
+    navn: z
+      .string()
+      .nonempty(oversett(språk, tekster.feilmeldinger[rolle].navn.påkrevd)),
     inntekt: z
       .string()
       .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
@@ -159,8 +167,8 @@ export const lagInnloggetSkjema = (språk: Språk) => {
       .array(lagInnloggetBarnSkjema(språk))
       .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
       .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
-    deg: lagForelderSkjema(språk),
-    medforelder: lagForelderSkjema(språk),
+    deg: lagForelderSkjema(språk, "deg"),
+    medforelder: lagForelderSkjema(språk, "medforelder"),
   });
 };
 
@@ -228,8 +236,8 @@ export const lagManueltSkjema = (språk: Språk) => {
       .array(lagManueltBarnSkjema(språk))
       .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
       .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
-    deg: lagForelderSkjema(språk),
-    medforelder: lagForelderSkjema(språk),
+    deg: lagForelderSkjema(språk, "deg"),
+    medforelder: lagForelderSkjema(språk, "medforelder"),
   });
 };
 
@@ -246,6 +254,24 @@ export type ManueltSkjemaValidert = z.infer<
 
 const tekster = definerTekster({
   feilmeldinger: {
+    deg: {
+      navn: {
+        påkrevd: {
+          nb: "Fyll ut ditt navn",
+          en: "Fill in your name",
+          nn: "Fyll ut ditt namn",
+        },
+      },
+    },
+    medforelder: {
+      navn: {
+        påkrevd: {
+          nb: "Fyll ut medforelderens navn",
+          en: "Fill in the co-parent's name",
+          nn: "Fyll ut medforelderens namn",
+        },
+      },
+    },
     motpartIdent: {
       påkrevd: {
         nb: "Velg medforelder",

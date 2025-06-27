@@ -1,7 +1,7 @@
 import { PersonCrossIcon } from "@navikt/aksel-icons";
 import { BodyLong, Button, ReadMore, TextField } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import { FormattertTallTextField } from "../FormattertTallTextField";
@@ -16,7 +16,6 @@ type Props = {
 };
 
 export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
-  const [erAlderSatt, setAlderSatt] = useState(false);
   const { underholdskostnader } = usePersoninformasjon();
   const { t } = useOversettelse();
   const form = useFormContext<ManueltSkjema>();
@@ -24,18 +23,10 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
 
   const alder = barnField.value("alder");
-  const visSpørsmålOmBarnetilsynsutgift = erAlderSatt && Number(alder) < 11;
+  const visSpørsmålOmBarnetilsynsutgift =
+    barnField.field("alder").touched() && Number(alder) < 11;
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
-
-  const handleChangeAlder = () => setAlderSatt(false);
-
-  const handleBlurAlder = (event: React.FocusEvent<HTMLInputElement>) => {
-    const alder = event.target.value;
-    if (!!alder) {
-      setAlderSatt(true);
-    }
-  };
 
   const underholdskostnadsgrupper = useMemo(
     () =>
@@ -58,9 +49,13 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
       />
       <TextField
         {...barnField.field("alder").getInputProps({
-          onBlur: handleBlurAlder,
-          onChange: handleChangeAlder,
-          label: t(tekster.alder.label(barnField.field("navn").value())),
+          label: t(
+            tekster.alder.label(
+              barnField.field("navn").touched()
+                ? barnField.field("navn").value()
+                : "",
+            ),
+          ),
         })}
         error={barnField.field("alder").error()}
         htmlSize={8}
@@ -76,7 +71,8 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
           {underholdskostnadsgrupper.map(
             ({ label, underholdskostnad, aldre }) => {
               const fremhevGruppe =
-                erAlderSatt && aldre.includes(Number(alder));
+                barnField.field("alder").touched() &&
+                aldre.includes(Number(alder));
               return (
                 <li key={label}>
                   <span

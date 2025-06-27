@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const PersonSchema = z.object({
   ident: z.string(), // kan være hva som helst
+  fulltNavn: z.string(),
 });
 
 const BarnSchema = z.object({

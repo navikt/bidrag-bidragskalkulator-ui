@@ -5,6 +5,7 @@ import { Husstandsmedlemmer } from "../Husstandsmedlemmer";
 import { Inntektsopplysninger } from "../Inntektsopplysninger";
 import { type ManueltSkjema } from "../schema";
 import { ManuellBarnSkjema } from "./ManuellBarnSkjema";
+import { MedforelderSkjema } from "./MedforelderSkjema";
 
 type Props = {
   form: FormApi<ManueltSkjema>;
@@ -15,6 +16,7 @@ export function ManueltBidragsskjema({ form }: Props) {
 
   return (
     <form {...form.getFormProps()} className="flex flex-col gap-4">
+      <MedforelderSkjema />
       <ManuellBarnSkjema />
       <Husstandsmedlemmer part="deg" />
       <Husstandsmedlemmer part="medforelder" />
