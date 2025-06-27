@@ -51,7 +51,7 @@
     "@inquirer/prompts": "^7.5.3",
     "@playwright/test": "^1.53.1",
     "@react-router/dev": "^7.6.2",
-    "@tailwindcss/vite": "^4.1.10",
+    "@tailwindcss/vite": "^4.1.11",
     "@types/node": "^24.0.4",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
