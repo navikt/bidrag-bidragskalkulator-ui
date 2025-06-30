@@ -45,10 +45,17 @@ export const ManuellBarnSkjema = () => {
     }, 0);
   };
 
+  const medforelderNavnField = form.field("medforelder.navn");
+  const medforelderNavn = medforelderNavnField.touched()
+    ? medforelderNavnField.value()
+    : "";
+
   return (
     <div className="border p-4 rounded-md space-y-4">
       <fieldset className="p-0">
-        <legend className="text-xl mb-6">{t(tekster.overskrift)}</legend>
+        <legend className="text-xl mb-6">
+          {t(tekster.overskrift(medforelderNavn))}
+        </legend>
         {barnArray.map((key, _, index) => {
           return (
             <React.Fragment key={key}>
@@ -87,11 +94,11 @@ const finnFokuserbartInputPåBarn = (index: number) => {
 };
 
 const tekster = definerTekster({
-  overskrift: {
-    nb: "Felles barn med den du ønsker å avtale barnebidrag med",
-    en: "Shared children with the parent you want to agree on child support with",
-    nn: "Felles barn med den du ønsker å avtale fostringstilskot med",
-  },
+  overskrift: (navn) => ({
+    nb: `Felles barn med ${navn || "den du ønsker å avtale barnebidrag med"}`,
+    en: `Shared children with ${navn || "the parent you want to agree on child support with"}`,
+    nn: `Felles barn med ${navn || "den du ønsker å avtale fostringstilskot med"}`,
+  }),
   leggTilBarn: {
     nb: "Legg til barn",
     en: "Add child",

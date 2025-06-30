@@ -79,7 +79,9 @@ export const ManueltResultatpanel = ({
           : t(tekster.overskrift.motta(Math.abs(totalSum)))}
       </Heading>
       {totalSum === 0 && <BodyLong spacing>{t(tekster.nullBidrag)}</BodyLong>}
-      <BodyLong spacing>{t(tekster.hvordanAvtale)}</BodyLong>
+      <BodyLong spacing>
+        {t(tekster.hvordanAvtale(form.field("medforelder.navn").value()))}
+      </BodyLong>
 
       <Button
         as="a"
@@ -219,11 +221,11 @@ const tekster = definerTekster({
     en: "It may be because you have divided the nights with the child equally between you, and because there is a small difference between your incomes.",
     nn: "Det kan vere fordi dere har delt nettene med barnet likt mellom dere, og fordi det er liten forskjell mellom inntektene deres.",
   },
-  hvordanAvtale: {
-    nb: "Den endelige summen på barnebidraget avtaler du med den andre forelderen. Da står dere fritt til å endre avtalen på et senere tidspunkt, om ting som inntekt eller samvær skulle endre seg. Om du vil, kan du opprette en slik avtale her:",
-    en: "The final amount of child support is agreed upon with the other parent. You are free to change the agreement at a later time if things like income or custody change. If you want, you can create such an agreement here:",
-    nn: "Den endelege summen på fostringstilskotet er noko du avtalar med den andre forelderen. Du står fritt til å endre avtalen på eit seinare tidspunkt, viss ting som inntekt eller samvær endrar seg. Om du vil, kan du opprette ein slik avtale her:",
-  },
+  hvordanAvtale: (navn) => ({
+    nb: `Den endelige summen på barnebidraget avtaler du med ${navn || "den andre forelderen"}. Da står dere fritt til å endre avtalen på et senere tidspunkt, om ting som inntekt eller samvær skulle endre seg. Om du vil, kan du opprette en slik avtale her:`,
+    en: `The final amount of child support is agreed upon with ${navn || "the other parent"}. You are free to change the agreement at a later time if things like income or custody change. If you want, you can create such an agreement here:`,
+    nn: `Den endelege summen på fostringstilskotet er noko du avtalar med ${navn || "den andre forelderen"}. Du står fritt til å endre avtalen på eit seinare tidspunkt, viss ting som inntekt eller samvær endrar seg. Om du vil, kan du opprette ein slik avtale her:`,
+  }),
   hvisManIkkeKommerTilEnighet: {
     nb: (
       <>

@@ -10,6 +10,11 @@ export const Inntektsopplysninger = () => {
   const form = useFormContext<ManueltSkjema | InnloggetSkjema>();
   const { t } = useOversettelse();
 
+  const medforelderNavnField = form.field("medforelder.navn");
+  const medforelderNavn = medforelderNavnField.touched()
+    ? medforelderNavnField.value()
+    : "";
+
   return (
     <div className="flex flex-col gap-4">
       <FormattertTallTextField
@@ -35,7 +40,7 @@ export const Inntektsopplysninger = () => {
 
       <FormattertTallTextField
         {...form.field("medforelder.inntekt").getControlProps()}
-        label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
+        label={t(tekster.hvaErInntektenTilDenAndreForelderen(medforelderNavn))}
         error={form.field("medforelder.inntekt").error()}
         htmlSize={18}
       />
@@ -73,11 +78,11 @@ const tekster = definerTekster({
       nn: "Inntekter som ikkje skal oppgjevast på skattemeldinga, skal ikkje takast med i utrekningsgrunnlaget, til dømes skattefrie husleigeinntekter.",
     },
   },
-  hvaErInntektenTilDenAndreForelderen: {
-    nb: `Hva er årsinntekten til den andre forelderen?`,
-    en: `What is the other parent's annual income?`,
-    nn: `Kva er årsinntekta til den andre forelderen?`,
-  },
+  hvaErInntektenTilDenAndreForelderen: (navn) => ({
+    nb: `Hva er årsinntekten til ${navn || "den andre forelderen"}?`,
+    en: `What is ${navn || "the other parent"}'s annual income?`,
+    nn: `Kva er årsinntekta til ${navn || "den andre forelderen"}?`,
+  }),
   beregnBarnebidraget: {
     nb: "Beregn barnebidraget",
     en: "Calculate child support",

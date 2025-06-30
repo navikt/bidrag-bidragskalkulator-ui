@@ -94,6 +94,7 @@ const samværsfradrag = [
 export const defaultPersoninformasjon: Personinformasjon = {
   person: {
     ident: "12345678901",
+    fulltNavn: "Test Megersen",
   },
   inntekt: 500000,
   barnerelasjoner: [],
@@ -107,6 +108,7 @@ export const defaultPersoninformasjon: Personinformasjon = {
 export const defaultManuellPersoninformasjon: ManuellPersoninformasjon = {
   person: {
     ident: "12345678901",
+    fulltNavn: "Test Megersen",
   },
   inntekt: 500000,
   underholdskostnader,
