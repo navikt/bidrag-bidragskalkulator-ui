@@ -31,6 +31,7 @@ export const Avtaledetaljer = () => {
           <DatePicker.Input
             {...inputProps}
             label={t(tekster.gjelderFra.label)}
+            description={t(tekster.gjelderFra.beskrivelse)}
             error={fraDato.error()}
           />
         </DatePicker>
@@ -75,9 +76,14 @@ const tekster = definerTekster({
   },
   gjelderFra: {
     label: {
-      nb: "Hvilken dag avtalen skal gjelde fra (dd.mm.åååå)",
-      nn: "Kva dag avtalen skal gjelde frå (dd.mm.åååå)",
-      en: "The day the agreement should apply from (dd.mm.yyyy)",
+      nb: "Hvilken dag avtalen skal gjelde fra",
+      nn: "Kva dag avtalen skal gjelde frå",
+      en: "The day the agreement should apply from",
+    },
+    beskrivelse: {
+      nb: "Oppgi dato med format dd.mm.åååå.",
+      nn: "Oppgi dato med format dd.mm.åååå.",
+      en: "Provide the date in the format dd.mm.yyyy.",
     },
   },
   nyAvtale: {
