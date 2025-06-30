@@ -93,9 +93,7 @@ export default function App() {
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   useEffect(() => {
     injectDecoratorClientSide({
-      env: location.hostname.includes("barnebidragskalkulator.nav.no")
-        ? "prod"
-        : "dev",
+      env: location.hostname.includes("www.nav.no") ? "prod" : "dev",
     });
   }, []);
 
