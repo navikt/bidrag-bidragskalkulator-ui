@@ -153,22 +153,30 @@ export const ManueltResultatpanel = ({
           </ExpansionCardHeader>
 
           <ExpansionCardContent>
-            <BodyLong spacing>{t(tekster.bidragetSkalDekke.del1)}</BodyLong>
-            <BodyLong spacing>{t(tekster.bidragetSkalDekke.del2)}</BodyLong>
+            <BodyLong spacing>
+              {t(tekster.bidragetSkalDekke.beskrivelse1)}
+            </BodyLong>
 
+            <BodyLong>{t(tekster.bidragetSkalDekke.listeIntro)}</BodyLong>
             <List>
               <ListItem>{t(tekster.bidragetSkalDekke.liste1)}</ListItem>
               <ListItem>{t(tekster.bidragetSkalDekke.liste2)}</ListItem>
               <ListItem>{t(tekster.bidragetSkalDekke.liste3)}</ListItem>
             </List>
 
-            <Link
-              href={t(tekster.bidragetSkalDekke.lesMerLenke)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t(tekster.bidragetSkalDekke.lesMer)}
-            </Link>
+            <BodyLong spacing>
+              {t(tekster.bidragetSkalDekke.beskrivelse2)}
+            </BodyLong>
+
+            <BodyLong>
+              <Link
+                href={t(tekster.bidragetSkalDekke.lesMerLenke)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t(tekster.bidragetSkalDekke.lesMer)}
+              </Link>
+            </BodyLong>
           </ExpansionCardContent>
         </ExpansionCard>
       </VStack>
@@ -356,15 +364,15 @@ const tekster = definerTekster({
       en: "What the child support should cover",
       nn: "Kva fostringstilskotet skal dekke",
     },
-    del1: {
-      nb: "Når foreldrene inngår en privat avtale, bestemmer dere selv hva barnebidraget skal dekke.",
-      en: "When parents establish a private agreement, the parents decide between themselves what the child support shall cover.",
-      nn: "Når foreldra inngår ein privat avtale, bestemmer de sjølv kva fostringstilskotet skal dekke.",
+    beskrivelse1: {
+      nb: "Når dere inngår en privat avtale om barnebidrag, bestemmer dere selv hva barnebidraget skal dekke. Som et minimum må barnebidraget dekke kostnadene ved å forsørge barnet i hverdagen, også kalt underholdskostnadene.",
+      en: "When you enter into a private agreement on child support, you decide for yourselves what the support should cover. As a minimum, the support must cover the costs of caring for the child in everyday life, also known as maintenance costs.",
+      nn: "Når de inngår ein privat avtale om fostringstilskot, bestemmer de sjølve kva fostringstilskotet skal dekke. Som eit minimum må fostringstilskotet dekke kostnadane ved å forsørgje barnet i kvardagen, også kalla underhaldskostnadar.",
     },
-    del2: {
-      nb: "Når Nav fastsetter barnebidraget, skal bidraget dekke det som går inn under underholdskostnaden. Kort fortalt handler det om kostnadene til den daglige forsørgelsen av barnet. Dette inkluderer:",
-      en: "When Nav calculates the child support, the child support payment is intended to cover expenditures that are included in the maintenance cost. In short, these are costs that a parent incurs in connection caring for the child in their day-to-day life. This includes:",
-      nn: "Når Nav fastset fostringstilskotet, skal tilskotet dekke det som går inn under underhaldskostnaden. Kort fortalt handlar det om kostnadene til den daglege forsørginga av barnet. Dette inkluderer:",
+    listeIntro: {
+      nb: "Dette inkluderer:",
+      en: "This includes:",
+      nn: "Dette inkluderer:",
     },
     liste1: {
       nb: "forbruksutgifter (klær, sko, mat og drikke, fritidsaktiviteter med mer)",
@@ -373,13 +381,18 @@ const tekster = definerTekster({
     },
     liste2: {
       nb: "boutgifter (barnets andel av boutgiftene)",
-      en: "housing costs (child’s share of housing costs)",
-      nn: "buutgifter (barnets andel av buutgiftene)",
+      en: "housing costs (the child’s share of housing costs)",
+      nn: "buutgifter (barnet sin del av buutgiftene)",
     },
     liste3: {
       nb: "tilsynsutgifter (barnehage, skolefritidsordning, dagmamma)",
       en: "child-care costs (kindergarten, after-school programme (SFO), nanny)",
       nn: "tilsynsutgifter (barnehage, skulefritidsordning, dagmamma)",
+    },
+    beskrivelse2: {
+      nb: "Det er underholdkostnadene Nav tar utgangspunkt i når vi fastsetter barnebidraget.",
+      en: "It is the maintenance costs that Nav uses as a basis when determining the support.",
+      nn: "Det er underhaldskostnadene Nav tek utgangspunkt i når vi fastset fostringstilskotet.",
     },
     lesMer: {
       nb: "Les mer om hva barnebidraget skal dekke",
