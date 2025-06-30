@@ -45,17 +45,16 @@ export const ManuellBarnSkjema = () => {
     }, 0);
   };
 
-  const medforelderNavn = form.field("medforelder.navn");
+  const medforelderNavnField = form.field("medforelder.navn");
+  const medforelderNavn = medforelderNavnField.touched()
+    ? medforelderNavnField.value()
+    : "";
 
   return (
     <div className="border p-4 rounded-md space-y-4">
       <fieldset className="p-0">
         <legend className="text-xl mb-6">
-          {t(
-            tekster.overskrift(
-              medforelderNavn.touched() ? medforelderNavn.value() : "",
-            ),
-          )}
+          {t(tekster.overskrift(medforelderNavn))}
         </legend>
         {barnArray.map((key, _, index) => {
           return (

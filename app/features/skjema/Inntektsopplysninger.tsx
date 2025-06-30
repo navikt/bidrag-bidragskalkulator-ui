@@ -10,6 +10,11 @@ export const Inntektsopplysninger = () => {
   const form = useFormContext<ManueltSkjema | InnloggetSkjema>();
   const { t } = useOversettelse();
 
+  const medforelderNavnField = form.field("medforelder.navn");
+  const medforelderNavn = medforelderNavnField.touched()
+    ? medforelderNavnField.value()
+    : "";
+
   return (
     <div className="flex flex-col gap-4">
       <FormattertTallTextField
@@ -35,11 +40,7 @@ export const Inntektsopplysninger = () => {
 
       <FormattertTallTextField
         {...form.field("medforelder.inntekt").getControlProps()}
-        label={t(
-          tekster.hvaErInntektenTilDenAndreForelderen(
-            form.field("medforelder.navn").value(),
-          ),
-        )}
+        label={t(tekster.hvaErInntektenTilDenAndreForelderen(medforelderNavn))}
         error={form.field("medforelder.inntekt").error()}
         htmlSize={18}
       />
