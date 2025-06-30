@@ -96,7 +96,7 @@ const tekster = definerTekster({
     ident: {
       label: {
         nb: "Fødselsnummer eller D-nummer (11 siffer)",
-        en: "National ID or D-number (11 digits)",
+        en: "National identity number or D number (11 digits)",
         nn: "Fødselsnummer eller D-nummer (11 siffer)",
       },
     },

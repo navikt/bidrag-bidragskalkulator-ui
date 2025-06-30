@@ -112,123 +112,123 @@ const tekster = definerTekster({
     deg: {
       fornavn: {
         påkrevd: {
-          nb: "Fornavn er påkrevd.",
-          en: "First name is required.",
-          nn: "Fornamn er påkravd.",
+          nb: "Fyll ut fornavn",
+          en: "Fill in first name",
+          nn: "Fyll ut fornamn",
         },
       },
       etternavn: {
         påkrevd: {
-          nb: "Etternavn er påkrevd.",
-          en: "Last name is required.",
-          nn: "Etternamn er påkravd.",
+          nb: "Fyll ut etternavn.",
+          en: "Fill in last name",
+          nn: "Fyll ut etternamn",
         },
       },
       ident: {
         påkrevd: {
-          nb: "Ugyldig ident. Ident må være 11 siffer.",
-          en: "Invalid ID. ID must be 11 digits.",
-          nn: "Ugyldig ident. Ident må vere 11 siffer.",
+          nb: "Fyll ut fødselsnummer eller D-nummer",
+          en: "Fill in identity number or D number",
+          nn: "Fyll ut fødselsnummer eller D-nummer",
         },
         ugyldig: {
-          nb: "Ugyldig ident. Ident må være 11 siffer.",
-          en: "Invalid ID. ID must be 11 digits.",
-          nn: "Ugyldig ident. Ident må vere 11 siffer.",
+          nb: "Ugyldig fødselsnummer eller D-nummer",
+          en: "Invalid identity number or D number",
+          nn: "Ugyldig fødselsnummer eller D-nummer",
         },
       },
     },
     medforelder: {
       ident: {
         påkrevd: {
-          nb: "Ugyldig ident. Ident må være 11 siffer.",
-          en: "Invalid ID. ID must be 11 digits.",
-          nn: "Ugyldig ident. Ident må vere 11 siffer.",
+          nb: "Fyll ut fødselsnummer eller D-nummer",
+          en: "Fill in identity number or D number",
+          nn: "Fyll ut fødselsnummer eller D-nummer",
         },
         ugyldig: {
-          nb: "Ugyldig ident. Ident må være 11 siffer.",
-          en: "Invalid ID. ID must be 11 digits.",
-          nn: "Ugyldig ident. Ident må vere 11 siffer.",
+          nb: "Ugyldig fødselsnummer eller D-nummer",
+          en: "Invalid identity number or D number",
+          nn: "Ugyldig fødselsnummer eller D-nummer",
         },
       },
       fornavn: {
         påkrevd: {
-          nb: "Fornavn er påkrevd.",
-          en: "First name is required.",
-          nn: "Fornamn er påkravd.",
+          nb: "Fyll ut fornavn",
+          en: "Fill in first name",
+          nn: "Fyll ut fornamn",
         },
       },
       etternavn: {
         påkrevd: {
-          nb: "Etternavn er påkrevd.",
-          en: "Last name is required.",
-          nn: "Etternamn er påkravd.",
+          nb: "Fyll ut etternavn",
+          en: "Fill in last name",
+          nn: "Fyll ut etternamn",
         },
       },
     },
     barn: {
       ident: {
-        nb: "Ugyldig ident. Ident må være 11 siffer.",
-        en: "Invalid ID. ID must be 11 digits.",
-        nn: "Ugyldig ident. Ident må vere 11 siffer.",
+        nb: "Fyll ut fødselsnummer eller D-nummer",
+        en: "Fill in identity number or D number",
+        nn: "Fyll ut fødselsnummer eller D-nummer",
       },
       fornavn: {
         påkrevd: {
-          nb: "Fornavn er påkrevd.",
-          en: "First name is required.",
-          nn: "Fornamn er påkravd.",
+          nb: "Fyll ut fornavn",
+          en: "Fill in first name",
+          nn: "Fyll ut fornamn",
         },
       },
       etternavn: {
         påkrevd: {
-          nb: "Etternavn er påkrevd.",
-          en: "Last name is required.",
-          nn: "Etternamn er påkravd.",
+          nb: "Fyll ut etternavn",
+          en: "Fill in last name",
+          nn: "Fyll ut etternamn",
         },
       },
       sum: {
         påkrevd: {
-          nb: "Sum bidrag er påkrevd.",
-          en: "Total contribution is required.",
-          nn: "Sum bidrag er påkravd.",
+          nb: "Fyll ut sum barnebidrag",
+          en: "Fill in total child contribution",
+          nn: "Fyll ut sum forstringstilskot",
         },
         ugyldig: {
-          nb: "Ugyldig verdi, velg et tall større enn eller lik 0.",
-          en: "Invalid value, select a number greater than or equal to 0.",
-          nn: "Ugyldig verdi, velg eit tal større enn eller lik 0.",
+          nb: "Fyll ut et positivt antall",
+          en: "Fill in a positive number",
+          nn: "Fyll ut eit positivt tal",
         },
       },
       bidragstype: {
         ugyldig: {
-          nb: "Ugyldig bidragstype.",
-          en: "Invalid contribution type.",
-          nn: "Ugyldig bidragstype.",
+          nb: "Fyll ut bidragstype",
+          en: "Fill in contribution type",
+          nn: "Fyll ut bidragstype",
         },
       },
     },
     fraDato: {
       påkrevd: {
-        nb: "Velg dato avtalen skal gjelde fra.",
-        en: "Select the date the agreement should apply from.",
-        nn: "Vel dato avtalen skal gjelde frå.",
+        nb: "Fyll ut dato avtalen skal gjelde fra",
+        en: "Fill in the date the agreement should apply from",
+        nn: "Fyll ut dato avtalen skal gjelde frå",
       },
       ugyldig: {
-        nb: "Ugyldig dato",
-        nn: "Ugyldig dato",
-        en: "Invalid date",
+        nb: "Fyll ut en gyldig dato",
+        en: "Fill in a valid date",
+        nn: "Fyll ut ein gyldig dato",
       },
     },
     medInnkreving: {
       påkrevd: {
-        nb: "Velg oppgjørsform",
-        en: "Select the type of settlement",
-        nn: "Vel oppgjerstype",
+        nb: "Fyll ut oppgjørsform",
+        en: "Fill in the type of settlement",
+        nn: "Fyll ut oppgjerstype",
       },
     },
     nyAvtale: {
       påkrevd: {
-        nb: "Velg om dette er en ny avtale",
-        en: "Select if this is a new agreement",
-        nn: "Vel om dette er ein ny avtale",
+        nb: "Fyll ut om dette er en ny avtale",
+        en: "Fill in if this is a new agreement",
+        nn: "Fyll ut om dette er ein ny avtale",
       },
     },
   },
