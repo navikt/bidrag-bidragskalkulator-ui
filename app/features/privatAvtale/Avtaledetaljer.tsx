@@ -81,9 +81,9 @@ const tekster = definerTekster({
       en: "The day the agreement should apply from",
     },
     beskrivelse: {
-      nb: "Oppgi dato med format dd.mm.åååå.",
-      nn: "Oppgi dato med format dd.mm.åååå.",
-      en: "Provide the date in the format dd.mm.yyyy.",
+      nb: "Oppgi dato med format dd.mm.åååå",
+      nn: "Oppgi dato med format dd.mm.åååå",
+      en: "Provide the date in the format dd.mm.yyyy",
     },
   },
   nyAvtale: {
@@ -98,26 +98,26 @@ const tekster = definerTekster({
       en: "Yes",
     },
     false: {
-      nb: "Nei",
-      nn: "Nei",
-      en: "No",
+      nb: "Nei, dette er en endring av en eksisterende avtale",
+      nn: "Nei, dette er en endring av en eksisterande avtale",
+      en: "No, this is a change to an existing agreement",
     },
   },
   medInnkreving: {
     label: {
-      nb: "Hvilken oppgjørsform ønsker dere?",
-      nn: "Kva oppgjerstype ynskjer de?",
-      en: "What type of settlement do you want?",
+      nb: "Ønsket oppgjørsform",
+      nn: "Ynskja oppgjerstype",
+      en: "Settlement type",
     },
     true: {
-      nb: "Vi ønsker at bidraget skal betales gjennom Skatteetaten v/Nav Innkreving.",
-      nn: "Vi ønskjer at bidraget skal betalast gjennom Skatteetaten v/Nav Innkreving.",
-      en: "We want the support to be paid through the Tax Administration via Nav Collection.",
+      nb: "Vi ønsker at bidraget skal betales gjennom Skatteetaten v/Nav Innkreving",
+      nn: "Vi ønskjer at bidraget skal betalast gjennom Skatteetaten v/Nav Innkreving",
+      en: "We want the support to be paid through the Tax Administration via Nav Collection",
     },
     false: {
-      nb: "Vi ønsker å gjøre opp bidraget oss i mellom (privat).",
-      nn: "Vi ønskjer å gjere opp bidraget oss imellom (privat).",
-      en: "We want to settle the support between us (private).",
+      nb: "Vi ønsker å gjøre opp bidraget oss i mellom (privat)",
+      nn: "Vi ønskjer å gjere opp bidraget oss imellom (privat)",
+      en: "We want to settle the support between us (private)",
     },
   },
 });
