@@ -16,29 +16,23 @@ export const hentPrivatAvtaleFraApi = async ({
   requestData: LagPrivatAvtaleRequest;
   språk: Språk;
   token: string;
-}): Promise<Response | { error: string }> => {
-  try {
-    const response = await fetch(`${env.SERVER_URL}/api/v1/privat-avtale`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestData),
-    });
+}): Promise<Response> => {
+  const response = await fetch(`${env.SERVER_URL}/api/v1/privat-avtale`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestData),
+  });
 
-    if (!response.ok) {
-      return {
-        error: oversett(språk, tekster.feil.genererePdf),
-      };
-    }
-
-    return response;
-  } catch (error) {
-    console.error(error);
-    return {
-      error: oversett(språk, tekster.feil.genererePdf),
-    };
+  if (!response.ok) {
+    console.error(
+      `Feil ved generering av privat avtale: ${response.status} ${response.statusText}`,
+    );
+    return Promise.reject(oversett(språk, tekster.feil.genererePdf));
   }
+
+  return response;
 };
 
 export const hentPrivatAvtaledokument = async (
@@ -54,8 +48,8 @@ export const hentPrivatAvtaledokument = async (
   const isPliktig = bidragstyper.includes("PLIKTIG");
 
   if (isMottaker && isPliktig) {
-    // TODO Håndtere pliktig og mottaker i samme avtale
-    throw new Error("Kan ikke være både mottaker og pliktig");
+    console.error("Pliktig og mottaker i samme privat avtale skjema");
+    return Promise.reject(oversett(språk, tekster.feil.mottakerOgPliktig));
   }
 
   const { bidragstype } = fåSummertBidrag(skjemaData.barn);
@@ -99,6 +93,11 @@ export const hentPrivatAvtaledokument = async (
 
 const tekster = definerTekster({
   feil: {
+    mottakerOgPliktig: {
+      nb: "Kan ikke være både mottaker og pliktig i samme skjema.",
+      en: "Cannot be both recipient and liable in the same form.",
+      nn: "Kan ikkje vere både mottakar og pliktig i same skjema.",
+    },
     genererePdf: {
       nb: "Det oppstod en feil. Vennligst prøv igjen.",
       en: "An error occurred. Please try again.",

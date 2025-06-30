@@ -1,5 +1,6 @@
 import { Heading } from "@navikt/ds-react";
 import { useForm } from "@rvf/react-router";
+import { useState } from "react";
 import type { LoaderFunctionArgs, MetaArgs } from "react-router";
 import { useHref, useLoaderData, useSearchParams } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
@@ -12,7 +13,22 @@ import {
 } from "~/features/privatAvtale/skjemaSchema";
 import { hentPrivatAvtaleSkjemaStandardverdi } from "~/features/privatAvtale/utils";
 import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
+import { tilÅrMånedDag } from "~/utils/dato";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
+import { lastNedPdf } from "~/utils/pdf";
+
+const hentPrivatAvtalePdf = async (
+  basename: string,
+  skjemadata: PrivatAvtaleSkjemaValidert,
+): Promise<Response> => {
+  return fetch(`${basename}api/privat-avtale`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(skjemadata),
+  });
+};
 
 export function meta({ matches }: MetaArgs) {
   const rootData = matches.find((match) => match.pathname === "/")?.data as {
@@ -35,6 +51,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function ManuellBarnebidragskalkulator() {
+  const [feilVedHentingAvAvtale, settFeilVedHentingAvAvtale] = useState<
+    string | undefined
+  >();
   const basename = useHref("/");
   const { t } = useOversettelse();
   const personinformasjon = useLoaderData<typeof loader>();
@@ -55,31 +74,22 @@ export default function ManuellBarnebidragskalkulator() {
       personinformasjon,
       forhåndsvalgteBarn,
     ),
-    handleSubmit: async (skjemaData) => {
-      const respons = await fetch(`${basename}api/privat-avtale`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(skjemaData),
-      });
+    handleSubmit: async (skjemadata) => {
+      settFeilVedHentingAvAvtale(undefined);
+      const respons = await hentPrivatAvtalePdf(basename, skjemadata);
 
       if (!respons.ok) {
-        // TODO
+        settFeilVedHentingAvAvtale(
+          oversett(språk, tekster.feilVedGenereringAvAvtale),
+        );
         return;
       }
 
-      // Noe som kan feile her?
+      const datoFormatert = tilÅrMånedDag(new Date());
+      const filnavn = `privat-avtale-barnebidrag-${datoFormatert}.pdf`;
       const blob = await respons.blob();
-      const url = URL.createObjectURL(blob);
-      const datoFormatert = new Date().toISOString().split("T")[0];
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `privat-avtale-barnebidrag-${datoFormatert}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+
+      lastNedPdf(blob, filnavn);
     },
   });
 
@@ -92,7 +102,7 @@ export default function ManuellBarnebidragskalkulator() {
 
         <IntroPanel />
 
-        <PrivatAvtaleSkjema form={form} />
+        <PrivatAvtaleSkjema form={form} error={feilVedHentingAvAvtale} />
       </div>
     </>
   );
@@ -115,5 +125,10 @@ const tekster = definerTekster({
     nb: "Barnebidrag - lag privat avtale",
     en: "Child support - create private agreement",
     nn: "Fostringstilskot - lag privat avtale",
+  },
+  feilVedGenereringAvAvtale: {
+    nb: "Det oppstod en feil ved generering av privat avtale.",
+    en: "An error occurred while generating the private agreement.",
+    nn: "Det oppstod ein feil ved generering av privat avtale.",
   },
 });

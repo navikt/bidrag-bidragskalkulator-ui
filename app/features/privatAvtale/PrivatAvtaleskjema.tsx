@@ -1,4 +1,4 @@
-import { Button } from "@navikt/ds-react";
+import { Alert, BodyLong, Button } from "@navikt/ds-react";
 import { FormProvider, type FormApi } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { Avtaledetaljer } from "./Avtaledetaljer";
@@ -8,9 +8,10 @@ import type { PrivatAvtaleSkjema } from "./skjemaSchema";
 
 type Props = {
   form: FormApi<PrivatAvtaleSkjema>;
+  error: string | undefined;
 };
 
-export function PrivatAvtaleSkjema({ form }: Props) {
+export function PrivatAvtaleSkjema({ form, error }: Props) {
   const { t } = useOversettelse();
 
   return (
@@ -22,6 +23,12 @@ export function PrivatAvtaleSkjema({ form }: Props) {
         <PrivatAvtaleBarn />
 
         <Avtaledetaljer />
+
+        {error && (
+          <Alert variant="error">
+            <BodyLong>{error}</BodyLong>
+          </Alert>
+        )}
 
         <Button
           type="submit"
