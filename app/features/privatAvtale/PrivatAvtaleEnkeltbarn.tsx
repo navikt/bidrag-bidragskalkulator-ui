@@ -135,15 +135,15 @@ const tekster = definerTekster({
       en: "Will you receive or pay child support?",
       nn: "Skal du motta eller betale barnebidrag?",
     },
-    MOTTAKER: (navnMotpart = "den andre forelderen") => ({
-      nb: `Jeg skal motta barnebidrag fra ${navnMotpart}`,
-      en: `I will receive child support from ${navnMotpart}`,
-      nn: `Eg skal motta barnebidrag frå ${navnMotpart}`,
+    MOTTAKER: (navnMotpart) => ({
+      nb: `Jeg skal motta barnebidrag fra ${navnMotpart || "den andre forelderen"}`,
+      en: `I will receive child support from ${navnMotpart || "the other parent"}`,
+      nn: `Eg skal motta barnebidrag frå ${navnMotpart || "den andre forelderen"}`,
     }),
-    PLIKTIG: (navnMotpart = "den andre forelderen") => ({
-      nb: `Jeg skal betale barnebidrag til ${navnMotpart}`,
-      en: `I will pay child support to ${navnMotpart}`,
-      nn: `Eg skal betale barnebidrag til ${navnMotpart}`,
+    PLIKTIG: (navnMotpart) => ({
+      nb: `Jeg skal betale barnebidrag til ${navnMotpart || "den andre forelderen"}`,
+      en: `I will pay child support to ${navnMotpart || "the other parent"}`,
+      nn: `Eg skal betale barnebidrag til ${navnMotpart || "den andre forelderen"}`,
     }),
   },
   fjernBarn: {
