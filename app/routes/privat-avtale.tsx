@@ -106,9 +106,9 @@ const tekster = definerTekster({
       nn: "Fostringstilskot - lag privat avtale",
     },
     beskrivelse: {
-      nb: "Barnebidragskalkulatoren hjelper deg å regne ut hvor stort et barnebidrag er.",
-      en: "The child support calculator helps you calculate how much child support you are entitled to.",
-      nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut hvor stort eit fostringstilskot er.",
+      nb: "Dette skjemaet kan dere bruke når dere skal inngå privat avtale om barnebidrag for barn under 18 år.",
+      en: "This form can be used when you want to make a private agreement on child support for children under 18 years old.",
+      nn: "Dette skjemaet kan de bruke når de skal inngå privat avtale om fostringstilskot for barn under 18 år.",
     },
   },
   overskrift: {
