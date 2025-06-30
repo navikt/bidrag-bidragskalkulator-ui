@@ -1,5 +1,4 @@
-import { env } from "process";
-
+import { env } from "~/config/env.server";
 import { fåSummertBidrag } from "~/utils/bidrag";
 import {
   definerTekster,
