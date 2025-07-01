@@ -12,4 +12,11 @@ export default defineConfig({
     reactRouter(),
     tsconfigPaths(),
   ],
+  server: {
+    hmr: {
+      path: "/",
+      clientPort: 5173,
+      host: "localhost",
+    },
+  },
 });
