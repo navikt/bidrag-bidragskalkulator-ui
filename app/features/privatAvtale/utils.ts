@@ -6,8 +6,7 @@ type Barn = PrivatAvtaleSkjema["barn"][number];
 
 const tomtBarn: Barn = {
   ident: "",
-  fornavn: "",
-  etternavn: "",
+  fulltNavn: "",
   sum: "",
   bidragstype: "",
 };
@@ -18,8 +17,7 @@ export const hentPrivatAvtaleSkjemaStandardverdi = (
 ): PrivatAvtaleSkjema => {
   const barn: Barn[] = forhåndsutfylteBarn.map((barn) => ({
     ident: "",
-    fornavn: "",
-    etternavn: "",
+    fulltNavn: "",
     sum: barn.sum.toString(),
     bidragstype: barn.bidragstype,
   }));
@@ -27,13 +25,11 @@ export const hentPrivatAvtaleSkjemaStandardverdi = (
   return {
     deg: {
       ident: personinformasjonDeg.person.ident,
-      fornavn: "",
-      etternavn: "",
+      fulltNavn: personinformasjonDeg.person.fulltNavn,
     },
     medforelder: {
       ident: "",
-      fornavn: "",
-      etternavn: "",
+      fulltNavn: "",
     },
     barn: barn.length > 0 ? barn : [tomtBarn],
     fraDato: "",

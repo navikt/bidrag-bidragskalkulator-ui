@@ -5,8 +5,7 @@ import { BidragstypeSchema } from "../skjema/beregning/schema";
 
 const Person = z.object({
   ident: z.string(),
-  fornavn: z.string(),
-  etternavn: z.string(),
+  fulltNavn: z.string(),
 });
 
 const Bidragsbarn = Person.extend({
@@ -33,12 +32,9 @@ export const lagValidertPersonSkjemaSchema = (
       .string()
       .nonempty(oversett(språk, tekster.feilmeldinger[part].ident.påkrevd))
       .length(11, oversett(språk, tekster.feilmeldinger[part].ident.ugyldig)),
-    fornavn: z
+    fulltNavn: z
       .string()
-      .nonempty(oversett(språk, tekster.feilmeldinger[part].fornavn.påkrevd)),
-    etternavn: z
-      .string()
-      .nonempty(oversett(språk, tekster.feilmeldinger[part].etternavn.påkrevd)),
+      .nonempty(oversett(språk, tekster.feilmeldinger[part].fulltNavn.påkrevd)),
   });
 };
 
@@ -66,15 +62,10 @@ export const lagPrivatAvtaleSkjemaValidertSchema = (språk: Språk) => {
     innhold: z.string(), // TODO
     barn: z.array(
       z.object({
-        fornavn: z
+        fulltNavn: z
           .string()
           .nonempty(
-            oversett(språk, tekster.feilmeldinger.barn.fornavn.påkrevd),
-          ),
-        etternavn: z
-          .string()
-          .nonempty(
-            oversett(språk, tekster.feilmeldinger.barn.etternavn.påkrevd),
+            oversett(språk, tekster.feilmeldinger.barn.fulltNavn.påkrevd),
           ),
         ident: z
           .string()
@@ -110,18 +101,11 @@ export type PrivatAvtaleSkjemaValidert = z.infer<
 const tekster = definerTekster({
   feilmeldinger: {
     deg: {
-      fornavn: {
+      fulltNavn: {
         påkrevd: {
-          nb: "Fyll ut fornavn",
-          en: "Fill in first name",
-          nn: "Fyll ut fornamn",
-        },
-      },
-      etternavn: {
-        påkrevd: {
-          nb: "Fyll ut etternavn.",
-          en: "Fill in last name",
-          nn: "Fyll ut etternamn",
+          nb: "Fyll ut fullt navn",
+          en: "Fill in full name",
+          nn: "Fyll ut fullt namn",
         },
       },
       ident: {
@@ -150,18 +134,11 @@ const tekster = definerTekster({
           nn: "Ugyldig fødselsnummer eller D-nummer",
         },
       },
-      fornavn: {
+      fulltNavn: {
         påkrevd: {
-          nb: "Fyll ut fornavn",
-          en: "Fill in first name",
-          nn: "Fyll ut fornamn",
-        },
-      },
-      etternavn: {
-        påkrevd: {
-          nb: "Fyll ut etternavn",
-          en: "Fill in last name",
-          nn: "Fyll ut etternamn",
+          nb: "Fyll ut fullt navn",
+          en: "Fill in full name",
+          nn: "Fyll ut fullt namn",
         },
       },
     },
@@ -171,18 +148,11 @@ const tekster = definerTekster({
         en: "Fill in identity number or D number",
         nn: "Fyll ut fødselsnummer eller D-nummer",
       },
-      fornavn: {
+      fulltNavn: {
         påkrevd: {
-          nb: "Fyll ut fornavn",
-          en: "Fill in first name",
-          nn: "Fyll ut fornamn",
-        },
-      },
-      etternavn: {
-        påkrevd: {
-          nb: "Fyll ut etternavn",
-          en: "Fill in last name",
-          nn: "Fyll ut etternamn",
+          nb: "Fyll ut fullt navn",
+          en: "Fill in full name",
+          nn: "Fyll ut fullt namn",
         },
       },
       sum: {

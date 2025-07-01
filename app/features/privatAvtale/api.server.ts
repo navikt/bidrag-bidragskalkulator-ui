@@ -57,14 +57,16 @@ export const hentPrivatAvtaledokument = async (
 
   const deg = {
     fodselsnummer: skjemaData.deg.ident,
-    fornavn: skjemaData.deg.fornavn,
-    etternavn: skjemaData.deg.etternavn,
+    fulltNavn: skjemaData.deg.fulltNavn,
+    etternavn: skjemaData.deg.fulltNavn,
+    fornavn: skjemaData.deg.fulltNavn,
   };
 
   const medforelder = {
     fodselsnummer: skjemaData.medforelder.ident,
-    fornavn: skjemaData.medforelder.fornavn,
-    etternavn: skjemaData.medforelder.etternavn,
+    fulltNavn: skjemaData.medforelder.fulltNavn,
+    etternavn: skjemaData.medforelder.fulltNavn,
+    fornavn: skjemaData.medforelder.fulltNavn,
   };
 
   const requestData: LagPrivatAvtaleRequest = {
@@ -77,8 +79,9 @@ export const hentPrivatAvtaledokument = async (
     barn: skjemaData.barn.map((barn) => {
       return {
         fodselsnummer: barn.ident,
-        fornavn: barn.fornavn,
-        etternavn: barn.etternavn,
+        fulltNavn: barn.fulltNavn,
+        fornavn: barn.fulltNavn,
+        etternavn: barn.fulltNavn,
         sumBidrag: barn.sum,
       };
     }),
