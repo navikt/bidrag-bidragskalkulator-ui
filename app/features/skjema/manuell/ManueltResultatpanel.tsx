@@ -1,4 +1,3 @@
-import { ExternalLinkIcon } from "@navikt/aksel-icons";
 import {
   Alert,
   BodyLong,
@@ -16,6 +15,7 @@ import {
 } from "@navikt/ds-react/ExpansionCard";
 import { ListItem } from "@navikt/ds-react/List";
 import { useFormContext } from "@rvf/react";
+import { Link as RouterLink } from "react-router";
 import { sporHendelse, sporHendelseEnGang } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
@@ -84,14 +84,10 @@ export const ManueltResultatpanel = ({
       </BodyLong>
 
       <Button
-        as="a"
-        href={t(tekster.lagPrivatAvtale.lenke)}
+        as={RouterLink}
+        to={`/privat-avtale?kalkulator=${JSON.stringify(data.resultater)}`}
         variant="primary"
         className="mb-6"
-        target="_blank"
-        rel="noopener noreferrer"
-        icon={<ExternalLinkIcon title={t(tekster.lagPrivatAvtale.nyFane)} />}
-        iconPosition="right"
         onClick={() =>
           sporHendelse("lag privat avtale klikket", {
             bidragstype,
