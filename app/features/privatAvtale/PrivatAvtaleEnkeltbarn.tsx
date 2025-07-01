@@ -26,20 +26,10 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
     <fieldset className="p-0 space-y-4">
       <legend className="sr-only">{overskrift}</legend>
       <TextField
-        {...barnField.field("fornavn").getInputProps()}
-        error={barnField.field("fornavn").error()}
-        label={t(tekster.fornavn.label)}
+        {...barnField.field("fulltNavn").getInputProps()}
+        error={barnField.field("fulltNavn").error()}
+        label={t(tekster.fulltNavn.label)}
         htmlSize={30}
-        inputMode="numeric"
-        autoComplete="off"
-      />
-
-      <TextField
-        {...barnField.field("etternavn").getInputProps()}
-        error={barnField.field("etternavn").error()}
-        label={t(tekster.etternavn.label)}
-        htmlSize={30}
-        inputMode="numeric"
         autoComplete="off"
       />
 
@@ -62,7 +52,7 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
             <Radio value={bidragstype} key={bidragstype}>
               {t(
                 tekster.bidragstype[bidragstype](
-                  form.field("medforelder.fornavn").value(),
+                  form.field("medforelder.fulltNavn").value(),
                 ),
               )}
             </Radio>
@@ -101,18 +91,11 @@ const tekster = definerTekster({
       nn: `Barn ${nummer}`,
     }),
   },
-  fornavn: {
+  fulltNavn: {
     label: {
-      nb: "Fornavn",
-      en: "First name",
-      nn: "Fornamn",
-    },
-  },
-  etternavn: {
-    label: {
-      nb: "Etternavn",
-      en: "Last name",
-      nn: "Etternamn",
+      nb: "Fullt navn",
+      en: "Full name",
+      nn: "Heile namnet",
     },
   },
   ident: {

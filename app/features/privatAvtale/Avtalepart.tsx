@@ -18,19 +18,13 @@ export const Avtalepart = ({ part }: Props) => {
         <legend className="text-xl mb-5">{t(tekster[part].tittel)}</legend>
 
         <TextField
-          {...form.field(`${part}.fornavn`).getInputProps()}
-          label={t(tekster[part].fornavn.label)}
-          error={form.field(`${part}.fornavn`).error()}
+          {...form.field(`${part}.fulltNavn`).getInputProps()}
+          label={t(tekster[part].fulltNavn.label)}
+          error={form.field(`${part}.fulltNavn`).error()}
           autoComplete="off"
           htmlSize={30}
         />
-        <TextField
-          {...form.field(`${part}.etternavn`).getInputProps()}
-          label={t(tekster[part].etternavn.label)}
-          error={form.field(`${part}.etternavn`).error()}
-          autoComplete="off"
-          htmlSize={30}
-        />
+
         <TextField
           {...form.field(`${part}.ident`).getInputProps()}
           label={t(tekster[part].ident.label)}
@@ -51,20 +45,14 @@ const tekster = definerTekster({
       nn: "Litt om deg",
       en: "About you",
     },
-    fornavn: {
+    fulltNavn: {
       label: {
-        nb: "Fornavn",
-        nn: "Fornamn",
-        en: "First name",
+        nb: "Fullt navn",
+        nn: "Heile namnet",
+        en: "Full name",
       },
     },
-    etternavn: {
-      label: {
-        nb: "Etternavn",
-        nn: "Etternamn",
-        en: "Last name",
-      },
-    },
+
     ident: {
       label: {
         nb: "Fødselsnummer eller D-nummer (11 siffer)",
@@ -79,18 +67,11 @@ const tekster = definerTekster({
       nn: "Litt om den andre forelderen",
       en: "About the other parent",
     },
-    fornavn: {
+    fulltNavn: {
       label: {
-        nb: "Fornavn",
-        nn: "Etternamn",
-        en: "First name",
-      },
-    },
-    etternavn: {
-      label: {
-        nb: "Etternavn",
-        nn: "Etternamn",
-        en: "Last name",
+        nb: "Fullt navn",
+        nn: "Heile namnet",
+        en: "Full name",
       },
     },
     ident: {
