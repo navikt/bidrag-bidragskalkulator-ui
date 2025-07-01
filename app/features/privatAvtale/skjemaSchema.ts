@@ -187,9 +187,9 @@ const tekster = definerTekster({
       },
       sum: {
         påkrevd: {
-          nb: "Fyll ut sum barnebidrag",
-          en: "Fill in total child contribution",
-          nn: "Fyll ut sum forstringstilskot",
+          nb: "Fyll ut barnebidrag per måned",
+          en: "Fill in child support per month",
+          nn: "Fyll ut fostringstilskot per månad",
         },
         ugyldig: {
           nb: "Fyll ut et positivt antall",

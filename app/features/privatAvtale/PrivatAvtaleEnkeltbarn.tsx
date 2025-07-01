@@ -52,14 +52,6 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
         autoComplete="off"
       />
 
-      <FormattertTallTextField
-        {...barnField.field("sum").getControlProps()}
-        error={barnField.field("sum").error()}
-        label={t(tekster.beløp.label)}
-        htmlSize={8}
-        autoComplete="off"
-      />
-
       <RadioGroup
         {...barnField.getControlProps("bidragstype")}
         error={barnField.field("bidragstype").error()}
@@ -77,6 +69,14 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
           );
         })}
       </RadioGroup>
+
+      <FormattertTallTextField
+        {...barnField.field("sum").getControlProps()}
+        error={barnField.field("sum").error()}
+        label={t(tekster.beløp.label)}
+        htmlSize={8}
+        autoComplete="off"
+      />
 
       {onFjernBarn && (
         <Button
@@ -124,9 +124,9 @@ const tekster = definerTekster({
   },
   beløp: {
     label: {
-      nb: "Beløp",
-      en: "Amount",
-      nn: "Beløp",
+      nb: "Barnebidrag per måned",
+      en: "Child support per month",
+      nn: "Fostringstilskot per månad",
     },
   },
   bidragstype: {
