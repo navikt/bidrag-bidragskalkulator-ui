@@ -1,6 +1,6 @@
 import { PlusIcon } from "@navikt/aksel-icons";
 import { Button } from "@navikt/ds-react";
-import { useField, useFieldArray, useFormContext } from "@rvf/react";
+import { useFieldArray, useFormContext } from "@rvf/react";
 import React from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -13,7 +13,7 @@ export const PrivatAvtaleBarn = () => {
 
   const barnArray = useFieldArray(form.scope("barn"));
   const antallBarn = barnArray.length();
-  const sisteBarn = useField(form.scope(`barn[${antallBarn - 1}]`));
+  const bidragstype = form.value("barn[0].bidragstype");
 
   const handleLeggTilBarn = () => {
     barnArray.push({
@@ -21,25 +21,22 @@ export const PrivatAvtaleBarn = () => {
       fornavn: "",
       etternavn: "",
       sum: "",
-      bidragstype: sisteBarn.value().bidragstype || "",
+      bidragstype: bidragstype ?? "",
     });
-    sporHendelse("barn lagt til", { antall: barnArray.length() + 1 });
+    sporHendelse("barn lagt til", { antall: antallBarn + 1 });
 
     setTimeout(() => {
-      const nyttBarnIndex = barnArray.length();
-      finnFokuserbartInputPåBarn(nyttBarnIndex)?.focus();
+      finnFokuserbartInputPåBarn(antallBarn)?.focus();
     }, 0);
   };
 
   const handleFjernBarn = (index: number) => {
     barnArray.remove(index);
-    sporHendelse("barn fjernet", { antall: barnArray.length() - 1 });
+    sporHendelse("barn fjernet", { antall: antallBarn - 1 });
 
     setTimeout(() => {
-      // Dette er den gamle lengden – den blir ikke oppdatert av en eller annen grunn
-      const antallBarnFørSletting = barnArray.length();
-      if (antallBarnFørSletting > 1) {
-        const sisteIndex = antallBarnFørSletting - 2;
+      if (antallBarn > 1) {
+        const sisteIndex = antallBarn - 2;
         finnFokuserbartInputPåBarn(sisteIndex)?.focus();
       }
     }, 0);
