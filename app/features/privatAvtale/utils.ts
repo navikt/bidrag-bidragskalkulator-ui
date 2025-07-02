@@ -13,7 +13,7 @@ const tomtBarn: Barn = {
 
 export const hentPrivatAvtaleSkjemaStandardverdi = (
   personinformasjonDeg: ManuellPersoninformasjon,
-  forhåndsutfylteBarn: BidragsutregningBarn[],
+  forhåndsutfylteBarn: BidragsutregningBarn[] = [],
 ): PrivatAvtaleSkjema => {
   const barn: Barn[] = forhåndsutfylteBarn.map((barn) => ({
     ident: "",
