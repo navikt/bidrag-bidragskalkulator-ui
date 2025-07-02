@@ -85,7 +85,8 @@ export const ManueltResultatpanel = ({
 
       <Button
         as={RouterLink}
-        to={`/privat-avtale?kalkulator=${JSON.stringify(data.resultater)}`}
+        to="/privat-avtale"
+        state={data}
         variant="primary"
         className="mb-6"
         onClick={() =>

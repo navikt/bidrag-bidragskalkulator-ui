@@ -1,8 +1,8 @@
-import { Heading } from "@navikt/ds-react";
+import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import { useForm } from "@rvf/react-router";
 import { useState } from "react";
 import type { LoaderFunctionArgs, MetaArgs } from "react-router";
-import { useHref, useLoaderData, useSearchParams } from "react-router";
+import { useHref, useLoaderData, useLocation } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
 import { IntroPanel } from "~/features/privatAvtale/IntroPanel";
 import { PrivatAvtaleSkjema } from "~/features/privatAvtale/PrivatAvtaleskjema";
@@ -12,6 +12,7 @@ import {
   type PrivatAvtaleSkjemaValidert,
 } from "~/features/privatAvtale/skjemaSchema";
 import { hentPrivatAvtaleSkjemaStandardverdi } from "~/features/privatAvtale/utils";
+import { ManuellBidragsutregningSchema } from "~/features/skjema/beregning/schema";
 import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
 import { tilÅrMånedDag } from "~/utils/dato";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
@@ -58,12 +59,14 @@ export default function ManuellBarnebidragskalkulator() {
   const { t } = useOversettelse();
   const personinformasjon = useLoaderData<typeof loader>();
 
-  const [urlSøkeparametre] = useSearchParams();
-  const kalkulatorResultater = urlSøkeparametre.get("kalkulator");
+  const { state: navigationState } = useLocation();
 
-  const forhåndsvalgteBarn = kalkulatorResultater
-    ? JSON.parse(kalkulatorResultater)
-    : [];
+  const bidragsutergningParsed =
+    ManuellBidragsutregningSchema.safeParse(navigationState);
+
+  const bidragsutregning = bidragsutergningParsed.success
+    ? bidragsutergningParsed.data
+    : undefined;
 
   const { språk } = useOversettelse();
 
@@ -72,7 +75,7 @@ export default function ManuellBarnebidragskalkulator() {
     submitSource: "state",
     defaultValues: hentPrivatAvtaleSkjemaStandardverdi(
       personinformasjon,
-      forhåndsvalgteBarn,
+      bidragsutregning?.resultater,
     ),
     handleSubmit: async (skjemadata) => {
       settFeilVedHentingAvAvtale(undefined);
@@ -102,6 +105,12 @@ export default function ManuellBarnebidragskalkulator() {
 
         <IntroPanel />
 
+        {!!bidragsutregning && (
+          <Alert variant={"info"}>
+            <BodyLong>{t(tekster.forhåndsutfyltAvtale.info)}</BodyLong>
+          </Alert>
+        )}
+
         <PrivatAvtaleSkjema form={form} error={feilVedHentingAvAvtale} />
       </div>
     </>
@@ -125,6 +134,13 @@ const tekster = definerTekster({
     nb: "Barnebidrag - lag privat avtale",
     en: "Child support - create private agreement",
     nn: "Fostringstilskot - lag privat avtale",
+  },
+  forhåndsutfyltAvtale: {
+    info: {
+      nb: "Vi har forhåndsufylt deler av den private avtalen med resultatene fra kalkulatoren. Endelig beløp for barnebidrag er det dere som velger. Om du oppdaterer siden må du fylle ut skjemaet på nytt.",
+      en: "We have pre-filled parts of the private agreement with the results from the calculator. The final amount for child support is up to you to decide. If you refresh the page, you will have to fill out the form again.",
+      nn: "Vi har forhåndsufylt delar av den private avtalen med resultatane frå kalkulatoren. Det endelege beløpet for fostringstilskot er det de som velger. Om du oppdaterer sida må du fylle ut skjemaet på nytt.",
+    },
   },
   feilVedGenereringAvAvtale: {
     nb: "Det oppstod en feil ved generering av privat avtale.",
