@@ -1,6 +1,6 @@
 import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import { useForm } from "@rvf/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { LoaderFunctionArgs, MetaArgs } from "react-router";
 import { useHref, useLoaderData, useLocation } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
@@ -52,12 +52,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function ManuellBarnebidragskalkulator() {
+  const [erHydrert, settErHydrert] = useState(false);
   const [feilVedHentingAvAvtale, settFeilVedHentingAvAvtale] = useState<
     string | undefined
   >();
   const basename = useHref("/");
   const { t } = useOversettelse();
   const personinformasjon = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    settErHydrert(true);
+  }, []);
 
   const { state: navigationState } = useLocation();
 
@@ -105,7 +110,7 @@ export default function ManuellBarnebidragskalkulator() {
 
         <IntroPanel />
 
-        {!!bidragsutregning && (
+        {!!bidragsutregning && erHydrert && (
           <Alert variant={"info"}>
             <BodyLong>{t(tekster.forhåndsutfyltAvtale.info)}</BodyLong>
           </Alert>
