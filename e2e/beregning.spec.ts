@@ -48,7 +48,7 @@ test.describe("Beregningstest", () => {
     await page.getByRole("button", { name: "Beregn barnebidrag" }).click();
 
     await expect(
-      page.getByText("Du skal motta 700 kr i barnebidrag per måned."),
+      page.getByText("Du skal motta 800 kr i barnebidrag per måned."),
     ).toBeVisible();
 
     await sjekkTilgjengelighet(page);
