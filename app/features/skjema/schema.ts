@@ -266,17 +266,17 @@ const tekster = definerTekster({
     medforelder: {
       navn: {
         påkrevd: {
-          nb: "Fyll ut medforelderens navn",
-          en: "Fill in the co-parent's name",
-          nn: "Fyll ut medforelderens namn",
+          nb: "Fyll ut den andre forelderens navn",
+          en: "Fill in the other parent's name",
+          nn: "Fyll ut den andre forelderens namn",
         },
       },
     },
     motpartIdent: {
       påkrevd: {
-        nb: "Velg medforelder",
-        en: "Choose co-parent",
-        nn: "Vel medforelder",
+        nb: "Velg den andre forelderen",
+        en: "Choose the other parent",
+        nn: "Vel den andre forelderen",
       },
       ugyldig: {
         nb: "Ugyldig verdi",
@@ -320,19 +320,19 @@ const tekster = definerTekster({
     },
     barnetilsynsutgift: {
       påkrevd: {
-        nb: "Fyll ut kostnader til barnetilsyn",
+        nb: "Fyll ut kostnader til barnepass",
         en: "Fill in costs for child care",
-        nn: "Fyll ut kostnader til barnetilsyn",
+        nn: "Fyll ut kostnader til barnepass",
       },
       minimum: {
-        nb: "Kostnader til barnetilsyn må være minst 0",
+        nb: "Kostnader til barnepass må være minst 0",
         en: "Costs for child care must be at least 0",
-        nn: "Kostnader til barnetilsyn må vere minst 0",
+        nn: "Kostnader til barnepass må vere minst 0",
       },
       maksimum: {
-        nb: "Kostnader for barnetilsyn kan ikke være mer enn 10 000 kr",
+        nb: "Kostnader for barnepass kan ikke være mer enn 10 000 kr",
         en: "Costs for child care cannot exceed 10,000 NOK",
-        nn: "Kostnader for barnetilsyn kan ikkje vere meir enn 10 000 kr",
+        nn: "Kostnader for barnepass kan ikkje vere meir enn 10 000 kr",
       },
     },
     bostatus: {

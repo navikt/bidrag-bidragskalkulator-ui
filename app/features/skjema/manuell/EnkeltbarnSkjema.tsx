@@ -152,14 +152,14 @@ const tekster = definerTekster({
   },
   barnetilsynsutgift: {
     label: {
-      nb: "Kostnad for barnetilsyn",
+      nb: "Kostnad for barnepass",
       en: "Child care costs",
-      nn: "Kostnad for barnetilsyn",
+      nn: "Kostnad for barnepass",
     },
     description: {
-      nb: "Barnetilsyn inkluderer barnehage (uten penger til kost, bleier og lignende), SFO, AKS eller dagmamma",
-      en: "Childcare includes kindergarten (excluding expenses for food, diapers etc), SFO, AKS or nanny",
-      nn: "Barnetilsyn inkluderer barnehage (uten penger til kost, bleier og lignende), SFO, AKS eller dagmamma",
+      nb: "Barnepass inkluderer barnehage (uten penger til kost, bleier og lignende), skolefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma",
+      en: "Childcare includes kindergarten (excluding expenses for food, diapers etc), after-school program (SFO), the Activity School (AKS) or nanny",
+      nn: "Barnepass inkluderer barnehage (uten penger til kost, bleier og lignende), skulefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma",
     },
   },
   år: {
