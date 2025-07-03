@@ -144,7 +144,7 @@ export const defaultManuellBidragsutregning: ManuellBidragsutregning = {
   resultater: [
     {
       alder: 8,
-      sum: 700,
+      sum: 800,
       bidragstype: "MOTTAKER",
     },
   ],
