@@ -21,14 +21,14 @@ export function MedforelderSkjema() {
 const tekster = definerTekster({
   navn: {
     label: {
-      nb: "Hva heter medforelderen?",
-      en: "Name of other parent",
-      nn: "Kva heter medforelderen?",
+      nb: "Hva heter den andre forelderen?",
+      en: "Name of the other parent",
+      nn: "Kva heter den andre forelderen?",
     },
     description: {
-      nb: "Skriv inn medforelderens fulle navn",
+      nb: "Skriv inn den andre forelderen sitt fulle navn",
       en: "Enter the other parent's full name",
-      nn: "Skriv inn medforelderens fulle namn",
+      nn: "Skriv inn den andre forelderen sitt fulle namn",
     },
   },
 });

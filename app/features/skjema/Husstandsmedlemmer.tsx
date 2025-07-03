@@ -68,9 +68,9 @@ export const Husstandsmedlemmer = ({ part }: Props) => {
 const tekster = definerTekster({
   deg: {
     tittel: () => ({
-      nb: "Din husstand",
-      nn: "Din husstand",
-      en: "Your household",
+      nb: "Om deg",
+      nn: "Om deg",
+      en: "About you",
     }),
     antallBarnBorFast: {
       label: () => ({
@@ -116,9 +116,9 @@ const tekster = definerTekster({
   },
   medforelder: {
     tittel: (navn) => ({
-      nb: `${navn || "Medforelderen"} sin husstand`,
-      nn: `${navn || "Medforelderen"} sin husstand`,
-      en: `${navn || "Other parent"}'s household`,
+      nb: `Om ${navn || "den andre forelderen"}`,
+      nn: `Om ${navn || "den andre forelderen"}`,
+      en: `About ${navn || "the other parent"}`,
     }),
     antallBarnBorFast: {
       label: (navn) => ({

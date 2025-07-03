@@ -8,8 +8,10 @@ test.describe("Beregningstest", () => {
 
     await sjekkTilgjengelighet(page);
 
-    await page.getByLabel("Hva heter medforelderen?").fill("Testforelder");
-    await page.getByLabel("Hva heter medforelderen?").blur();
+    await page
+      .getByLabel("Hva heter den andre forelderen?")
+      .fill("Testforelder");
+    await page.getByLabel("Hva heter den andre forelderen?").blur();
 
     await page.getByLabel("Hva heter barnet?").fill("Testperson");
     await page.getByLabel("Hva heter barnet?").blur();
@@ -18,9 +20,9 @@ test.describe("Beregningstest", () => {
     await page
       .getByLabel("Vi har avtale om fast bosted hos begge (delt fast bosted)")
       .check();
-    await page.getByLabel("Kostnad for barnetilsyn").fill("1000");
+    await page.getByLabel("Kostnad for barnepass").fill("1000");
 
-    const dinHusstand = page.getByRole("group", { name: "Din husstand" });
+    const dinHusstand = page.getByRole("group", { name: "Om deg" });
     await dinHusstand.getByLabel("Nei").check();
     await dinHusstand.getByLabel("Antall barn som bor fast hos deg").fill("0");
     await dinHusstand
@@ -28,7 +30,7 @@ test.describe("Beregningstest", () => {
       .fill("0");
 
     const medforelderensHusstand = page.getByRole("group", {
-      name: "Testforelder sin husstand",
+      name: "Om Testforelder",
     });
     await medforelderensHusstand.getByLabel("Nei").check();
     await medforelderensHusstand
@@ -45,7 +47,7 @@ test.describe("Beregningstest", () => {
 
     await sjekkTilgjengelighet(page);
 
-    await page.getByRole("button", { name: "Beregn barnebidrag" }).click();
+    await page.getByRole("button", { name: "Beregn barnebidraget" }).click();
 
     await expect(
       page.getByText("Du skal motta 800 kr i barnebidrag per måned."),

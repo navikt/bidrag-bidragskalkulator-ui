@@ -56,9 +56,9 @@ const tekster = definerTekster({
       nn: "Kva er årsinntekta di?",
     },
     beskrivelse: {
-      nb: "Inntekten din hentes fra Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
+      nb: "Inntekten din er hentet fra Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
       en: "Your income is fetched from The Norwegian Tax Administration, and is all income registered on you in the last 12 months. Adjust the amount if it does not match.",
-      nn: "Inntekta di hentes frå Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
+      nn: "Inntekta di er henta frå Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
     },
   },
   inntektsinformasjon: {
