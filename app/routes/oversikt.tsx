@@ -1,12 +1,11 @@
-import { BodyLong, Heading } from "@navikt/ds-react";
-import {
-  useLoaderData,
-  type LoaderFunctionArgs,
-  type MetaArgs,
-} from "react-router";
+import { Heading } from "@navikt/ds-react";
+import { type LoaderFunctionArgs, type MetaArgs } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
+import { hentBidragsdokumenterFraApi } from "~/features/oversikt/api.server";
+import { MineDokumenter } from "~/features/oversikt/MineDokumenter";
 import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
+import { erResponse } from "~/utils/respons";
 
 export function meta({ matches }: MetaArgs) {
   const rootData = matches.find((match) => match.pathname === "/")?.data as {
@@ -25,12 +24,19 @@ export function meta({ matches }: MetaArgs) {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return medToken(request, hentManuellPersoninformasjon);
+  const [bidragsdokumenter, personinformasjon] = await Promise.all([
+    medToken(request, hentBidragsdokumenterFraApi),
+    medToken(request, hentManuellPersoninformasjon),
+  ]);
+
+  if (erResponse(bidragsdokumenter)) return bidragsdokumenter;
+  if (erResponse(personinformasjon)) return personinformasjon;
+
+  return { bidragsdokumenter, personinformasjon };
 }
 
 export default function MinOversikt() {
   const { t } = useOversettelse();
-  const personinformasjon = useLoaderData<typeof loader>();
 
   return (
     <div className="max-w-xl mx-auto p-4 mt-8 flex flex-col gap-4">
@@ -38,9 +44,7 @@ export default function MinOversikt() {
         {t(tekster.overskrift)}
       </Heading>
 
-      <BodyLong spacing>
-        {t(tekster.hei(personinformasjon.person.fulltNavn))}
-      </BodyLong>
+      <MineDokumenter />
     </div>
   );
 }
@@ -63,9 +67,4 @@ const tekster = definerTekster({
     en: "Child support - overview",
     nn: "Fostringstilskot - oversikt",
   },
-  hei: (navn) => ({
-    nb: `Hei ${navn}, her kommer dine dokumenter knyttet til barnebidrag`,
-    en: `Hello ${navn}, here will your documents related to child support come`,
-    nn: `Hei ${navn}, her kjem dine dokument knytt til fostringstilskot`,
-  }),
 });
