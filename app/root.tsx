@@ -21,6 +21,7 @@ import { useDekoratørSpråk } from "./features/dektoratøren/useDektoratørSpr�
 import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
 import { InternalServerError } from "./features/feilhåndtering/500";
 import { lagHeaders } from "./features/headers/headers.server";
+import { ApplikasjonssiderSchema } from "./types/applikasjonssider";
 import { Analytics } from "./utils/analytics";
 import {
   definerTekster,
@@ -29,10 +30,29 @@ import {
   OversettelseProvider,
 } from "./utils/i18n";
 
+const BASENAME = "/barnebidrag/tjenester/";
+const SLUTTER_MED_SKRÅSTREK = /\/+$/;
+
 export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const sisteDelAvUrl = url.pathname
+    .split(BASENAME)[1]
+    ?.replace(SLUTTER_MED_SKRÅSTREK, "");
+  const applikasjonssideParsed =
+    ApplikasjonssiderSchema.safeParse(sisteDelAvUrl);
+
+  if (!applikasjonssideParsed.success) {
+    console.error(`Ugyldig side: ${sisteDelAvUrl}`);
+  }
+
   const språk = hentSpråkFraCookie(request.headers.get("Cookie"));
   const [dekoratørHtml, headers] = await Promise.all([
-    lagDekoratørHtmlFragmenter(språk),
+    lagDekoratørHtmlFragmenter(
+      språk,
+      applikasjonssideParsed.success
+        ? applikasjonssideParsed.data
+        : "kalkulator",
+    ),
     lagHeaders(språk),
   ]);
 
