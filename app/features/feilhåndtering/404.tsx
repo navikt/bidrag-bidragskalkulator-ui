@@ -8,6 +8,7 @@ import {
   List,
   VStack,
 } from "@navikt/ds-react";
+import { Link as ReactRouterLink } from "react-router";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export function NotFound() {
@@ -25,7 +26,7 @@ export function NotFound() {
             <List.Item>{t(tekster.forslag.gåTilForsiden)}</List.Item>
           </List>
         </div>
-        <Button as="a" href="https://barnebidragskalkulator.nav.no">
+        <Button as={ReactRouterLink} to={`/kalkulator`}>
           {t(tekster.ctas.gåTilKalkulator)}
         </Button>
         <Link href="https://www.nav.no/person/kontakt-oss/tilbakemeldinger/feil-og-mangler">

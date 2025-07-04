@@ -23,7 +23,7 @@ export function lagDekoratørHtmlFragmenter(språk: Språk) {
             språk,
             breadcrumbTekster.barnebidragskalkulator.label,
           ),
-          url: "https://barnebidragskalkulator.nav.no",
+          url: `${env.INGRESS}/kalkulator`,
         },
       ],
     },

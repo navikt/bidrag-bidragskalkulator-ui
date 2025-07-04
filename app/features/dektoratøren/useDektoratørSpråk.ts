@@ -22,7 +22,7 @@ export function useDekoratørSpråk(eksterntSpråk: Språk) {
             språk,
             breadcrumbTekster.barnebidragskalkulator.label,
           ),
-          url: "https://barnebidragskalkulator.nav.no",
+          url: "https://www.nav.no/barnebidrag/tjenester/kalkulator",
         },
       ]);
     } else {
