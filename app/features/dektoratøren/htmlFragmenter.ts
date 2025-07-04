@@ -1,9 +1,13 @@
 import { fetchDecoratorHtml } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { env } from "~/config/env.server";
+import type { Applikasjonssider } from "~/types/applikasjonssider";
 import { oversett, Språk } from "~/utils/i18n";
 import { breadcrumbTekster } from "./breadcrumbTekster";
 
-export function lagDekoratørHtmlFragmenter(språk: Språk) {
+export function lagDekoratørHtmlFragmenter(
+  språk: Språk,
+  side: Applikasjonssider,
+) {
   return fetchDecoratorHtml({
     env: env.ENVIRONMENT === "local" ? "dev" : env.ENVIRONMENT,
     params: {
@@ -19,11 +23,8 @@ export function lagDekoratørHtmlFragmenter(språk: Språk) {
           url: oversett(språk, breadcrumbTekster.barnebidrag.url),
         },
         {
-          title: oversett(
-            språk,
-            breadcrumbTekster.barnebidragskalkulator.label,
-          ),
-          url: `${env.INGRESS}/kalkulator`,
+          title: oversett(språk, breadcrumbTekster[side].label),
+          url: `${env.INGRESS}/${side}`,
         },
       ],
     },

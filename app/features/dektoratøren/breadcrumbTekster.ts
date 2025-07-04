@@ -13,11 +13,18 @@ export const breadcrumbTekster = definerTekster({
       nn: "https://www.nav.no/barnebidrag",
     },
   },
-  barnebidragskalkulator: {
+  kalkulator: {
     label: {
       nb: "Barnebidragskalkulator",
       en: "Child support calculator",
       nn: "Fostringstilskotskalkulator",
+    },
+  },
+  "privat-avtale": {
+    label: {
+      nb: "Privat avtale",
+      en: "Private agreement",
+      nn: "Privat avtale",
     },
   },
 });

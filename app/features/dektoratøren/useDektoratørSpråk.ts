@@ -18,10 +18,7 @@ export function useDekoratørSpråk(eksterntSpråk: Språk) {
           url: oversett(språk, breadcrumbTekster.barnebidrag.url),
         },
         {
-          title: oversett(
-            språk,
-            breadcrumbTekster.barnebidragskalkulator.label,
-          ),
+          title: oversett(språk, breadcrumbTekster.kalkulator.label),
           url: "https://www.nav.no/barnebidrag/tjenester/kalkulator",
         },
       ]);
