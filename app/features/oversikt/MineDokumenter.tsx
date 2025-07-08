@@ -1,4 +1,4 @@
-import { BodyLong, Box, Heading, VStack } from "@navikt/ds-react";
+import { BodyLong, Box, Heading, Link, VStack } from "@navikt/ds-react";
 import { useRouteLoaderData } from "react-router";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
@@ -50,10 +50,25 @@ export const MineDokumenter: React.FC = () => {
               padding="space-16"
               borderRadius={`${borderRadiusTopp} ${borderRadiusBunn}`}
             >
-              {journalpost.tittel}
+              <Link
+                href={`/api/hent-dokument/${journalpost.journalpostId}/${journalpost.dokumenter[0]?.dokumentInfoId}`}
+              >
+                {journalpost.tittel}
+              </Link>
               <BodyLong size="small">
                 {datoTilTekst(new Date(journalpost.dato))} - {parter}
               </BodyLong>
+
+              {journalpost.dokumenter.map((dokument) => {
+                return (
+                  <Link
+                    key={dokument.dokumentInfoId}
+                    href={`/api/hent-dokument/${journalpost.journalpostId}/${dokument.dokumentInfoId}`}
+                  >
+                    {dokument.tittel}
+                  </Link>
+                );
+              })}
             </Box>
           );
         })}
