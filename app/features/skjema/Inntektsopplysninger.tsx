@@ -28,7 +28,11 @@ export const Inntektsopplysninger = () => {
         header={t(tekster.inntektsinformasjon.overskrift)}
         onOpenChange={(open) => {
           if (open) {
-            sporHendelseEnGang("inntektsinformasjon utvidet");
+            sporHendelseEnGang({
+              hendelsetype: "inntektsinformasjon utvidet",
+              skjemaId: "barnebidragskalkulator-under-18",
+              skjemanavn: "Kalkulator barnebidrag under 18 år",
+            });
           }
         }}
       >

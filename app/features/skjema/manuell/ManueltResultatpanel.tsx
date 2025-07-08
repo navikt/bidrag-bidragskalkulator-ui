@@ -90,7 +90,8 @@ export const ManueltResultatpanel = ({
         variant="primary"
         className="mb-6"
         onClick={() =>
-          sporHendelse("lag privat avtale klikket", {
+          sporHendelse({
+            hendelsetype: "lag privat avtale klikket",
             bidragstype,
           })
         }
@@ -105,11 +106,13 @@ export const ManueltResultatpanel = ({
           aria-labelledby="detaljer"
           size="small"
           onToggle={(open) => {
-            sporHendelseEnGang(
-              open
+            sporHendelseEnGang({
+              hendelsetype: open
                 ? "beregningsdetaljer utvidet"
                 : "beregningsdetaljer kollapset",
-            );
+              skjemaId: "barnebidragskalkulator-under-18",
+              skjemanavn: "Kalkulator barnebidrag under 18 år",
+            });
           }}
         >
           <ExpansionCardHeader>

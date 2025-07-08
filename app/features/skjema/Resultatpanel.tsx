@@ -43,6 +43,19 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
     );
   }
 
+  const bidragstyper = data.resultater.map((resultat) => resultat.bidragstype);
+  const isMottaker = bidragstyper.includes("MOTTAKER");
+  const isPliktig = bidragstyper.includes("PLIKTIG");
+
+  const bidragstype =
+    isMottaker && isPliktig
+      ? "MOTTAKER_OG_PLIKTIG"
+      : isMottaker
+        ? "MOTTAKER"
+        : isPliktig
+          ? "PLIKTIG"
+          : "INGEN";
+
   const totalSum = data.resultater.reduce((sum, neste) => {
     if (neste.bidragstype === "PLIKTIG") {
       return sum + neste.sum;
@@ -72,7 +85,12 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
         href="https://www.nav.no/fyllut/nav550060?sub=paper"
         variant="primary"
         className="mb-6"
-        onClick={() => sporHendelse("lag privat avtale klikket")}
+        onClick={() =>
+          sporHendelse({
+            hendelsetype: "lag privat avtale klikket",
+            bidragstype,
+          })
+        }
       >
         {t(tekster.lagPrivatAvtale)}
       </Button>
@@ -82,11 +100,13 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
         aria-labelledby="detaljer"
         size="small"
         onToggle={(open) => {
-          sporHendelseEnGang(
-            open
+          sporHendelseEnGang({
+            hendelsetype: open
               ? "beregningsdetaljer utvidet"
               : "beregningsdetaljer kollapset",
-          );
+            skjemaId: "barnebidragskalkulator-under-18",
+            skjemanavn: "Kalkulator barnebidrag under 18 år",
+          });
         }}
       >
         <ExpansionCardHeader>
