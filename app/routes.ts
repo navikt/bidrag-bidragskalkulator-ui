@@ -4,6 +4,7 @@ export default [
   route("/kalkulator", "routes/kalkulator.tsx"),
   route("/privat-avtale", "routes/privat-avtale.tsx"),
   route("/oversikt", "routes/oversikt.tsx"),
+  route("/oversikt/dokumenter/:journalpostId", "routes/min-side/dokument.tsx"),
 
   route("/api/privat-avtale", "routes/api/privat-avtale.ts"),
   route(

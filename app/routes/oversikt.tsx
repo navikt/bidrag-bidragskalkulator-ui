@@ -40,7 +40,7 @@ export default function MinOversikt() {
 
   return (
     <div className="max-w-xl mx-auto p-4 mt-8 flex flex-col gap-4">
-      <Heading size="xlarge" level="1" spacing align="center">
+      <Heading size="xlarge" level="1" spacing>
         {t(tekster.overskrift)}
       </Heading>
 
