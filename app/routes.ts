@@ -3,6 +3,7 @@ export default [
   index("routes/index.tsx"),
   route("/kalkulator", "routes/kalkulator.tsx"),
   route("/privat-avtale", "routes/privat-avtale.tsx"),
+  route("/oversikt", "routes/oversikt.tsx"),
 
   route("/api/privat-avtale", "routes/api/privat-avtale.ts"),
 

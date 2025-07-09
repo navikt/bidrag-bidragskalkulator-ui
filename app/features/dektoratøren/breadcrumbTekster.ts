@@ -27,4 +27,11 @@ export const breadcrumbTekster = definerTekster({
       nn: "Privat avtale",
     },
   },
+  oversikt: {
+    label: {
+      nb: "Oversikt",
+      en: "Overview",
+      nn: "Oversikt",
+    },
+  },
 });
