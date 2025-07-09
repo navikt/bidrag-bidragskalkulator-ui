@@ -41,17 +41,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const applikasjonssideParsed =
     ApplikasjonssiderSchema.safeParse(sisteDelAvUrl);
 
-  if (!applikasjonssideParsed.success) {
-    console.error(`Ugyldig side: ${sisteDelAvUrl}`);
-  }
-
   const språk = hentSpråkFraCookie(request.headers.get("Cookie"));
   const [dekoratørHtml, headers] = await Promise.all([
     lagDekoratørHtmlFragmenter(
       språk,
       applikasjonssideParsed.success
         ? applikasjonssideParsed.data
-        : "kalkulator",
+        : "kalkulator", // TODO Håndtere dette bedre
     ),
     lagHeaders(språk),
   ]);
