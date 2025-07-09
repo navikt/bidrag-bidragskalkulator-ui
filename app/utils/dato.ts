@@ -25,3 +25,11 @@ export const erDatostrengÅrMånedDag = (dato: string): boolean => {
   const regex = /^\d{4}-\d{2}-\d{2}$/;
   return regex.test(dato);
 };
+
+/**
+ * @param dato som Date-objekt
+ * @returns dato som tekststreng i formatet `DD.MM.YYYY`
+ */
+export const datoTilTekst = (dato: Date): string => {
+  return norskDatoformaterer.format(dato);
+};

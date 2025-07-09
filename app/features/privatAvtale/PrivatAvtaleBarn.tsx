@@ -22,7 +22,12 @@ export const PrivatAvtaleBarn = () => {
       sum: "",
       bidragstype: bidragstype ?? "",
     });
-    sporHendelse("barn lagt til", { antall: antallBarn + 1 });
+    sporHendelse({
+      hendelsetype: "barn lagt til",
+      skjemaId: "barnebidrag-privat-avtale-under-18",
+      skjemanavn: "Privat avtale under 18 år",
+      antall: antallBarn + 1,
+    });
 
     setTimeout(() => {
       finnFokuserbartInputPåBarn(antallBarn)?.focus();
@@ -31,7 +36,12 @@ export const PrivatAvtaleBarn = () => {
 
   const handleFjernBarn = (index: number) => {
     barnArray.remove(index);
-    sporHendelse("barn fjernet", { antall: antallBarn - 1 });
+    sporHendelse({
+      hendelsetype: "barn fjernet",
+      skjemaId: "barnebidrag-privat-avtale-under-18",
+      skjemanavn: "Privat avtale under 18 år",
+      antall: antallBarn - 1,
+    });
 
     setTimeout(() => {
       if (antallBarn > 1) {
