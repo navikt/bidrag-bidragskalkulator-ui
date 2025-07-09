@@ -12,7 +12,11 @@ import {
   type PrivatAvtaleSkjemaValidert,
 } from "~/features/privatAvtale/skjemaSchema";
 import { hentPrivatAvtaleSkjemaStandardverdi } from "~/features/privatAvtale/utils";
-import { ManuellBidragsutregningSchema } from "~/features/skjema/beregning/schema";
+import {
+  BidragstypeSchema,
+  ManuellBidragsutregningSchema,
+  type Bidragstype,
+} from "~/features/skjema/beregning/schema";
 import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
 import { tilÅrMånedDag } from "~/utils/dato";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
@@ -29,6 +33,18 @@ const hentPrivatAvtalePdf = async (
     },
     body: JSON.stringify(skjemadata),
   });
+};
+
+const lagPrivatAvtalePdfNavn = (bidragstype: Bidragstype) => {
+  const datoFormatert = tilÅrMånedDag(new Date());
+  const rolle =
+    bidragstype === "MOTTAKER"
+      ? "som-mottaker"
+      : bidragstype === "PLIKTIG"
+        ? "som-pliktig"
+        : "ukjent";
+
+  return `privat-avtale-barnebidrag-${rolle}-${datoFormatert}.pdf`;
 };
 
 export function meta({ matches }: MetaArgs) {
@@ -82,22 +98,46 @@ export default function ManuellBarnebidragskalkulator() {
       personinformasjon,
       bidragsutregning?.resultater,
     ),
-    handleSubmit: async (skjemadata) => {
+    handleSubmit: async (skjemaData) => {
       settFeilVedHentingAvAvtale(undefined);
-      const respons = await hentPrivatAvtalePdf(basename, skjemadata);
 
-      if (!respons.ok) {
+      const barnPerBidragstype = BidragstypeSchema.options
+        .map((type) => ({
+          type,
+          barn: skjemaData.barn.filter((b) => b.bidragstype === type),
+        }))
+        .filter(({ barn }) => barn.length > 0);
+
+      const resultater = await Promise.all(
+        barnPerBidragstype.map(async ({ type, barn }) => {
+          const respons = await hentPrivatAvtalePdf(basename, {
+            ...skjemaData,
+            barn,
+          });
+
+          if (!respons.ok) {
+            return { type, pdf: null };
+          }
+
+          const pdf = await respons.blob();
+          return { type, pdf };
+        }),
+      );
+
+      const feilet = resultater.some(({ pdf }) => pdf === null);
+
+      if (feilet) {
         settFeilVedHentingAvAvtale(
           oversett(språk, tekster.feilVedGenereringAvAvtale),
         );
         return;
       }
 
-      const datoFormatert = tilÅrMånedDag(new Date());
-      const filnavn = `privat-avtale-barnebidrag-${datoFormatert}.pdf`;
-      const blob = await respons.blob();
-
-      lastNedPdf(blob, filnavn);
+      resultater.forEach(({ type, pdf }) => {
+        if (pdf) {
+          lastNedPdf(pdf, lagPrivatAvtalePdfNavn(type));
+        }
+      });
     },
   });
 
