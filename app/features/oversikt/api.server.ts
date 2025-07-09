@@ -30,22 +30,10 @@ export const hentDokument = async (
   request: Request,
   params: { journalpostId: string; dokumentId: string },
 ) => {
+  const { journalpostId, dokumentId } = params;
   const cookieHeader = request.headers.get("Cookie");
 
-  const searchParams = new URL(request.url).searchParams;
-
-  console.log("searchParams", searchParams);
-
-  console.log("token", token);
   const språk = hentSpråkFraCookie(cookieHeader);
-  // const skjemaData: {
-  //   journalpostId: string;
-  //   dokumentId: string;
-  // } = await request.json();
-
-  // const { journalpostId, dokumentId } = skjemaData;
-  const journalpostId = searchParams.get("journalpostId") ?? "454000114";
-  const dokumentId = searchParams.get("dokumentId") ?? "454408109";
 
   const response = await fetch(
     `${env.SERVER_URL}/api/v1/minside/dokumenter/${journalpostId}/${dokumentId}`,
