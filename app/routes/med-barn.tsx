@@ -71,10 +71,17 @@ export default function InnloggetBarnebidragskalkulator() {
         block: "center",
       });
       settErEndretSidenUtregning(false);
-      sporHendelse("skjema fullført");
+      sporHendelse({
+        hendelsetype: "skjema fullført",
+        skjemaId: "barnebidragskalkulator-under-18",
+        skjemanavn: "Kalkulator barnebidrag under 18 år",
+      });
     },
     onInvalidSubmit: () => {
-      sporHendelse("skjema validering feilet", {
+      sporHendelse({
+        hendelsetype: "skjema validering feilet",
+        skjemaId: "barnebidragskalkulator-under-18",
+        skjemanavn: "Kalkulator barnebidrag under 18 år",
         førsteFeil:
           document.activeElement instanceof HTMLInputElement
             ? document.activeElement.name
@@ -82,7 +89,12 @@ export default function InnloggetBarnebidragskalkulator() {
       });
     },
     onSubmitFailure: (error) => {
-      sporHendelse("skjema innsending feilet", { feil: String(error) });
+      sporHendelse({
+        hendelsetype: "skjema innsending feilet",
+        skjemaId: "barnebidragskalkulator-under-18",
+        skjemanavn: "Kalkulator barnebidrag under 18 år",
+        feil: String(error),
+      });
     },
   });
 

@@ -1,13 +1,4 @@
-type EventType =
-  | "skjema validering feilet"
-  | "skjema innsending feilet"
-  | "skjema fullført"
-  | "beregningsdetaljer utvidet"
-  | "beregningsdetaljer kollapset"
-  | "inntektsinformasjon utvidet"
-  | "barn lagt til"
-  | "lag privat avtale klikket"
-  | "barn fjernet";
+import type { Sporingshendelse } from "~/types/analyse";
 
 type Sporingsdata = Record<string, unknown> & {
   /**
@@ -23,48 +14,46 @@ type Sporingsdata = Record<string, unknown> & {
  * Under utvikling logges det til console istedenfor.
  *
  * ```tsx
- * await sporHendelse("skjema validering feilet", { feil: error.message })
+ * await sporHendelse({
+ *   hendelsetype: "skjema validering feilet",
+ *   førsteFeil: error.message
+ * })
  * ```
  *
- * @param event En hendelse som skal spores
- * @param data Optional data du kan sende med
+ * @param hendelse En hendelse som skal spores
  * @returns Promise<void>
  */
-export async function sporHendelse(
-  event: EventType,
-  data: Record<string, unknown> = {},
-) {
+
+export const sporHendelse = async (hendelse: Sporingshendelse) => {
+  const { hendelsetype, ...data } = hendelse;
   const sporingsdata: Sporingsdata = {
     ...data,
     versjon: 1,
   };
 
   if (process.env.NODE_ENV === "development") {
-    console.info(`[DEV] hendelse sporet: ${event}`, sporingsdata);
+    console.info(`[DEV] hendelse sporet:`, hendelsetype, sporingsdata);
     return;
   }
 
   return window.umami
-    ? window.umami.track(event, sporingsdata)
+    ? window.umami.track(hendelsetype, sporingsdata)
     : Promise.resolve();
-}
+};
 
-const sporingsregister: Set<EventType> = new Set();
+const sporingsregister: Set<Sporingshendelse["hendelsetype"]> = new Set();
 
 /**
  * Sporer en hendelse, men maks en gang per sidelast.
  */
-export function sporHendelseEnGang(
-  event: EventType,
-  data: Record<string, unknown> = {},
-) {
-  if (sporingsregister.has(event)) {
+export function sporHendelseEnGang(event: Sporingshendelse) {
+  if (sporingsregister.has(event.hendelsetype)) {
     return;
   }
 
-  sporingsregister.add(event);
+  sporingsregister.add(event.hendelsetype);
 
-  return sporHendelse(event, data);
+  return sporHendelse(event);
 }
 
 type AnalyticsProps = {

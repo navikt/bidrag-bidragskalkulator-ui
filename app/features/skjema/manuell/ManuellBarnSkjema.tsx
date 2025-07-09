@@ -23,7 +23,12 @@ export const ManuellBarnSkjema = () => {
       samvær: sisteBarn.value().samvær,
       barnetilsynsutgift: "",
     });
-    sporHendelse("barn lagt til", { antall: barnArray.length() + 1 });
+    sporHendelse({
+      hendelsetype: "barn lagt til",
+      skjemaId: "barnebidragskalkulator-under-18",
+      skjemanavn: "Kalkulator barnebidrag under 18 år",
+      antall: barnArray.length() + 1,
+    });
 
     setTimeout(() => {
       const nyttBarnIndex = barnArray.length();
@@ -33,7 +38,12 @@ export const ManuellBarnSkjema = () => {
 
   const handleFjernBarn = (index: number) => {
     barnArray.remove(index);
-    sporHendelse("barn fjernet", { antall: barnArray.length() - 1 });
+    sporHendelse({
+      hendelsetype: "barn fjernet",
+      skjemaId: "barnebidragskalkulator-under-18",
+      skjemanavn: "Kalkulator barnebidrag under 18 år",
+      antall: barnArray.length() - 1,
+    });
 
     setTimeout(() => {
       // Dette er den gamle lengden – den blir ikke oppdatert av en eller annen grunn
