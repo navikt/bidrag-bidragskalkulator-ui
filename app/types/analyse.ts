@@ -17,7 +17,7 @@ type SkjemaInnsendingFeilet = {
   hendelsetype: "skjema innsending feilet";
   skjemaId: SkjemaId;
   skjemanavn: Skjemanavn;
-  feil: string;
+  feil: string | undefined;
 };
 
 type SkjemaFullført = {
