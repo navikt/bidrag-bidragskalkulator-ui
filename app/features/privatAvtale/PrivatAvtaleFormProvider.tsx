@@ -19,6 +19,7 @@ import {
   type Bidragstype,
   type UtregningNavigasjonsdata,
 } from "~/features/skjema/beregning/schema";
+import { sporHendelse } from "~/utils/analytics";
 import { tilÅrMånedDag } from "~/utils/dato";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { lastNedPdf } from "~/utils/pdf";
@@ -155,11 +156,33 @@ export function PrivatAvtaleFormProvider({
         }
       });
       setAntallNedlastedeFil(resultater.length);
+      sporHendelse({
+        hendelsetype: "skjema fullført",
+        skjemaId: "barnebidrag-privat-avtale-under-18",
+        skjemanavn: "Privat avtale under 18 år",
+      });
+    },
+    onInvalidSubmit: () => {
+      sporHendelse({
+        hendelsetype: "skjema validering feilet",
+        skjemaId: "barnebidrag-privat-avtale-under-18",
+        skjemanavn: "Privat avtale under 18 år",
+        førsteFeil:
+          document.activeElement instanceof HTMLInputElement
+            ? document.activeElement.name
+            : null,
+      });
     },
     onSubmitFailure: (error) => {
       const message =
         error instanceof Error ? error.message : t(tekster.feilmelding);
       settFeilVedHentingAvAvtale(message);
+      sporHendelse({
+        hendelsetype: "skjema innsending feilet",
+        skjemaId: "barnebidrag-privat-avtale-under-18",
+        skjemanavn: "Privat avtale under 18 år",
+        feil: undefined,
+      });
       throw new Error(message);
     },
   });
