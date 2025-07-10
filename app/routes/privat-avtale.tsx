@@ -18,6 +18,7 @@ import {
   type Bidragstype,
 } from "~/features/skjema/beregning/schema";
 import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
+import { sporHendelse } from "~/utils/analytics";
 import { tilÅrMånedDag } from "~/utils/dato";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 import { lastNedPdf } from "~/utils/pdf";
@@ -98,6 +99,35 @@ export default function ManuellBarnebidragskalkulator() {
       personinformasjon,
       bidragsutregning?.resultater,
     ),
+    onSubmitSuccess: () => {
+      sporHendelse({
+        hendelsetype: "skjema fullført",
+        skjemaId: "barnebidrag-privat-avtale-under-18",
+        skjemanavn: "Privat avtale under 18 år",
+      });
+    },
+    onInvalidSubmit: () => {
+      sporHendelse({
+        hendelsetype: "skjema validering feilet",
+        skjemaId: "barnebidrag-privat-avtale-under-18",
+        skjemanavn: "Privat avtale under 18 år",
+        førsteFeil:
+          document.activeElement instanceof HTMLInputElement
+            ? document.activeElement.name
+            : null,
+      });
+    },
+    onSubmitFailure: () => {
+      settFeilVedHentingAvAvtale(
+        oversett(språk, tekster.feilVedGenereringAvAvtale),
+      );
+      sporHendelse({
+        hendelsetype: "skjema innsending feilet",
+        skjemaId: "barnebidrag-privat-avtale-under-18",
+        skjemanavn: "Privat avtale under 18 år",
+        feil: undefined,
+      });
+    },
     handleSubmit: async (skjemaData) => {
       settFeilVedHentingAvAvtale(undefined);
 
@@ -116,22 +146,13 @@ export default function ManuellBarnebidragskalkulator() {
           });
 
           if (!respons.ok) {
-            return { type, pdf: null };
+            throw new Error(`Noe gikk galt. Status: ${respons.status}`);
           }
 
           const pdf = await respons.blob();
           return { type, pdf };
         }),
       );
-
-      const feilet = resultater.some(({ pdf }) => pdf === null);
-
-      if (feilet) {
-        settFeilVedHentingAvAvtale(
-          oversett(språk, tekster.feilVedGenereringAvAvtale),
-        );
-        return;
-      }
 
       resultater.forEach(({ type, pdf }) => {
         if (pdf) {
