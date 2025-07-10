@@ -4,6 +4,7 @@ import { FormattertTallTextField } from "./FormattertTallTextField";
 
 import { Radio, RadioGroup, Stack } from "@navikt/ds-react";
 import type { ManueltSkjema } from "./schema";
+import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
 const BOR_MED_ANNEN_VOKSEN_ALTERNATIVER = ["true", "false"] as const;
 
@@ -33,7 +34,13 @@ export const Husstandsmedlemmer = ({ part }: Props) => {
           <Stack gap="0 6" direction={{ xs: "column", sm: "row" }} wrap={false}>
             {BOR_MED_ANNEN_VOKSEN_ALTERNATIVER.map((alternativ) => {
               return (
-                <Radio value={alternativ} key={alternativ}>
+                <Radio
+                  value={alternativ}
+                  key={alternativ}
+                  onChange={sporKalkulatorSpørsmålBesvart(
+                    t(tekster[part].borMedAnnenVoksen.label("")),
+                  )}
+                >
                   {t(tekster[part].borMedAnnenVoksen[alternativ])}
                 </Radio>
               );
@@ -48,6 +55,9 @@ export const Husstandsmedlemmer = ({ part }: Props) => {
           description={t(
             tekster[part].antallBarnBorFast.beskrivelse(medforelderNavn),
           )}
+          onBlur={sporKalkulatorSpørsmålBesvart(
+            t(tekster[part].antallBarnBorFast.label("")),
+          )}
           htmlSize={8}
         />
 
@@ -57,6 +67,9 @@ export const Husstandsmedlemmer = ({ part }: Props) => {
           error={form.field(`${part}.antallBarnDeltBosted`).error()}
           description={t(
             tekster[part].antallBarnDeltBosted.beskrivelse(medforelderNavn),
+          )}
+          onBlur={sporKalkulatorSpørsmålBesvart(
+            t(tekster[part].antallBarnDeltBosted.label("")),
           )}
           htmlSize={8}
         />

@@ -1,4 +1,5 @@
 import type z from "zod";
+import { sporHendelse } from "~/utils/analytics";
 import type { Samværsklasse } from "./beregning/schema";
 import type {
   Barn,
@@ -214,3 +215,16 @@ export const finnMotpartBasertPåIdent = (
     (relasjon) => relasjon.motpart?.ident === ident,
   )?.motpart;
 };
+
+export const sporKalkulatorSpørsmålBesvart =
+  (spørsmål: string) => (event: React.FocusEvent<HTMLInputElement>) => {
+    if (!!event.target.value) {
+      sporHendelse({
+        hendelsetype: "skjema spørsmål besvart",
+        skjemaId: "barnebidragskalkulator-under-18",
+        skjemanavn: "Kalkulator barnebidrag under 18 år",
+        spørsmålId: event.target.name,
+        spørsmål,
+      });
+    }
+  };
