@@ -1,8 +1,9 @@
-import { TextField, type TextFieldProps } from "@navikt/ds-react";
+import { TextField } from "@navikt/ds-react";
 import { type ChangeEvent, type Ref } from "react";
+import type { DSFieldProps } from "./FormattertTallTextField";
 
 export type InternalFormatterbartTextFieldProps = Omit<
-  TextFieldProps,
+  DSFieldProps,
   "onChange"
 > & {
   onChange: (value: string) => void;

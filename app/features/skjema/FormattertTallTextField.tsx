@@ -2,7 +2,10 @@ import { type TextFieldProps } from "@navikt/ds-react";
 import { type Ref } from "react";
 import { InternalFormatterbartTextField } from "./InternalFormatterbartTextField";
 
-export type FormattertTallTextFieldProps = Omit<TextFieldProps, "onChange"> & {
+export type DSFieldProps = TextFieldProps &
+  React.RefAttributes<HTMLInputElement>;
+
+type FormattertTallTextFieldProps = Omit<DSFieldProps, "onChange"> & {
   onChange: (value: string) => void;
   ref?: Ref<HTMLInputElement | null>;
 };
