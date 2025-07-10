@@ -1,5 +1,5 @@
-import { BodyLong, Box, Heading, VStack } from "@navikt/ds-react";
-import { useRouteLoaderData } from "react-router";
+import { BodyLong, Box, Heading, Link, VStack } from "@navikt/ds-react";
+import { Link as ReactRouterLink, useRouteLoaderData } from "react-router";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 import type { loader } from "~/routes/oversikt";
@@ -50,7 +50,12 @@ export const MineDokumenter: React.FC = () => {
               padding="space-16"
               borderRadius={`${borderRadiusTopp} ${borderRadiusBunn}`}
             >
-              {journalpost.tittel}
+              <Link
+                as={ReactRouterLink}
+                to={`/oversikt/dokumenter/${journalpost.journalpostId}`}
+              >
+                {journalpost.tittel}
+              </Link>
               <BodyLong size="small">
                 {datoTilTekst(new Date(journalpost.dato))} - {parter}
               </BodyLong>
