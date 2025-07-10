@@ -13,14 +13,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   });
 
   const modifiedResponse = new Response(response.body, {
-    headers: response.headers,
+    headers: {
+      ...response.headers,
+      "Content-Disposition": "inline; filename=dokument.pdf",
+    },
     status: response.status,
   });
-
-  modifiedResponse.headers.set(
-    "Content-Disposition",
-    "inline; filename=dokument.pdf",
-  );
 
   return modifiedResponse;
 }
