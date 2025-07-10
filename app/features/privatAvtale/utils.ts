@@ -1,3 +1,4 @@
+import { sporHendelse } from "~/utils/analytics";
 import type { UtregningNavigasjonsdata } from "../skjema/beregning/schema";
 import type { HentPersoninformasjonForPrivatAvtaleRespons } from "./apiSchema";
 import type { PrivatAvtaleSkjema } from "./skjemaSchema";
@@ -38,3 +39,21 @@ export const hentPrivatAvtaleSkjemaStandardverdi = (
     innhold: "",
   };
 };
+
+export const sporPrivatAvtaleSpørsmålBesvart =
+  (spørsmål: string) =>
+  (
+    event:
+      | React.FocusEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (event.target.value) {
+      sporHendelse({
+        hendelsetype: "skjema spørsmål besvart",
+        skjemaId: "barnebidrag-privat-avtale-under-18",
+        skjemanavn: "Privat avtale under 18 år",
+        spørsmålId: event.target.name,
+        spørsmål,
+      });
+    }
+  };

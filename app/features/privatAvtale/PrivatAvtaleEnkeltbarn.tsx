@@ -5,6 +5,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { BidragstypeSchema } from "../skjema/beregning/schema";
 import { FormattertTallTextField } from "../skjema/FormattertTallTextField";
 import type { PrivatAvtaleSkjema } from "./skjemaSchema";
+import { sporPrivatAvtaleSpørsmålBesvart } from "./utils";
 
 type Props = {
   barnIndex: number;
@@ -26,17 +27,21 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
     <fieldset className="p-0 space-y-4">
       <legend className="sr-only">{overskrift}</legend>
       <TextField
-        {...barnField.field("fulltNavn").getInputProps()}
+        {...barnField.field("fulltNavn").getInputProps({
+          label: t(tekster.fulltNavn.label),
+          onBlur: sporPrivatAvtaleSpørsmålBesvart(t(tekster.fulltNavn.label)),
+        })}
         error={barnField.field("fulltNavn").error()}
-        label={t(tekster.fulltNavn.label)}
         htmlSize={30}
         autoComplete="off"
       />
 
       <TextField
-        {...barnField.field("ident").getInputProps()}
+        {...barnField.field("ident").getInputProps({
+          label: t(tekster.ident.label),
+          onBlur: sporPrivatAvtaleSpørsmålBesvart(t(tekster.ident.label)),
+        })}
         error={barnField.field("ident").error()}
-        label={t(tekster.ident.label)}
         htmlSize={13}
         inputMode="numeric"
         autoComplete="off"
@@ -49,7 +54,13 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
       >
         {BidragstypeSchema.options.map((bidragstype) => {
           return (
-            <Radio value={bidragstype} key={bidragstype}>
+            <Radio
+              value={bidragstype}
+              key={bidragstype}
+              onChange={sporPrivatAvtaleSpørsmålBesvart(
+                t(tekster.bidragstype.label),
+              )}
+            >
               {t(
                 tekster.bidragstype[bidragstype](
                   form.field("medforelder.fulltNavn").value(),
@@ -64,6 +75,7 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
         {...barnField.field("sum").getControlProps()}
         error={barnField.field("sum").error()}
         label={t(tekster.beløp.label)}
+        onBlur={sporPrivatAvtaleSpørsmålBesvart(t(tekster.beløp.label))}
         htmlSize={8}
         autoComplete="off"
       />
