@@ -8,7 +8,10 @@ import { FormattertTallTextField } from "../FormattertTallTextField";
 import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
 import { Samvær } from "../Samvær";
 import type { ManueltSkjema } from "../schema";
-import { tilUnderholdskostnadsgruppeMedLabel } from "../utils";
+import {
+  sporKalkulatorSpørsmålBesvart,
+  tilUnderholdskostnadsgruppeMedLabel,
+} from "../utils";
 
 type Props = {
   barnIndex: number;
@@ -27,6 +30,9 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
     barnField.field("alder").touched() && Number(alder) < 11;
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
+  const navnBarn = barnField.field("navn").touched()
+    ? barnField.field("navn").value()
+    : "";
 
   const underholdskostnadsgrupper = useMemo(
     () =>
@@ -41,21 +47,18 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
     <fieldset className="p-0 space-y-4">
       <legend className="sr-only">{overskrift}</legend>
       <TextField
-        {...barnField.field("navn").getInputProps()}
-        label={t(tekster.navn.label)}
+        {...barnField.field("navn").getInputProps({
+          onBlur: sporKalkulatorSpørsmålBesvart(t(tekster.navn.label)),
+          label: t(tekster.navn.label),
+        })}
         description={t(tekster.navn.description)}
         error={barnField.field("navn").error()}
         className="max-w-80"
       />
       <TextField
         {...barnField.field("alder").getInputProps({
-          label: t(
-            tekster.alder.label(
-              barnField.field("navn").touched()
-                ? barnField.field("navn").value()
-                : "",
-            ),
-          ),
+          label: t(tekster.alder.label(navnBarn)),
+          onBlur: sporKalkulatorSpørsmålBesvart(t(tekster.alder.label(""))),
         })}
         error={barnField.field("alder").error()}
         htmlSize={8}
@@ -91,6 +94,9 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
         <FormattertTallTextField
           {...barnField.field("barnetilsynsutgift").getControlProps()}
           label={t(tekster.barnetilsynsutgift.label)}
+          onBlur={sporKalkulatorSpørsmålBesvart(
+            t(tekster.barnetilsynsutgift.label),
+          )}
           description={t(tekster.barnetilsynsutgift.description)}
           htmlSize={18}
           error={barnField.field("barnetilsynsutgift").error()}

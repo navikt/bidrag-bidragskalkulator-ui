@@ -5,6 +5,7 @@ import { FormattertTallTextField } from "./FormattertTallTextField";
 import { BodyLong, ReadMore } from "@navikt/ds-react";
 import { sporHendelseEnGang } from "~/utils/analytics";
 import type { InnloggetSkjema, ManueltSkjema } from "./schema";
+import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
 export const Inntektsopplysninger = () => {
   const form = useFormContext<ManueltSkjema | InnloggetSkjema>();
@@ -22,6 +23,7 @@ export const Inntektsopplysninger = () => {
         label={t(tekster.dinInntekt.label)}
         description={t(tekster.dinInntekt.beskrivelse)}
         error={form.field("deg.inntekt").error()}
+        onBlur={sporKalkulatorSpørsmålBesvart(t(tekster.dinInntekt.label))}
         htmlSize={18}
       />
       <ReadMore
@@ -46,6 +48,9 @@ export const Inntektsopplysninger = () => {
         {...form.field("medforelder.inntekt").getControlProps()}
         label={t(tekster.hvaErInntektenTilDenAndreForelderen(medforelderNavn))}
         error={form.field("medforelder.inntekt").error()}
+        onBlur={sporKalkulatorSpørsmålBesvart(
+          t(tekster.hvaErInntektenTilDenAndreForelderen("")),
+        )}
         htmlSize={18}
       />
     </div>

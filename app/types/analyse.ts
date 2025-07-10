@@ -62,6 +62,14 @@ type LagPrivatAvtaleKlikket = {
   bidragstype: "MOTTAKER_OG_PLIKTIG" | "MOTTAKER" | "PLIKTIG" | "INGEN";
 };
 
+type SkjemaSpørsmålBesvart = {
+  hendelsetype: "skjema spørsmål besvart";
+  skjemaId: SkjemaId;
+  skjemanavn: Skjemanavn;
+  spørsmålId: string;
+  spørsmål: string;
+};
+
 export type Sporingshendelse =
   | SkjemaValideringFeilet
   | SkjemaInnsendingFeilet
@@ -71,4 +79,5 @@ export type Sporingshendelse =
   | InntektsinformasjonUtvidet
   | BarnLagtTil
   | BarnFjernet
+  | SkjemaSpørsmålBesvart
   | LagPrivatAvtaleKlikket;
