@@ -6,6 +6,10 @@ export default [
   route("/oversikt", "routes/oversikt.tsx"),
 
   route("/api/privat-avtale", "routes/api/privat-avtale.ts"),
+  route(
+    "/api/hent-dokument/:journalpostId/:dokumentId",
+    "routes/api/hent-dokument.ts",
+  ),
 
   route("/api/internal/isalive", "routes/api/internal/isalive.ts"),
   route("/api/internal/isready", "routes/api/internal/isready.ts"),
