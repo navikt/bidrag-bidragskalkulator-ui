@@ -76,6 +76,7 @@ export const hentPrivatAvtaledokument = async (
     fraDato: skjemaData.fraDato,
     nyAvtale: skjemaData.nyAvtale,
     oppgjorsform: skjemaData.medInnkreving ? "Innkreving" : "Privat",
+    tilInnsending: true,
     barn: skjemaData.barn.map((barn) => {
       return {
         fodselsnummer: barn.ident,

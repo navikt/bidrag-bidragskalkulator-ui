@@ -19,6 +19,7 @@ export const LagPrivatAvtaleRequestSchema = z.object({
   fraDato: z.string(),
   nyAvtale: z.boolean(),
   oppgjorsform: z.enum(["Privat", "Innkreving"]), // TODO Hva skal denne være?
+  tilInnsending: z.boolean(),
 });
 
 export type LagPrivatAvtaleRequest = z.infer<
