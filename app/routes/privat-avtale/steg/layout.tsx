@@ -4,20 +4,40 @@ import {
   useLoaderData,
   useLocation,
   type LoaderFunctionArgs,
+  type MetaFunction,
 } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
+import { hentSideMetadata } from "~/features/privatAvtale/pageMeta";
 import { PrivatAvtaleFormProvider } from "~/features/privatAvtale/PrivatAvtaleFormProvider";
-import { lagStepperData } from "~/features/privatAvtale/steg";
+import { stegdata } from "~/features/privatAvtale/privatAvtaleSteg";
 import { ManuellBidragsutregningSchema } from "~/features/skjema/beregning/schema";
 import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
-import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  return medToken(request, hentManuellPersoninformasjon);
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  const metadata = data?.metadata;
+
+  return [
+    { title: metadata?.tittel ?? "Barnebidrag – lag privat avtale" },
+    {
+      name: "description",
+      content: metadata?.beskrivelse ?? "",
+    },
+  ];
+};
+
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  const språk = context.språk ?? Språk.NorwegianBokmål;
+  const url = new URL(request.url);
+
+  return {
+    personinformasjon: await medToken(request, hentManuellPersoninformasjon),
+    metadata: hentSideMetadata(url.pathname, språk),
+  };
 }
 
 export default function PrivatAvtaleStegLayout() {
-  const personinformasjon = useLoaderData<typeof loader>();
+  const { personinformasjon } = useLoaderData<typeof loader>();
   const { state: navigationState, pathname } = useLocation();
   const { t, språk } = useOversettelse();
 
@@ -28,13 +48,13 @@ export default function PrivatAvtaleStegLayout() {
     ? bidragsutergningParsed.data
     : undefined;
 
-  const privatAvtaleSteg = lagStepperData(språk);
+  const privatAvtaleSteg = stegdata(språk);
+  const aktivSteg = privatAvtaleSteg.find((steg) =>
+    steg.path.includes(pathname),
+  );
   const aktivStegIndex = privatAvtaleSteg.findIndex((steg) =>
     steg.path.includes(pathname),
   );
-  const aktivSteg = privatAvtaleSteg[aktivStegIndex];
-  const aktivStegStep = aktivSteg?.step ?? 1;
-
   const forrigeSteg =
     aktivStegIndex > 0
       ? privatAvtaleSteg[aktivStegIndex - 1].path
@@ -46,13 +66,16 @@ export default function PrivatAvtaleStegLayout() {
 
   return (
     <>
-      <Stepper aria-labelledby="stepper-heading" activeStep={aktivStegStep}>
+      <Stepper
+        aria-labelledby="stepper-heading"
+        activeStep={aktivSteg?.step ?? 1}
+      >
         {privatAvtaleSteg.map((steg) => (
-          <Stepper.Step href={steg.path}>{steg.title}</Stepper.Step>
+          <Stepper.Step href={steg.path}>{steg.overskrift}</Stepper.Step>
         ))}
       </Stepper>
       <Heading level="2" size="large">
-        {aktivSteg?.title}
+        {aktivSteg?.overskrift}
       </Heading>
       <PrivatAvtaleFormProvider
         personinformasjon={personinformasjon}

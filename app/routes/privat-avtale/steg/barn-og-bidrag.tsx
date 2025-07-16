@@ -1,5 +1,5 @@
 import { PrivatAvtaleBarn } from "~/features/privatAvtale/PrivatAvtaleBarn";
 
-export default function Barnebidrag() {
+export default function BarnOgBidrag() {
   return <PrivatAvtaleBarn />;
 }

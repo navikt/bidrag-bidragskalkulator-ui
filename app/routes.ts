@@ -20,8 +20,8 @@ export default [
         "routes/privat-avtale/steg/foreldre.tsx",
       ),
       route(
-        "/privat-avtale/steg/barnebidrag",
-        "routes/privat-avtale/steg/barnebidrag.tsx",
+        "/privat-avtale/steg/barn-og-bidrag",
+        "routes/privat-avtale/steg/barn-og-bidrag.tsx",
       ),
       route(
         "/privat-avtale/steg/avtaledetaljer",
