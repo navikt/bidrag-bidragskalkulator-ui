@@ -23,6 +23,10 @@ export default [
         "/privat-avtale/steg/barnebidrag",
         "routes/privat-avtale/steg/barnebidrag.tsx",
       ),
+      route(
+        "/privat-avtale/steg/avtaledetaljer",
+        "routes/privat-avtale/steg/avtaledetaljer.tsx",
+      ),
     ]),
   ]),
 

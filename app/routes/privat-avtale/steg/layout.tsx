@@ -3,7 +3,6 @@ import {
   Outlet,
   useLoaderData,
   useLocation,
-  useNavigate,
   type LoaderFunctionArgs,
 } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
@@ -21,7 +20,6 @@ export default function PrivatAvtaleStegLayout() {
   const personinformasjon = useLoaderData<typeof loader>();
   const { state: navigationState, pathname } = useLocation();
   const { t, språk } = useOversettelse();
-  const navigate = useNavigate();
 
   const bidragsutergningParsed =
     ManuellBidragsutregningSchema.safeParse(navigationState);
@@ -37,17 +35,14 @@ export default function PrivatAvtaleStegLayout() {
   const aktivSteg = privatAvtaleSteg[aktivStegIndex];
   const aktivStegStep = aktivSteg?.step ?? 1;
 
-  const handleForrigeSteg = () => {
-    if (aktivStegIndex > 0) {
-      navigate(privatAvtaleSteg[aktivStegIndex - 1].path);
-    }
-  };
-
-  const handleNesteSteg = () => {
-    if (aktivStegIndex < privatAvtaleSteg.length - 1) {
-      navigate(privatAvtaleSteg[aktivStegIndex + 1].path);
-    }
-  };
+  const forrigeSteg =
+    aktivStegIndex > 0
+      ? privatAvtaleSteg[aktivStegIndex - 1].path
+      : "/barnebidrag/tjenester/privat-avtale";
+  const nesteSteg =
+    aktivStegIndex < privatAvtaleSteg.length - 1
+      ? privatAvtaleSteg[aktivStegIndex + 1].path
+      : null;
 
   return (
     <>
@@ -66,20 +61,19 @@ export default function PrivatAvtaleStegLayout() {
         <Outlet />
       </PrivatAvtaleFormProvider>
       <div className="flex gap-5">
-        <Button
-          className="flex-1"
-          variant="primary"
-          onClick={handleForrigeSteg}
-        >
+        <Button className="flex-1" variant="primary" as="a" href={forrigeSteg}>
           {t(tekster.knapp.forrigeSteg)}
         </Button>
-        <Button
-          className="flex-1"
-          variant="secondary"
-          onClick={handleNesteSteg}
-        >
-          {t(tekster.knapp.nesteSteg)}
-        </Button>
+        {nesteSteg && (
+          <Button
+            className="flex-1"
+            variant="secondary"
+            as="a"
+            href={nesteSteg}
+          >
+            {t(tekster.knapp.nesteSteg)}
+          </Button>
+        )}
       </div>
     </>
   );

@@ -1,3 +1,5 @@
+import { PrivatAvtaleBarn } from "~/features/privatAvtale/PrivatAvtaleBarn";
+
 export default function Barnebidrag() {
-  return <p>Barnebidrag</p>;
+  return <PrivatAvtaleBarn />;
 }

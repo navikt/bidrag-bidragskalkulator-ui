@@ -3,22 +3,22 @@ import { definerTekster, oversett, Språk } from "~/utils/i18n";
 export const lagStepperData = (språk: Språk) => [
   {
     step: 1,
-    path: "/privat-avtale/steg/foreldre",
+    path: "/barnebidrag/tjenester/privat-avtale/steg/foreldre",
     title: oversett(språk, tekster.omDegOgDenAndreForelderen),
   },
   {
     step: 2,
-    path: "/privat-avtale/steg/barnebidrag",
+    path: "/barnebidrag/tjenester/privat-avtale/steg/barnebidrag",
     title: oversett(språk, tekster.barnebidrag),
   },
   {
     step: 3,
-    path: "/privat-avtale/steg/om-avtale",
-    title: oversett(språk, tekster.omAvtale),
+    path: "/barnebidrag/tjenester/privat-avtale/steg/avtaledetaljer",
+    title: oversett(språk, tekster.avtaledetaljer),
   },
   {
     step: 4,
-    path: "/privat-avtale/steg/oppsummering",
+    path: "/barnebidrag/tjenester/privat-avtale/steg/oppsummering",
     title: oversett(språk, tekster.oppsummering),
   },
 ];
@@ -34,10 +34,10 @@ const tekster = definerTekster({
     en: "Child support",
     nn: "Barnebidrag",
   },
-  omAvtale: {
-    nb: "Om avtalen",
-    en: "About the agreement",
-    nn: "Om avtala",
+  avtaledetaljer: {
+    nb: "Avtaledetaljer",
+    en: "Agreement details",
+    nn: "Avtaledetaljar",
   },
   oppsummering: {
     nb: "Oppsummering og generering",
