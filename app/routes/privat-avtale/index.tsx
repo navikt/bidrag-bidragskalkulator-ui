@@ -1,8 +1,7 @@
 import { Button } from "@navikt/ds-react";
-import { useEffect, useState } from "react";
 import type { MetaArgs } from "react-router";
-import { useNavigate } from "react-router";
 import { IntroPanel } from "~/features/privatAvtale/IntroPanel";
+import { stegdata } from "~/features/privatAvtale/privatAvtaleSteg";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
 export function meta({ matches }: MetaArgs) {
@@ -22,33 +21,15 @@ export function meta({ matches }: MetaArgs) {
 }
 
 export default function Veiledning() {
-  const [erHydrert, settErHydrert] = useState(false);
-  const [feilVedHentingAvAvtale, settFeilVedHentingAvAvtale] = useState<
-    string | undefined
-  >();
-  const { t } = useOversettelse();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    settErHydrert(true);
-  }, []);
+  const { t, språk } = useOversettelse();
+  const førsteSteg = stegdata(språk).find((steg) => steg.step === 1)?.path;
 
   return (
     <>
       <IntroPanel />
-
-      <Button
-        onClick={() => navigate("/privat-avtale/steg/foreldre")}
-        variant="primary"
-      >
+      <Button variant="primary" as="a" href={førsteSteg}>
         {t(tekster.start)}
       </Button>
-
-      {/* {!!bidragsutregning && erHydrert && (
-          <Alert variant={"info"}>
-            <BodyLong>{t(tekster.forhåndsutfyltAvtale.info)}</BodyLong>
-          </Alert>
-        )} */}
     </>
   );
 }
@@ -66,26 +47,9 @@ const tekster = definerTekster({
       nn: "Dette skjemaet kan de bruke når de skal inngå privat avtale om fostringstilskot for barn under 18 år.",
     },
   },
-  overskrift: {
-    nb: "Veiledning",
-    en: "Guidance",
-    nn: "Rettleiing",
-  },
   start: {
     nb: "Start",
     en: "Start",
     nn: "Start",
-  },
-  forhåndsutfyltAvtale: {
-    info: {
-      nb: "Vi har forhåndsufylt deler av den private avtalen med resultatene fra kalkulatoren. Endelig beløp for barnebidrag er det dere som velger. Om du oppdaterer siden må du fylle ut skjemaet på nytt.",
-      en: "We have pre-filled parts of the private agreement with the results from the calculator. The final amount for child support is up to you to decide. If you refresh the page, you will have to fill out the form again.",
-      nn: "Vi har forhåndsufylt delar av den private avtalen med resultatane frå kalkulatoren. Det endelege beløpet for fostringstilskot er det de som velger. Om du oppdaterer sida må du fylle ut skjemaet på nytt.",
-    },
-  },
-  feilVedGenereringAvAvtale: {
-    nb: "Det oppstod en feil ved generering av privat avtale.",
-    en: "An error occurred while generating the private agreement.",
-    nn: "Det oppstod ein feil ved generering av privat avtale.",
   },
 });
