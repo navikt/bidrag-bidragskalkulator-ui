@@ -1,3 +1,4 @@
+import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Heading, Stepper } from "@navikt/ds-react";
 import {
   Outlet,
@@ -65,40 +66,51 @@ export default function PrivatAvtaleStegLayout() {
       : null;
 
   return (
-    <>
+    <div className="flex flex-col md:flex-row-reverse gap-20">
       <Stepper
-        aria-labelledby={aktivSteg?.overskrift}
+        aria-labelledby="skjemaoverskrift"
         activeStep={aktivSteg?.step ?? 1}
       >
         {privatAvtaleSteg.map((steg) => (
           <Stepper.Step href={steg.path}>{steg.overskrift}</Stepper.Step>
         ))}
       </Stepper>
-      <Heading level="2" size="large">
-        {aktivSteg?.overskrift}
-      </Heading>
-      <PrivatAvtaleFormProvider
-        personinformasjon={personinformasjon}
-        bidragsutregning={bidragsutregning}
-      >
-        <Outlet />
-      </PrivatAvtaleFormProvider>
-      <div className="flex gap-5">
-        <Button className="flex-1" variant="primary" as="a" href={forrigeSteg}>
-          {t(tekster.knapp.forrigeSteg)}
-        </Button>
-        {nesteSteg && (
+      <section className="flex-1 space-y-6" aria-labelledby="skjemaoverskrift">
+        <Heading id="skjemaoverskrift" level="2" size="large">
+          {aktivSteg?.overskrift}
+        </Heading>
+        <PrivatAvtaleFormProvider
+          personinformasjon={personinformasjon}
+          bidragsutregning={bidragsutregning}
+        >
+          <Outlet />
+        </PrivatAvtaleFormProvider>
+
+        <div className="flex gap-5">
           <Button
             className="flex-1"
             variant="secondary"
+            icon={<ArrowLeftIcon aria-hidden />}
             as="a"
-            href={nesteSteg}
+            href={forrigeSteg}
           >
-            {t(tekster.knapp.nesteSteg)}
+            {t(tekster.knapp.forrigeSteg)}
           </Button>
-        )}
-      </div>
-    </>
+          {nesteSteg && (
+            <Button
+              className="flex-1"
+              variant="primary"
+              icon={<ArrowRightIcon aria-hidden />}
+              iconPosition="right"
+              as="a"
+              href={nesteSteg}
+            >
+              {t(tekster.knapp.nesteSteg)}
+            </Button>
+          )}
+        </div>
+      </section>
+    </div>
   );
 }
 

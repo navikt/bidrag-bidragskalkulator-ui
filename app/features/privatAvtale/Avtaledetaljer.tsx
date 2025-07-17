@@ -23,48 +23,46 @@ export const Avtaledetaljer = () => {
   });
 
   return (
-    <div className="border p-4 rounded-md">
-      <fieldset className="p-0 flex flex-col gap-6">
-        <legend className="text-xl mb-5">{t(tekster.tittel)}</legend>
+    <fieldset className="p-0 flex flex-col gap-6">
+      <legend className="text-xl mb-5">{t(tekster.tittel)}</legend>
 
-        <DatePicker {...datepickerProps}>
-          <DatePicker.Input
-            {...inputProps}
-            label={t(tekster.gjelderFra.label)}
-            description={t(tekster.gjelderFra.beskrivelse)}
-            error={fraDato.error()}
-          />
-        </DatePicker>
+      <DatePicker {...datepickerProps}>
+        <DatePicker.Input
+          {...inputProps}
+          label={t(tekster.gjelderFra.label)}
+          description={t(tekster.gjelderFra.beskrivelse)}
+          error={fraDato.error()}
+        />
+      </DatePicker>
 
-        <RadioGroup
-          {...form.field("nyAvtale").getInputProps()}
-          error={form.field("nyAvtale").error()}
-          legend={t(tekster.nyAvtale.label)}
-        >
-          {NY_AVTALE_ALTERNATIVER.map((alternativ) => {
-            return (
-              <Radio value={alternativ} key={alternativ}>
-                {t(tekster.nyAvtale[alternativ])}
-              </Radio>
-            );
-          })}
-        </RadioGroup>
+      <RadioGroup
+        {...form.field("nyAvtale").getInputProps()}
+        error={form.field("nyAvtale").error()}
+        legend={t(tekster.nyAvtale.label)}
+      >
+        {NY_AVTALE_ALTERNATIVER.map((alternativ) => {
+          return (
+            <Radio value={alternativ} key={alternativ}>
+              {t(tekster.nyAvtale[alternativ])}
+            </Radio>
+          );
+        })}
+      </RadioGroup>
 
-        <RadioGroup
-          {...form.field("medInnkreving").getInputProps()}
-          error={form.field("medInnkreving").error()}
-          legend={t(tekster.medInnkreving.label)}
-        >
-          {INNKREVING_ALTERNATIVER.map((alternativ) => {
-            return (
-              <Radio value={alternativ} key={alternativ}>
-                {t(tekster.medInnkreving[alternativ])}
-              </Radio>
-            );
-          })}
-        </RadioGroup>
-      </fieldset>
-    </div>
+      <RadioGroup
+        {...form.field("medInnkreving").getInputProps()}
+        error={form.field("medInnkreving").error()}
+        legend={t(tekster.medInnkreving.label)}
+      >
+        {INNKREVING_ALTERNATIVER.map((alternativ) => {
+          return (
+            <Radio value={alternativ} key={alternativ}>
+              {t(tekster.medInnkreving[alternativ])}
+            </Radio>
+          );
+        })}
+      </RadioGroup>
+    </fieldset>
   );
 };
 

@@ -52,34 +52,32 @@ export const PrivatAvtaleBarn = () => {
   };
 
   return (
-    <div className="border p-4 rounded-md space-y-4">
-      <fieldset className="p-0">
-        <legend className="text-xl mb-6">{t(tekster.overskrift)}</legend>
-        {barnArray.map((key, _, index) => {
-          return (
-            <React.Fragment key={key}>
-              <PrivatAvtaleEnkeltbarnSkjema
-                barnIndex={index}
-                onFjernBarn={
-                  antallBarn > 1 ? () => handleFjernBarn(index) : undefined
-                }
-              />
-              <hr className="my-8 border-gray-300" />
-            </React.Fragment>
-          );
-        })}
+    <fieldset className="p-0">
+      <legend className="text-xl mb-6">{t(tekster.overskrift)}</legend>
+      {barnArray.map((key, _, index) => {
+        return (
+          <React.Fragment key={key}>
+            <PrivatAvtaleEnkeltbarnSkjema
+              barnIndex={index}
+              onFjernBarn={
+                antallBarn > 1 ? () => handleFjernBarn(index) : undefined
+              }
+            />
+            <hr className="my-8 border-gray-300" />
+          </React.Fragment>
+        );
+      })}
 
-        <Button
-          type="button"
-          variant="secondary"
-          size="small"
-          onClick={handleLeggTilBarn}
-          icon={<PlusIcon aria-hidden />}
-        >
-          {t(tekster.leggTilBarn)}
-        </Button>
-      </fieldset>
-    </div>
+      <Button
+        type="button"
+        variant="secondary"
+        size="small"
+        onClick={handleLeggTilBarn}
+        icon={<PlusIcon aria-hidden />}
+      >
+        {t(tekster.leggTilBarn)}
+      </Button>
+    </fieldset>
   );
 };
 

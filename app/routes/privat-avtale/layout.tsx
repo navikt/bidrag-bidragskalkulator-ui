@@ -6,7 +6,7 @@ export default function PrivatAvtaleLayout() {
   const { t } = useOversettelse();
 
   return (
-    <div className="max-w-xl mx-auto p-4 mt-8 flex flex-col gap-4">
+    <div className="max-w-5xl mx-auto p-4 m-10 flex flex-col gap-4">
       <Heading size="xlarge" level="1" spacing>
         {t(tekster.overskrift)}
       </Heading>
