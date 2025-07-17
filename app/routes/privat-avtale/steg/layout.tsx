@@ -67,7 +67,7 @@ export default function PrivatAvtaleStegLayout() {
   return (
     <>
       <Stepper
-        aria-labelledby="stepper-heading"
+        aria-labelledby={aktivSteg?.overskrift}
         activeStep={aktivSteg?.step ?? 1}
       >
         {privatAvtaleSteg.map((steg) => (
