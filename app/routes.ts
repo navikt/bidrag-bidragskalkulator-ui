@@ -27,6 +27,10 @@ export default [
         "/privat-avtale/steg/avtaledetaljer",
         "routes/privat-avtale/steg/avtaledetaljer.tsx",
       ),
+      route(
+        "/privat-avtale/steg/oppsummering-og-avtale",
+        "routes/privat-avtale/steg/oppsummering-og-avtale.tsx",
+      ),
     ]),
   ]),
 

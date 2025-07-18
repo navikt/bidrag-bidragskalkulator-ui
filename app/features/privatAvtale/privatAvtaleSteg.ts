@@ -27,7 +27,7 @@ export const stegKonfigurasjon: StegKonfigurasjon[] = [
   },
   {
     step: 4,
-    path: "privat-avtale/steg/oppsummering",
+    path: "privat-avtale/steg/oppsummering-og-avtale",
     key: "oppsummering",
   },
 ];
@@ -101,9 +101,9 @@ export const privatAvtaleTekster = definerTekster({
   oppsummering: {
     meta: {
       tittel: {
-        nb: "Oppsummering og generering - Barnebidrag privat avtale",
-        en: "Summary and generation - Child support private agreement",
-        nn: "Oppsummering og generering - Barnebidrag privat avtale",
+        nb: "Oppsummering og avtale - Barnebidrag privat avtale",
+        en: "Summary and agreement - Child support private agreement",
+        nn: "Oppsummering og avtale - Barnebidrag privat avtale",
       },
       beskrivelse: {
         nb: "Se over og generer din private barnebidragsavtale.",
@@ -112,9 +112,9 @@ export const privatAvtaleTekster = definerTekster({
       },
     },
     overskrift: {
-      nb: "Oppsummering og generering",
-      en: "Summary and generation",
-      nn: "Oppsummering og generering",
+      nb: "Oppsummering og avtale",
+      en: "Summary and agreement",
+      nn: "Oppsummering og avtale",
     },
   },
 });

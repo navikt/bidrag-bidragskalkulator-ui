@@ -97,6 +97,7 @@ export type PrivatAvtaleSkjema = z.infer<typeof PrivatAvtaleSkjemaSchema>;
 export type PrivatAvtaleSkjemaValidert = z.infer<
   ReturnType<typeof lagPrivatAvtaleSkjemaValidertSchema>
 >;
+export type Person = z.infer<typeof Person>;
 
 const tekster = definerTekster({
   feilmeldinger: {
