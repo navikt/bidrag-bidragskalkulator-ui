@@ -2,7 +2,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Heading, Stepper } from "@navikt/ds-react";
 import {
   Outlet,
-  redirect,
+  useHref,
   useLoaderData,
   useLocation,
   type LoaderFunctionArgs,
@@ -11,13 +11,9 @@ import {
 import { medToken } from "~/features/autentisering/api.server";
 import { hentSideMetadata } from "~/features/privatAvtale/pageMeta";
 import { PrivatAvtaleFormProvider } from "~/features/privatAvtale/PrivatAvtaleFormProvider";
-import {
-  stegdata,
-  stegKonfigurasjon,
-} from "~/features/privatAvtale/privatAvtaleSteg";
+import { stegdata } from "~/features/privatAvtale/privatAvtaleSteg";
 import { ManuellBidragsutregningSchema } from "~/features/skjema/beregning/schema";
 import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
-import { parseCookie } from "~/utils/cookie";
 import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -35,20 +31,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export async function loader({ request, context }: LoaderFunctionArgs) {
   const språk = context.språk ?? Språk.NorwegianBokmål;
   const url = new URL(request.url);
-  const pathname = url.pathname;
-
-  const cookies = parseCookie(request.headers.get("Cookie") ?? "");
-  const skjemaStartet = cookies["privatAvtaleStartet"] === "true";
-
-  const erGyldigSteg = stegKonfigurasjon.some((steg) =>
-    pathname.endsWith(steg.path),
-  );
-  const erFørsteSteg = pathname.endsWith("/foreldre");
-  const førsteSteg = stegKonfigurasjon.find((steg) => steg.step === 1);
-
-  if (!skjemaStartet && erGyldigSteg && !erFørsteSteg && førsteSteg) {
-    return redirect(førsteSteg.path);
-  }
 
   return {
     personinformasjon: await medToken(request, hentManuellPersoninformasjon),
@@ -61,6 +43,8 @@ export default function PrivatAvtaleStegLayout() {
   const { state: navigationState, pathname } = useLocation();
   const { t, språk } = useOversettelse();
 
+  const basename = useHref("/");
+
   const bidragsutergningParsed =
     ManuellBidragsutregningSchema.safeParse(navigationState);
 
@@ -68,7 +52,7 @@ export default function PrivatAvtaleStegLayout() {
     ? bidragsutergningParsed.data
     : undefined;
 
-  const privatAvtaleSteg = stegdata(språk);
+  const privatAvtaleSteg = stegdata(språk, basename);
   const aktivSteg = privatAvtaleSteg.find((steg) =>
     steg.path.endsWith(pathname),
   );

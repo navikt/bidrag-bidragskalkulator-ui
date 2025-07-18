@@ -12,30 +12,30 @@ export type StegKonfigurasjon = {
 export const stegKonfigurasjon: StegKonfigurasjon[] = [
   {
     step: 1,
-    path: "/barnebidrag/tjenester/privat-avtale/steg/foreldre",
+    path: "privat-avtale/steg/foreldre",
     key: "omDegOgDenAndreForelderen",
   },
   {
     step: 2,
-    path: "/barnebidrag/tjenester/privat-avtale/steg/barn-og-bidrag",
+    path: "privat-avtale/steg/barn-og-bidrag",
     key: "barnOgBidrag",
   },
   {
     step: 3,
-    path: "/barnebidrag/tjenester/privat-avtale/steg/avtaledetaljer",
+    path: "privat-avtale/steg/avtaledetaljer",
     key: "avtaledetaljer",
   },
   {
     step: 4,
-    path: "/barnebidrag/tjenester/privat-avtale/steg/oppsummering",
+    path: "privat-avtale/steg/oppsummering",
     key: "oppsummering",
   },
 ];
 
-export function stegdata(språk: Språk) {
+export function stegdata(språk: Språk, basename: string) {
   return stegKonfigurasjon.map(({ step, path, key }) => ({
     step,
-    path,
+    path: `${basename}${path}`,
     overskrift: oversett(språk, privatAvtaleTekster[key].overskrift),
   }));
 }
