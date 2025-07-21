@@ -8,62 +8,32 @@ import {
   stegdata,
   type StegdataType,
 } from "~/features/privatAvtale/privatAvtaleSteg";
+import type { PrivatAvtaleSkjema } from "~/features/privatAvtale/skjemaSchema";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export default function OppsummeringOgAvtale() {
   const form = usePrivatAvtaleForm();
   const { t, språk } = useOversettelse();
-  const { deg, medforelder, barn, fraDato, nyAvtale, medInnkreving } =
-    form.value();
+  const feil = form.formState.fieldErrors;
+  const steg = stegdata(språk);
 
-  const privatAvtaleSteg = stegdata(språk);
-
-  const manglendeSteg = finnFørsteUfullstendigeSteg();
-  const harMangler = manglendeSteg !== undefined;
-
-  function erTom(tekst: string | undefined) {
-    return !tekst || tekst.trim() === "";
-  }
-
-  function finnFørsteUfullstendigeSteg(): StegdataType | undefined {
-    if (
-      erTom(deg.fulltNavn) ||
-      erTom(deg.ident) ||
-      erTom(medforelder.fulltNavn) ||
-      erTom(medforelder.ident)
-    ) {
-      return privatAvtaleSteg.find((steg) => steg.step === 1);
-    }
-    if (
-      barn.length === 0 ||
-      barn.some(
-        (barn) =>
-          erTom(barn.fulltNavn) ||
-          erTom(barn.ident) ||
-          erTom(barn.sum) ||
-          erTom(barn.bidragstype),
-      )
-    ) {
-      return privatAvtaleSteg.find((steg) => steg.step === 2);
-    }
-    if (erTom(fraDato) || nyAvtale === "" || medInnkreving === "") {
-      return privatAvtaleSteg.find((steg) => steg.step === 3);
-    }
-
-    return undefined;
-  }
+  const ufullstendigeSteg = finnUfullstendigeSteg(form.value(), feil, steg);
+  const harUfullstendigeSteg = ufullstendigeSteg.length > 0;
 
   return (
     <VStack gap="6">
-      {harMangler && <OppsummeringsVarsel manglendeSteg={manglendeSteg} />}
+      {harUfullstendigeSteg && (
+        <OppsummeringsVarsel ufullstendigSteg={ufullstendigeSteg} />
+      )}
       <OppsummeringForeldre />
       <OppsummeringBarn />
       <OppsummeringAvtaledetaljer />
 
       <Button
         variant="primary"
+        className="w-full sm:w-60"
         onClick={() => form.submit()}
-        disabled={harMangler}
+        disabled={harUfullstendigeSteg}
       >
         {t(tekster.lastNedKnapp)}
       </Button>
@@ -78,3 +48,65 @@ const tekster = definerTekster({
     en: "Download private agreement",
   },
 });
+
+function finnUfullstendigeSteg(
+  data: PrivatAvtaleSkjema,
+  feil: Record<string, unknown>,
+  privatAvtaleSteg: StegdataType[],
+): StegdataType[] {
+  const erTom = (tekst?: string) => !tekst || tekst.trim() === "";
+  const harFeil = (nøkkel: string) =>
+    Object.keys(feil).some((key) => key.startsWith(nøkkel));
+
+  const ufullstendig: StegdataType[] = [];
+
+  const manglerForeldre =
+    erTom(data.deg.fulltNavn) ||
+    erTom(data.deg.ident) ||
+    erTom(data.medforelder.fulltNavn) ||
+    erTom(data.medforelder.ident) ||
+    harFeil("deg") ||
+    harFeil("medforelder");
+
+  if (manglerForeldre) {
+    const steg = privatAvtaleSteg.find((s) => s.step === 1);
+    if (steg) {
+      ufullstendig.push(steg);
+    }
+  }
+
+  const manglerBarn =
+    data.barn.length === 0 ||
+    data.barn.some(
+      (barn) =>
+        erTom(barn.fulltNavn) ||
+        erTom(barn.ident) ||
+        erTom(barn.sum) ||
+        erTom(barn.bidragstype),
+    ) ||
+    harFeil("barn");
+
+  if (manglerBarn) {
+    const steg = privatAvtaleSteg.find((steg) => steg.step === 2);
+    if (steg) {
+      ufullstendig.push(steg);
+    }
+  }
+
+  const manglerAvtale =
+    erTom(data.fraDato) ||
+    data.nyAvtale === "" ||
+    data.medInnkreving === "" ||
+    harFeil("fraDato") ||
+    harFeil("nyAvtale") ||
+    harFeil("medInnkreving");
+
+  if (manglerAvtale) {
+    const steg = privatAvtaleSteg.find((steg) => steg.step === 3);
+    if (steg) {
+      ufullstendig.push(steg);
+    }
+  }
+
+  return ufullstendig;
+}

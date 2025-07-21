@@ -29,9 +29,7 @@ export default function Veiledning() {
       <IntroPanel />
       {førsteSteg && (
         <Link as={ReactRouterLink} to={førsteSteg}>
-          <Button variant="primary" as="a">
-            {t(tekster.start)}
-          </Button>
+          <Button variant="primary">{t(tekster.start)}</Button>
         </Link>
       )}
     </>

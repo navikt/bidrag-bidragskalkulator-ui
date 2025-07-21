@@ -96,7 +96,6 @@ export default function PrivatAvtaleStegLayout() {
               className="flex-1"
               variant="secondary"
               icon={<ArrowLeftIcon aria-hidden />}
-              as="a"
             >
               {t(tekster.knapp.forrigeSteg)}
             </Button>
@@ -109,7 +108,6 @@ export default function PrivatAvtaleStegLayout() {
                 variant="primary"
                 icon={<ArrowRightIcon aria-hidden />}
                 iconPosition="right"
-                as="a"
               >
                 {t(tekster.knapp.nesteSteg)}
               </Button>
