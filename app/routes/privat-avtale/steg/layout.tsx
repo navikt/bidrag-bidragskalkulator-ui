@@ -3,7 +3,6 @@ import { Button, Heading, Link, Stepper } from "@navikt/ds-react";
 import {
   Outlet,
   Link as ReactRouterLink,
-  useHref,
   useLoaderData,
   useLocation,
   type LoaderFunctionArgs,
@@ -44,7 +43,6 @@ export default function PrivatAvtaleStegLayout() {
   const { personinformasjon } = useLoaderData<typeof loader>();
   const { state: navigationState, pathname } = useLocation();
   const { t, språk } = useOversettelse();
-  const basename = useHref("/").slice(0, -1);
   const bidragsutergningParsed =
     ManuellBidragsutregningSchema.safeParse(navigationState);
 
@@ -75,7 +73,7 @@ export default function PrivatAvtaleStegLayout() {
         activeStep={aktivSteg?.step ?? 1}
       >
         {privatAvtaleSteg.map((steg) => (
-          <Stepper.Step href={`${basename}${steg.path}`}>
+          <Stepper.Step as={ReactRouterLink} to={steg.path}>
             {steg.overskrift}
           </Stepper.Step>
         ))}
