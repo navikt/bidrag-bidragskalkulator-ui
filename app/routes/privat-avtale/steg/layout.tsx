@@ -1,7 +1,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Button, Heading, Stepper } from "@navikt/ds-react";
+import { Button, Heading, Link, Stepper } from "@navikt/ds-react";
 import {
   Outlet,
+  Link as ReactRouterLink,
   useHref,
   useLoaderData,
   useLocation,
@@ -42,9 +43,7 @@ export default function PrivatAvtaleStegLayout() {
   const { personinformasjon } = useLoaderData<typeof loader>();
   const { state: navigationState, pathname } = useLocation();
   const { t, språk } = useOversettelse();
-
-  const basename = useHref("/");
-
+  const basename = useHref("/").slice(0, -1);
   const bidragsutergningParsed =
     ManuellBidragsutregningSchema.safeParse(navigationState);
 
@@ -52,7 +51,7 @@ export default function PrivatAvtaleStegLayout() {
     ? bidragsutergningParsed.data
     : undefined;
 
-  const privatAvtaleSteg = stegdata(språk, basename);
+  const privatAvtaleSteg = stegdata(språk);
   const aktivSteg = privatAvtaleSteg.find((steg) =>
     steg.path.endsWith(pathname),
   );
@@ -62,7 +61,7 @@ export default function PrivatAvtaleStegLayout() {
   const forrigeSteg =
     aktivStegIndex > 0
       ? privatAvtaleSteg[aktivStegIndex - 1].path
-      : "/barnebidrag/tjenester/privat-avtale";
+      : "/privat-avtale";
   const nesteSteg =
     aktivStegIndex < privatAvtaleSteg.length - 1
       ? privatAvtaleSteg[aktivStegIndex + 1].path
@@ -75,7 +74,9 @@ export default function PrivatAvtaleStegLayout() {
         activeStep={aktivSteg?.step ?? 1}
       >
         {privatAvtaleSteg.map((steg) => (
-          <Stepper.Step href={steg.path}>{steg.overskrift}</Stepper.Step>
+          <Stepper.Step href={`${basename}${steg.path}`}>
+            {steg.overskrift}
+          </Stepper.Step>
         ))}
       </Stepper>
       <section className="flex-1 space-y-6" aria-labelledby="skjemaoverskrift">
@@ -90,26 +91,29 @@ export default function PrivatAvtaleStegLayout() {
         </PrivatAvtaleFormProvider>
 
         <div className="flex gap-5">
-          <Button
-            className="flex-1"
-            variant="secondary"
-            icon={<ArrowLeftIcon aria-hidden />}
-            as="a"
-            href={forrigeSteg}
-          >
-            {t(tekster.knapp.forrigeSteg)}
-          </Button>
-          {nesteSteg && (
+          <Link as={ReactRouterLink} to={forrigeSteg}>
             <Button
               className="flex-1"
-              variant="primary"
-              icon={<ArrowRightIcon aria-hidden />}
-              iconPosition="right"
+              variant="secondary"
+              icon={<ArrowLeftIcon aria-hidden />}
               as="a"
-              href={nesteSteg}
             >
-              {t(tekster.knapp.nesteSteg)}
+              {t(tekster.knapp.forrigeSteg)}
             </Button>
+          </Link>
+
+          {nesteSteg && (
+            <Link as={ReactRouterLink} to={nesteSteg}>
+              <Button
+                className="flex-1"
+                variant="primary"
+                icon={<ArrowRightIcon aria-hidden />}
+                iconPosition="right"
+                as="a"
+              >
+                {t(tekster.knapp.nesteSteg)}
+              </Button>
+            </Link>
           )}
         </div>
       </section>

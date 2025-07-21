@@ -1,5 +1,5 @@
-import { Button } from "@navikt/ds-react";
-import { useHref, type MetaArgs } from "react-router";
+import { Button, Link } from "@navikt/ds-react";
+import { Link as ReactRouterLink, type MetaArgs } from "react-router";
 import { IntroPanel } from "~/features/privatAvtale/IntroPanel";
 import { stegdata } from "~/features/privatAvtale/privatAvtaleSteg";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
@@ -22,17 +22,18 @@ export function meta({ matches }: MetaArgs) {
 
 export default function Veiledning() {
   const { t, språk } = useOversettelse();
-  const basename = useHref("/");
-  const førsteSteg = stegdata(språk, basename).find(
-    (steg) => steg.step === 1,
-  )?.path;
+  const førsteSteg = stegdata(språk).find((steg) => steg.step === 1)?.path;
 
   return (
     <>
       <IntroPanel />
-      <Button variant="primary" as="a" href={førsteSteg}>
-        {t(tekster.start)}
-      </Button>
+      {førsteSteg && (
+        <Link as={ReactRouterLink} to={førsteSteg}>
+          <Button variant="primary" as="a">
+            {t(tekster.start)}
+          </Button>
+        </Link>
+      )}
     </>
   );
 }

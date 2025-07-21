@@ -1,72 +1,80 @@
-import { BodyLong, Heading, List } from "@navikt/ds-react";
-import { useField } from "@rvf/react";
-import type { Person } from "~/features/privatAvtale/skjemaSchema";
+import { Button, VStack } from "@navikt/ds-react";
+import { OppsummeringAvtaledetaljer } from "~/features/privatAvtale/oppsummering/OppsummeringAvtaledetaljer";
+import { OppsummeringBarn } from "~/features/privatAvtale/oppsummering/OppsummeringBarn";
+import { OppsummeringForeldre } from "~/features/privatAvtale/oppsummering/OppsummeringForeldre";
+import OppsummeringsVarsel from "~/features/privatAvtale/oppsummering/OppsummeringsVarsel";
+import { usePrivatAvtaleForm } from "~/features/privatAvtale/PrivatAvtaleFormProvider";
+import {
+  stegdata,
+  type StegdataType,
+} from "~/features/privatAvtale/privatAvtaleSteg";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export default function OppsummeringOgAvtale() {
-  const { t } = useOversettelse();
-  const deg = useField("deg").value() as Person;
-  const medforelder = useField("medforelder").value() as Person;
+  const form = usePrivatAvtaleForm();
+  const { t, språk } = useOversettelse();
+  const { deg, medforelder, barn, fraDato, nyAvtale, medInnkreving } =
+    form.value();
+
+  const privatAvtaleSteg = stegdata(språk);
+
+  const manglendeSteg = finnFørsteUfullstendigeSteg();
+  const harMangler = manglendeSteg !== undefined;
+
+  function erTom(tekst: string | undefined) {
+    return !tekst || tekst.trim() === "";
+  }
+
+  function finnFørsteUfullstendigeSteg(): StegdataType | undefined {
+    if (
+      erTom(deg.fulltNavn) ||
+      erTom(deg.ident) ||
+      erTom(medforelder.fulltNavn) ||
+      erTom(medforelder.ident)
+    ) {
+      return privatAvtaleSteg.find((steg) => steg.step === 1);
+    }
+    if (
+      barn.length === 0 ||
+      barn.some(
+        (barn) =>
+          erTom(barn.fulltNavn) ||
+          erTom(barn.ident) ||
+          erTom(barn.sum) ||
+          erTom(barn.bidragstype),
+      )
+    ) {
+      return privatAvtaleSteg.find((steg) => steg.step === 2);
+    }
+    if (erTom(fraDato) || nyAvtale === "" || medInnkreving === "") {
+      return privatAvtaleSteg.find((steg) => steg.step === 3);
+    }
+
+    return undefined;
+  }
 
   return (
-    <>
-      <BodyLong>{t(tekster.beskrivelse)}</BodyLong>
-      <Heading level="3" size="medium">
-        {t(tekster.omDeg)}
-      </Heading>
+    <VStack gap="6">
+      {harMangler && <OppsummeringsVarsel manglendeSteg={manglendeSteg} />}
+      <OppsummeringForeldre />
+      <OppsummeringBarn />
+      <OppsummeringAvtaledetaljer />
 
-      <List as="ul">
-        <List.Item title={t(tekster.fulltNavn)}>{deg.fulltNavn}</List.Item>
-        <List.Item title={t(tekster.ident)}>{deg.ident}</List.Item>
-      </List>
-
-      <Heading level="3" size="medium">
-        {t(tekster.omDenAndreForelderem)}
-      </Heading>
-
-      <List as="ul">
-        <List.Item title={t(tekster.fulltNavn)}>
-          {medforelder.fulltNavn}
-        </List.Item>
-        <List.Item title={t(tekster.ident)}>{medforelder.ident}</List.Item>
-      </List>
-
-      <Heading level="3" size="medium">
-        {t(tekster.barn)}
-      </Heading>
-    </>
+      <Button
+        variant="primary"
+        onClick={() => form.submit()}
+        disabled={harMangler}
+      >
+        {t(tekster.lastNedKnapp)}
+      </Button>
+    </VStack>
   );
 }
 
 const tekster = definerTekster({
-  beskrivelse: {
-    nb: "Kontroller at alle opplysningene er korrekte. Dersom alle opplysningene er korrekte, kan du laste ned privat avtale.",
-    nn: "Kontroller at alle opplysningane er korrekte. Dersom alle opplysningane er korrekte, kan du lasta ned privat avtale.",
-    en: "Please verify that all information is correct. If all information is correct, you can download the private agreement.",
-  },
-  omDeg: {
-    nb: "Om deg",
-    nn: "Om deg",
-    en: "About you",
-  },
-  fulltNavn: {
-    nb: "Fullt navn",
-    nn: "Fullt namn",
-    en: "Full name",
-  },
-  ident: {
-    nb: "Fødselsnummer eller D-nummer",
-    en: "National ID or D-number",
-    nn: "Fødselsnummer eller D-nummer",
-  },
-  omDenAndreForelderem: {
-    nb: "Den andre forelderen",
-    nn: "Den andre forelderen",
-    en: "The other parent",
-  },
-  barn: {
-    nb: "Barn",
-    nn: "Barn",
-    en: "Child",
+  lastNedKnapp: {
+    nb: "Last ned privat avtale",
+    nn: "Last ned privat avtale",
+    en: "Download private agreement",
   },
 });

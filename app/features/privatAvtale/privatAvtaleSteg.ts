@@ -9,33 +9,39 @@ export type StegKonfigurasjon = {
   key: StegKey;
 };
 
+export type StegdataType = {
+  step: number;
+  path: string;
+  overskrift: string;
+};
+
 export const stegKonfigurasjon: StegKonfigurasjon[] = [
   {
     step: 1,
-    path: "privat-avtale/steg/foreldre",
+    path: "/privat-avtale/steg/foreldre",
     key: "omDegOgDenAndreForelderen",
   },
   {
     step: 2,
-    path: "privat-avtale/steg/barn-og-bidrag",
+    path: "/privat-avtale/steg/barn-og-bidrag",
     key: "barnOgBidrag",
   },
   {
     step: 3,
-    path: "privat-avtale/steg/avtaledetaljer",
+    path: "/privat-avtale/steg/avtaledetaljer",
     key: "avtaledetaljer",
   },
   {
     step: 4,
-    path: "privat-avtale/steg/oppsummering-og-avtale",
+    path: "/privat-avtale/steg/oppsummering-og-avtale",
     key: "oppsummering",
   },
 ];
 
-export function stegdata(språk: Språk, basename: string) {
+export function stegdata(språk: Språk): StegdataType[] {
   return stegKonfigurasjon.map(({ step, path, key }) => ({
     step,
-    path: `${basename}${path}`,
+    path,
     overskrift: oversett(språk, privatAvtaleTekster[key].overskrift),
   }));
 }
