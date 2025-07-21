@@ -15,6 +15,7 @@ import { PrivatAvtaleFormProvider } from "~/features/privatAvtale/PrivatAvtaleFo
 import { stegdata } from "~/features/privatAvtale/privatAvtaleSteg";
 import { ManuellBidragsutregningSchema } from "~/features/skjema/beregning/schema";
 import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
+import type { ManuellPersoninformasjon } from "~/features/skjema/personinformasjon/schema";
 import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -84,7 +85,7 @@ export default function PrivatAvtaleStegLayout() {
           {aktivSteg?.overskrift}
         </Heading>
         <PrivatAvtaleFormProvider
-          personinformasjon={personinformasjon}
+          personinformasjon={personinformasjon as ManuellPersoninformasjon}
           bidragsutregning={bidragsutregning}
         >
           <Outlet />

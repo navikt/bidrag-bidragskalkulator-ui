@@ -12,6 +12,7 @@ import { type PrivatAvtaleSkjemaValidert } from "./skjemaSchema";
 export const hentPrivatAvtaleFraApi = async ({
   requestData,
   språk,
+  token,
 }: {
   requestData: LagPrivatAvtaleRequest;
   språk: Språk;
@@ -21,6 +22,7 @@ export const hentPrivatAvtaleFraApi = async ({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(requestData),
   });

@@ -1,4 +1,5 @@
-import { Button, VStack } from "@navikt/ds-react";
+import { Alert, Button, VStack } from "@navikt/ds-react";
+import { useEffect } from "react";
 import { OppsummeringAvtaledetaljer } from "~/features/privatAvtale/oppsummering/OppsummeringAvtaledetaljer";
 import { OppsummeringBarn } from "~/features/privatAvtale/oppsummering/OppsummeringBarn";
 import { OppsummeringForeldre } from "~/features/privatAvtale/oppsummering/OppsummeringForeldre";
@@ -12,18 +13,28 @@ import type { PrivatAvtaleSkjema } from "~/features/privatAvtale/skjemaSchema";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export default function OppsummeringOgAvtale() {
-  const form = usePrivatAvtaleForm();
+  const { form, feilVedHentingAvAvtale, isSubmitting } = usePrivatAvtaleForm();
   const { t, språk } = useOversettelse();
+
   const feil = form.formState.fieldErrors;
   const steg = stegdata(språk);
 
   const ufullstendigeSteg = finnUfullstendigeSteg(form.value(), feil, steg);
   const harUfullstendigeSteg = ufullstendigeSteg.length > 0;
 
+  useEffect(() => {
+    if (feilVedHentingAvAvtale) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [feilVedHentingAvAvtale]);
+
   return (
     <VStack gap="6">
       {harUfullstendigeSteg && (
         <OppsummeringsVarsel ufullstendigSteg={ufullstendigeSteg} />
+      )}
+      {feilVedHentingAvAvtale && (
+        <Alert variant="error">{feilVedHentingAvAvtale}</Alert>
       )}
       <OppsummeringForeldre />
       <OppsummeringBarn />
@@ -34,8 +45,9 @@ export default function OppsummeringOgAvtale() {
         className="w-full sm:w-60"
         onClick={() => form.submit()}
         disabled={harUfullstendigeSteg}
+        loading={isSubmitting}
       >
-        {t(tekster.lastNedKnapp)}
+        {isSubmitting ? t(tekster.lasterNed) : t(tekster.lastNedKnapp)}
       </Button>
     </VStack>
   );
@@ -46,6 +58,11 @@ const tekster = definerTekster({
     nb: "Last ned privat avtale",
     nn: "Last ned privat avtale",
     en: "Download private agreement",
+  },
+  lasterNed: {
+    nb: "Laster ned ...",
+    nn: "Lastar ned ...",
+    en: "Dowloading ...",
   },
 });
 

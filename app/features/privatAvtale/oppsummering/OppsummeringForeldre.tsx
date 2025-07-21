@@ -3,7 +3,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 
 export function OppsummeringForeldre() {
-  const form = usePrivatAvtaleForm();
+  const { form } = usePrivatAvtaleForm();
   const { t } = useOversettelse();
   const { deg, medforelder } = form.value();
 

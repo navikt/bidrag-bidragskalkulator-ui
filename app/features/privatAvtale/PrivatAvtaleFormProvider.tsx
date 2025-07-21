@@ -11,16 +11,23 @@ import { hentPrivatAvtaleSkjemaStandardverdi } from "~/features/privatAvtale/uti
 import {
   BidragstypeSchema,
   type Bidragstype,
+  type ManuellBidragsutregning,
 } from "~/features/skjema/beregning/schema";
 import { tilÅrMånedDag } from "~/utils/dato";
 import { useOversettelse } from "~/utils/i18n";
 import { lastNedPdf } from "~/utils/pdf";
+import type { ManuellPersoninformasjon } from "../skjema/personinformasjon/schema";
+
+type PrivatAvtaleFormContextType = {
+  form: ReturnType<
+    typeof useForm<PrivatAvtaleSkjemaType, PrivatAvtaleSkjemaValidert>
+  >;
+  feilVedHentingAvAvtale: string | undefined;
+  isSubmitting: boolean;
+};
 
 const PrivatAvtaleFormContext = createContext<
-  | ReturnType<
-      typeof useForm<PrivatAvtaleSkjemaType, PrivatAvtaleSkjemaValidert>
-    >
-  | undefined
+  PrivatAvtaleFormContextType | undefined
 >(undefined);
 
 const hentPrivatAvtalePdf = async (
@@ -54,8 +61,8 @@ export function PrivatAvtaleFormProvider({
   bidragsutregning,
 }: {
   children: ReactNode;
-  personinformasjon: any;
-  bidragsutregning?: any;
+  personinformasjon: ManuellPersoninformasjon;
+  bidragsutregning?: ManuellBidragsutregning;
 }) {
   const { språk } = useOversettelse();
   const basename = useHref("/");
@@ -63,6 +70,7 @@ export function PrivatAvtaleFormProvider({
   const [feilVedHentingAvAvtale, settFeilVedHentingAvAvtale] = useState<
     string | undefined
   >();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const form = useForm<PrivatAvtaleSkjemaType, PrivatAvtaleSkjemaValidert>({
     schema: lagPrivatAvtaleSkjemaValidertSchema(språk),
@@ -72,6 +80,7 @@ export function PrivatAvtaleFormProvider({
       bidragsutregning?.resultater,
     ),
     handleSubmit: async (skjemaData) => {
+      setIsSubmitting(true);
       settFeilVedHentingAvAvtale(undefined);
 
       const barnPerBidragstype = BidragstypeSchema.options
@@ -100,7 +109,9 @@ export function PrivatAvtaleFormProvider({
       const feilet = resultater.some(({ pdf }) => pdf === null);
 
       if (feilet) {
+        setIsSubmitting(false);
         settFeilVedHentingAvAvtale("Feil ved generering av avtale");
+
         return;
       }
 
@@ -109,11 +120,14 @@ export function PrivatAvtaleFormProvider({
           lastNedPdf(pdf, lagPrivatAvtalePdfNavn(type));
         }
       });
+      setIsSubmitting(false);
     },
   });
 
   return (
-    <PrivatAvtaleFormContext.Provider value={form}>
+    <PrivatAvtaleFormContext.Provider
+      value={{ form, feilVedHentingAvAvtale, isSubmitting }}
+    >
       <FormProvider scope={form.scope()}>
         <form {...form.getFormProps()} className="flex flex-col gap-4">
           {children}
