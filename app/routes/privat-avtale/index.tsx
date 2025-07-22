@@ -28,8 +28,14 @@ export default function Veiledning() {
     <>
       <IntroPanel />
       {førsteSteg && (
-        <Link as={ReactRouterLink} to={førsteSteg}>
-          <Button variant="primary">{t(tekster.start)}</Button>
+        <Link
+          as={ReactRouterLink}
+          to={førsteSteg}
+          className="flex w-full sm:w-50 self-center"
+        >
+          <Button variant="primary" className="w-full">
+            {t(tekster.start)}
+          </Button>
         </Link>
       )}
     </>

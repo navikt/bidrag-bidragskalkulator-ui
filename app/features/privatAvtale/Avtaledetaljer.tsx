@@ -1,25 +1,26 @@
-import { useField, useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 import { DatePicker, Radio, RadioGroup, useDatepicker } from "@navikt/ds-react";
 import { tilÅrMånedDag } from "~/utils/dato";
-import type { PrivatAvtaleSkjema } from "./skjemaSchema";
+import { usePrivatAvtaleForm } from "./PrivatAvtaleFormProvider";
 
 const NY_AVTALE_ALTERNATIVER = ["true", "false"] as const;
 const INNKREVING_ALTERNATIVER = ["false", "true"] as const;
 
 export const Avtaledetaljer = () => {
-  const form = useFormContext<PrivatAvtaleSkjema>();
+  const { form } = usePrivatAvtaleForm();
   const { t } = useOversettelse();
 
-  const fraDato = useField(form.scope("fraDato"));
+  const { getControlProps, value, field, error } = form;
+
+  const { fraDato } = value();
 
   const { datepickerProps, inputProps } = useDatepicker({
     fromDate: undefined,
     onDateChange: (dato) => {
-      const datoString = dato ? tilÅrMånedDag(dato) : "";
-      fraDato.setValue(datoString);
+      field("fraDato").setValue(dato ? tilÅrMånedDag(dato) : "");
     },
+    defaultSelected: fraDato ? new Date(fraDato) : undefined,
   });
 
   return (
@@ -31,13 +32,13 @@ export const Avtaledetaljer = () => {
           {...inputProps}
           label={t(tekster.gjelderFra.label)}
           description={t(tekster.gjelderFra.beskrivelse)}
-          error={fraDato.error()}
+          error={error("fraDato")}
         />
       </DatePicker>
 
       <RadioGroup
-        {...form.field("nyAvtale").getInputProps()}
-        error={form.field("nyAvtale").error()}
+        {...getControlProps("nyAvtale")}
+        error={field("nyAvtale").error()}
         legend={t(tekster.nyAvtale.label)}
       >
         {NY_AVTALE_ALTERNATIVER.map((alternativ) => {
@@ -50,8 +51,8 @@ export const Avtaledetaljer = () => {
       </RadioGroup>
 
       <RadioGroup
-        {...form.field("medInnkreving").getInputProps()}
-        error={form.field("medInnkreving").error()}
+        {...getControlProps("medInnkreving")}
+        error={field("medInnkreving").error()}
         legend={t(tekster.medInnkreving.label)}
       >
         {INNKREVING_ALTERNATIVER.map((alternativ) => {

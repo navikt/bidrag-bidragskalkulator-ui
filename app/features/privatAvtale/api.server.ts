@@ -22,6 +22,7 @@ export const hentPrivatAvtaleFraApi = async ({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Accept: "application/pdf",
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(requestData),

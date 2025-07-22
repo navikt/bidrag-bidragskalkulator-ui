@@ -13,28 +13,42 @@ import type { PrivatAvtaleSkjema } from "~/features/privatAvtale/skjemaSchema";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export default function OppsummeringOgAvtale() {
-  const { form, feilVedHentingAvAvtale, isSubmitting } = usePrivatAvtaleForm();
+  const { form, feilVedHentingAvAvtale, antallNedlastedeFiler } =
+    usePrivatAvtaleForm();
   const { t, språk } = useOversettelse();
 
-  const feil = form.formState.fieldErrors;
+  const { isSubmitting, submitStatus, fieldErrors } = form.formState;
+  const innsendingsfeil = submitStatus === "error" && feilVedHentingAvAvtale;
+  const innsendingVellykket =
+    submitStatus === "success" && antallNedlastedeFiler;
+
   const steg = stegdata(språk);
 
-  const ufullstendigeSteg = finnUfullstendigeSteg(form.value(), feil, steg);
+  const ufullstendigeSteg = finnUfullstendigeSteg(
+    form.value(),
+    fieldErrors,
+    steg,
+  );
   const harUfullstendigeSteg = ufullstendigeSteg.length > 0;
 
   useEffect(() => {
-    if (feilVedHentingAvAvtale) {
+    if (innsendingsfeil || innsendingVellykket) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }, [feilVedHentingAvAvtale]);
+  }, [innsendingsfeil, innsendingVellykket]);
 
   return (
     <VStack gap="6">
       {harUfullstendigeSteg && (
         <OppsummeringsVarsel ufullstendigSteg={ufullstendigeSteg} />
       )}
-      {feilVedHentingAvAvtale && (
+      {innsendingsfeil && (
         <Alert variant="error">{feilVedHentingAvAvtale}</Alert>
+      )}
+      {innsendingVellykket && (
+        <Alert variant="success">
+          {t(tekster.suksessmelding(antallNedlastedeFiler))}
+        </Alert>
       )}
       <OppsummeringForeldre />
       <OppsummeringBarn />
@@ -52,19 +66,6 @@ export default function OppsummeringOgAvtale() {
     </VStack>
   );
 }
-
-const tekster = definerTekster({
-  lastNedKnapp: {
-    nb: "Last ned privat avtale",
-    nn: "Last ned privat avtale",
-    en: "Download private agreement",
-  },
-  lasterNed: {
-    nb: "Laster ned ...",
-    nn: "Lastar ned ...",
-    en: "Dowloading ...",
-  },
-});
 
 function finnUfullstendigeSteg(
   data: PrivatAvtaleSkjema,
@@ -127,3 +128,30 @@ function finnUfullstendigeSteg(
 
   return ufullstendig;
 }
+
+const tekster = definerTekster({
+  lastNedKnapp: {
+    nb: "Last ned privat avtale",
+    nn: "Last ned privat avtale",
+    en: "Download private agreement",
+  },
+  lasterNed: {
+    nb: "Laster ned ...",
+    nn: "Lastar ned ...",
+    en: "Dowloading ...",
+  },
+  suksessmelding: (antallFiler) => ({
+    nb:
+      antallFiler === 1
+        ? "Avtalen ble generert og lastet ned."
+        : `${antallFiler} avtaler ble generert og lastet ned.`,
+    nn:
+      antallFiler === 1
+        ? "Avtalen blei generert og lasta ned."
+        : `${antallFiler} avtalar blei generert og lasta ned.`,
+    en:
+      antallFiler === 1
+        ? "The agreement was generated and downloaded."
+        : `${antallFiler} agreements were generated and downloaded.`,
+  }),
+});

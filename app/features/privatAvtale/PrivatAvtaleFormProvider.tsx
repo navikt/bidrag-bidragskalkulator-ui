@@ -14,7 +14,7 @@ import {
   type ManuellBidragsutregning,
 } from "~/features/skjema/beregning/schema";
 import { tilÅrMånedDag } from "~/utils/dato";
-import { useOversettelse } from "~/utils/i18n";
+import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { lastNedPdf } from "~/utils/pdf";
 import type { ManuellPersoninformasjon } from "../skjema/personinformasjon/schema";
 
@@ -23,7 +23,7 @@ type PrivatAvtaleFormContextType = {
     typeof useForm<PrivatAvtaleSkjemaType, PrivatAvtaleSkjemaValidert>
   >;
   feilVedHentingAvAvtale: string | undefined;
-  isSubmitting: boolean;
+  antallNedlastedeFiler: number | undefined;
 };
 
 const PrivatAvtaleFormContext = createContext<
@@ -64,13 +64,15 @@ export function PrivatAvtaleFormProvider({
   personinformasjon: ManuellPersoninformasjon;
   bidragsutregning?: ManuellBidragsutregning;
 }) {
-  const { språk } = useOversettelse();
+  const { t, språk } = useOversettelse();
   const basename = useHref("/");
 
   const [feilVedHentingAvAvtale, settFeilVedHentingAvAvtale] = useState<
     string | undefined
   >();
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [antallNedlastedeFiler, setAntallNedlastedeFil] = useState<
+    number | undefined
+  >();
 
   const form = useForm<PrivatAvtaleSkjemaType, PrivatAvtaleSkjemaValidert>({
     schema: lagPrivatAvtaleSkjemaValidertSchema(språk),
@@ -80,7 +82,6 @@ export function PrivatAvtaleFormProvider({
       bidragsutregning?.resultater,
     ),
     handleSubmit: async (skjemaData) => {
-      setIsSubmitting(true);
       settFeilVedHentingAvAvtale(undefined);
 
       const barnPerBidragstype = BidragstypeSchema.options
@@ -109,10 +110,8 @@ export function PrivatAvtaleFormProvider({
       const feilet = resultater.some(({ pdf }) => pdf === null);
 
       if (feilet) {
-        setIsSubmitting(false);
-        settFeilVedHentingAvAvtale("Feil ved generering av avtale");
-
-        return;
+        settFeilVedHentingAvAvtale(t(tekster.feilmelding));
+        throw new Error(t(tekster.feilmelding));
       }
 
       resultater.forEach(({ type, pdf }) => {
@@ -120,13 +119,13 @@ export function PrivatAvtaleFormProvider({
           lastNedPdf(pdf, lagPrivatAvtalePdfNavn(type));
         }
       });
-      setIsSubmitting(false);
+      setAntallNedlastedeFil(resultater.length);
     },
   });
 
   return (
     <PrivatAvtaleFormContext.Provider
-      value={{ form, feilVedHentingAvAvtale, isSubmitting }}
+      value={{ form, feilVedHentingAvAvtale, antallNedlastedeFiler }}
     >
       <FormProvider scope={form.scope()}>
         <form {...form.getFormProps()} className="flex flex-col gap-4">
@@ -146,3 +145,11 @@ export function usePrivatAvtaleForm() {
   }
   return context;
 }
+
+const tekster = definerTekster({
+  feilmelding: {
+    nb: "Det oppsto en feil under generering av avtalen.",
+    nn: "Det oppstod ein feil under generering av avtalen.",
+    en: "An error occurred while generating the agreement.",
+  },
+});

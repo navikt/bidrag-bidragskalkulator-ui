@@ -1,15 +1,14 @@
-import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 import { TextField } from "@navikt/ds-react";
-import type { PrivatAvtaleSkjema } from "./skjemaSchema";
+import { usePrivatAvtaleForm } from "./PrivatAvtaleFormProvider";
 
 type Props = {
   part: "deg" | "medforelder";
 };
 
 export const Avtalepart = ({ part }: Props) => {
-  const form = useFormContext<PrivatAvtaleSkjema>();
+  const { form } = usePrivatAvtaleForm();
   const { t } = useOversettelse();
 
   return (

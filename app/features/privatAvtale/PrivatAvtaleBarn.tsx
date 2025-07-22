@@ -1,15 +1,15 @@
 import { PlusIcon } from "@navikt/aksel-icons";
 import { Button } from "@navikt/ds-react";
-import { useFieldArray, useFormContext } from "@rvf/react";
+import { useFieldArray } from "@rvf/react";
 import React from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { PrivatAvtaleEnkeltbarnSkjema } from "./PrivatAvtaleEnkeltbarn";
-import type { PrivatAvtaleSkjema } from "./skjemaSchema";
+import { usePrivatAvtaleForm } from "./PrivatAvtaleFormProvider";
 
 export const PrivatAvtaleBarn = () => {
   const { t } = useOversettelse();
-  const form = useFormContext<PrivatAvtaleSkjema>();
+  const { form } = usePrivatAvtaleForm();
 
   const barnArray = useFieldArray(form.scope("barn"));
   const antallBarn = barnArray.length();
