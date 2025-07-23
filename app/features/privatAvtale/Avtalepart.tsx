@@ -1,40 +1,37 @@
-import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 import { TextField } from "@navikt/ds-react";
-import type { PrivatAvtaleSkjema } from "./skjemaSchema";
+import { usePrivatAvtaleForm } from "./PrivatAvtaleFormProvider";
 
 type Props = {
   part: "deg" | "medforelder";
 };
 
 export const Avtalepart = ({ part }: Props) => {
-  const form = useFormContext<PrivatAvtaleSkjema>();
+  const { form } = usePrivatAvtaleForm();
   const { t } = useOversettelse();
 
   return (
-    <div className="border p-4 rounded-md">
-      <fieldset className="p-0 flex flex-col gap-4">
-        <legend className="text-xl mb-5">{t(tekster[part].tittel)}</legend>
+    <fieldset className="p-0 flex flex-col gap-4">
+      <legend className="text-xl mb-5">{t(tekster[part].tittel)}</legend>
 
-        <TextField
-          {...form.field(`${part}.fulltNavn`).getInputProps()}
-          label={t(tekster[part].fulltNavn.label)}
-          error={form.field(`${part}.fulltNavn`).error()}
-          autoComplete="off"
-          htmlSize={30}
-        />
+      <TextField
+        {...form.field(`${part}.fulltNavn`).getInputProps()}
+        label={t(tekster[part].fulltNavn.label)}
+        error={form.field(`${part}.fulltNavn`).error()}
+        autoComplete="off"
+        htmlSize={30}
+      />
 
-        <TextField
-          {...form.field(`${part}.ident`).getInputProps()}
-          label={t(tekster[part].ident.label)}
-          error={form.field(`${part}.ident`).error()}
-          htmlSize={13}
-          inputMode="numeric"
-          autoComplete="off"
-        />
-      </fieldset>
-    </div>
+      <TextField
+        {...form.field(`${part}.ident`).getInputProps()}
+        label={t(tekster[part].ident.label)}
+        error={form.field(`${part}.ident`).error()}
+        htmlSize={13}
+        inputMode="numeric"
+        autoComplete="off"
+      />
+    </fieldset>
   );
 };
 

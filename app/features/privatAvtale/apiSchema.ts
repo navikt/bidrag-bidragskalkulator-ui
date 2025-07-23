@@ -2,8 +2,6 @@ import { z } from "zod";
 
 const Person = z.object({
   fodselsnummer: z.string(),
-  fornavn: z.string(), // TODO Fjerne når APIet er oppdatert
-  etternavn: z.string(), // TODO Fjerne når APIet er oppdatert
   fulltNavn: z.string(),
 });
 
@@ -19,6 +17,7 @@ export const LagPrivatAvtaleRequestSchema = z.object({
   fraDato: z.string(),
   nyAvtale: z.boolean(),
   oppgjorsform: z.enum(["Privat", "Innkreving"]), // TODO Hva skal denne være?
+  tilInnsending: z.boolean(),
 });
 
 export type LagPrivatAvtaleRequest = z.infer<

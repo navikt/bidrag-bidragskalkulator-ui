@@ -1,12 +1,39 @@
-import { index, route, type RouteConfig } from "@react-router/dev/routes";
+import {
+  index,
+  layout,
+  route,
+  type RouteConfig,
+} from "@react-router/dev/routes";
 export default [
   index("routes/index.tsx"),
   route("/kalkulator", "routes/kalkulator.tsx"),
-  route("/privat-avtale", "routes/privat-avtale.tsx"),
   route("/oversikt", "routes/oversikt.tsx"),
   route("/oversikt/dokumenter/:journalpostId", "routes/min-side/dokument.tsx"),
 
   route("/api/privat-avtale", "routes/api/privat-avtale.ts"),
+
+  layout("routes/privat-avtale/layout.tsx", [
+    route("/privat-avtale", "routes/privat-avtale/index.tsx"),
+    layout("routes/privat-avtale/steg/layout.tsx", [
+      route(
+        "/privat-avtale/steg/foreldre",
+        "routes/privat-avtale/steg/foreldre.tsx",
+      ),
+      route(
+        "/privat-avtale/steg/barn-og-bidrag",
+        "routes/privat-avtale/steg/barn-og-bidrag.tsx",
+      ),
+      route(
+        "/privat-avtale/steg/avtaledetaljer",
+        "routes/privat-avtale/steg/avtaledetaljer.tsx",
+      ),
+      route(
+        "/privat-avtale/steg/oppsummering-og-avtale",
+        "routes/privat-avtale/steg/oppsummering-og-avtale.tsx",
+      ),
+    ]),
+  ]),
+
   route(
     "/api/hent-dokument/:journalpostId/:dokumentId",
     "routes/api/hent-dokument.ts",
