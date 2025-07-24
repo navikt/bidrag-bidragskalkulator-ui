@@ -91,35 +91,45 @@ export function PrivatAvtaleFormProvider({
         }))
         .filter(({ barn }) => barn.length > 0);
 
-      const resultater = await Promise.all(
-        barnPerBidragstype.map(async ({ type, barn }) => {
-          const respons = await hentPrivatAvtalePdf(basename, {
-            ...skjemaData,
-            barn,
-          });
+      try {
+        const resultater = await Promise.all(
+          barnPerBidragstype.map(async ({ type, barn }) => {
+            try {
+              const respons = await hentPrivatAvtalePdf(basename, {
+                ...skjemaData,
+                barn,
+              });
+              const pdf = await respons.blob();
+              return { type, pdf };
+            } catch (feil: unknown) {
+              return {
+                type,
+                pdf: null,
+                feilmelding:
+                  typeof feil === "string" ? feil : t(tekster.feilmelding),
+              };
+            }
+          }),
+        );
 
-          if (!respons.ok) {
-            return { type, pdf: null };
-          }
-
-          const pdf = await respons.blob();
-          return { type, pdf };
-        }),
-      );
-
-      const feilet = resultater.some(({ pdf }) => pdf === null);
-
-      if (feilet) {
-        settFeilVedHentingAvAvtale(t(tekster.feilmelding));
-        throw new Error(t(tekster.feilmelding));
-      }
-
-      resultater.forEach(({ type, pdf }) => {
-        if (pdf) {
-          lastNedPdf(pdf, lagPrivatAvtalePdfNavn(type));
+        const feilet = resultater.some(({ pdf }) => pdf === null);
+        if (feilet) {
+          const førsteFeil = resultater.find(
+            (resultat) => resultat.pdf === null,
+          )?.feilmelding;
+          settFeilVedHentingAvAvtale(førsteFeil);
+          throw new Error(førsteFeil);
         }
-      });
-      setAntallNedlastedeFil(resultater.length);
+
+        resultater.forEach(({ type, pdf }) => {
+          if (pdf) {
+            lastNedPdf(pdf, lagPrivatAvtalePdfNavn(type));
+          }
+        });
+        setAntallNedlastedeFil(resultater.length);
+      } catch (e) {
+        console.error("Feil ved generering av privat avtale", e);
+      }
     },
   });
 

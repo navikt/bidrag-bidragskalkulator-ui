@@ -29,10 +29,22 @@ export const hentPrivatAvtaleFraApi = async ({
   });
 
   if (!response.ok) {
+    const status = response.status;
+
+    let feilmelding;
+    if (status === 502) {
+      // Metaforce-feil
+      feilmelding = oversett(språk, tekster.feil.metaforce);
+    } else {
+      // Generell feil
+      feilmelding = oversett(språk, tekster.feil.genererePdf);
+    }
+
     console.error(
-      `Feil ved generering av privat avtale: ${response.status} ${response.statusText}`,
+      `Feil ved generering av privat avtale: ${status} ${response.statusText}`,
     );
-    return Promise.reject(oversett(språk, tekster.feil.genererePdf));
+
+    return Promise.reject(feilmelding);
   }
 
   return response;
@@ -79,7 +91,7 @@ export const hentPrivatAvtaledokument = async (
     fraDato: skjemaData.fraDato,
     nyAvtale: skjemaData.nyAvtale,
     oppgjorsform: skjemaData.medInnkreving ? "Innkreving" : "Privat",
-    tilInnsending: true,
+    tilInnsending: skjemaData.medInnkreving,
     barn: skjemaData.barn.map((barn) => {
       return {
         fodselsnummer: barn.ident,
@@ -109,6 +121,11 @@ const tekster = definerTekster({
       nb: "Det oppstod en feil. Vennligst prøv igjen.",
       en: "An error occurred. Please try again.",
       nn: "Det oppstod ein feil. Ver venleg og prøv igjen.",
+    },
+    metaforce: {
+      nb: "Det er for tiden en teknisk feil med dokumenttjenesten. Prøv igjen senere.",
+      en: "There is currently a technical error with the document service. Please try again later.",
+      nn: "Det er for tida ein teknisk feil med dokumenttenesta. Prøv igjen seinare.",
     },
   },
 });
