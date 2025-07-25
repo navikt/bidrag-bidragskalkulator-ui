@@ -67,13 +67,16 @@ export const lagInnloggetBarnSkjema = (språk: Språk) => {
     }),
     samvær: z
       .string()
-      .nonempty(oversett(språk, tekster.feilmeldinger.samvær.påkrevd))
-      .pipe(
-        z.coerce
-          .number()
-          .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
-          .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum)),
-      ),
+      .refine((verdi) => verdi.trim() !== "", {
+        message: oversett(språk, tekster.feilmeldinger.samvær.påkrevd),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(språk, tekster.feilmeldinger.samvær.minimum),
+      })
+      .refine((verdi) => verdi <= 30, {
+        message: oversett(språk, tekster.feilmeldinger.samvær.maksimum),
+      }),
     barnetilsynsutgift: lagBarnetilsynsutgiftSchema(språk),
   });
 };
@@ -88,64 +91,58 @@ export const lagForelderSkjema = (
       .nonempty(oversett(språk, tekster.feilmeldinger[rolle].navn.påkrevd)),
     inntekt: z
       .string()
-      .nonempty(oversett(språk, tekster.feilmeldinger.inntekt.påkrevd))
-      .pipe(
-        z.coerce
-          .number()
-          .min(0, oversett(språk, tekster.feilmeldinger.inntekt.positivt))
-          .step(1, oversett(språk, tekster.feilmeldinger.inntekt.heleKroner)),
-      ),
+      .refine((verdi) => verdi.trim() !== "", {
+        message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
+      })
+      .refine((verdi) => Number.isInteger(verdi), {
+        message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
+      }),
     antallBarnBorFast: z
       .string()
-      .nonempty(
-        oversett(
+      .refine((verdi) => verdi.trim() !== "", {
+        message: oversett(
           språk,
           tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.påkrevd,
         ),
-      )
-      .pipe(
-        z.coerce
-          .number({
-            invalid_type_error: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.tall,
-            ),
-          })
-          .min(
-            0,
-            oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast
-                .minimum,
-            ),
-          ),
-      ),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => !isNaN(verdi), {
+        message: oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.tall,
+        ),
+      })
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.minimum,
+        ),
+      }),
     antallBarnDeltBosted: z
       .string()
-      .nonempty(
-        oversett(
+      .refine((verdi) => verdi.trim() !== "", {
+        message: oversett(
           språk,
           tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted.påkrevd,
         ),
-      )
-      .pipe(
-        z.coerce
-          .number({
-            invalid_type_error: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
-                .tall,
-            ),
-          })
-          .min(
-            0,
-            oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
-                .minimum,
-            ),
-          ),
-      ),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => !isNaN(verdi), {
+        message: oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted.tall,
+        ),
+      })
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted.minimum,
+        ),
+      }),
     borMedAnnenVoksen: z
       .enum(["true", "false"], {
         message: oversett(
@@ -179,56 +176,63 @@ export const lagManueltBarnSkjema = (språk: Språk) => {
       .nonempty(oversett(språk, tekster.feilmeldinger.barn.navn.påkrevd)),
     alder: z
       .string()
-      .nonempty(oversett(språk, tekster.feilmeldinger.barn.alder.påkrevd))
-      .pipe(
-        z.coerce
-          .number({
-            invalid_type_error: oversett(
-              språk,
-              tekster.feilmeldinger.barn.alder.tall,
-            ),
-          })
-          .min(0, oversett(språk, tekster.feilmeldinger.barn.alder.minimum))
-          .max(25, oversett(språk, tekster.feilmeldinger.barn.alder.maksimum))
-          .int(oversett(språk, tekster.feilmeldinger.barn.alder.heltall)),
-      ),
+      .refine((verdi) => verdi.trim() !== "", {
+        message: oversett(språk, tekster.feilmeldinger.barn.alder.påkrevd),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => !isNaN(verdi), {
+        message: oversett(språk, tekster.feilmeldinger.barn.alder.tall),
+      })
+      .refine((verdi) => Number.isInteger(verdi), {
+        message: oversett(språk, tekster.feilmeldinger.barn.alder.heltall),
+      })
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(språk, tekster.feilmeldinger.barn.alder.minimum),
+      })
+      .refine((verdi) => verdi <= 25, {
+        message: oversett(språk, tekster.feilmeldinger.barn.alder.maksimum),
+      }),
     bosted: z.enum(FastBosted.options, {
       message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
     }),
     samvær: z
       .string()
-      .nonempty(oversett(språk, tekster.feilmeldinger.samvær.påkrevd))
-      .pipe(
-        z.coerce
-          .number()
-          .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
-          .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum)),
-      ),
+      .refine((verdi) => verdi.trim() !== "", {
+        message: oversett(språk, tekster.feilmeldinger.samvær.påkrevd),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(språk, tekster.feilmeldinger.samvær.minimum),
+      })
+      .refine((verdi) => verdi <= 30, {
+        message: oversett(språk, tekster.feilmeldinger.samvær.maksimum),
+      }),
     barnetilsynsutgift: lagBarnetilsynsutgiftSchema(språk),
   });
 };
 
-const lagBarnetilsynsutgiftSchema = (språk: Språk) => {
-  return z
-    .string({
-      required_error: oversett(
+const lagBarnetilsynsutgiftSchema = (språk: Språk) =>
+  z
+    .string()
+    .refine((verdi) => verdi.trim() !== "", {
+      message: oversett(
         språk,
         tekster.feilmeldinger.barnetilsynsutgift.påkrevd,
       ),
     })
-    .pipe(
-      z.coerce
-        .number()
-        .min(
-          0,
-          oversett(språk, tekster.feilmeldinger.barnetilsynsutgift.minimum),
-        )
-        .max(
-          10000,
-          oversett(språk, tekster.feilmeldinger.barnetilsynsutgift.maksimum),
-        ),
-    );
-};
+    .transform((verdi) => Number(verdi.trim()))
+    .refine((verdi) => verdi >= 0, {
+      message: oversett(
+        språk,
+        tekster.feilmeldinger.barnetilsynsutgift.minimum,
+      ),
+    })
+    .refine((verdi) => verdi <= 10000, {
+      message: oversett(
+        språk,
+        tekster.feilmeldinger.barnetilsynsutgift.maksimum,
+      ),
+    });
 
 export const lagManueltSkjema = (språk: Språk) => {
   return z.object({
