@@ -120,83 +120,48 @@ export const lagForelderSkjema = (
           message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
         }),
     ),
-    antallBarnBorFast: z.preprocess(
-      (input) => {
-        if (typeof input === "string") {
-          const trimmed = input.trim();
-          if (trimmed === "") {
-            return undefined;
-          }
-
-          const parsed = Number(trimmed);
-          return isNaN(parsed) ? NaN : parsed;
-        }
-        return input;
-      },
-      z
-        .union([
-          z
-            .number()
-            .refine((verdi) => !isNaN(verdi), {
-              message: oversett(
-                språk,
-                tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.tall,
-              ),
-            })
-            .min(0, {
-              message: oversett(
-                språk,
-                tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast
-                  .minimum,
-              ),
-            }),
-          z.undefined(), // Lar deg fange "tomt felt" med egen melding
-        ])
-        .refine((verdi) => verdi !== undefined, {
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.påkrevd,
-          ),
-        }),
-    ),
-    antallBarnDeltBosted: z.preprocess(
-      (input) => {
-        if (typeof input === "string") {
-          const trimmed = input.trim();
-          if (trimmed === "") return undefined;
-          const parsed = Number(trimmed);
-          return isNaN(parsed) ? NaN : parsed;
-        }
-        return input;
-      },
-      z
-        .union([
-          z
-            .number()
-            .refine((verdi) => !isNaN(verdi), {
-              message: oversett(
-                språk,
-                tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
-                  .tall,
-              ),
-            })
-            .min(0, {
-              message: oversett(
-                språk,
-                tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
-                  .minimum,
-              ),
-            }),
-          z.undefined(),
-        ])
-        .refine((verdi) => verdi !== undefined, {
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
-              .påkrevd,
-          ),
-        }),
-    ),
+    antallBarnBorFast: z
+      .string()
+      .refine((verdi) => verdi.trim() !== "", {
+        message: oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.påkrevd,
+        ),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => !isNaN(verdi), {
+        message: oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.tall,
+        ),
+      })
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.minimum,
+        ),
+      }),
+    antallBarnDeltBosted: z
+      .string()
+      .refine((verdi) => verdi.trim() !== "", {
+        message: oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted.påkrevd,
+        ),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => !isNaN(verdi), {
+        message: oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted.tall,
+        ),
+      })
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(
+          språk,
+          tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted.minimum,
+        ),
+      }),
     borMedAnnenVoksen: z
       .enum(["true", "false"], {
         message: oversett(
