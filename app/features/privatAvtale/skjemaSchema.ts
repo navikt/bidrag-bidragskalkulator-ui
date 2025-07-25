@@ -73,15 +73,13 @@ export const lagPrivatAvtaleSkjemaValidertSchema = (språk: Språk) => {
           .length(11, oversett(språk, tekster.feilmeldinger.barn.ident)),
         sum: z
           .string()
-          .nonempty(oversett(språk, tekster.feilmeldinger.barn.sum.påkrevd))
-          .pipe(
-            z.coerce.number({
-              invalid_type_error: oversett(
-                språk,
-                tekster.feilmeldinger.barn.sum.ugyldig,
-              ),
-            }),
-          ),
+          .refine((verdi) => verdi.trim() !== "", {
+            message: oversett(språk, tekster.feilmeldinger.barn.sum.påkrevd),
+          })
+          .transform((verdi) => Number(verdi))
+          .refine((verdi) => !isNaN(verdi), {
+            message: oversett(språk, tekster.feilmeldinger.barn.sum.ugyldig),
+          }),
         bidragstype: z.enum(BidragstypeSchema.options, {
           message: oversett(
             språk,
