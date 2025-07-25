@@ -65,22 +65,18 @@ export const lagInnloggetBarnSkjema = (språk: Språk) => {
     bosted: z.enum(FastBosted.options, {
       message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
     }),
-    samvær: z.preprocess(
-      (input) => {
-        if (typeof input === "string" && input.trim() === "") {
-          return undefined;
-        }
-        const tall = Number(input);
-        return isNaN(tall) ? undefined : tall;
-      },
-      z
-        .number()
-        .min(0, oversett(språk, tekster.feilmeldinger.samvær.minimum))
-        .max(30, oversett(språk, tekster.feilmeldinger.samvær.maksimum))
-        .refine((val) => val !== undefined, {
-          message: oversett(språk, tekster.feilmeldinger.samvær.påkrevd),
-        }),
-    ),
+    samvær: z
+      .string()
+      .refine((verdi) => verdi.trim() !== "", {
+        message: oversett(språk, tekster.feilmeldinger.samvær.påkrevd),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(språk, tekster.feilmeldinger.samvær.minimum),
+      })
+      .refine((verdi) => verdi <= 30, {
+        message: oversett(språk, tekster.feilmeldinger.samvær.maksimum),
+      }),
     barnetilsynsutgift: lagBarnetilsynsutgiftSchema(språk),
   });
 };
@@ -93,33 +89,18 @@ export const lagForelderSkjema = (
     navn: z
       .string()
       .nonempty(oversett(språk, tekster.feilmeldinger[rolle].navn.påkrevd)),
-    inntekt: z.preprocess(
-      (input) => {
-        if (typeof input === "string" && input.trim() === "") {
-          return undefined;
-        }
-        const tall = Number(input);
-        return isNaN(tall) ? undefined : tall;
-      },
-      z
-        .union([
-          z
-            .number()
-            .min(0, {
-              message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
-            })
-            .multipleOf(1, {
-              message: oversett(
-                språk,
-                tekster.feilmeldinger.inntekt.heleKroner,
-              ),
-            }),
-          z.undefined(),
-        ])
-        .refine((val) => val !== undefined, {
-          message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
-        }),
-    ),
+    inntekt: z
+      .string()
+      .refine((verdi) => verdi.trim() !== "", {
+        message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
+      })
+      .refine((verdi) => Number.isInteger(verdi), {
+        message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
+      }),
     antallBarnBorFast: z
       .string()
       .refine((verdi) => verdi.trim() !== "", {
@@ -194,69 +175,37 @@ export const lagManueltBarnSkjema = (språk: Språk) => {
       .string()
       .nonempty(oversett(språk, tekster.feilmeldinger.barn.navn.påkrevd)),
     alder: z
-      .preprocess(
-        (input) => {
-          if (typeof input === "string") {
-            const trimmed = input.trim();
-            if (trimmed === "") return undefined;
-            const parsed = Number(trimmed);
-            return isNaN(parsed) ? NaN : parsed;
-          }
-          return input;
-        },
-        z
-          .union([
-            z
-              .number()
-              .refine((verdi) => !isNaN(verdi), {
-                message: oversett(språk, tekster.feilmeldinger.barn.alder.tall),
-              })
-              .min(0, {
-                message: oversett(
-                  språk,
-                  tekster.feilmeldinger.barn.alder.minimum,
-                ),
-              })
-              .max(25, {
-                message: oversett(
-                  språk,
-                  tekster.feilmeldinger.barn.alder.maksimum,
-                ),
-              }),
-            z.undefined(),
-          ])
-          .refine((verdi) => Number.isInteger(verdi), {
-            message: oversett(språk, tekster.feilmeldinger.barn.alder.heltall),
-          }),
-      )
-      .refine((verdi) => verdi !== undefined, {
+      .string()
+      .refine((verdi) => verdi.trim() !== "", {
         message: oversett(språk, tekster.feilmeldinger.barn.alder.påkrevd),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => !isNaN(verdi), {
+        message: oversett(språk, tekster.feilmeldinger.barn.alder.tall),
+      })
+      .refine((verdi) => Number.isInteger(verdi), {
+        message: oversett(språk, tekster.feilmeldinger.barn.alder.heltall),
+      })
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(språk, tekster.feilmeldinger.barn.alder.minimum),
+      })
+      .refine((verdi) => verdi <= 25, {
+        message: oversett(språk, tekster.feilmeldinger.barn.alder.maksimum),
       }),
     bosted: z.enum(FastBosted.options, {
       message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
     }),
     samvær: z
-      .preprocess(
-        (input) => {
-          if (typeof input === "string") {
-            const trimmed = input.trim();
-            if (trimmed === "") return undefined;
-            const parsed = Number(trimmed);
-            return isNaN(parsed) ? NaN : parsed;
-          }
-          return input;
-        },
-        z
-          .number()
-          .min(0, {
-            message: oversett(språk, tekster.feilmeldinger.samvær.minimum),
-          })
-          .max(30, {
-            message: oversett(språk, tekster.feilmeldinger.samvær.maksimum),
-          }),
-      )
-      .refine((verdi) => verdi !== undefined, {
+      .string()
+      .refine((verdi) => verdi.trim() !== "", {
         message: oversett(språk, tekster.feilmeldinger.samvær.påkrevd),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(språk, tekster.feilmeldinger.samvær.minimum),
+      })
+      .refine((verdi) => verdi <= 30, {
+        message: oversett(språk, tekster.feilmeldinger.samvær.maksimum),
       }),
     barnetilsynsutgift: lagBarnetilsynsutgiftSchema(språk),
   });
@@ -264,41 +213,24 @@ export const lagManueltBarnSkjema = (språk: Språk) => {
 
 const lagBarnetilsynsutgiftSchema = (språk: Språk) =>
   z
-    .preprocess(
-      (input) => {
-        if (typeof input === "string") {
-          const trimmed = input.trim();
-          if (trimmed === "") {
-            return undefined;
-          }
-
-          const parsed = Number(trimmed);
-          return isNaN(parsed) ? NaN : parsed;
-        }
-        return input;
-      },
-      z.union([
-        z
-          .number()
-          .min(0, {
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.barnetilsynsutgift.minimum,
-            ),
-          })
-          .max(10000, {
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.barnetilsynsutgift.maksimum,
-            ),
-          }),
-        z.undefined(),
-      ]),
-    )
-    .refine((verdi) => verdi !== undefined, {
+    .string()
+    .refine((verdi) => verdi.trim() !== "", {
       message: oversett(
         språk,
         tekster.feilmeldinger.barnetilsynsutgift.påkrevd,
+      ),
+    })
+    .transform((verdi) => Number(verdi.trim()))
+    .refine((verdi) => verdi >= 0, {
+      message: oversett(
+        språk,
+        tekster.feilmeldinger.barnetilsynsutgift.minimum,
+      ),
+    })
+    .refine((verdi) => verdi <= 10000, {
+      message: oversett(
+        språk,
+        tekster.feilmeldinger.barnetilsynsutgift.maksimum,
       ),
     });
 
