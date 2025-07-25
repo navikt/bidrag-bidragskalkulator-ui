@@ -57,7 +57,7 @@ export default function OppsummeringOgAvtale() {
       <Button
         variant="primary"
         className="w-full sm:w-60"
-        onClick={() => form.submit()}
+        type="submit"
         disabled={harUfullstendigeSteg}
         loading={isSubmitting}
       >
