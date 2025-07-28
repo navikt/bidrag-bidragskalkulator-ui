@@ -44,7 +44,13 @@ export const hentPrivatAvtaleFraApi = async ({
       `Feil ved generering av privat avtale: ${status} ${response.statusText}`,
     );
 
-    return Promise.reject(feilmelding);
+    return new Response(feilmelding, {
+      status,
+      statusText: response.statusText,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    });
   }
 
   return response;

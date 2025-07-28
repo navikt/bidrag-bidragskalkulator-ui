@@ -33,14 +33,21 @@ const PrivatAvtaleFormContext = createContext<
 const hentPrivatAvtalePdf = async (
   basename: string,
   skjemadata: PrivatAvtaleSkjemaValidert,
-): Promise<Response> => {
-  return fetch(`${basename}api/privat-avtale`, {
+): Promise<Blob> => {
+  const respons = await fetch(`${basename}api/privat-avtale`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(skjemadata),
   });
+
+  if (!respons.ok) {
+    const feilmelding = await respons.text();
+    throw new Error(feilmelding);
+  }
+
+  return await respons.blob();
 };
 
 const lagPrivatAvtalePdfNavn = (bidragstype: Bidragstype) => {
@@ -91,45 +98,41 @@ export function PrivatAvtaleFormProvider({
         }))
         .filter(({ barn }) => barn.length > 0);
 
-      try {
-        const resultater = await Promise.all(
-          barnPerBidragstype.map(async ({ type, barn }) => {
-            try {
-              const respons = await hentPrivatAvtalePdf(basename, {
-                ...skjemaData,
-                barn,
-              });
-              const pdf = await respons.blob();
-              return { type, pdf };
-            } catch (feil: unknown) {
-              return {
-                type,
-                pdf: null,
-                feilmelding:
-                  typeof feil === "string" ? feil : t(tekster.feilmelding),
-              };
-            }
-          }),
-        );
+      const resultater = await Promise.all(
+        barnPerBidragstype.map(async ({ type, barn }) => {
+          try {
+            const pdf = await hentPrivatAvtalePdf(basename, {
+              ...skjemaData,
+              barn,
+            });
 
-        const feilet = resultater.some(({ pdf }) => pdf === null);
-        if (feilet) {
-          const førsteFeil = resultater.find(
-            (resultat) => resultat.pdf === null,
-          )?.feilmelding;
-          settFeilVedHentingAvAvtale(førsteFeil);
-          throw new Error(førsteFeil);
-        }
-
-        resultater.forEach(({ type, pdf }) => {
-          if (pdf) {
-            lastNedPdf(pdf, lagPrivatAvtalePdfNavn(type));
+            return { type, pdf };
+          } catch (feil: unknown) {
+            return {
+              type,
+              pdf: null,
+              feilmelding:
+                feil instanceof Error ? feil.message : t(tekster.feilmelding),
+            };
           }
-        });
-        setAntallNedlastedeFil(resultater.length);
-      } catch (e) {
-        console.error("Feil ved generering av privat avtale", e);
+        }),
+      );
+
+      const feilet = resultater.some(({ pdf }) => pdf === null);
+      if (feilet) {
+        const førsteFeil = resultater.find(
+          (resultat) => resultat.pdf === null,
+        )?.feilmelding;
+        settFeilVedHentingAvAvtale(førsteFeil);
+        throw new Error(førsteFeil);
       }
+
+      resultater.forEach(({ type, pdf }) => {
+        if (pdf) {
+          lastNedPdf(pdf, lagPrivatAvtalePdfNavn(type));
+        }
+      });
+      setAntallNedlastedeFil(resultater.length);
     },
   });
 
