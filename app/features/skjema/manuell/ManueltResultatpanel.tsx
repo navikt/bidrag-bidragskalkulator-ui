@@ -65,6 +65,22 @@ export const ManueltResultatpanel = ({
           ? "PLIKTIG"
           : "INGEN";
 
+  const { barn, medforelder } = form.value();
+
+  const navigasjonState = {
+    medforelder: {
+      navn: medforelder.navn,
+    },
+    barn: data.resultater.map((resultat) => ({
+      alder: resultat.alder,
+      navn:
+        barn.find((b) => Number(b.alder) === Number(resultat.alder))?.navn ??
+        "",
+      sum: resultat.sum,
+      bidragstype: resultat.bidragstype,
+    })),
+  };
+
   return (
     <Alert variant="info">
       <Heading
@@ -86,7 +102,7 @@ export const ManueltResultatpanel = ({
       <Button
         as={RouterLink}
         to="/privat-avtale"
-        state={data}
+        state={navigasjonState}
         variant="primary"
         className="mb-6"
         onClick={() =>
