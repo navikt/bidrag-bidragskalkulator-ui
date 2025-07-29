@@ -42,10 +42,10 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 export default function PrivatAvtaleStegLayout() {
   const { personinformasjon } = useLoaderData<typeof loader>();
   const { state: navigationState, pathname } = useLocation();
+
   const { t, språk } = useOversettelse();
   const bidragsutergningParsed =
     ManuellBidragsutregningSchema.safeParse(navigationState);
-
   const bidragsutregning = bidragsutergningParsed.success
     ? bidragsutergningParsed.data
     : undefined;
