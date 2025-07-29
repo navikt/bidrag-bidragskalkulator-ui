@@ -60,6 +60,18 @@ export const BidragsutregningBarnSchema = z.object({
   bidragstype: BidragstypeSchema,
 });
 
+export const UtregningNavigasjonsdataSchema = z.object({
+  medforelder: z.object({
+    navn: z.string(),
+  }),
+  barn: z.array(
+    z.object({
+      navn: z.string(),
+      ...BidragsutregningBarnSchema.shape,
+    }),
+  ),
+});
+
 export const ManuellBidragsutregningSchema = z.object({
   resultater: z.array(BidragsutregningBarnSchema),
 });
@@ -69,4 +81,7 @@ export type BidragsutregningBarn = z.infer<typeof BidragsutregningBarnSchema>;
 export type Bidragsutregning = z.infer<typeof BidragsutregningSchema>;
 export type ManuellBidragsutregning = z.infer<
   typeof ManuellBidragsutregningSchema
+>;
+export type UtregningNavigasjonsdata = z.infer<
+  typeof UtregningNavigasjonsdataSchema
 >;

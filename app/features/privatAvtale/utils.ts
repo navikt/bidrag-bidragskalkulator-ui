@@ -1,4 +1,4 @@
-import type { BidragsutregningBarn } from "../skjema/beregning/schema";
+import type { UtregningNavigasjonsdata } from "../skjema/beregning/schema";
 import type { ManuellPersoninformasjon } from "../skjema/personinformasjon/schema";
 import type { PrivatAvtaleSkjema } from "./skjemaSchema";
 
@@ -13,14 +13,14 @@ const tomtBarn: Barn = {
 
 export const hentPrivatAvtaleSkjemaStandardverdi = (
   personinformasjonDeg: ManuellPersoninformasjon,
-  forhåndsutfylteBarn: BidragsutregningBarn[] = [],
+  forhåndsutfylteInformasjon?: UtregningNavigasjonsdata,
 ): PrivatAvtaleSkjema => {
-  const barn: Barn[] = forhåndsutfylteBarn.map((barn) => ({
+  const barn: Barn[] = forhåndsutfylteInformasjon?.barn.map((b) => ({
     ident: "",
-    fulltNavn: "",
-    sum: barn.sum.toString(),
-    bidragstype: barn.bidragstype,
-  }));
+    fulltNavn: b.navn,
+    sum: b.sum.toString(),
+    bidragstype: b.bidragstype,
+  })) ?? [tomtBarn];
 
   return {
     deg: {
@@ -29,9 +29,9 @@ export const hentPrivatAvtaleSkjemaStandardverdi = (
     },
     medforelder: {
       ident: "",
-      fulltNavn: "",
+      fulltNavn: forhåndsutfylteInformasjon?.medforelder.navn ?? "",
     },
-    barn: barn.length > 0 ? barn : [tomtBarn],
+    barn: barn,
     fraDato: "",
     nyAvtale: "",
     medInnkreving: "",
