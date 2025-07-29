@@ -1,5 +1,13 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Button, Heading, Link, Stepper } from "@navikt/ds-react";
+import {
+  Alert,
+  BodyLong,
+  Button,
+  Heading,
+  Link,
+  Stepper,
+} from "@navikt/ds-react";
+import { useEffect, useState } from "react";
 import {
   Outlet,
   Link as ReactRouterLink,
@@ -12,7 +20,7 @@ import { medToken } from "~/features/autentisering/api.server";
 import { hentSideMetadata } from "~/features/privatAvtale/pageMeta";
 import { PrivatAvtaleFormProvider } from "~/features/privatAvtale/PrivatAvtaleFormProvider";
 import { stegdata } from "~/features/privatAvtale/privatAvtaleSteg";
-import { ManuellBidragsutregningSchema } from "~/features/skjema/beregning/schema";
+import { UtregningNavigasjonsdataSchema } from "~/features/skjema/beregning/schema";
 import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
 import type { ManuellPersoninformasjon } from "~/features/skjema/personinformasjon/schema";
 import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
@@ -42,13 +50,18 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 export default function PrivatAvtaleStegLayout() {
   const { personinformasjon } = useLoaderData<typeof loader>();
   const { state: navigationState, pathname } = useLocation();
-  const { t, språk } = useOversettelse();
   const bidragsutergningParsed =
-    ManuellBidragsutregningSchema.safeParse(navigationState);
-
+    UtregningNavigasjonsdataSchema.safeParse(navigationState);
   const bidragsutregning = bidragsutergningParsed.success
     ? bidragsutergningParsed.data
     : undefined;
+
+  const { t, språk } = useOversettelse();
+  const [erHydrert, settErHydrert] = useState(false);
+
+  useEffect(() => {
+    settErHydrert(true);
+  }, []);
 
   const privatAvtaleSteg = stegdata(språk);
   const aktivSteg = privatAvtaleSteg.find((steg) =>
@@ -79,6 +92,11 @@ export default function PrivatAvtaleStegLayout() {
         ))}
       </Stepper>
       <section className="flex-1 space-y-6" aria-labelledby="skjemaoverskrift">
+        {!!bidragsutregning && erHydrert && (
+          <Alert variant={"info"}>
+            <BodyLong>{t(tekster.forhåndsutfyltAvtale.info)}</BodyLong>
+          </Alert>
+        )}
         <Heading id="skjemaoverskrift" level="2" size="large">
           {aktivSteg?.overskrift}
         </Heading>
@@ -119,6 +137,13 @@ export default function PrivatAvtaleStegLayout() {
 }
 
 const tekster = definerTekster({
+  forhåndsutfyltAvtale: {
+    info: {
+      nb: "Vi har forhåndsufylt deler av den private avtalen med resultatene fra kalkulatoren. Endelig beløp for barnebidrag er det dere som velger. Om du oppdaterer siden må du fylle ut skjemaet på nytt.",
+      en: "We have pre-filled parts of the private agreement with the results from the calculator. The final amount for child support is up to you to decide. If you refresh the page, you will have to fill out the form again.",
+      nn: "Vi har forhåndsufylt delar av den private avtalen med resultatane frå kalkulatoren. Det endelege beløpet for fostringstilskot er det de som velger. Om du oppdaterer sida må du fylle ut skjemaet på nytt.",
+    },
+  },
   knapp: {
     nesteSteg: {
       nb: "Neste steg",

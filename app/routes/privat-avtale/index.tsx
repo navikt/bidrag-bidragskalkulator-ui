@@ -1,5 +1,9 @@
 import { Button, Link } from "@navikt/ds-react";
-import { Link as ReactRouterLink, type MetaArgs } from "react-router";
+import {
+  Link as ReactRouterLink,
+  useLocation,
+  type MetaArgs,
+} from "react-router";
 import { IntroPanel } from "~/features/privatAvtale/IntroPanel";
 import { stegdata } from "~/features/privatAvtale/privatAvtaleSteg";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
@@ -23,6 +27,7 @@ export function meta({ matches }: MetaArgs) {
 export default function Veiledning() {
   const { t, språk } = useOversettelse();
   const førsteSteg = stegdata(språk).find((steg) => steg.step === 1)?.path;
+  const { state: navigationState } = useLocation();
 
   return (
     <>
@@ -31,6 +36,7 @@ export default function Veiledning() {
         <Link
           as={ReactRouterLink}
           to={førsteSteg}
+          state={navigationState}
           className="flex w-full sm:w-50 self-center"
         >
           <Button variant="primary" className="w-full">

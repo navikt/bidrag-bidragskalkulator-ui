@@ -11,7 +11,7 @@ import { hentPrivatAvtaleSkjemaStandardverdi } from "~/features/privatAvtale/uti
 import {
   BidragstypeSchema,
   type Bidragstype,
-  type ManuellBidragsutregning,
+  type UtregningNavigasjonsdata,
 } from "~/features/skjema/beregning/schema";
 import { tilÅrMånedDag } from "~/utils/dato";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -69,7 +69,7 @@ export function PrivatAvtaleFormProvider({
 }: {
   children: ReactNode;
   personinformasjon: ManuellPersoninformasjon;
-  bidragsutregning?: ManuellBidragsutregning;
+  bidragsutregning?: UtregningNavigasjonsdata;
 }) {
   const { t, språk } = useOversettelse();
   const basename = useHref("/");
@@ -86,7 +86,7 @@ export function PrivatAvtaleFormProvider({
     submitSource: "state",
     defaultValues: hentPrivatAvtaleSkjemaStandardverdi(
       personinformasjon,
-      bidragsutregning?.resultater,
+      bidragsutregning,
     ),
     handleSubmit: async (skjemaData) => {
       settFeilVedHentingAvAvtale(undefined);
