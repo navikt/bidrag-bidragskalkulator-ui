@@ -6,7 +6,11 @@ import {
   oversett,
   Språk,
 } from "~/utils/i18n";
-import type { LagPrivatAvtaleRequest } from "./apiSchema";
+import {
+  PrivatAvtalePersoninformasjonSchema,
+  type HentPersoninformasjonForPrivatAvtaleRespons,
+  type LagPrivatAvtaleRequest,
+} from "./apiSchema";
 import { type PrivatAvtaleSkjemaValidert } from "./skjemaSchema";
 
 export const hentPrivatAvtaleFraApi = async ({
@@ -114,6 +118,34 @@ export const hentPrivatAvtaledokument = async (
     språk,
     token,
   });
+};
+
+export const hentPersoninformasjonForPrivatAvtale = async (
+  token: string,
+): Promise<HentPersoninformasjonForPrivatAvtaleRespons> => {
+  const response = await fetch(
+    `${env.SERVER_URL}/api/v1/privat-avtale/informasjon`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw data;
+  }
+
+  const parsed = PrivatAvtalePersoninformasjonSchema.safeParse(data);
+
+  if (!parsed.success) {
+    throw parsed.error;
+  }
+
+  return parsed.data;
 };
 
 const tekster = definerTekster({

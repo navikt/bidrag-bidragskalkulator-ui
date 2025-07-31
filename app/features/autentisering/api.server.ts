@@ -41,12 +41,12 @@ export const medToken = async <T, Args extends unknown[]>(
   request: Request,
   fn: (token: string, request: Request, ...args: Args) => Promise<T>,
   ...args: Args
-): Promise<Response | T> => {
+): Promise<T> => {
   const tokenOrResponse = await hentAutentiseringstoken({ request });
 
-  if (typeof tokenOrResponse === "string") {
-    return fn(tokenOrResponse, request, ...args);
+  if (typeof tokenOrResponse !== "string") {
+    throw tokenOrResponse;
   }
 
-  return tokenOrResponse;
+  return fn(tokenOrResponse, request, ...args);
 };
