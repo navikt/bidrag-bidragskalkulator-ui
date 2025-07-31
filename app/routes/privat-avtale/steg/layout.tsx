@@ -17,12 +17,12 @@ import {
   type MetaFunction,
 } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
+import { hentPersoninformasjonForPrivatAvtale } from "~/features/privatAvtale/api.server";
+import type { HentPersoninformasjonForPrivatAvtaleRespons } from "~/features/privatAvtale/apiSchema";
 import { hentSideMetadata } from "~/features/privatAvtale/pageMeta";
 import { PrivatAvtaleFormProvider } from "~/features/privatAvtale/PrivatAvtaleFormProvider";
 import { stegdata } from "~/features/privatAvtale/privatAvtaleSteg";
 import { UtregningNavigasjonsdataSchema } from "~/features/skjema/beregning/schema";
-import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
-import type { ManuellPersoninformasjon } from "~/features/skjema/personinformasjon/schema";
 import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -37,12 +37,20 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
-export async function loader({ request, context }: LoaderFunctionArgs) {
+export async function loader({
+  request,
+  context,
+}: LoaderFunctionArgs): Promise<{
+  personinformasjon: HentPersoninformasjonForPrivatAvtaleRespons;
+  metadata: Awaited<ReturnType<typeof hentSideMetadata>>;
+}> {
   const språk = context.språk ?? Språk.NorwegianBokmål;
   const url = new URL(request.url);
 
   return {
-    personinformasjon: await medToken(request, hentManuellPersoninformasjon),
+    personinformasjon: await medToken(request, (token) =>
+      hentPersoninformasjonForPrivatAvtale(token),
+    ),
     metadata: hentSideMetadata(url.pathname, språk),
   };
 }
@@ -100,12 +108,14 @@ export default function PrivatAvtaleStegLayout() {
         <Heading id="skjemaoverskrift" level="2" size="large">
           {aktivSteg?.overskrift}
         </Heading>
-        <PrivatAvtaleFormProvider
-          personinformasjon={personinformasjon as ManuellPersoninformasjon}
-          bidragsutregning={bidragsutregning}
-        >
-          <Outlet />
-        </PrivatAvtaleFormProvider>
+        {personinformasjon && (
+          <PrivatAvtaleFormProvider
+            personinformasjon={personinformasjon}
+            bidragsutregning={bidragsutregning}
+          >
+            <Outlet />
+          </PrivatAvtaleFormProvider>
+        )}
 
         <div className="flex gap-5">
           <Link as={ReactRouterLink} to={forrigeSteg}>

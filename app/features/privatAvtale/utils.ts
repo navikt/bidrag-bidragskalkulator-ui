@@ -1,5 +1,5 @@
 import type { UtregningNavigasjonsdata } from "../skjema/beregning/schema";
-import type { ManuellPersoninformasjon } from "../skjema/personinformasjon/schema";
+import type { HentPersoninformasjonForPrivatAvtaleRespons } from "./apiSchema";
 import type { PrivatAvtaleSkjema } from "./skjemaSchema";
 
 type Barn = PrivatAvtaleSkjema["barn"][number];
@@ -12,7 +12,7 @@ const tomtBarn: Barn = {
 };
 
 export const hentPrivatAvtaleSkjemaStandardverdi = (
-  personinformasjonDeg: ManuellPersoninformasjon,
+  personinformasjonDeg: HentPersoninformasjonForPrivatAvtaleRespons,
   forhåndsutfylteInformasjon?: UtregningNavigasjonsdata,
 ): PrivatAvtaleSkjema => {
   const barn: Barn[] = forhåndsutfylteInformasjon?.barn.map((b) => ({
@@ -24,8 +24,8 @@ export const hentPrivatAvtaleSkjemaStandardverdi = (
 
   return {
     deg: {
-      ident: personinformasjonDeg.person.ident,
-      fulltNavn: personinformasjonDeg.person.fulltNavn,
+      ident: personinformasjonDeg.ident,
+      fulltNavn: personinformasjonDeg.fulltNavn,
     },
     medforelder: {
       ident: "",

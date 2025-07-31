@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+export const PrivatAvtalePersoninformasjonSchema = z.object({
+  ident: z.string(),
+  fulltNavn: z.string(),
+});
+
 const Person = z.object({
   fodselsnummer: z.string(),
   fulltNavn: z.string(),
@@ -22,4 +27,8 @@ export const LagPrivatAvtaleRequestSchema = z.object({
 
 export type LagPrivatAvtaleRequest = z.infer<
   typeof LagPrivatAvtaleRequestSchema
+>;
+
+export type HentPersoninformasjonForPrivatAvtaleRespons = z.infer<
+  typeof PrivatAvtalePersoninformasjonSchema
 >;
