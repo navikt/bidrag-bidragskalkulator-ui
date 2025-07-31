@@ -1,6 +1,12 @@
 import { FormProvider, useForm } from "@rvf/react";
 import type { ReactNode } from "react";
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useHref } from "react-router";
 import {
   lagPrivatAvtaleSkjemaValidertSchema,
@@ -16,7 +22,13 @@ import {
 import { tilÅrMånedDag } from "~/utils/dato";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { lastNedPdf } from "~/utils/pdf";
-import type { ManuellPersoninformasjon } from "../skjema/personinformasjon/schema";
+import type { HentPersoninformasjonForPrivatAvtaleRespons } from "./apiSchema";
+
+type Resultat = {
+  type: Bidragstype;
+  pdf: Blob | null;
+  feilmelding?: string;
+};
 
 type PrivatAvtaleFormContextType = {
   form: ReturnType<
@@ -68,7 +80,7 @@ export function PrivatAvtaleFormProvider({
   bidragsutregning,
 }: {
   children: ReactNode;
-  personinformasjon: ManuellPersoninformasjon;
+  personinformasjon: HentPersoninformasjonForPrivatAvtaleRespons;
   bidragsutregning?: UtregningNavigasjonsdata;
 }) {
   const { t, språk } = useOversettelse();
@@ -80,8 +92,15 @@ export function PrivatAvtaleFormProvider({
   const [antallNedlastedeFiler, setAntallNedlastedeFil] = useState<
     number | undefined
   >();
+  const [innsendteSkjema, setInnsendteSkjema] = useState<
+    PrivatAvtaleSkjemaValidert | undefined
+  >();
 
-  const form = useForm<PrivatAvtaleSkjemaType, PrivatAvtaleSkjemaValidert>({
+  const form = useForm<
+    PrivatAvtaleSkjemaType,
+    PrivatAvtaleSkjemaValidert,
+    Resultat[]
+  >({
     schema: lagPrivatAvtaleSkjemaValidertSchema(språk),
     submitSource: "state",
     defaultValues: hentPrivatAvtaleSkjemaStandardverdi(
@@ -90,6 +109,7 @@ export function PrivatAvtaleFormProvider({
     ),
     handleSubmit: async (skjemaData) => {
       settFeilVedHentingAvAvtale(undefined);
+      setInnsendteSkjema(skjemaData);
 
       const barnPerBidragstype = BidragstypeSchema.options
         .map((type) => ({
@@ -123,10 +143,12 @@ export function PrivatAvtaleFormProvider({
         const førsteFeil = resultater.find(
           (resultat) => resultat.pdf === null,
         )?.feilmelding;
-        settFeilVedHentingAvAvtale(førsteFeil);
         throw new Error(førsteFeil);
       }
 
+      return resultater;
+    },
+    onSubmitSuccess: (resultater) => {
       resultater.forEach(({ type, pdf }) => {
         if (pdf) {
           lastNedPdf(pdf, lagPrivatAvtalePdfNavn(type));
@@ -134,11 +156,37 @@ export function PrivatAvtaleFormProvider({
       });
       setAntallNedlastedeFil(resultater.length);
     },
+    onSubmitFailure: (error) => {
+      const message =
+        error instanceof Error ? error.message : t(tekster.feilmelding);
+      settFeilVedHentingAvAvtale(message);
+      throw new Error(message);
+    },
   });
+
+  const erEndretEtterInnsending = useCallback(() => {
+    if (!innsendteSkjema) return false;
+    return JSON.stringify(innsendteSkjema) !== JSON.stringify(form.value());
+  }, [innsendteSkjema, form]);
+
+  useEffect(() => {
+    const unsubscribe = form.subscribe.value(() => {
+      if (erEndretEtterInnsending()) {
+        settFeilVedHentingAvAvtale(undefined);
+        setAntallNedlastedeFil(undefined);
+      }
+    });
+
+    return unsubscribe;
+  }, [erEndretEtterInnsending, form]);
 
   return (
     <PrivatAvtaleFormContext.Provider
-      value={{ form, feilVedHentingAvAvtale, antallNedlastedeFiler }}
+      value={{
+        form,
+        feilVedHentingAvAvtale,
+        antallNedlastedeFiler,
+      }}
     >
       <FormProvider scope={form.scope()}>
         <form {...form.getFormProps()} className="flex flex-col gap-4">
