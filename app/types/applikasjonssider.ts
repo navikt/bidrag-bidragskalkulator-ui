@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-export const ApplikasjonssiderSchema = z.enum([
+export const ApplikasjonssideSchema = z.enum([
   "kalkulator",
   "privat-avtale",
   "oversikt",
 ]);
 
-export type Applikasjonssider = z.infer<typeof ApplikasjonssiderSchema>;
+export type Applikasjonsside = z.infer<typeof ApplikasjonssideSchema>;

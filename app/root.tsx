@@ -21,8 +21,8 @@ import { useDekoratørSpråk } from "./features/dektoratøren/useDektoratørSpr�
 import { useInjectDecoratorScript } from "./features/dektoratøren/useInjectDecoratorScript";
 import { InternalServerError } from "./features/feilhåndtering/500";
 import { lagHeaders } from "./features/headers/headers.server";
-import { ApplikasjonssiderSchema } from "./types/applikasjonssider";
 import { Analytics } from "./utils/analytics";
+import { fåApplikasjonsside } from "./utils/applikasjonssider";
 import {
   definerTekster,
   hentSpråkFraCookie,
@@ -30,25 +30,13 @@ import {
   OversettelseProvider,
 } from "./utils/i18n";
 
-const BASENAME = "/barnebidrag/tjenester/";
-const SLUTTER_MED_SKRÅSTREK = /\/+$/;
-
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
-  const sisteDelAvUrl = url.pathname
-    .split(BASENAME)[1]
-    ?.replace(SLUTTER_MED_SKRÅSTREK, "");
-  const applikasjonssideParsed =
-    ApplikasjonssiderSchema.safeParse(sisteDelAvUrl);
 
   const språk = hentSpråkFraCookie(request.headers.get("Cookie"));
+  const applikasjonsside = fåApplikasjonsside(url.pathname);
   const [dekoratørHtml, headers] = await Promise.all([
-    lagDekoratørHtmlFragmenter(
-      språk,
-      applikasjonssideParsed.success
-        ? applikasjonssideParsed.data
-        : "kalkulator", // TODO Håndtere dette bedre
-    ),
+    lagDekoratørHtmlFragmenter(språk, applikasjonsside),
     lagHeaders(språk),
   ]);
 
@@ -57,6 +45,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       dekoratørHtml,
       språk,
       umamiWebsiteId: env.UMAMI_WEBSITE_ID,
+      applikasjonsside,
     },
     {
       headers,
@@ -69,10 +58,10 @@ export const headers = ({ loaderHeaders }: HeadersArgs) => {
 };
 
 export default function App() {
-  const { dekoratørHtml, språk, umamiWebsiteId } =
+  const { dekoratørHtml, språk, umamiWebsiteId, applikasjonsside } =
     useLoaderData<typeof loader>();
 
-  const interntSpråk = useDekoratørSpråk(språk);
+  const interntSpråk = useDekoratørSpråk(språk, applikasjonsside);
   useInjectDecoratorScript(dekoratørHtml.DECORATOR_SCRIPTS);
 
   return (
