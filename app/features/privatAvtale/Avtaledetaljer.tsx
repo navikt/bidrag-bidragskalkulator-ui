@@ -3,6 +3,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { DatePicker, Radio, RadioGroup, useDatepicker } from "@navikt/ds-react";
 import { tilÅrMånedDag } from "~/utils/dato";
 import { usePrivatAvtaleForm } from "./PrivatAvtaleFormProvider";
+import { sporPrivatAvtaleSpørsmålBesvart } from "./utils";
 
 const NY_AVTALE_ALTERNATIVER = ["true", "false"] as const;
 const INNKREVING_ALTERNATIVER = ["false", "true"] as const;
@@ -33,6 +34,7 @@ export const Avtaledetaljer = () => {
           label={t(tekster.gjelderFra.label)}
           description={t(tekster.gjelderFra.beskrivelse)}
           error={error("fraDato")}
+          onBlur={sporPrivatAvtaleSpørsmålBesvart(t(tekster.gjelderFra.label))}
         />
       </DatePicker>
 
@@ -43,7 +45,13 @@ export const Avtaledetaljer = () => {
       >
         {NY_AVTALE_ALTERNATIVER.map((alternativ) => {
           return (
-            <Radio value={alternativ} key={alternativ}>
+            <Radio
+              value={alternativ}
+              key={alternativ}
+              onChange={sporPrivatAvtaleSpørsmålBesvart(
+                t(tekster.nyAvtale.label),
+              )}
+            >
               {t(tekster.nyAvtale[alternativ])}
             </Radio>
           );
@@ -57,7 +65,13 @@ export const Avtaledetaljer = () => {
       >
         {INNKREVING_ALTERNATIVER.map((alternativ) => {
           return (
-            <Radio value={alternativ} key={alternativ}>
+            <Radio
+              value={alternativ}
+              key={alternativ}
+              onChange={sporPrivatAvtaleSpørsmålBesvart(
+                t(tekster.medInnkreving.label),
+              )}
+            >
               {t(tekster.medInnkreving[alternativ])}
             </Radio>
           );

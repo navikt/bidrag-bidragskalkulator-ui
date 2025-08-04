@@ -2,6 +2,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 import { TextField } from "@navikt/ds-react";
 import { usePrivatAvtaleForm } from "./PrivatAvtaleFormProvider";
+import { sporPrivatAvtaleSpørsmålBesvart } from "./utils";
 
 type Props = {
   part: "deg" | "medforelder";
@@ -16,16 +17,22 @@ export const Avtalepart = ({ part }: Props) => {
       <legend className="text-xl mb-5">{t(tekster[part].tittel)}</legend>
 
       <TextField
-        {...form.field(`${part}.fulltNavn`).getInputProps()}
-        label={t(tekster[part].fulltNavn.label)}
+        {...form.field(`${part}.fulltNavn`).getInputProps({
+          label: t(tekster[part].fulltNavn.label),
+          onBlur: sporPrivatAvtaleSpørsmålBesvart(
+            t(tekster[part].fulltNavn.label),
+          ),
+        })}
         error={form.field(`${part}.fulltNavn`).error()}
         autoComplete="off"
         htmlSize={30}
       />
 
       <TextField
-        {...form.field(`${part}.ident`).getInputProps()}
-        label={t(tekster[part].ident.label)}
+        {...form.field(`${part}.ident`).getInputProps({
+          label: t(tekster[part].ident.label),
+          onBlur: sporPrivatAvtaleSpørsmålBesvart(t(tekster[part].ident.label)),
+        })}
         error={form.field(`${part}.ident`).error()}
         htmlSize={13}
         inputMode="numeric"
@@ -49,7 +56,6 @@ const tekster = definerTekster({
         en: "Full name",
       },
     },
-
     ident: {
       label: {
         nb: "Fødselsnummer eller D-nummer (11 siffer)",
