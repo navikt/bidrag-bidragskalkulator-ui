@@ -3,13 +3,15 @@ import { Link as ReactRouterLink, useRouteLoaderData } from "react-router";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 import { RouteConfig } from "~/config/routeConfig";
-import type { loader } from "~/routes/oversikt";
+import type { loader } from "~/routes/min-side/oversikt";
 import { datoTilTekst } from "~/utils/dato";
 
 export const MineDokumenter: React.FC = () => {
   const { t } = useOversettelse();
 
-  const loaderData = useRouteLoaderData<typeof loader>("routes/oversikt");
+  const loaderData = useRouteLoaderData<typeof loader>(
+    "routes/min-side/oversikt",
+  );
 
   if (!loaderData) {
     throw new Error("Kunne ikke hente data for MineDokumenter");

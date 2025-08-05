@@ -1,5 +1,5 @@
 import { handle as kalkulatorHandle } from "~/routes/kalkulator";
-import { handle as oversiktHandle } from "~/routes/oversikt";
+import { handle as oversiktHandle } from "~/routes/min-side/oversikt";
 import { handle as privatAvtaleHandle } from "~/routes/privat-avtale/layout";
 import type { Applikasjonsside } from "~/types/applikasjonssider";
 import { oversett, Språk } from "~/utils/i18n";
