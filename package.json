@@ -56,7 +56,7 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.7",
     "@typescript-eslint/eslint-plugin": "^8.36.0",
-    "@typescript-eslint/parser": "^8.36.0",
+    "@typescript-eslint/parser": "^8.39.0",
     "arg": "^5.0.2",
     "axe-core": "^4.10.3",
     "eslint": "^9.32.0",
