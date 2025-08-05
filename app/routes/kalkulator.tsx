@@ -154,6 +154,32 @@ const tekster = definerTekster({
       nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut hvor stort eit fostringstilskot er.",
     },
   },
+  brødsmuler: {
+    steg1: {
+      label: {
+        nb: "Barnebidrag",
+        nn: "Fostringstilskot",
+        en: "Child support",
+      },
+      url: {
+        nb: "https://www.nav.no/barnebidrag",
+        nn: "https://www.nav.no/barnebidrag",
+        en: "https://www.nav.no/barnebidrag/en",
+      },
+    },
+    steg2: {
+      label: {
+        nb: "Kalkulator",
+        nn: "Kalkulator",
+        en: "Calculator",
+      },
+      url: {
+        nb: "https://www.nav.no/barnebidrag/tjenester/kalkulator",
+        nn: "https://www.nav.no/barnebidrag/tjenester/kalkulator",
+        en: "https://www.nav.no/barnebidrag/tjenester/kalkulator",
+      },
+    },
+  },
   overskrift: {
     nb: <>Barnebidrags&shy;kalkulator</>,
     en: "Child support calculator",
@@ -167,3 +193,7 @@ const tekster = definerTekster({
     },
   },
 });
+
+export const handle = {
+  brødsmuler: [tekster.brødsmuler.steg1, tekster.brødsmuler.steg2],
+};
