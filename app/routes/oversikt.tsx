@@ -62,9 +62,39 @@ const tekster = definerTekster({
       nn: "Denne sida viser dokument knytt til fostringstilskot",
     },
   },
+  brødsmuler: {
+    steg1: {
+      label: {
+        nb: "Min side",
+        nn: "Mi side",
+        en: "My page",
+      },
+      url: {
+        nb: "https://www.nav.no/minside",
+        nn: "https://www.nav.no/minside/nn",
+        en: "https://www.nav.no/minside/en",
+      },
+    },
+    steg2: {
+      label: {
+        nb: "Barnebidrag",
+        nn: "Fostringstilskot",
+        en: "Child support",
+      },
+      url: {
+        nb: "https://www.nav.no/barnebidrag/tjenester/oversikt",
+        nn: "https://www.nav.no/barnebidrag/tjenester/oversikt",
+        en: "https://www.nav.no/barnebidrag/tjenester/oversikt",
+      },
+    },
+  },
   overskrift: {
     nb: "Barnebidrag - oversikt",
     en: "Child support - overview",
     nn: "Fostringstilskot - oversikt",
   },
 });
+
+export const handle = {
+  brødsmuler: [tekster.brødsmuler.steg1, tekster.brødsmuler.steg2],
+};

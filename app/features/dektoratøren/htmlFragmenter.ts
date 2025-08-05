@@ -1,12 +1,12 @@
 import { fetchDecoratorHtml } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { env } from "~/config/env.server";
-import type { Applikasjonssider } from "~/types/applikasjonssider";
-import { oversett, Språk } from "~/utils/i18n";
-import { breadcrumbTekster } from "./breadcrumbTekster";
+import type { Applikasjonsside } from "~/types/applikasjonssider";
+import { Språk } from "~/utils/i18n";
+import { lagBrødsmulesti } from "./brødsmulesti";
 
 export function lagDekoratørHtmlFragmenter(
   språk: Språk,
-  side: Applikasjonssider,
+  side: Applikasjonsside,
 ) {
   return fetchDecoratorHtml({
     env: env.ENVIRONMENT === "local" ? "dev" : env.ENVIRONMENT,
@@ -17,16 +17,7 @@ export function lagDekoratørHtmlFragmenter(
         locale: språk,
         handleInApp: true,
       })),
-      breadcrumbs: [
-        {
-          title: oversett(språk, breadcrumbTekster.barnebidrag.label),
-          url: oversett(språk, breadcrumbTekster.barnebidrag.url),
-        },
-        {
-          title: oversett(språk, breadcrumbTekster[side].label),
-          url: `${env.INGRESS}/${side}`,
-        },
-      ],
+      breadcrumbs: lagBrødsmulesti(språk, side),
     },
   });
 }
