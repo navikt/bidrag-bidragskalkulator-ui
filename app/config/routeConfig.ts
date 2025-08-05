@@ -24,7 +24,8 @@ export const RouteConfig = {
         }: {
           journalpostId: string;
           dokumentId: string;
-        }) => `/api/hent-dokument/${journalpostId}/${dokumentId}`,
+        }) =>
+          `/barnebidrag/tjenester/api/hent-dokument/${journalpostId}/${dokumentId}`,
       },
     },
   },
