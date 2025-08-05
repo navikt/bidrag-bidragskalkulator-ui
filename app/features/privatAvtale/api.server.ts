@@ -1,5 +1,5 @@
 import { env } from "~/config/env.server";
-import { fåSummertBidrag } from "~/utils/bidrag";
+import { summerBidrag } from "~/utils/bidrag";
 import {
   definerTekster,
   hentSpråkFraCookie,
@@ -77,7 +77,7 @@ export const hentPrivatAvtaledokument = async (
     return Promise.reject(oversett(språk, tekster.feil.mottakerOgPliktig));
   }
 
-  const { bidragstype } = fåSummertBidrag(skjemaData.barn);
+  const { bidragstype } = summerBidrag(skjemaData.barn);
   const erBidragsmottaker = bidragstype === "MOTTAKER";
 
   const deg = {

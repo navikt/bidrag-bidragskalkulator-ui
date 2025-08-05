@@ -17,14 +17,14 @@ import { env } from "./config/env.server";
 import { lagDekoratørHtmlFragmenter } from "./features/dektoratøren/htmlFragmenter";
 import { InternalServerError } from "./features/feilhåndtering/500";
 import { lagHeaders } from "./features/headers/headers.server";
-import { fåApplikasjonsside } from "./utils/applikasjonssider";
+import { hentApplikasjonsside } from "./utils/applikasjonssider";
 import { hentSpråkFraCookie } from "./utils/i18n";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
 
   const språk = hentSpråkFraCookie(request.headers.get("Cookie"));
-  const applikasjonsside = fåApplikasjonsside(url.pathname);
+  const applikasjonsside = hentApplikasjonsside(url.pathname);
   const [dekoratørHtml, headers] = await Promise.all([
     lagDekoratørHtmlFragmenter(språk, applikasjonsside),
     lagHeaders(språk),

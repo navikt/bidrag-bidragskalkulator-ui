@@ -1,6 +1,6 @@
 import type { Bidragstype } from "~/features/skjema/beregning/schema";
 
-export const fåSummertBidrag = <
+export const summerBidrag = <
   Bidrag extends {
     sum: number;
     bidragstype: Bidragstype;

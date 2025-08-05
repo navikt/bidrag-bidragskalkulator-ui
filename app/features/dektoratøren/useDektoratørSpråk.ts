@@ -5,7 +5,7 @@ import {
 import { useState } from "react";
 import type { Applikasjonsside } from "~/types/applikasjonssider";
 import { Språk } from "~/utils/i18n";
-import { fåBrødsmulesti } from "./brødsmulesti";
+import { lagBrødsmulesti } from "./brødsmulesti";
 
 export function useDekoratørSpråk(
   eksterntSpråk: Språk,
@@ -16,7 +16,7 @@ export function useDekoratørSpråk(
     if (Object.values(Språk).includes(locale as Språk)) {
       const språk = locale as Språk;
       setInterntSpråk(språk);
-      setBreadcrumbs(fåBrødsmulesti(språk, side));
+      setBreadcrumbs(lagBrødsmulesti(språk, side));
     } else {
       setInterntSpråk(Språk.NorwegianBokmål);
     }

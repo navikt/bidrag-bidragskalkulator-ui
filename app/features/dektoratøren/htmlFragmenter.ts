@@ -2,7 +2,7 @@ import { fetchDecoratorHtml } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { env } from "~/config/env.server";
 import type { Applikasjonsside } from "~/types/applikasjonssider";
 import { Språk } from "~/utils/i18n";
-import { fåBrødsmulesti } from "./brødsmulesti";
+import { lagBrødsmulesti } from "./brødsmulesti";
 
 export function lagDekoratørHtmlFragmenter(
   språk: Språk,
@@ -17,7 +17,7 @@ export function lagDekoratørHtmlFragmenter(
         locale: språk,
         handleInApp: true,
       })),
-      breadcrumbs: fåBrødsmulesti(språk, side),
+      breadcrumbs: lagBrødsmulesti(språk, side),
     },
   });
 }

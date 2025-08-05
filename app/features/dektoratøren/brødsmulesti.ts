@@ -10,7 +10,7 @@ const brødsmuletekster = {
   oversikt: oversiktHandle.brødsmuler,
 } as const;
 
-export const fåBrødsmulesti = (språk: Språk, side: Applikasjonsside) => {
+export const lagBrødsmulesti = (språk: Språk, side: Applikasjonsside) => {
   const brødsmuler = brødsmuletekster[side];
   if (!brødsmuler) {
     return [];

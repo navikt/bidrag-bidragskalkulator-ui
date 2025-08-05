@@ -1,6 +1,6 @@
 import type { Applikasjonsside } from "~/types/applikasjonssider";
 
-export const fåApplikasjonsside = (pathname: string): Applikasjonsside => {
+export const hentApplikasjonsside = (pathname: string): Applikasjonsside => {
   if (pathname.includes("privat-avtale")) {
     return "privat-avtale";
   }
