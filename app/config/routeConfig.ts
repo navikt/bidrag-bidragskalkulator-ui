@@ -14,7 +14,7 @@ export const RouteConfig = {
       DETALJER: {
         route: "/oversikt/dokumenter/:journalpostId",
         link: ({ journalpostId }: { journalpostId: string }) =>
-          `/api/oversikt/dokumenter/${journalpostId}`,
+          `/oversikt/dokumenter/${journalpostId}`,
       },
       HENT_DOKUMENT: {
         route: "/api/hent-dokument/:journalpostId/:dokumentId",
