@@ -1,5 +1,6 @@
 import { BodyLong, GuidePanel, Link } from "@navikt/ds-react";
 import { Link as ReactRouterLink } from "react-router";
+import { RouteConfig } from "~/config/routeConfig";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export function IntroPanel() {
@@ -10,7 +11,7 @@ export function IntroPanel() {
       <BodyLong spacing>{t(tekster.innhold1)}</BodyLong>
       <BodyLong spacing>{t(tekster.innhold2)}</BodyLong>
 
-      <Link as={ReactRouterLink} to={"/kalkulator"}>
+      <Link as={ReactRouterLink} to={RouteConfig.KALKULATOR}>
         {t(tekster.lenkeTilKalkulator)}
       </Link>
     </GuidePanel>

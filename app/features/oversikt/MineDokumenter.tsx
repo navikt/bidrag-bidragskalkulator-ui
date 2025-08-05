@@ -2,6 +2,7 @@ import { BodyLong, Box, Heading, Link, VStack } from "@navikt/ds-react";
 import { Link as ReactRouterLink, useRouteLoaderData } from "react-router";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
+import { RouteConfig } from "~/config/routeConfig";
 import type { loader } from "~/routes/oversikt";
 import { datoTilTekst } from "~/utils/dato";
 
@@ -52,7 +53,9 @@ export const MineDokumenter: React.FC = () => {
             >
               <Link
                 as={ReactRouterLink}
-                to={`/oversikt/dokumenter/${journalpost.journalpostId}`}
+                to={RouteConfig.OVERSIKT.DOKUMENTER.DETALJER.link({
+                  journalpostId: journalpost.journalpostId,
+                })}
               >
                 {journalpost.tittel}
               </Link>

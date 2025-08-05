@@ -9,6 +9,7 @@ import {
   VStack,
 } from "@navikt/ds-react";
 import { Link as ReactRouterLink } from "react-router";
+import { RouteConfig } from "~/config/routeConfig";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export function NotFound() {
@@ -26,7 +27,7 @@ export function NotFound() {
             <List.Item>{t(tekster.forslag.gåTilForsiden)}</List.Item>
           </List>
         </div>
-        <Button as={ReactRouterLink} to={`/kalkulator`}>
+        <Button as={ReactRouterLink} to={RouteConfig.KALKULATOR}>
           {t(tekster.ctas.gåTilKalkulator)}
         </Button>
         <Link href="https://www.nav.no/person/kontakt-oss/tilbakemeldinger/feil-og-mangler">
