@@ -159,14 +159,12 @@ export function PrivatAvtaleFormProvider({
       sporHendelse({
         hendelsetype: "skjema fullført",
         skjemaId: "barnebidrag-privat-avtale-under-18",
-        skjemanavn: "Privat avtale under 18 år",
       });
     },
     onInvalidSubmit: () => {
       sporHendelse({
         hendelsetype: "skjema validering feilet",
         skjemaId: "barnebidrag-privat-avtale-under-18",
-        skjemanavn: "Privat avtale under 18 år",
         førsteFeil:
           document.activeElement instanceof HTMLInputElement
             ? document.activeElement.name
@@ -180,7 +178,6 @@ export function PrivatAvtaleFormProvider({
       sporHendelse({
         hendelsetype: "skjema innsending feilet",
         skjemaId: "barnebidrag-privat-avtale-under-18",
-        skjemanavn: "Privat avtale under 18 år",
         feil: undefined,
       });
       throw new Error(message);

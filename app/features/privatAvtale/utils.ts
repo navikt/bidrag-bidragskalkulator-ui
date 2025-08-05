@@ -51,7 +51,6 @@ export const sporPrivatAvtaleSpørsmålBesvart =
       sporHendelse({
         hendelsetype: "skjema spørsmål besvart",
         skjemaId: "barnebidrag-privat-avtale-under-18",
-        skjemanavn: "Privat avtale under 18 år",
         spørsmålId: event.target.name,
         spørsmål,
       });

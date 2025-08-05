@@ -26,7 +26,6 @@ export const ManuellBarnSkjema = () => {
     sporHendelse({
       hendelsetype: "barn lagt til",
       skjemaId: "barnebidragskalkulator-under-18",
-      skjemanavn: "Kalkulator barnebidrag under 18 år",
       antall: barnArray.length() + 1,
     });
 
@@ -41,7 +40,6 @@ export const ManuellBarnSkjema = () => {
     sporHendelse({
       hendelsetype: "barn fjernet",
       skjemaId: "barnebidragskalkulator-under-18",
-      skjemanavn: "Kalkulator barnebidrag under 18 år",
       antall: barnArray.length() - 1,
     });
 

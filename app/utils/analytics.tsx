@@ -1,4 +1,8 @@
-import type { Sporingshendelse } from "~/types/analyse";
+import {
+  skjemanavnMapping,
+  type SkjemaId,
+  type Sporingshendelse,
+} from "~/types/analyse";
 
 type Sporingsdata = Record<string, unknown> & {
   /**
@@ -31,6 +35,10 @@ export const sporHendelse = async (hendelse: Sporingshendelse) => {
     versjon: 1,
   };
 
+  if (erSkjemahendelse(hendelse)) {
+    sporingsdata.skjemanavn = skjemanavnMapping[hendelse.skjemaId];
+  }
+
   if (process.env.NODE_ENV === "development") {
     console.info(`[DEV] hendelse sporet:`, hendelsetype, sporingsdata);
     return;
@@ -39,6 +47,12 @@ export const sporHendelse = async (hendelse: Sporingshendelse) => {
   return window.umami
     ? window.umami.track(hendelsetype, sporingsdata)
     : Promise.resolve();
+};
+
+const erSkjemahendelse = (
+  hendelse: Sporingshendelse,
+): hendelse is Sporingshendelse & { skjemaId: SkjemaId } => {
+  return "skjemaId" in hendelse && hendelse.skjemaId !== undefined;
 };
 
 const sporingsregister: Set<Sporingshendelse["hendelsetype"]> = new Set();

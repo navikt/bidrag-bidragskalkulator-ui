@@ -127,7 +127,6 @@ export const ManueltResultatpanel = ({
                 ? "beregningsdetaljer utvidet"
                 : "beregningsdetaljer kollapset",
               skjemaId: "barnebidragskalkulator-under-18",
-              skjemanavn: "Kalkulator barnebidrag under 18 år",
             });
           }}
         >
