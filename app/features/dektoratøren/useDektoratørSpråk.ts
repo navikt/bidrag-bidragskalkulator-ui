@@ -20,6 +20,11 @@ export function useDekoratørSpråk(
     } else {
       setInterntSpråk(Språk.NorwegianBokmål);
     }
+    // TODO: Når man endrer språk, trigges ikke loaderne på nytt,
+    // som igjen gjør at loaders ikke oppdateres, som _igjen_ gjør at
+    // meta-tags (mer spesifikt tittel) ikke oppdateres slik de skal.
+    // Som en workaround laster vi siden på nytt når man endrer språk.
+    window.location.reload();
   });
   return interntSpråk;
 }
