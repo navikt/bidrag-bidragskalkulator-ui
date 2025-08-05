@@ -75,14 +75,12 @@ export default function ManuellBarnebidragskalkulator() {
       sporHendelse({
         hendelsetype: "skjema fullført",
         skjemaId: "barnebidragskalkulator-under-18",
-        skjemanavn: "Kalkulator barnebidrag under 18 år",
       });
     },
     onInvalidSubmit: () => {
       sporHendelse({
         hendelsetype: "skjema validering feilet",
         skjemaId: "barnebidragskalkulator-under-18",
-        skjemanavn: "Kalkulator barnebidrag under 18 år",
         førsteFeil:
           document.activeElement instanceof HTMLInputElement
             ? document.activeElement.name
@@ -93,7 +91,6 @@ export default function ManuellBarnebidragskalkulator() {
       sporHendelse({
         hendelsetype: "skjema innsending feilet",
         skjemaId: "barnebidragskalkulator-under-18",
-        skjemanavn: "Kalkulator barnebidrag under 18 år",
         feil: String(error),
       });
     },

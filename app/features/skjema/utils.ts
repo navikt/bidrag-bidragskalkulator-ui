@@ -222,7 +222,6 @@ export const sporKalkulatorSpørsmålBesvart =
       sporHendelse({
         hendelsetype: "skjema spørsmål besvart",
         skjemaId: "barnebidragskalkulator-under-18",
-        skjemanavn: "Kalkulator barnebidrag under 18 år",
         spørsmålId: event.target.name,
         spørsmål,
       });

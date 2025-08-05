@@ -25,7 +25,6 @@ export const PrivatAvtaleBarn = () => {
     sporHendelse({
       hendelsetype: "barn lagt til",
       skjemaId: "barnebidrag-privat-avtale-under-18",
-      skjemanavn: "Privat avtale under 18 år",
       antall: antallBarn + 1,
     });
 
@@ -39,7 +38,6 @@ export const PrivatAvtaleBarn = () => {
     sporHendelse({
       hendelsetype: "barn fjernet",
       skjemaId: "barnebidrag-privat-avtale-under-18",
-      skjemanavn: "Privat avtale under 18 år",
       antall: antallBarn - 1,
     });
 

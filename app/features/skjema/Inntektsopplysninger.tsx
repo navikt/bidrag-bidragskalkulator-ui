@@ -33,7 +33,6 @@ export const Inntektsopplysninger = () => {
             sporHendelseEnGang({
               hendelsetype: "inntektsinformasjon utvidet",
               skjemaId: "barnebidragskalkulator-under-18",
-              skjemanavn: "Kalkulator barnebidrag under 18 år",
             });
           }
         }}
