@@ -1,4 +1,5 @@
-import { Heading, Label, List } from "@navikt/ds-react";
+import { BodyLong } from "@navikt/ds-react";
+import { DescriptionList } from "~/components/ui/DescriptionList";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 
@@ -9,30 +10,40 @@ export function OppsummeringBarn() {
 
   return (
     <section>
-      <Heading size="small" level="3">
-        {t(tekster.barnTittel)}
-      </Heading>
-
       <div className="mt-2 space-y-4">
         {barn.map((barn, i) => (
-          <div key={i} className="space-y-1">
-            <Label>
+          <div key={i}>
+            <BodyLong className="mb-4">
               {t(tekster.barnLabel)} {i + 1}
-            </Label>
-            <List as="ul" className="list-none pl-0">
-              <List.Item title={t(tekster.fulltNavn)}>
+            </BodyLong>
+
+            <DescriptionList>
+              <DescriptionList.Label>
+                {t(tekster.fulltNavn)}
+              </DescriptionList.Label>
+              <DescriptionList.Value>
                 {barn.fulltNavn || t(tekster.ikkeUtfylt)}
-              </List.Item>
-              <List.Item title={t(tekster.ident)}>
+              </DescriptionList.Value>
+
+              <DescriptionList.Label>{t(tekster.ident)}</DescriptionList.Label>
+              <DescriptionList.Value>
                 {barn.ident || t(tekster.ikkeUtfylt)}
-              </List.Item>
-              <List.Item title={t(tekster.bidragstype)}>
+              </DescriptionList.Value>
+
+              <DescriptionList.Label>
+                {t(tekster.bidragstype)}
+              </DescriptionList.Label>
+              <DescriptionList.Value>
                 {barn.bidragstype || t(tekster.ikkeUtfylt)}
-              </List.Item>
-              <List.Item title={t(tekster.belopPerManed)}>
+              </DescriptionList.Value>
+
+              <DescriptionList.Label>
+                {t(tekster.belopPerManed)}
+              </DescriptionList.Label>
+              <DescriptionList.Value>
                 {barn.sum || t(tekster.ikkeUtfylt)}
-              </List.Item>
-            </List>
+              </DescriptionList.Value>
+            </DescriptionList>
           </div>
         ))}
       </div>
@@ -41,11 +52,6 @@ export function OppsummeringBarn() {
 }
 
 const tekster = definerTekster({
-  barnTittel: {
-    nb: "Felles barn og barnebidrag",
-    nn: "Felles barn og barnebidrag",
-    en: "Shared children and child support",
-  },
   barnLabel: {
     nb: "Barn",
     nn: "Barn",

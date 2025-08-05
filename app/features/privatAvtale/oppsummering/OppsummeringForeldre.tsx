@@ -1,4 +1,5 @@
-import { Heading, Label, List } from "@navikt/ds-react";
+import { BodyLong } from "@navikt/ds-react";
+import { DescriptionList } from "~/components/ui/DescriptionList";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 
@@ -9,40 +10,40 @@ export function OppsummeringForeldre() {
 
   return (
     <section>
-      <Heading size="small" level="3">
-        {t(tekster.foreldreTittel)}
-      </Heading>
       <div className="mt-2 space-y-2">
-        <Label>{t(tekster.omDeg)}</Label>
-        <List as="ul" className="list-none pl-0">
-          <List.Item title={t(tekster.fulltNavn)}>
-            {deg.fulltNavn || t(tekster.ikkeUtfylt)}
-          </List.Item>
-          <List.Item title={t(tekster.ident)}>
-            {deg.ident || t(tekster.ikkeUtfylt)}
-          </List.Item>
-        </List>
+        <BodyLong className="font-bold">{t(tekster.omDeg)}</BodyLong>
 
-        <Label>{t(tekster.omMedforelder)}</Label>
-        <List as="ul" className="list-none pl-0">
-          <List.Item title={t(tekster.fulltNavn)}>
+        <DescriptionList className="mb-4">
+          <DescriptionList.Label>{t(tekster.fulltNavn)}</DescriptionList.Label>
+          <DescriptionList.Value>
+            {deg.fulltNavn || t(tekster.ikkeUtfylt)}
+          </DescriptionList.Value>
+
+          <DescriptionList.Label>{t(tekster.ident)}</DescriptionList.Label>
+          <DescriptionList.Value>
+            {deg.ident || t(tekster.ikkeUtfylt)}
+          </DescriptionList.Value>
+        </DescriptionList>
+
+        <BodyLong className="font-bold">{t(tekster.omMedforelder)}</BodyLong>
+
+        <DescriptionList>
+          <DescriptionList.Label>{t(tekster.fulltNavn)}</DescriptionList.Label>
+          <DescriptionList.Value>
             {medforelder.fulltNavn || t(tekster.ikkeUtfylt)}
-          </List.Item>
-          <List.Item title={t(tekster.ident)}>
+          </DescriptionList.Value>
+
+          <DescriptionList.Label>{t(tekster.ident)}</DescriptionList.Label>
+          <DescriptionList.Value>
             {medforelder.ident || t(tekster.ikkeUtfylt)}
-          </List.Item>
-        </List>
+          </DescriptionList.Value>
+        </DescriptionList>
       </div>
     </section>
   );
 }
 
 const tekster = definerTekster({
-  foreldreTittel: {
-    nb: "Om deg og den andre forelderen",
-    nn: "Om deg og den andre forelderen",
-    en: "About you and the other parent",
-  },
   omDeg: {
     nb: "Deg",
     nn: "Deg",

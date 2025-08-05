@@ -1,4 +1,4 @@
-import { Heading, List } from "@navikt/ds-react";
+import { DescriptionList } from "~/components/ui/DescriptionList";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 
@@ -9,38 +9,35 @@ export function OppsummeringAvtaledetaljer() {
 
   return (
     <section>
-      <Heading size="small" level="3">
-        {t(tekster.avtaledetaljerTittel)}
-      </Heading>
-      <List as="ul">
-        <List.Item title={t(tekster.avtaleFra)}>
+      <DescriptionList>
+        <DescriptionList.Label>{t(tekster.avtaleFra)}</DescriptionList.Label>
+        <DescriptionList.Value>
           {fraDato || t(tekster.ikkeUtfylt)}
-        </List.Item>
-        <List.Item title={t(tekster.nyAvtale)}>
+        </DescriptionList.Value>
+
+        <DescriptionList.Label>{t(tekster.nyAvtale)}</DescriptionList.Label>
+        <DescriptionList.Value>
           {nyAvtale === "true"
             ? t(tekster.ja)
             : nyAvtale === "false"
               ? t(tekster.nei)
               : t(tekster.ikkeUtfylt)}
-        </List.Item>
-        <List.Item title={t(tekster.oppgjørsform)}>
+        </DescriptionList.Value>
+
+        <DescriptionList.Label>{t(tekster.oppgjørsform)}</DescriptionList.Label>
+        <DescriptionList.Value>
           {medInnkreving === "true"
             ? t(tekster.innkrevingGjennomNav)
             : medInnkreving === "false"
               ? t(tekster.privatOppgjor)
               : t(tekster.ikkeUtfylt)}
-        </List.Item>
-      </List>
+        </DescriptionList.Value>
+      </DescriptionList>
     </section>
   );
 }
 
 const tekster = definerTekster({
-  avtaledetaljerTittel: {
-    nb: "Avtaledetaljer",
-    nn: "Avtaledetaljar",
-    en: "Agreement details",
-  },
   avtaleFra: {
     nb: "Avtalen gjelder fra",
     nn: "Avtalen gjeld frå",

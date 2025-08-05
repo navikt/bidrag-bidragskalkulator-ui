@@ -1,4 +1,4 @@
-import { Alert, Button, VStack } from "@navikt/ds-react";
+import { Accordion, Alert, Button, VStack } from "@navikt/ds-react";
 import { useEffect } from "react";
 import { OppsummeringAvtaledetaljer } from "~/features/privatAvtale/oppsummering/OppsummeringAvtaledetaljer";
 import { OppsummeringBarn } from "~/features/privatAvtale/oppsummering/OppsummeringBarn";
@@ -50,9 +50,33 @@ export default function OppsummeringOgAvtale() {
           {t(tekster.suksessmelding(antallNedlastedeFiler))}
         </Alert>
       )}
-      <OppsummeringForeldre />
-      <OppsummeringBarn />
-      <OppsummeringAvtaledetaljer />
+
+      <Accordion>
+        <Accordion.Item defaultOpen>
+          <Accordion.Header>
+            {t(tekster.accordionTitler.omDegOgMedforelder)}
+          </Accordion.Header>
+          <Accordion.Content>
+            <OppsummeringForeldre />
+          </Accordion.Content>
+        </Accordion.Item>
+        <Accordion.Item defaultOpen>
+          <Accordion.Header>
+            {t(tekster.accordionTitler.barnOgBidrag)}
+          </Accordion.Header>
+          <Accordion.Content>
+            <OppsummeringBarn />
+          </Accordion.Content>
+        </Accordion.Item>
+        <Accordion.Item defaultOpen>
+          <Accordion.Header>
+            {t(tekster.accordionTitler.avtaledetaljer)}
+          </Accordion.Header>
+          <Accordion.Content>
+            <OppsummeringAvtaledetaljer />
+          </Accordion.Content>
+        </Accordion.Item>
+      </Accordion>
 
       <Button
         variant="primary"
@@ -154,4 +178,21 @@ const tekster = definerTekster({
         ? "The agreement was generated and downloaded."
         : `${antallFiler} agreements were generated and downloaded.`,
   }),
+  accordionTitler: {
+    omDegOgMedforelder: {
+      nb: "Om deg og den andre forelderen",
+      nn: "Om deg og den andre forelderen",
+      en: "About you and the other parent",
+    },
+    barnOgBidrag: {
+      nb: "Felles barn og barnebidrag",
+      nn: "Felles barn og fostringstilskot",
+      en: "Shared children and child support",
+    },
+    avtaledetaljer: {
+      nb: "Avtaledetaljer",
+      nn: "Avtaledetaljar",
+      en: "Agreement details",
+    },
+  },
 });
