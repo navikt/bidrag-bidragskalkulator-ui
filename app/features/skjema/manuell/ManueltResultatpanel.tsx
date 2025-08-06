@@ -6,7 +6,6 @@ import {
   Heading,
   Link,
   List,
-  VStack,
 } from "@navikt/ds-react";
 import {
   ExpansionCardContent,
@@ -118,7 +117,7 @@ export const ManueltResultatpanel = ({
 
       <BodyLong spacing>{t(tekster.hvisManIkkeKommerTilEnighet)}</BodyLong>
 
-      <VStack gap="3">
+      <div className="flex flex-col gap-3">
         <ExpansionCard
           aria-labelledby="detaljer"
           size="small"
@@ -197,7 +196,7 @@ export const ManueltResultatpanel = ({
             </BodyLong>
           </ExpansionCardContent>
         </ExpansionCard>
-      </VStack>
+      </div>
     </Alert>
   );
 };

@@ -6,7 +6,6 @@ import {
   HGrid,
   Link,
   List,
-  VStack,
 } from "@navikt/ds-react";
 
 type InternalServerErrorProps = {
@@ -16,8 +15,8 @@ export function InternalServerError({ stack }: InternalServerErrorProps) {
   return (
     <Box paddingBlock="20 16">
       <HGrid columns="minmax(auto,600px)" data-aksel-template="500-v2">
-        <VStack gap="16">
-          <VStack gap="12" align="start">
+        <div className="flex flex-col gap-16">
+          <div className="flex flex-col gap-12 items-start">
             <div>
               <BodyShort textColor="subtle" size="small">
                 Statuskode 500
@@ -67,7 +66,7 @@ export function InternalServerError({ stack }: InternalServerErrorProps) {
             )}
 
             <Button>Gå til Min side</Button>
-          </VStack>
+          </div>
 
           <div>
             <Heading level="1" size="large" spacing>
@@ -84,7 +83,7 @@ export function InternalServerError({ stack }: InternalServerErrorProps) {
               if the problem persists.
             </BodyShort>
           </div>
-        </VStack>
+        </div>
       </HGrid>
     </Box>
   );

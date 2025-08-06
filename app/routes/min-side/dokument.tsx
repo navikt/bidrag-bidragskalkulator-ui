@@ -1,4 +1,11 @@
-import { Box, Heading, Link, Table, VStack } from "@navikt/ds-react";
+import { Box, Heading, Link, List, Table } from "@navikt/ds-react";
+import { ListItem } from "@navikt/ds-react/List";
+import {
+  TableBody,
+  TableDataCell,
+  TableHeaderCell,
+  TableRow,
+} from "@navikt/ds-react/Table";
 import {
   useLoaderData,
   useParams,
@@ -75,38 +82,38 @@ export default function Dokument() {
       )}
 
       <Table>
-        <Table.Body>
+        <TableBody>
           {journalpost.avsender && (
-            <Table.Row>
-              <Table.HeaderCell scope="row">
+            <TableRow>
+              <TableHeaderCell scope="row">
                 {t(tekster.tabell.avsender)}
-              </Table.HeaderCell>
-              <Table.DataCell>{journalpost.avsender.navn}</Table.DataCell>
-            </Table.Row>
+              </TableHeaderCell>
+              <TableDataCell>{journalpost.avsender.navn}</TableDataCell>
+            </TableRow>
           )}
           {journalpost.mottaker && (
-            <Table.Row>
-              <Table.HeaderCell scope="row">
+            <TableRow>
+              <TableHeaderCell scope="row">
                 {t(tekster.tabell.mottaker)}
-              </Table.HeaderCell>
-              <Table.DataCell>{journalpost.mottaker.navn}</Table.DataCell>
-            </Table.Row>
+              </TableHeaderCell>
+              <TableDataCell>{journalpost.mottaker.navn}</TableDataCell>
+            </TableRow>
           )}
-          <Table.Row>
-            <Table.HeaderCell scope="row">
+          <TableRow>
+            <TableHeaderCell scope="row">
               {t(tekster.tabell.dato)}
-            </Table.HeaderCell>
-            <Table.DataCell>
+            </TableHeaderCell>
+            <TableDataCell>
               {datoTilTekst(new Date(journalpost.dato))}
-            </Table.DataCell>
-          </Table.Row>
-          <Table.Row>
-            <Table.HeaderCell scope="row">
+            </TableDataCell>
+          </TableRow>
+          <TableRow>
+            <TableHeaderCell scope="row">
               {t(tekster.tabell.tema.label)}
-            </Table.HeaderCell>
-            <Table.DataCell>{t(tekster.tabell.tema.verdi)}</Table.DataCell>
-          </Table.Row>
-        </Table.Body>
+            </TableHeaderCell>
+            <TableDataCell>{t(tekster.tabell.tema.verdi)}</TableDataCell>
+          </TableRow>
+        </TableBody>
       </Table>
 
       {dokumenter.length > 1 && (
@@ -114,22 +121,22 @@ export default function Dokument() {
           <Heading level="3" size="small" spacing>
             {t(tekster.vedlegg.overskrift(dokumenter.length))}
           </Heading>
-          <VStack as="ul" gap="1">
+          <List className="flex flex-col gap-1">
             {journalpost.dokumenter.map((dokument) => {
               return (
-                <li key={dokument.dokumentInfoId}>
+                <ListItem key={dokument.dokumentInfoId}>
                   <Link
                     href={RouteConfig.OVERSIKT.DOKUMENTER.HENT_DOKUMENT.link({
                       journalpostId: journalpost.journalpostId,
                       dokumentId: dokument.dokumentInfoId,
                     })}
                   >
-                    <Box>{dokument.tittel}</Box>
+                    {dokument.tittel}
                   </Link>
-                </li>
+                </ListItem>
               );
             })}
-          </VStack>
+          </List>
         </div>
       )}
     </div>

@@ -1,4 +1,4 @@
-import { BodyLong, Box, Heading, Link, VStack } from "@navikt/ds-react";
+import { BodyLong, Box, Heading, Link, List } from "@navikt/ds-react";
 import { Link as ReactRouterLink, useRouteLoaderData } from "react-router";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
@@ -28,46 +28,49 @@ export const MineDokumenter: React.FC = () => {
       </Heading>
 
       <BodyLong>{t(tekster.antallDokumenter(journalposter.length))}</BodyLong>
+      {journalposter.length === 0 && (
+        <BodyLong>{t(tekster.ingenDokumenter.beskrivelse)}</BodyLong>
+      )}
+      {journalposter.length > 0 && (
+        <List className="flex gap-1">
+          {journalposter.map((journalpost, index) => {
+            const erFørsteElement = index === 0;
+            const erSisteElement = index === journalposter.length - 1;
 
-      <VStack as="ul" gap="1">
-        {journalposter.length === 0 && (
-          <BodyLong>{t(tekster.ingenDokumenter.beskrivelse)}</BodyLong>
-        )}
-        {journalposter.map((journalpost, index) => {
-          const erFørsteElement = index === 0;
-          const erSisteElement = index === journalposter.length - 1;
+            const borderRadiusTopp = erFørsteElement ? "12 12" : "4 4";
+            const borderRadiusBunn = erSisteElement ? "12 12" : "4 4";
 
-          const borderRadiusTopp = erFørsteElement ? "12 12" : "4 4";
-          const borderRadiusBunn = erSisteElement ? "12 12" : "4 4";
+            const parter =
+              journalpost.mottaker?.navn && journalpost.avsender?.navn
+                ? `${journalpost.mottaker.navn}, ${journalpost.avsender.navn}`
+                : journalpost.mottaker?.navn ||
+                  journalpost.avsender?.navn ||
+                  "";
 
-          const parter =
-            journalpost.mottaker?.navn && journalpost.avsender?.navn
-              ? `${journalpost.mottaker.navn}, ${journalpost.avsender.navn}`
-              : journalpost.mottaker?.navn || journalpost.avsender?.navn || "";
-
-          return (
-            <Box
-              as="li"
-              key={journalpost.journalpostId}
-              background="surface-neutral-subtle"
-              padding="space-16"
-              borderRadius={`${borderRadiusTopp} ${borderRadiusBunn}`}
-            >
-              <Link
-                as={ReactRouterLink}
-                to={RouteConfig.OVERSIKT.DOKUMENTER.DETALJER.link({
-                  journalpostId: journalpost.journalpostId,
-                })}
+            return (
+              <Box
+                as="li"
+                key={journalpost.journalpostId}
+                background="surface-neutral-subtle"
+                padding="space-16"
+                borderRadius={`${borderRadiusTopp} ${borderRadiusBunn}`}
               >
-                {journalpost.tittel}
-              </Link>
-              <BodyLong size="small">
-                {datoTilTekst(new Date(journalpost.dato))} - {parter}
-              </BodyLong>
-            </Box>
-          );
-        })}
-      </VStack>
+                <Link
+                  as={ReactRouterLink}
+                  to={RouteConfig.OVERSIKT.DOKUMENTER.DETALJER.link({
+                    journalpostId: journalpost.journalpostId,
+                  })}
+                >
+                  {journalpost.tittel}
+                </Link>
+                <BodyLong size="small">
+                  {datoTilTekst(new Date(journalpost.dato))} - {parter}
+                </BodyLong>
+              </Box>
+            );
+          })}
+        </List>
+      )}
 
       <div>
         <Heading level="2" size="small">
