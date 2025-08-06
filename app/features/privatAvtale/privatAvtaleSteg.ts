@@ -51,20 +51,20 @@ export const privatAvtaleTekster = definerTekster({
   omDegOgDenAndreForelderen: {
     meta: {
       tittel: {
-        nb: "Om deg og den andre forelderen - Barnebidrag privat avtale",
-        en: "About you and the other parent - Child support private agreement",
-        nn: "Om deg og den andre forelderen - Barnebidrag privat avtale",
+        nb: "Om den andre forelderen - Barnebidrag privat avtale",
+        en: "About the other parent - Child support private agreement",
+        nn: "Om den andre forelderen - Barnebidrag privat avtale",
       },
       beskrivelse: {
-        nb: "Registrer informasjon om deg og den andre forelderen for å lage en privat barnebidragsavtale.",
-        en: "Register information about you and the other parent to create a private child support agreement.",
-        nn: "Registrer informasjon om deg og den andre forelderen for å lage ein privat barnebidragsavtale.",
+        nb: "Registrer informasjon om den andre forelderen for å lage en privat barnebidragsavtale.",
+        en: "Register information about the other parent to create a private child support agreement.",
+        nn: "Registrer informasjon om den andre forelderen for å lage ein privat barnebidragsavtale.",
       },
     },
     overskrift: {
-      nb: "Om deg og den andre forelderen",
-      en: "About you and the other parent",
-      nn: "Om deg og den andre forelderen",
+      nb: "Om den andre forelderen",
+      en: "About the other parent",
+      nn: "Om den andre forelderen",
     },
   },
   barnOgBidrag: {
