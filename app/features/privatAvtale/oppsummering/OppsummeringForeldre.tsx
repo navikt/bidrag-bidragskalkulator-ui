@@ -1,4 +1,15 @@
-import { Heading, Label, List } from "@navikt/ds-react";
+import {
+  FormSummary,
+  FormSummaryAnswer,
+  FormSummaryAnswers,
+  FormSummaryEditLink,
+  FormSummaryHeader,
+  FormSummaryHeading,
+  FormSummaryLabel,
+  FormSummaryValue,
+} from "@navikt/ds-react/FormSummary";
+import { Link } from "react-router";
+import { RouteConfig } from "~/config/routeConfig";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 
@@ -8,32 +19,60 @@ export function OppsummeringForeldre() {
   const { deg, medforelder } = form.value();
 
   return (
-    <section>
-      <Heading size="small" level="3">
-        {t(tekster.foreldreTittel)}
-      </Heading>
-      <div className="mt-2 space-y-2">
-        <Label>{t(tekster.omDeg)}</Label>
-        <List as="ul" className="list-none pl-0">
-          <List.Item title={t(tekster.fulltNavn)}>
-            {deg.fulltNavn || t(tekster.ikkeUtfylt)}
-          </List.Item>
-          <List.Item title={t(tekster.ident)}>
-            {deg.ident || t(tekster.ikkeUtfylt)}
-          </List.Item>
-        </List>
-
-        <Label>{t(tekster.omMedforelder)}</Label>
-        <List as="ul" className="list-none pl-0">
-          <List.Item title={t(tekster.fulltNavn)}>
-            {medforelder.fulltNavn || t(tekster.ikkeUtfylt)}
-          </List.Item>
-          <List.Item title={t(tekster.ident)}>
-            {medforelder.ident || t(tekster.ikkeUtfylt)}
-          </List.Item>
-        </List>
-      </div>
-    </section>
+    <>
+      <FormSummary>
+        <FormSummaryHeader>
+          <FormSummaryHeading level="3">{t(tekster.omDeg)}</FormSummaryHeading>
+          <FormSummaryEditLink
+            as={Link}
+            to={`${RouteConfig.PRIVAT_AVTALE.STEG_1_FORELDRE}#avtalepart-deg`}
+          >
+            {t(tekster.endreSvar)}
+          </FormSummaryEditLink>
+        </FormSummaryHeader>
+        <FormSummaryAnswers>
+          <FormSummaryAnswer>
+            <FormSummaryLabel>{t(tekster.fulltNavn)}</FormSummaryLabel>
+            <FormSummaryValue>
+              {deg.fulltNavn || t(tekster.ikkeUtfylt)}
+            </FormSummaryValue>
+          </FormSummaryAnswer>
+          <FormSummaryAnswer>
+            <FormSummaryLabel>{t(tekster.ident)}</FormSummaryLabel>
+            <FormSummaryValue>
+              {deg.ident || t(tekster.ikkeUtfylt)}
+            </FormSummaryValue>
+          </FormSummaryAnswer>
+        </FormSummaryAnswers>
+      </FormSummary>
+      <FormSummary>
+        <FormSummaryHeader>
+          <FormSummaryHeading level="3">
+            {t(tekster.omMedforelder)}
+          </FormSummaryHeading>
+          <FormSummaryEditLink
+            as={Link}
+            to={`${RouteConfig.PRIVAT_AVTALE.STEG_1_FORELDRE}#avtalepart-medforelder`}
+          >
+            {t(tekster.endreSvar)}
+          </FormSummaryEditLink>
+        </FormSummaryHeader>
+        <FormSummaryAnswers>
+          <FormSummaryAnswer>
+            <FormSummaryLabel>{t(tekster.fulltNavn)}</FormSummaryLabel>
+            <FormSummaryValue>
+              {medforelder.fulltNavn || t(tekster.ikkeUtfylt)}
+            </FormSummaryValue>
+          </FormSummaryAnswer>
+          <FormSummaryAnswer>
+            <FormSummaryLabel>{t(tekster.ident)}</FormSummaryLabel>
+            <FormSummaryValue>
+              {medforelder.ident || t(tekster.ikkeUtfylt)}
+            </FormSummaryValue>
+          </FormSummaryAnswer>
+        </FormSummaryAnswers>
+      </FormSummary>
+    </>
   );
 }
 
@@ -44,14 +83,14 @@ const tekster = definerTekster({
     en: "About you and the other parent",
   },
   omDeg: {
-    nb: "Deg",
-    nn: "Deg",
-    en: "You",
+    nb: "Om deg",
+    nn: "Om deg",
+    en: "About you",
   },
   omMedforelder: {
-    nb: "Den andre forelderen",
-    nn: "Den andre forelderen",
-    en: "The other parent",
+    nb: "Om den andre forelderen",
+    nn: "Om den andre forelderen",
+    en: "About the other parent",
   },
   fulltNavn: {
     nb: "Fullt navn",
@@ -67,5 +106,10 @@ const tekster = definerTekster({
     nb: "Ikke utfylt",
     nn: "Ikkje utfylt",
     en: "Not filled in",
+  },
+  endreSvar: {
+    nb: "Endre svar",
+    nn: "Endre svar",
+    en: "Edit answer",
   },
 });
