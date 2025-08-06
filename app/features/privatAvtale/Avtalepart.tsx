@@ -13,11 +13,7 @@ export const Avtalepart = ({ part }: Props) => {
   const { t } = useOversettelse();
 
   return (
-    <fieldset className="p-0 flex flex-col gap-4">
-      <legend className="text-xl mb-5" id={`avtalepart-${part}`}>
-        {t(tekster[part].tittel)}
-      </legend>
-
+    <div className="space-y-6">
       <TextField
         {...form.field(`${part}.fulltNavn`).getInputProps({
           label: t(tekster[part].fulltNavn.label),
@@ -40,17 +36,12 @@ export const Avtalepart = ({ part }: Props) => {
         inputMode="numeric"
         autoComplete="off"
       />
-    </fieldset>
+    </div>
   );
 };
 
 const tekster = definerTekster({
   deg: {
-    tittel: {
-      nb: "Litt om deg",
-      nn: "Litt om deg",
-      en: "About you",
-    },
     fulltNavn: {
       label: {
         nb: "Fullt navn",
@@ -67,11 +58,6 @@ const tekster = definerTekster({
     },
   },
   medforelder: {
-    tittel: {
-      nb: "Litt om den andre forelderen",
-      nn: "Litt om den andre forelderen",
-      en: "About the other parent",
-    },
     fulltNavn: {
       label: {
         nb: "Fullt navn",

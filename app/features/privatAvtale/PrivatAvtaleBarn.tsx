@@ -50,8 +50,7 @@ export const PrivatAvtaleBarn = () => {
   };
 
   return (
-    <fieldset className="p-0">
-      <legend className="text-xl mb-6">{t(tekster.overskrift)}</legend>
+    <div>
       {barnArray.map((key, _, index) => {
         return (
           <React.Fragment key={key}>
@@ -75,7 +74,7 @@ export const PrivatAvtaleBarn = () => {
       >
         {t(tekster.leggTilBarn)}
       </Button>
-    </fieldset>
+    </div>
   );
 };
 
