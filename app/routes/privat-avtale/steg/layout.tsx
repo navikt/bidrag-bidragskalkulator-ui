@@ -16,6 +16,7 @@ import {
   type LoaderFunctionArgs,
   type MetaFunction,
 } from "react-router";
+import { RouteConfig } from "~/config/routeConfig";
 import { medToken } from "~/features/autentisering/api.server";
 import { hentPersoninformasjonForPrivatAvtale } from "~/features/privatAvtale/api.server";
 import type { HentPersoninformasjonForPrivatAvtaleRespons } from "~/features/privatAvtale/apiSchema";
@@ -81,7 +82,7 @@ export default function PrivatAvtaleStegLayout() {
   const forrigeSteg =
     aktivStegIndex > 0
       ? privatAvtaleSteg[aktivStegIndex - 1].path
-      : "/privat-avtale";
+      : RouteConfig.PRIVAT_AVTALE.INDEX;
   const nesteSteg =
     aktivStegIndex < privatAvtaleSteg.length - 1
       ? privatAvtaleSteg[aktivStegIndex + 1].path

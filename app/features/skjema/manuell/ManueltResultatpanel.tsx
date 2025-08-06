@@ -15,7 +15,8 @@ import {
 } from "@navikt/ds-react/ExpansionCard";
 import { ListItem } from "@navikt/ds-react/List";
 import { useFormContext } from "@rvf/react";
-import { Link as RouterLink } from "react-router";
+import { Link as ReactRouterLink } from "react-router";
+import { RouteConfig } from "~/config/routeConfig";
 import { sporHendelse, sporHendelseEnGang } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
@@ -100,8 +101,8 @@ export const ManueltResultatpanel = ({
       </BodyLong>
 
       <Button
-        as={RouterLink}
-        to="/privat-avtale"
+        as={ReactRouterLink}
+        to={RouteConfig.PRIVAT_AVTALE.INDEX}
         state={navigasjonState}
         variant="primary"
         className="mb-6"

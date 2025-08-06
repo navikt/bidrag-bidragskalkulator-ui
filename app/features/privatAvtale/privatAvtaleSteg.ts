@@ -1,3 +1,4 @@
+import { RouteConfig } from "~/config/routeConfig";
 import { definerTekster, oversett, type Språk } from "~/utils/i18n";
 
 type PrivatAvtaleTeksterType = typeof privatAvtaleTekster;
@@ -18,22 +19,22 @@ export type StegdataType = {
 export const stegKonfigurasjon: StegKonfigurasjon[] = [
   {
     step: 1,
-    path: "/privat-avtale/steg/foreldre",
+    path: RouteConfig.PRIVAT_AVTALE.STEG_1_FORELDRE,
     key: "omDegOgDenAndreForelderen",
   },
   {
     step: 2,
-    path: "/privat-avtale/steg/barn-og-bidrag",
+    path: RouteConfig.PRIVAT_AVTALE.STEG_2_BARN_OG_BIDRAG,
     key: "barnOgBidrag",
   },
   {
     step: 3,
-    path: "/privat-avtale/steg/avtaledetaljer",
+    path: RouteConfig.PRIVAT_AVTALE.STEG_3_AVTALEDETALJER,
     key: "avtaledetaljer",
   },
   {
     step: 4,
-    path: "/privat-avtale/steg/oppsummering-og-avtale",
+    path: RouteConfig.PRIVAT_AVTALE.STEG_4_OPPSUMMERING_OG_AVTALE,
     key: "oppsummering",
   },
 ];

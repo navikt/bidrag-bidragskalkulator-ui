@@ -5,6 +5,7 @@ import {
   type LoaderFunctionArgs,
   type MetaArgs,
 } from "react-router";
+import { RouteConfig } from "~/config/routeConfig";
 import { medToken } from "~/features/autentisering/api.server";
 import { NotFound } from "~/features/feilhåndtering/404";
 import { hentBidragsdokumenterFraApi } from "~/features/oversikt/api.server";
@@ -63,7 +64,10 @@ export default function Dokument() {
           borderRadius="12"
         >
           <Link
-            href={`/barnebidrag/tjenester/api/hent-dokument/${journalpost.journalpostId}/${dokumenter[0].dokumentInfoId}`}
+            href={RouteConfig.OVERSIKT.DOKUMENTER.HENT_DOKUMENT.link({
+              journalpostId: journalpost.journalpostId,
+              dokumentId: dokumenter[0].dokumentInfoId,
+            })}
           >
             {t(tekster.åpne(dokumenter[0].tittel))}
           </Link>
@@ -115,7 +119,10 @@ export default function Dokument() {
               return (
                 <li key={dokument.dokumentInfoId}>
                   <Link
-                    href={`/barnebidrag/tjenester/api/hent-dokument/${journalpost.journalpostId}/${dokument.dokumentInfoId}`}
+                    href={RouteConfig.OVERSIKT.DOKUMENTER.HENT_DOKUMENT.link({
+                      journalpostId: journalpost.journalpostId,
+                      dokumentId: dokument.dokumentInfoId,
+                    })}
                   >
                     <Box>{dokument.tittel}</Box>
                   </Link>
