@@ -32,7 +32,7 @@ export const MineDokumenter: React.FC = () => {
         <BodyLong>{t(tekster.ingenDokumenter.beskrivelse)}</BodyLong>
       )}
       {journalposter.length > 0 && (
-        <List className="flex gap-1">
+        <List className="flex flex-col gap-1">
           {journalposter.map((journalpost, index) => {
             const erFørsteElement = index === 0;
             const erSisteElement = index === journalposter.length - 1;
