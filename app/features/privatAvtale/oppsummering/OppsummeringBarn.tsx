@@ -42,7 +42,9 @@ export function OppsummeringBarn() {
                 {t(tekster.barnLabel)} {i + 1}
               </FormSummaryLabel>
               <FormSummaryValue>
-                <Barnesvar barn={barn} />
+                <FormSummaryAnswers>
+                  <Barnesvar barn={barn} />
+                </FormSummaryAnswers>
               </FormSummaryValue>
             </FormSummaryAnswer>
           ))
@@ -59,7 +61,7 @@ type BarnesvarProps = {
 const Barnesvar = ({ barn }: BarnesvarProps) => {
   const { t } = useOversettelse();
   return (
-    <FormSummaryAnswers>
+    <>
       <FormSummaryAnswer>
         <FormSummaryLabel>{t(tekster.fulltNavn)}</FormSummaryLabel>
         <FormSummaryValue>
@@ -82,7 +84,7 @@ const Barnesvar = ({ barn }: BarnesvarProps) => {
         <FormSummaryLabel>{t(tekster.belopPerManed)}</FormSummaryLabel>
         <FormSummaryValue>{barn.sum || t(tekster.ikkeUtfylt)}</FormSummaryValue>
       </FormSummaryAnswer>
-    </FormSummaryAnswers>
+    </>
   );
 };
 
