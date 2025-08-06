@@ -23,12 +23,6 @@ export function OppsummeringForeldre() {
       <FormSummary>
         <FormSummaryHeader>
           <FormSummaryHeading level="3">{t(tekster.omDeg)}</FormSummaryHeading>
-          <FormSummaryEditLink
-            as={Link}
-            to={`${RouteConfig.PRIVAT_AVTALE.STEG_1_FORELDRE}#avtalepart-deg`}
-          >
-            {t(tekster.endreSvar)}
-          </FormSummaryEditLink>
         </FormSummaryHeader>
         <FormSummaryAnswers>
           <FormSummaryAnswer>
