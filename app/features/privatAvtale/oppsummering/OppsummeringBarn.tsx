@@ -17,7 +17,7 @@ import type { PrivatAvtaleSkjema } from "../skjemaSchema";
 export function OppsummeringBarn() {
   const { form } = usePrivatAvtaleForm();
   const { t } = useOversettelse();
-  const { barn } = form.value();
+  const { barn, medforelder } = form.value();
 
   return (
     <FormSummary>
@@ -34,7 +34,7 @@ export function OppsummeringBarn() {
       </FormSummaryHeader>
       <FormSummaryAnswers>
         {barn.length === 1 ? (
-          <Barnesvar barn={barn[0]} />
+          <Barnesvar barn={barn[0]} navnMedforelder={medforelder?.fulltNavn} />
         ) : (
           barn.map((barn, i) => (
             <FormSummaryAnswer key={i}>
@@ -43,7 +43,10 @@ export function OppsummeringBarn() {
               </FormSummaryLabel>
               <FormSummaryValue>
                 <FormSummaryAnswers>
-                  <Barnesvar barn={barn} />
+                  <Barnesvar
+                    barn={barn}
+                    navnMedforelder={medforelder?.fulltNavn}
+                  />
                 </FormSummaryAnswers>
               </FormSummaryValue>
             </FormSummaryAnswer>
@@ -56,9 +59,10 @@ export function OppsummeringBarn() {
 
 type BarnesvarProps = {
   barn: PrivatAvtaleSkjema["barn"][number];
+  navnMedforelder?: string;
 };
 
-const Barnesvar = ({ barn }: BarnesvarProps) => {
+const Barnesvar = ({ barn, navnMedforelder = "" }: BarnesvarProps) => {
   const { t } = useOversettelse();
   return (
     <>
@@ -75,9 +79,11 @@ const Barnesvar = ({ barn }: BarnesvarProps) => {
         </FormSummaryValue>
       </FormSummaryAnswer>
       <FormSummaryAnswer>
-        <FormSummaryLabel>{t(tekster.bidragstype)}</FormSummaryLabel>
+        <FormSummaryLabel>{t(tekster.bidragstype.label)}</FormSummaryLabel>
         <FormSummaryValue>
-          {barn.bidragstype || t(tekster.ikkeUtfylt)}
+          {barn.bidragstype
+            ? t(tekster.bidragstype[barn.bidragstype](navnMedforelder))
+            : t(tekster.ikkeUtfylt)}
         </FormSummaryValue>
       </FormSummaryAnswer>
       <FormSummaryAnswer>
@@ -100,9 +106,21 @@ const tekster = definerTekster({
     en: "Child",
   },
   bidragstype: {
-    nb: "Bidragstype",
-    nn: "Bidragstype",
-    en: "Contribution type",
+    label: {
+      nb: "Skal du motta eller betale barnebidrag?",
+      en: "Will you receive or pay child support?",
+      nn: "Skal du motta eller betale barnebidrag?",
+    },
+    MOTTAKER: (navnMotpart) => ({
+      nb: `Jeg skal motta barnebidrag fra ${navnMotpart || "den andre forelderen"}`,
+      en: `I will receive child support from ${navnMotpart || "the other parent"}`,
+      nn: `Eg skal motta barnebidrag frå ${navnMotpart || "den andre forelderen"}`,
+    }),
+    PLIKTIG: (navnMotpart) => ({
+      nb: `Jeg skal betale barnebidrag til ${navnMotpart || "den andre forelderen"}`,
+      en: `I will pay child support to ${navnMotpart || "the other parent"}`,
+      nn: `Eg skal betale barnebidrag til ${navnMotpart || "den andre forelderen"}`,
+    }),
   },
   belopPerManed: {
     nb: "Beløp per måned",
