@@ -9,7 +9,7 @@ export default [
   layout("routes/hovedlayout.tsx", [
     index("routes/index.tsx"),
     route(RouteConfig.KALKULATOR, "routes/kalkulator.tsx"),
-    route(RouteConfig.OVERSIKT.INDEX, "routes/oversikt.tsx"),
+    route(RouteConfig.OVERSIKT.INDEX, "routes/min-side/oversikt.tsx"),
     route(
       RouteConfig.OVERSIKT.DOKUMENTER.DETALJER.route,
       "routes/min-side/dokument.tsx",
