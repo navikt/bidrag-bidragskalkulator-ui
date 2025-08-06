@@ -1,4 +1,4 @@
-import { BodyLong, Box, Heading, Link, List } from "@navikt/ds-react";
+import { BodyLong, Box, Heading, Link } from "@navikt/ds-react";
 import { Link as ReactRouterLink, useRouteLoaderData } from "react-router";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
@@ -32,7 +32,7 @@ export const MineDokumenter: React.FC = () => {
         <BodyLong>{t(tekster.ingenDokumenter.beskrivelse)}</BodyLong>
       )}
       {journalposter.length > 0 && (
-        <List className="flex flex-col gap-1">
+        <ul className="flex flex-col gap-1">
           {journalposter.map((journalpost, index) => {
             const erFørsteElement = index === 0;
             const erSisteElement = index === journalposter.length - 1;
@@ -69,7 +69,7 @@ export const MineDokumenter: React.FC = () => {
               </Box>
             );
           })}
-        </List>
+        </ul>
       )}
 
       <div>

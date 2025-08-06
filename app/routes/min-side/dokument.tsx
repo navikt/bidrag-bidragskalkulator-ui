@@ -1,5 +1,4 @@
-import { Box, Heading, Link, List, Table } from "@navikt/ds-react";
-import { ListItem } from "@navikt/ds-react/List";
+import { Box, Heading, Link, Table } from "@navikt/ds-react";
 import {
   TableBody,
   TableDataCell,
@@ -121,10 +120,10 @@ export default function Dokument() {
           <Heading level="3" size="small" spacing>
             {t(tekster.vedlegg.overskrift(dokumenter.length))}
           </Heading>
-          <List className="flex flex-col gap-1">
+          <ul className="flex flex-col gap-1">
             {journalpost.dokumenter.map((dokument) => {
               return (
-                <ListItem key={dokument.dokumentInfoId}>
+                <li key={dokument.dokumentInfoId}>
                   <Link
                     href={RouteConfig.OVERSIKT.DOKUMENTER.HENT_DOKUMENT.link({
                       journalpostId: journalpost.journalpostId,
@@ -133,10 +132,10 @@ export default function Dokument() {
                   >
                     {dokument.tittel}
                   </Link>
-                </ListItem>
+                </li>
               );
             })}
-          </List>
+          </ul>
         </div>
       )}
     </div>
