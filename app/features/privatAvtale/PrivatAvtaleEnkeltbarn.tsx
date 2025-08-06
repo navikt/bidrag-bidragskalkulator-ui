@@ -24,7 +24,7 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
   return (
-    <fieldset className="p-0 space-y-4">
+    <fieldset className="p-0 space-y-6">
       <legend className="sr-only">{overskrift}</legend>
       <TextField
         {...barnField.field("fulltNavn").getInputProps({

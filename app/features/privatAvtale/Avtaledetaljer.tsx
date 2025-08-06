@@ -25,9 +25,7 @@ export const Avtaledetaljer = () => {
   });
 
   return (
-    <fieldset className="p-0 flex flex-col gap-6">
-      <legend className="text-xl mb-5">{t(tekster.tittel)}</legend>
-
+    <div className="space-y-6">
       <DatePicker {...datepickerProps}>
         <DatePicker.Input
           {...inputProps}
@@ -77,7 +75,7 @@ export const Avtaledetaljer = () => {
           );
         })}
       </RadioGroup>
-    </fieldset>
+    </div>
   );
 };
 
