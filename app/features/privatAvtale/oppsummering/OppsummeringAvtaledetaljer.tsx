@@ -10,6 +10,7 @@ import {
 } from "@navikt/ds-react/FormSummary";
 import { Link } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
+import { datoTilTekst } from "~/utils/dato";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 
@@ -35,7 +36,7 @@ export function OppsummeringAvtaledetaljer() {
         <FormSummaryAnswer>
           <FormSummaryLabel>{t(tekster.avtaleFra)}</FormSummaryLabel>
           <FormSummaryValue>
-            {fraDato || t(tekster.ikkeUtfylt)}
+            {fraDato ? datoTilTekst(new Date(fraDato)) : t(tekster.ikkeUtfylt)}
           </FormSummaryValue>
         </FormSummaryAnswer>
         <FormSummaryAnswer>
