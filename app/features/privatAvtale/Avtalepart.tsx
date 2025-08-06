@@ -14,7 +14,9 @@ export const Avtalepart = ({ part }: Props) => {
 
   return (
     <fieldset className="p-0 flex flex-col gap-4">
-      <legend className="text-xl mb-5">{t(tekster[part].tittel)}</legend>
+      <legend className="text-xl mb-5" id={`avtalepart-${part}`}>
+        {t(tekster[part].tittel)}
+      </legend>
 
       <TextField
         {...form.field(`${part}.fulltNavn`).getInputProps({

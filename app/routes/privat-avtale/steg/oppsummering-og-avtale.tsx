@@ -50,9 +50,11 @@ export default function OppsummeringOgAvtale() {
           {t(tekster.suksessmelding(antallNedlastedeFiler))}
         </Alert>
       )}
-      <OppsummeringForeldre />
-      <OppsummeringBarn />
-      <OppsummeringAvtaledetaljer />
+      <VStack gap="4">
+        <OppsummeringForeldre />
+        <OppsummeringBarn />
+        <OppsummeringAvtaledetaljer />
+      </VStack>
 
       <Button
         variant="primary"
