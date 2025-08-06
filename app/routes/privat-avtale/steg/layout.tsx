@@ -1,12 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import {
-  Alert,
-  BodyLong,
-  Button,
-  Heading,
-  Link,
-  Stepper,
-} from "@navikt/ds-react";
+import { Alert, BodyLong, Button, Heading, Stepper } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
 import {
   Outlet,
@@ -119,27 +112,25 @@ export default function PrivatAvtaleStegLayout() {
         )}
 
         <div className="flex gap-5">
-          <Link as={ReactRouterLink} to={forrigeSteg}>
-            <Button
-              className="flex-1"
-              variant="secondary"
-              icon={<ArrowLeftIcon aria-hidden />}
-            >
-              {t(tekster.knapp.forrigeSteg)}
-            </Button>
-          </Link>
+          <Button
+            as={ReactRouterLink}
+            to={forrigeSteg}
+            variant="secondary"
+            icon={<ArrowLeftIcon aria-hidden />}
+          >
+            {t(tekster.knapp.forrigeSteg)}
+          </Button>
 
           {nesteSteg && (
-            <Link as={ReactRouterLink} to={nesteSteg}>
-              <Button
-                className="flex-1"
-                variant="primary"
-                icon={<ArrowRightIcon aria-hidden />}
-                iconPosition="right"
-              >
-                {t(tekster.knapp.nesteSteg)}
-              </Button>
-            </Link>
+            <Button
+              as={ReactRouterLink}
+              to={nesteSteg}
+              variant="primary"
+              icon={<ArrowRightIcon aria-hidden />}
+              iconPosition="right"
+            >
+              {t(tekster.knapp.nesteSteg)}
+            </Button>
           )}
         </div>
       </section>
