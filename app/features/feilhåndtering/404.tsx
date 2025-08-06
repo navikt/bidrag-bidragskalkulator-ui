@@ -1,13 +1,5 @@
 import { BugIcon } from "@navikt/aksel-icons";
-import {
-  BodyShort,
-  Box,
-  Button,
-  Heading,
-  Link,
-  List,
-  VStack,
-} from "@navikt/ds-react";
+import { BodyShort, Box, Button, Heading, Link, List } from "@navikt/ds-react";
 import { Link as ReactRouterLink } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -16,7 +8,7 @@ export function NotFound() {
   const { t } = useOversettelse();
   return (
     <Box paddingBlock="20 16" data-aksel-template="404-v2">
-      <VStack gap="12" align="start">
+      <div className="flex flex-col gap-12 items-start">
         <div>
           <Heading level="1" size="large" spacing>
             {t(tekster.tittel)}
@@ -34,7 +26,7 @@ export function NotFound() {
           <BugIcon aria-hidden />
           {t(tekster.ctas.meldFra)}
         </Link>
-      </VStack>
+      </div>
     </Box>
   );
 }

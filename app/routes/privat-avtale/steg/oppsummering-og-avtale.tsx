@@ -1,4 +1,4 @@
-import { Alert, Button, VStack } from "@navikt/ds-react";
+import { Alert, Button } from "@navikt/ds-react";
 import { useEffect } from "react";
 import { OppsummeringAvtaledetaljer } from "~/features/privatAvtale/oppsummering/OppsummeringAvtaledetaljer";
 import { OppsummeringBarn } from "~/features/privatAvtale/oppsummering/OppsummeringBarn";
@@ -38,7 +38,7 @@ export default function OppsummeringOgAvtale() {
   }, [innsendingsfeil, innsendingVellykket]);
 
   return (
-    <VStack gap="6">
+    <div className="flex flex-col gap-6">
       {harUfullstendigeSteg && (
         <OppsummeringsVarsel ufullstendigSteg={ufullstendigeSteg} />
       )}
@@ -50,11 +50,11 @@ export default function OppsummeringOgAvtale() {
           {t(tekster.suksessmelding(antallNedlastedeFiler))}
         </Alert>
       )}
-      <VStack gap="4">
+      <div className="flex flex-col gap-4">
         <OppsummeringForeldre />
         <OppsummeringBarn />
         <OppsummeringAvtaledetaljer />
-      </VStack>
+      </div>
 
       <Button
         variant="primary"
@@ -65,7 +65,7 @@ export default function OppsummeringOgAvtale() {
       >
         {isSubmitting ? t(tekster.lasterNed) : t(tekster.lastNedKnapp)}
       </Button>
-    </VStack>
+    </div>
   );
 }
 
