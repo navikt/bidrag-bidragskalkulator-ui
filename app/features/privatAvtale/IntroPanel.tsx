@@ -7,7 +7,7 @@ export function IntroPanel() {
   const { t } = useOversettelse();
 
   return (
-    <GuidePanel poster>
+    <GuidePanel poster className="max-w-xl mx-auto">
       <BodyLong spacing>{t(tekster.innhold1)}</BodyLong>
       <BodyLong spacing>{t(tekster.innhold2)}</BodyLong>
 

@@ -8,6 +8,7 @@ import {
   FormSummaryLabel,
   FormSummaryValue,
 } from "@navikt/ds-react/FormSummary";
+import { useFormScope } from "@rvf/react";
 import { Link } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
 import { datoTilTekst } from "~/utils/dato";
@@ -16,8 +17,10 @@ import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 
 export function OppsummeringAvtaledetaljer() {
   const { form } = usePrivatAvtaleForm();
+  const scopedForm = useFormScope(form.scope("steg3.avtaledetaljer"));
   const { t } = useOversettelse();
-  const { nyAvtale, fraDato, medInnkreving } = form.value();
+
+  const { nyAvtale, fraDato, medInnkreving } = scopedForm.value();
 
   return (
     <FormSummary>

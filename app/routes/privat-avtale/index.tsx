@@ -1,4 +1,4 @@
-import { Button, Link } from "@navikt/ds-react";
+import { Button } from "@navikt/ds-react";
 import {
   Link as ReactRouterLink,
   useLocation,
@@ -33,16 +33,15 @@ export default function Veiledning() {
     <>
       <IntroPanel />
       {førsteSteg && (
-        <Link
+        <Button
           as={ReactRouterLink}
           to={førsteSteg}
           state={navigationState}
-          className="flex w-full sm:w-50 self-center"
+          variant="primary"
+          className="w-fit mx-auto"
         >
-          <Button variant="primary" className="w-full">
-            {t(tekster.start)}
-          </Button>
-        </Link>
+          {t(tekster.start)}
+        </Button>
       )}
     </>
   );

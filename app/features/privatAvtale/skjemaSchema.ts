@@ -13,17 +13,7 @@ const Bidragsbarn = Person.extend({
   bidragstype: z.enum([...BidragstypeSchema.options, ""]), // Fra kalkulator, skal ikke redigeres (?? eller kanskje?)
 });
 
-export const PrivatAvtaleSkjemaSchema = z.object({
-  deg: Person,
-  medforelder: Person,
-  barn: z.array(Bidragsbarn),
-  fraDato: z.string(),
-  nyAvtale: z.enum(["true", "false", ""]),
-  medInnkreving: z.enum(["true", "false", ""]),
-  innhold: z.string(),
-});
-
-export const lagValidertPersonSkjemaSchema = (
+const lagValidertPersonSkjemaSchema = (
   språk: Språk,
   part: "deg" | "medforelder",
 ) => {
@@ -38,28 +28,34 @@ export const lagValidertPersonSkjemaSchema = (
   });
 };
 
-export const lagPrivatAvtaleSkjemaValidertSchema = (språk: Språk) => {
-  return z.object({
+export type Person = z.infer<typeof Person>;
+
+export const PrivatAvtaleFlerstegsSkjemaSchema = z.object({
+  steg1: z.object({
+    deg: Person,
+    medforelder: Person,
+  }),
+  steg2: z.object({
+    barn: z.array(Bidragsbarn),
+  }),
+  steg3: z.object({
+    avtaledetaljer: z.object({
+      fraDato: z.string(),
+      nyAvtale: z.enum(["true", "false", ""]),
+      medInnkreving: z.enum(["true", "false", ""]),
+      innhold: z.string().optional(), // TODO: Definer innhold
+    }),
+  }),
+});
+
+const lagSteg1Schema = (språk: Språk) =>
+  z.object({
     deg: lagValidertPersonSkjemaSchema(språk, "deg"),
     medforelder: lagValidertPersonSkjemaSchema(språk, "medforelder"),
-    fraDato: z
-      .string()
-      .nonempty(oversett(språk, tekster.feilmeldinger.fraDato.påkrevd))
-      .refine(
-        erDatostrengÅrMånedDag,
-        oversett(språk, tekster.feilmeldinger.fraDato.ugyldig),
-      ),
-    nyAvtale: z
-      .enum(["true", "false"], {
-        message: oversett(språk, tekster.feilmeldinger.nyAvtale.påkrevd),
-      })
-      .transform((value) => value === "true"),
-    medInnkreving: z
-      .enum(["true", "false"], {
-        message: oversett(språk, tekster.feilmeldinger.medInnkreving.påkrevd),
-      })
-      .transform((value) => value === "true"),
-    innhold: z.string(), // TODO
+  });
+
+const lagSteg2Schema = (språk: Språk) =>
+  z.object({
     barn: z.array(
       z.object({
         fulltNavn: z
@@ -89,13 +85,44 @@ export const lagPrivatAvtaleSkjemaValidertSchema = (språk: Språk) => {
       }),
     ),
   });
-};
 
-export type PrivatAvtaleSkjema = z.infer<typeof PrivatAvtaleSkjemaSchema>;
-export type PrivatAvtaleSkjemaValidert = z.infer<
-  ReturnType<typeof lagPrivatAvtaleSkjemaValidertSchema>
+const lagSteg3Schema = (språk: Språk) =>
+  z.object({
+    avtaledetaljer: z.object({
+      fraDato: z
+        .string()
+        .nonempty(oversett(språk, tekster.feilmeldinger.fraDato.påkrevd))
+        .refine(
+          erDatostrengÅrMånedDag,
+          oversett(språk, tekster.feilmeldinger.fraDato.ugyldig),
+        ),
+      nyAvtale: z
+        .enum(["true", "false"], {
+          message: oversett(språk, tekster.feilmeldinger.nyAvtale.påkrevd),
+        })
+        .transform((value) => value === "true"),
+      medInnkreving: z
+        .enum(["true", "false"], {
+          message: oversett(språk, tekster.feilmeldinger.medInnkreving.påkrevd),
+        })
+        .transform((value) => value === "true"),
+      innhold: z.string().optional(), // TODO: Definer innhold
+    }),
+  });
+
+export const lagPrivatAvtaleFlerstegsSchema = (språk: Språk) =>
+  z.object({
+    steg1: lagSteg1Schema(språk),
+    steg2: lagSteg2Schema(språk),
+    steg3: lagSteg3Schema(språk),
+  });
+
+export type PrivatAvtaleFlerstegsSkjema = z.infer<
+  typeof PrivatAvtaleFlerstegsSkjemaSchema
 >;
-export type Person = z.infer<typeof Person>;
+export type PrivatAvtaleFlerstegsSkjemaValidert = z.infer<
+  ReturnType<typeof lagPrivatAvtaleFlerstegsSchema>
+>;
 
 const tekster = definerTekster({
   feilmeldinger: {

@@ -1,6 +1,7 @@
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 import { DatePicker, Radio, RadioGroup, useDatepicker } from "@navikt/ds-react";
+import { useFormScope } from "@rvf/react";
 import { tilÅrMånedDag } from "~/utils/dato";
 import { usePrivatAvtaleForm } from "./PrivatAvtaleFormProvider";
 import { sporPrivatAvtaleSpørsmålBesvart } from "./utils";
@@ -9,19 +10,21 @@ const NY_AVTALE_ALTERNATIVER = ["true", "false"] as const;
 const INNKREVING_ALTERNATIVER = ["false", "true"] as const;
 
 export const Avtaledetaljer = () => {
-  const { form } = usePrivatAvtaleForm();
+  const privatAvtaleFormContext = usePrivatAvtaleForm();
   const { t } = useOversettelse();
 
-  const { getControlProps, value, field, error } = form;
-
-  const { fraDato } = value();
+  const form = useFormScope(
+    privatAvtaleFormContext.form.scope("steg3.avtaledetaljer"),
+  );
 
   const { datepickerProps, inputProps } = useDatepicker({
     fromDate: undefined,
     onDateChange: (dato) => {
-      field("fraDato").setValue(dato ? tilÅrMånedDag(dato) : "");
+      form.field("fraDato").setValue(dato ? tilÅrMånedDag(dato) : "");
     },
-    defaultSelected: fraDato ? new Date(fraDato) : undefined,
+    defaultSelected: form.value("fraDato")
+      ? new Date(form.value("fraDato"))
+      : undefined,
   });
 
   return (
@@ -31,14 +34,14 @@ export const Avtaledetaljer = () => {
           {...inputProps}
           label={t(tekster.gjelderFra.label)}
           description={t(tekster.gjelderFra.beskrivelse)}
-          error={error("fraDato")}
+          error={form.error("fraDato")}
           onBlur={sporPrivatAvtaleSpørsmålBesvart(t(tekster.gjelderFra.label))}
         />
       </DatePicker>
 
       <RadioGroup
-        {...getControlProps("nyAvtale")}
-        error={field("nyAvtale").error()}
+        {...form.getControlProps("nyAvtale")}
+        error={form.field("nyAvtale").error()}
         legend={t(tekster.nyAvtale.label)}
       >
         {NY_AVTALE_ALTERNATIVER.map((alternativ) => {
@@ -57,8 +60,8 @@ export const Avtaledetaljer = () => {
       </RadioGroup>
 
       <RadioGroup
-        {...getControlProps("medInnkreving")}
-        error={field("medInnkreving").error()}
+        {...form.getControlProps("medInnkreving")}
+        error={form.field("medInnkreving").error()}
         legend={t(tekster.medInnkreving.label)}
       >
         {INNKREVING_ALTERNATIVER.map((alternativ) => {

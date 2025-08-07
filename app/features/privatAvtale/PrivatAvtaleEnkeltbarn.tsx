@@ -4,7 +4,7 @@ import { useFormContext, useFormScope } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { BidragstypeSchema } from "../skjema/beregning/schema";
 import { FormattertTallTextField } from "../skjema/FormattertTallTextField";
-import type { PrivatAvtaleSkjema } from "./skjemaSchema";
+import type { PrivatAvtaleFlerstegsSkjema } from "./skjemaSchema";
 import { sporPrivatAvtaleSpørsmålBesvart } from "./utils";
 
 type Props = {
@@ -17,9 +17,9 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
   onFjernBarn,
 }: Props) => {
   const { t } = useOversettelse();
-  const form = useFormContext<PrivatAvtaleSkjema>();
+  const form = useFormContext<PrivatAvtaleFlerstegsSkjema>();
 
-  const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
+  const barnField = useFormScope(form.scope(`steg2.barn[${barnIndex}]`));
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
@@ -63,7 +63,7 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
             >
               {t(
                 tekster.bidragstype[bidragstype](
-                  form.field("medforelder.fulltNavn").value(),
+                  form.field("steg1.medforelder.fulltNavn").value(),
                 ),
               )}
             </Radio>
