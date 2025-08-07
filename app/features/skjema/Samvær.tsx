@@ -16,6 +16,7 @@ export function Samvær({ barnIndex }: SamværProps) {
   const form = useFormContext<ManueltSkjema>();
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
   const samvær = barnField.value("samvær") || SAMVÆR_STANDARDVERDI;
+  const navnMedforelder = form.value("medforelder.navn");
   const samværsgradBeskrivelse =
     samvær === "1"
       ? t(tekster.samvær.enNatt)
@@ -40,7 +41,7 @@ export function Samvær({ barnIndex }: SamværProps) {
         {FastBosted.options.map((bosted) => {
           return (
             <Radio value={bosted} key={bosted}>
-              {t(tekster.bosted.valg[bosted])}
+              {t(tekster.bosted.valg[bosted](navnMedforelder))}
             </Radio>
           );
         })}
@@ -178,25 +179,20 @@ const tekster = definerTekster({
         en: "Select where the child will live",
         nn: "Velg kvar barnet skal bu",
       },
-      DELT_FAST_BOSTED: {
+      DELT_FAST_BOSTED: () => ({
         nb: "Vi har avtale om fast bosted hos begge (delt fast bosted)",
         en: "We have an agreement on permanent residence with both of us (shared permanent residence)",
         nn: "Vi har avtale om fast bustad hos begge (delt fast bustad)",
-      },
-      HOS_MEG: {
-        nb: "Barnet bor fast hos meg, og har samvær med medforelderen",
-        en: "The child lives with me and has visitation with the other co-parent",
-        nn: "Barnet bur fast hos meg, og har samvær med medforelderen",
-      },
-      HOS_MEDFORELDER: {
-        nb: "Barnet bor fast hos medforelder, og har samvær med meg",
-        en: "The child lives with the co-parent and has visitation with me",
-        nn: "Barnet bur fast hos medforelder, og har samvær med meg",
-      },
-      hosDenAndre: (navn) => ({
-        nb: `Barnet bor hos ${navn}`,
-        en: `The child lives with ${navn}`,
-        nn: `Barnet bur hos ${navn}`,
+      }),
+      HOS_MEG: (navn) => ({
+        nb: `Barnet bor fast hos meg, og har samvær med ${navn || "den andre forelderen"}`,
+        en: `The child lives with me and has visitation with ${navn || "the other co-parent"}`,
+        nn: `Barnet bur fast hos meg, og har samvær med ${navn || "den andre forelderen"}`,
+      }),
+      HOS_MEDFORELDER: (navn) => ({
+        nb: `Barnet bor fast hos ${navn || "den andre forelderen"}, og har samvær med meg`,
+        en: `The child lives with ${navn || "the other co-parent"} and has visitation with me`,
+        nn: `Barnet bur fast hos ${navn || "den andre forelderen"}, og har samvær med meg`,
       }),
     },
   },
@@ -248,7 +244,6 @@ const tekster = definerTekster({
       },
       SAMVÆRSKLASSE_1_TIL_4: (samværsfradrag, samværsklasse) => ({
         nb: `Når barnet har samvær med den andre forelderen, har den andre forelderen rett på fradrag for samvær, som varierer basert på hvilken samværsklasse samværet faller i. I samværsklasse ${samværsklasse} er fradraget ${samværsfradrag} per måned.`,
-
         en: `When the child has visitation with the other parent, the other parent is entitled to a deduction for visitation, which varies based on the visitation class. In visitation class ${samværsklasse}, the deduction is ${samværsfradrag} per month.`,
         nn: `Når barnet har samvær med den andre forelderen, har den andre forelderen rett på fradrag for samvær, som varierer basert på hvilken samværsklasse samværet faller i. I samværsklasse ${samværsklasse} er fradraget ${samværsfradrag} per måned.`,
       }),
@@ -266,7 +261,6 @@ const tekster = definerTekster({
       },
       SAMVÆRSKLASSE_1_TIL_4: (samværsfradrag, samværsklasse) => ({
         nb: `Når barnet har samvær med deg, har du rett på fradrag for samvær, som varierer basert på hvilken samværsklasse samværet faller i. I samværsklasse ${samværsklasse} er fradraget ${samværsfradrag} per måned.`,
-
         en: `When the child has visitation with you, you are entitled to a deduction for visitation, which varies based on the visitation class. In visitation class ${samværsklasse}, the deduction is ${samværsfradrag} per month.`,
         nn: `Når barnet har samvær med deg, har du rett på fradrag for samvær, som varierer basert på hvilken samværsklasse samværet faller i. I samværsklasse ${samværsklasse} er fradraget ${samværsfradrag} per måned.`,
       }),
