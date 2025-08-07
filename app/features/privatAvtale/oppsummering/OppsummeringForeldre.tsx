@@ -16,7 +16,8 @@ import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 export function OppsummeringForeldre() {
   const { form } = usePrivatAvtaleForm();
   const { t } = useOversettelse();
-  const { deg, medforelder } = form.value();
+  const skjemaverdier = form.value();
+  const { medforelder, deg } = skjemaverdier.steg1;
 
   return (
     <>

@@ -1,9 +1,9 @@
 import { sporHendelse } from "~/utils/analytics";
 import type { UtregningNavigasjonsdata } from "../skjema/beregning/schema";
 import type { HentPersoninformasjonForPrivatAvtaleRespons } from "./apiSchema";
-import type { PrivatAvtaleSkjema } from "./skjemaSchema";
+import type { PrivatAvtaleFlerstegsSkjema } from "./skjemaSchema";
 
-type Barn = PrivatAvtaleSkjema["barn"][number];
+type Barn = PrivatAvtaleFlerstegsSkjema["steg2"]["barn"][number];
 
 const tomtBarn: Barn = {
   ident: "",
@@ -12,11 +12,11 @@ const tomtBarn: Barn = {
   bidragstype: "",
 };
 
-export const hentPrivatAvtaleSkjemaStandardverdi = (
-  personinformasjonDeg: HentPersoninformasjonForPrivatAvtaleRespons,
-  forhåndsutfylteInformasjon?: UtregningNavigasjonsdata,
-): PrivatAvtaleSkjema => {
-  const barn: Barn[] = forhåndsutfylteInformasjon?.barn.map((b) => ({
+export const hentPrivatAvtaleFlerstegsSkjemaStandardverdi = (
+  forhåndsutfyltInformasjon: UtregningNavigasjonsdata | undefined,
+  personinformasjon: HentPersoninformasjonForPrivatAvtaleRespons,
+): PrivatAvtaleFlerstegsSkjema => {
+  const barn: Barn[] = forhåndsutfyltInformasjon?.barn.map((b) => ({
     ident: "",
     fulltNavn: b.navn,
     sum: b.sum.toString(),
@@ -24,19 +24,25 @@ export const hentPrivatAvtaleSkjemaStandardverdi = (
   })) ?? [tomtBarn];
 
   return {
-    deg: {
-      ident: personinformasjonDeg.ident,
-      fulltNavn: personinformasjonDeg.fulltNavn,
+    steg1: {
+      deg: {
+        ident: personinformasjon.ident,
+        fulltNavn: personinformasjon.fulltNavn,
+      },
+      medforelder: {
+        ident: "",
+        fulltNavn: forhåndsutfyltInformasjon?.medforelder.navn ?? "",
+      },
     },
-    medforelder: {
-      ident: "",
-      fulltNavn: forhåndsutfylteInformasjon?.medforelder.navn ?? "",
+    steg2: { barn },
+    steg3: {
+      avtaledetaljer: {
+        fraDato: "",
+        nyAvtale: "",
+        medInnkreving: "",
+        innhold: "",
+      },
     },
-    barn: barn,
-    fraDato: "",
-    nyAvtale: "",
-    medInnkreving: "",
-    innhold: "",
   };
 };
 

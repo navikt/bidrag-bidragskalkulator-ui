@@ -11,7 +11,7 @@ import {
   type HentPersoninformasjonForPrivatAvtaleRespons,
   type LagPrivatAvtaleRequest,
 } from "./apiSchema";
-import { type PrivatAvtaleSkjemaValidert } from "./skjemaSchema";
+import { type PrivatAvtaleFlerstegsSkjemaValidert } from "./skjemaSchema";
 
 export const hentPrivatAvtaleFraApi = async ({
   requestData,
@@ -66,9 +66,9 @@ export const hentPrivatAvtaledokument = async (
 ) => {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
-  const skjemaData: PrivatAvtaleSkjemaValidert = await request.json();
+  const skjemaData: PrivatAvtaleFlerstegsSkjemaValidert = await request.json();
 
-  const bidragstyper = skjemaData.barn.map((barn) => barn.bidragstype);
+  const bidragstyper = skjemaData.steg2.barn.map((barn) => barn.bidragstype);
   const isMottaker = bidragstyper.includes("MOTTAKER");
   const isPliktig = bidragstyper.includes("PLIKTIG");
 
@@ -77,40 +77,40 @@ export const hentPrivatAvtaledokument = async (
     return Promise.reject(oversett(språk, tekster.feil.mottakerOgPliktig));
   }
 
-  const { bidragstype } = summerBidrag(skjemaData.barn);
+  const { bidragstype } = summerBidrag(skjemaData.steg2.barn);
   const erBidragsmottaker = bidragstype === "MOTTAKER";
 
   const deg = {
-    fodselsnummer: skjemaData.deg.ident,
-    fulltNavn: skjemaData.deg.fulltNavn,
-    etternavn: skjemaData.deg.fulltNavn,
-    fornavn: skjemaData.deg.fulltNavn,
+    fodselsnummer: skjemaData.steg1.deg.ident,
+    fulltNavn: skjemaData.steg1.deg.fulltNavn,
+    etternavn: skjemaData.steg1.deg.fulltNavn,
+    fornavn: skjemaData.steg1.deg.fulltNavn,
   };
 
   const medforelder = {
-    fodselsnummer: skjemaData.medforelder.ident,
-    fulltNavn: skjemaData.medforelder.fulltNavn,
-    etternavn: skjemaData.medforelder.fulltNavn,
-    fornavn: skjemaData.medforelder.fulltNavn,
+    fodselsnummer: skjemaData.steg1.medforelder.ident,
+    fulltNavn: skjemaData.steg1.medforelder.fulltNavn,
+    etternavn: skjemaData.steg1.medforelder.fulltNavn,
+    fornavn: skjemaData.steg1.medforelder.fulltNavn,
   };
 
   const requestData: LagPrivatAvtaleRequest = {
-    innhold: "", // TODO
+    innhold: skjemaData.steg3.avtaledetaljer.innhold ?? "",
     bidragsmottaker: erBidragsmottaker ? deg : medforelder,
     bidragspliktig: erBidragsmottaker ? medforelder : deg,
-    fraDato: skjemaData.fraDato,
-    nyAvtale: skjemaData.nyAvtale,
-    oppgjorsform: skjemaData.medInnkreving ? "Innkreving" : "Privat",
-    tilInnsending: skjemaData.medInnkreving,
-    barn: skjemaData.barn.map((barn) => {
-      return {
-        fodselsnummer: barn.ident,
-        fulltNavn: barn.fulltNavn,
-        fornavn: barn.fulltNavn,
-        etternavn: barn.fulltNavn,
-        sumBidrag: barn.sum,
-      };
-    }),
+    fraDato: skjemaData.steg3.avtaledetaljer.fraDato,
+    nyAvtale: skjemaData.steg3.avtaledetaljer.nyAvtale,
+    oppgjorsform: skjemaData.steg3.avtaledetaljer.medInnkreving
+      ? "Innkreving"
+      : "Privat",
+    tilInnsending: skjemaData.steg3.avtaledetaljer.medInnkreving,
+    barn: skjemaData.steg2.barn.map((barn) => ({
+      fodselsnummer: barn.ident,
+      fulltNavn: barn.fulltNavn,
+      fornavn: barn.fulltNavn,
+      etternavn: barn.fulltNavn,
+      sumBidrag: barn.sum,
+    })),
   };
 
   return hentPrivatAvtaleFraApi({

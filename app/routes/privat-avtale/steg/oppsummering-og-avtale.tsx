@@ -9,7 +9,7 @@ import {
   stegdata,
   type StegdataType,
 } from "~/features/privatAvtale/privatAvtaleSteg";
-import type { PrivatAvtaleSkjema } from "~/features/privatAvtale/skjemaSchema";
+import type { PrivatAvtaleFlerstegsSkjema } from "~/features/privatAvtale/skjemaSchema";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export default function OppsummeringOgAvtale() {
@@ -70,7 +70,7 @@ export default function OppsummeringOgAvtale() {
 }
 
 function finnUfullstendigeSteg(
-  data: PrivatAvtaleSkjema,
+  data: PrivatAvtaleFlerstegsSkjema,
   feil: Record<string, unknown>,
   privatAvtaleSteg: StegdataType[],
 ): StegdataType[] {
@@ -81,12 +81,12 @@ function finnUfullstendigeSteg(
   const ufullstendig: StegdataType[] = [];
 
   const manglerForeldre =
-    erTom(data.deg.fulltNavn) ||
-    erTom(data.deg.ident) ||
-    erTom(data.medforelder.fulltNavn) ||
-    erTom(data.medforelder.ident) ||
-    harFeil("deg") ||
-    harFeil("medforelder");
+    erTom(data.steg1.deg.fulltNavn) ||
+    erTom(data.steg1.deg.ident) ||
+    erTom(data.steg1.medforelder.fulltNavn) ||
+    erTom(data.steg1.medforelder.ident) ||
+    harFeil("steg1.deg") ||
+    harFeil("steg1.medforelder");
 
   if (manglerForeldre) {
     const steg = privatAvtaleSteg.find((s) => s.step === 1);
@@ -96,15 +96,15 @@ function finnUfullstendigeSteg(
   }
 
   const manglerBarn =
-    data.barn.length === 0 ||
-    data.barn.some(
+    data.steg2.barn.length === 0 ||
+    data.steg2.barn.some(
       (barn) =>
         erTom(barn.fulltNavn) ||
         erTom(barn.ident) ||
         erTom(barn.sum) ||
         erTom(barn.bidragstype),
     ) ||
-    harFeil("barn");
+    harFeil("steg2.barn");
 
   if (manglerBarn) {
     const steg = privatAvtaleSteg.find((steg) => steg.step === 2);
@@ -114,12 +114,12 @@ function finnUfullstendigeSteg(
   }
 
   const manglerAvtale =
-    erTom(data.fraDato) ||
-    data.nyAvtale === "" ||
-    data.medInnkreving === "" ||
-    harFeil("fraDato") ||
-    harFeil("nyAvtale") ||
-    harFeil("medInnkreving");
+    erTom(data.steg3.avtaledetaljer.fraDato) ||
+    data.steg3.avtaledetaljer.nyAvtale === "" ||
+    data.steg3.avtaledetaljer.medInnkreving === "" ||
+    harFeil("steg3.avtaledetaljer.fraDato") ||
+    harFeil("steg3.avtaledetaljer.nyAvtale") ||
+    harFeil("steg3.avtaledetaljer.medInnkreving");
 
   if (manglerAvtale) {
     const steg = privatAvtaleSteg.find((steg) => steg.step === 3);
@@ -138,9 +138,9 @@ const tekster = definerTekster({
     en: "Download private agreement",
   },
   lasterNed: {
-    nb: "Laster ned ...",
-    nn: "Lastar ned ...",
-    en: "Dowloading ...",
+    nb: "Laster ned…",
+    nn: "Lastar ned…",
+    en: "Downloading…",
   },
   suksessmelding: (antallFiler) => ({
     nb:

@@ -12,12 +12,14 @@ import { Link } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
-import type { PrivatAvtaleSkjema } from "../skjemaSchema";
+import type { PrivatAvtaleFlerstegsSkjema } from "../skjemaSchema";
 
 export function OppsummeringBarn() {
   const { form } = usePrivatAvtaleForm();
   const { t } = useOversettelse();
-  const { barn, medforelder } = form.value();
+  const skjemaverdier = form.value();
+  const { barn } = skjemaverdier.steg2;
+  const { medforelder } = skjemaverdier.steg1;
 
   return (
     <FormSummary>
@@ -58,7 +60,7 @@ export function OppsummeringBarn() {
 }
 
 type BarnesvarProps = {
-  barn: PrivatAvtaleSkjema["barn"][number];
+  barn: PrivatAvtaleFlerstegsSkjema["steg2"]["barn"][number];
   navnMedforelder?: string;
 };
 

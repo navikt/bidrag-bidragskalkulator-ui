@@ -9,11 +9,11 @@ import {
 } from "react";
 import { useHref } from "react-router";
 import {
-  lagPrivatAvtaleSkjemaValidertSchema,
-  type PrivatAvtaleSkjema as PrivatAvtaleSkjemaType,
-  type PrivatAvtaleSkjemaValidert,
+  lagPrivatAvtaleFlerstegsSchema,
+  type PrivatAvtaleFlerstegsSkjema as PrivatAvtaleFlerstegsSkjemaType,
+  type PrivatAvtaleFlerstegsSkjemaValidert,
 } from "~/features/privatAvtale/skjemaSchema";
-import { hentPrivatAvtaleSkjemaStandardverdi } from "~/features/privatAvtale/utils";
+import { hentPrivatAvtaleFlerstegsSkjemaStandardverdi } from "~/features/privatAvtale/utils";
 import {
   BidragstypeSchema,
   type Bidragstype,
@@ -33,7 +33,10 @@ type Resultat = {
 
 type PrivatAvtaleFormContextType = {
   form: ReturnType<
-    typeof useForm<PrivatAvtaleSkjemaType, PrivatAvtaleSkjemaValidert>
+    typeof useForm<
+      PrivatAvtaleFlerstegsSkjemaType,
+      PrivatAvtaleFlerstegsSkjemaValidert
+    >
   >;
   feilVedHentingAvAvtale: string | undefined;
   antallNedlastedeFiler: number | undefined;
@@ -45,7 +48,7 @@ const PrivatAvtaleFormContext = createContext<
 
 const hentPrivatAvtalePdf = async (
   basename: string,
-  skjemadata: PrivatAvtaleSkjemaValidert,
+  skjemadata: PrivatAvtaleFlerstegsSkjemaValidert,
 ): Promise<Blob> => {
   const respons = await fetch(`${basename}api/privat-avtale`, {
     method: "POST",
@@ -60,7 +63,7 @@ const hentPrivatAvtalePdf = async (
     throw new Error(feilmelding);
   }
 
-  return await respons.blob();
+  return respons.blob();
 };
 
 const lagPrivatAvtalePdfNavn = (bidragstype: Bidragstype) => {
@@ -75,47 +78,49 @@ const lagPrivatAvtalePdfNavn = (bidragstype: Bidragstype) => {
   return `privat-avtale-barnebidrag-${rolle}-${datoFormatert}.pdf`;
 };
 
+type PrivatAvtaleFormProviderProps = {
+  children: ReactNode;
+  bidragsutregning?: UtregningNavigasjonsdata;
+  personinformasjon: HentPersoninformasjonForPrivatAvtaleRespons;
+};
+
 export function PrivatAvtaleFormProvider({
   children,
-  personinformasjon,
   bidragsutregning,
-}: {
-  children: ReactNode;
-  personinformasjon: HentPersoninformasjonForPrivatAvtaleRespons;
-  bidragsutregning?: UtregningNavigasjonsdata;
-}) {
+  personinformasjon,
+}: PrivatAvtaleFormProviderProps) {
   const { t, språk } = useOversettelse();
   const basename = useHref("/");
 
   const [feilVedHentingAvAvtale, settFeilVedHentingAvAvtale] = useState<
     string | undefined
   >();
-  const [antallNedlastedeFiler, setAntallNedlastedeFil] = useState<
+  const [antallNedlastedeFiler, setAntallNedlastedeFiler] = useState<
     number | undefined
   >();
-  const [innsendteSkjema, setInnsendteSkjema] = useState<
-    PrivatAvtaleSkjemaValidert | undefined
+  const [innsendtSkjema, setInnsendtSkjema] = useState<
+    PrivatAvtaleFlerstegsSkjemaValidert | undefined
   >();
 
   const form = useForm<
-    PrivatAvtaleSkjemaType,
-    PrivatAvtaleSkjemaValidert,
+    PrivatAvtaleFlerstegsSkjemaType,
+    PrivatAvtaleFlerstegsSkjemaValidert,
     Resultat[]
   >({
-    schema: lagPrivatAvtaleSkjemaValidertSchema(språk),
+    schema: lagPrivatAvtaleFlerstegsSchema(språk),
     submitSource: "state",
-    defaultValues: hentPrivatAvtaleSkjemaStandardverdi(
-      personinformasjon,
+    defaultValues: hentPrivatAvtaleFlerstegsSkjemaStandardverdi(
       bidragsutregning,
+      personinformasjon,
     ),
     handleSubmit: async (skjemaData) => {
       settFeilVedHentingAvAvtale(undefined);
-      setInnsendteSkjema(skjemaData);
+      setInnsendtSkjema(skjemaData);
 
       const barnPerBidragstype = BidragstypeSchema.options
         .map((type) => ({
           type,
-          barn: skjemaData.barn.filter((b) => b.bidragstype === type),
+          barn: skjemaData.steg2.barn.filter((b) => b.bidragstype === type),
         }))
         .filter(({ barn }) => barn.length > 0);
 
@@ -124,7 +129,7 @@ export function PrivatAvtaleFormProvider({
           try {
             const pdf = await hentPrivatAvtalePdf(basename, {
               ...skjemaData,
-              barn,
+              steg2: { barn },
             });
 
             return { type, pdf };
@@ -155,7 +160,7 @@ export function PrivatAvtaleFormProvider({
           lastNedPdf(pdf, lagPrivatAvtalePdfNavn(type));
         }
       });
-      setAntallNedlastedeFil(resultater.length);
+      setAntallNedlastedeFiler(resultater.length);
       sporHendelse({
         hendelsetype: "skjema fullført",
         skjemaId: "barnebidrag-privat-avtale-under-18",
@@ -185,15 +190,15 @@ export function PrivatAvtaleFormProvider({
   });
 
   const erEndretEtterInnsending = useCallback(() => {
-    if (!innsendteSkjema) return false;
-    return JSON.stringify(innsendteSkjema) !== JSON.stringify(form.value());
-  }, [innsendteSkjema, form]);
+    if (!innsendtSkjema) return false;
+    return JSON.stringify(innsendtSkjema) !== JSON.stringify(form.value());
+  }, [innsendtSkjema, form]);
 
   useEffect(() => {
     const unsubscribe = form.subscribe.value(() => {
       if (erEndretEtterInnsending()) {
         settFeilVedHentingAvAvtale(undefined);
-        setAntallNedlastedeFil(undefined);
+        setAntallNedlastedeFiler(undefined);
       }
     });
 

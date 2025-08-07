@@ -5,7 +5,7 @@ import { usePrivatAvtaleForm } from "./PrivatAvtaleFormProvider";
 import { sporPrivatAvtaleSpørsmålBesvart } from "./utils";
 
 type Props = {
-  part: "deg" | "medforelder";
+  part: "medforelder";
 };
 
 export const Avtalepart = ({ part }: Props) => {
@@ -15,23 +15,23 @@ export const Avtalepart = ({ part }: Props) => {
   return (
     <div className="space-y-6">
       <TextField
-        {...form.field(`${part}.fulltNavn`).getInputProps({
+        {...form.field(`steg1.${part}.fulltNavn`).getInputProps({
           label: t(tekster[part].fulltNavn.label),
           onBlur: sporPrivatAvtaleSpørsmålBesvart(
             t(tekster[part].fulltNavn.label),
           ),
         })}
-        error={form.field(`${part}.fulltNavn`).error()}
+        error={form.field(`steg1.${part}.fulltNavn`).error()}
         autoComplete="off"
         htmlSize={30}
       />
 
       <TextField
-        {...form.field(`${part}.ident`).getInputProps({
+        {...form.field(`steg1.${part}.ident`).getInputProps({
           label: t(tekster[part].ident.label),
           onBlur: sporPrivatAvtaleSpørsmålBesvart(t(tekster[part].ident.label)),
         })}
-        error={form.field(`${part}.ident`).error()}
+        error={form.field(`steg1.${part}.ident`).error()}
         htmlSize={13}
         inputMode="numeric"
         autoComplete="off"

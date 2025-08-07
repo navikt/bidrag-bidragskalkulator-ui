@@ -11,9 +11,9 @@ export const PrivatAvtaleBarn = () => {
   const { t } = useOversettelse();
   const { form } = usePrivatAvtaleForm();
 
-  const barnArray = useFieldArray(form.scope("barn"));
+  const barnArray = useFieldArray(form.scope("steg2.barn"));
   const antallBarn = barnArray.length();
-  const bidragstype = form.value("barn[0].bidragstype");
+  const bidragstype = form.value("steg2.barn[0].bidragstype");
 
   const handleLeggTilBarn = () => {
     barnArray.push({
