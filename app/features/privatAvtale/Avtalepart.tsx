@@ -1,6 +1,7 @@
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 import { TextField } from "@navikt/ds-react";
+import { NAVN_TEXT_FIELD_HTML_SIZE } from "~/utils/ui";
 import { usePrivatAvtaleForm } from "./PrivatAvtaleFormProvider";
 import { sporPrivatAvtaleSpørsmålBesvart } from "./utils";
 
@@ -23,7 +24,7 @@ export const Avtalepart = ({ part }: Props) => {
         })}
         error={form.field(`${part}.fulltNavn`).error()}
         autoComplete="off"
-        htmlSize={30}
+        htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
       />
 
       <TextField

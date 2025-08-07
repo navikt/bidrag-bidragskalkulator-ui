@@ -1,0 +1,1 @@
+export const NAVN_TEXT_FIELD_HTML_SIZE = 30;

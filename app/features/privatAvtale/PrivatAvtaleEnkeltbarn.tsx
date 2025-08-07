@@ -2,6 +2,7 @@ import { PersonCrossIcon } from "@navikt/aksel-icons";
 import { Button, Radio, RadioGroup, TextField } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { NAVN_TEXT_FIELD_HTML_SIZE } from "~/utils/ui";
 import { BidragstypeSchema } from "../skjema/beregning/schema";
 import { FormattertTallTextField } from "../skjema/FormattertTallTextField";
 import type { PrivatAvtaleSkjema } from "./skjemaSchema";
@@ -32,7 +33,7 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
           onBlur: sporPrivatAvtaleSpørsmålBesvart(t(tekster.fulltNavn.label)),
         })}
         error={barnField.field("fulltNavn").error()}
-        htmlSize={30}
+        htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
         autoComplete="off"
       />
 
