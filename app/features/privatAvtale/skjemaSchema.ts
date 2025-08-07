@@ -97,6 +97,98 @@ export type PrivatAvtaleSkjemaValidert = z.infer<
 >;
 export type Person = z.infer<typeof Person>;
 
+export const PrivatAvtaleFlerstegsSkjemaSchema = z.object({
+  steg1: z.object({
+    medforelder: Person,
+  }),
+  steg2: z.object({
+    barn: z.array(Bidragsbarn),
+  }),
+  steg3: z.object({
+    avtaledetaljer: z.object({
+      fraDato: z.string(),
+      nyAvtale: z.enum(["true", "false", ""]),
+      medInnkreving: z.enum(["true", "false", ""]),
+      innhold: z.string(), // TODO: Definer innhold
+    }),
+  }),
+});
+
+const lagSteg1Schema = (språk: Språk) =>
+  z.object({
+    medforelder: lagValidertPersonSkjemaSchema(språk, "medforelder"),
+  });
+
+const lagSteg2Schema = (språk: Språk) =>
+  z.object({
+    barn: z.array(
+      z.object({
+        fulltNavn: z
+          .string()
+          .nonempty(
+            oversett(språk, tekster.feilmeldinger.barn.fulltNavn.påkrevd),
+          ),
+        ident: z
+          .string()
+          .nonempty(oversett(språk, tekster.feilmeldinger.barn.ident))
+          .length(11, oversett(språk, tekster.feilmeldinger.barn.ident)),
+        sum: z
+          .string()
+          .refine((verdi) => verdi.trim() !== "", {
+            message: oversett(språk, tekster.feilmeldinger.barn.sum.påkrevd),
+          })
+          .transform((verdi) => Number(verdi))
+          .refine((verdi) => !isNaN(verdi), {
+            message: oversett(språk, tekster.feilmeldinger.barn.sum.ugyldig),
+          }),
+        bidragstype: z.enum(BidragstypeSchema.options, {
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.barn.bidragstype.ugyldig,
+          ),
+        }),
+      }),
+    ),
+  });
+
+const lagSteg3Schema = (språk: Språk) =>
+  z.object({
+    avtaledetaljer: z.object({
+      fraDato: z
+        .string()
+        .nonempty(oversett(språk, tekster.feilmeldinger.fraDato.påkrevd))
+        .refine(
+          erDatostrengÅrMånedDag,
+          oversett(språk, tekster.feilmeldinger.fraDato.ugyldig),
+        ),
+      nyAvtale: z
+        .enum(["true", "false"], {
+          message: oversett(språk, tekster.feilmeldinger.nyAvtale.påkrevd),
+        })
+        .transform((value) => value === "true"),
+      medInnkreving: z
+        .enum(["true", "false"], {
+          message: oversett(språk, tekster.feilmeldinger.medInnkreving.påkrevd),
+        })
+        .transform((value) => value === "true"),
+      innhold: z.string().optional(), // TODO: Definer innhold
+    }),
+  });
+
+export const lagPrivatAvtaleFlerstegsSchema = (språk: Språk) =>
+  z.object({
+    steg1: lagSteg1Schema(språk),
+    steg2: lagSteg2Schema(språk),
+    steg3: lagSteg3Schema(språk),
+  });
+
+export type PrivatAvtaleFlerstegsSkjema = z.infer<
+  typeof PrivatAvtaleFlerstegsSkjemaSchema
+>;
+export type PrivatAvtaleFlerstegsSkjemaValidert = z.infer<
+  ReturnType<typeof lagPrivatAvtaleSkjemaValidertSchema>
+>;
+
 const tekster = definerTekster({
   feilmeldinger: {
     deg: {
