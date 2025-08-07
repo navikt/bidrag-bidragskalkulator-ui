@@ -13,7 +13,8 @@ export function MedforelderSkjema() {
         error={form.field("medforelder.navn").error()}
         label={t(tekster.navn.label)}
         description={t(tekster.navn.description)}
-        className="max-w-80"
+        autoComplete="off"
+        htmlSize={30}
       />
     </div>
   );
