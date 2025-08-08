@@ -194,9 +194,9 @@ type SamværsklasseType = keyof typeof SAMVÆRSKLASSE_GRENSER;
 export const kalkulerSamværsklasse = (
   antallNetterHosMeg: number,
   fastBosted: z.infer<typeof FastBosted>,
-): SamværsklasseType | "DELT_BOSTED" => {
+): SamværsklasseType | undefined => {
   if (fastBosted === "DELT_FAST_BOSTED") {
-    return "DELT_BOSTED";
+    return undefined;
   }
 
   const netterHosBidragspliktig =
@@ -211,7 +211,7 @@ export const kalkulerSamværsklasse = (
     }
   }
 
-  return "DELT_BOSTED";
+  return undefined;
 };
 
 /**

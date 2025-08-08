@@ -144,7 +144,8 @@ export const hentBidragsutregning = async (token: string, request: Request) => {
     dittBoforhold,
     medforelderBoforhold,
     barn: skjemaData.barn.map((barn) => {
-      const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
+      const samværsklasse =
+        kalkulerSamværsklasse(barn.samvær, barn.bosted) ?? "DELT_BOSTED";
       const bidragstype = kalkulerBidragstype(
         barn.bosted,
         inntektForelder1,
@@ -190,7 +191,8 @@ export const hentManuellBidragsutregning = async (request: Request) => {
     dittBoforhold,
     medforelderBoforhold,
     barn: skjemaData.barn.map((barn) => {
-      const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
+      const samværsklasse =
+        kalkulerSamværsklasse(barn.samvær, barn.bosted) ?? "DELT_BOSTED";
       const bidragstype = kalkulerBidragstype(
         barn.bosted,
         inntektForelder1,
