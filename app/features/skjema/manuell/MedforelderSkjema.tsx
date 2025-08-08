@@ -1,6 +1,7 @@
 import { TextField } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { NAVN_TEXT_FIELD_HTML_SIZE } from "~/utils/ui";
 import type { ManueltSkjema } from "../schema";
 
 export function MedforelderSkjema() {
@@ -13,7 +14,8 @@ export function MedforelderSkjema() {
         error={form.field("medforelder.navn").error()}
         label={t(tekster.navn.label)}
         description={t(tekster.navn.description)}
-        className="max-w-80"
+        autoComplete="off"
+        htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
       />
     </div>
   );

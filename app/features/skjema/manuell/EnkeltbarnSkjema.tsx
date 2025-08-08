@@ -4,6 +4,7 @@ import { useFormContext, useFormScope } from "@rvf/react";
 import { useMemo } from "react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
+import { NAVN_TEXT_FIELD_HTML_SIZE } from "~/utils/ui";
 import { FormattertTallTextField } from "../FormattertTallTextField";
 import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
 import { Samvær } from "../Samvær";
@@ -53,7 +54,8 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
         })}
         description={t(tekster.navn.description)}
         error={barnField.field("navn").error()}
-        className="max-w-80"
+        autoComplete="off"
+        htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
       />
       <TextField
         {...barnField.field("alder").getInputProps({
