@@ -26,7 +26,7 @@ export const useUfullstendigeSteg = (): StegdataType[] => {
   );
   const skjemadata = useMemo(() => form.value(), [form]);
 
-  return useMemo(() => {
+  const ufullstendigeSteg = useMemo(() => {
     const valideringsresultat = validator.safeParse(skjemadata);
 
     if (valideringsresultat.success) {
@@ -42,10 +42,14 @@ export const useUfullstendigeSteg = (): StegdataType[] => {
       }
     }
 
-    return Array.from(unikeStegnummer)
+    const stegdata = Array.from(unikeStegnummer)
       .map((stegnummer) => finnStegForStegnummer(stegnummer, alleSteg))
       .filter((steg): steg is StegdataType => steg !== null);
+
+    return stegdata;
   }, [validator, skjemadata, alleSteg]);
+
+  return ufullstendigeSteg;
 };
 
 const hentStegnummerFraFeilsti = (feilsti: PropertyKey[]): number | null => {
