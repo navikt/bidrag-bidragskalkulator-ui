@@ -1,5 +1,6 @@
 import { Alert, Button } from "@navikt/ds-react";
 import { useEffect } from "react";
+import { OppsummeringAndreBestemmelser } from "~/features/privatAvtale/oppsummering/OppsummeringAndreBestemmelser";
 import { OppsummeringAvtaledetaljer } from "~/features/privatAvtale/oppsummering/OppsummeringAvtaledetaljer";
 import { OppsummeringBarn } from "~/features/privatAvtale/oppsummering/OppsummeringBarn";
 import { OppsummeringForeldre } from "~/features/privatAvtale/oppsummering/OppsummeringForeldre";
@@ -44,6 +45,7 @@ export default function OppsummeringOgAvtale() {
         <OppsummeringForeldre />
         <OppsummeringBarn />
         <OppsummeringAvtaledetaljer />
+        <OppsummeringAndreBestemmelser />
       </div>
 
       <Button

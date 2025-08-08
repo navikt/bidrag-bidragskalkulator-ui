@@ -43,6 +43,10 @@ export const hentPrivatAvtaleFlerstegsSkjemaStandardverdi = (
         innhold: "",
       },
     },
+    steg4: {
+      erAndreBestemmelser: "",
+      andreBestemmelser: "",
+    },
   };
 };
 
