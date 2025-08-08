@@ -1,6 +1,5 @@
 import type z from "zod";
 import { sporHendelse } from "~/utils/analytics";
-import type { Samværsklasse } from "./beregning/schema";
 import type {
   Barn,
   ManuellPersoninformasjon,
@@ -159,30 +158,61 @@ export const hentManueltSkjemaStandardverdi = (
   };
 };
 
+export const SAMVÆRSKLASSE_GRENSER = {
+  SAMVÆRSKLASSE_0: {
+    min: 0,
+    max: 0,
+    klassenummer: 0,
+  },
+  SAMVÆRSKLASSE_1: {
+    min: 1,
+    max: 3,
+    klassenummer: 1,
+  },
+  SAMVÆRSKLASSE_2: {
+    min: 4,
+    max: 8,
+    klassenummer: 2,
+  },
+  SAMVÆRSKLASSE_3: {
+    min: 9,
+    max: 13,
+    klassenummer: 3,
+  },
+  SAMVÆRSKLASSE_4: {
+    min: 14,
+    max: 16,
+    klassenummer: 4,
+  },
+} as const;
+
+type SamværsklasseType = keyof typeof SAMVÆRSKLASSE_GRENSER;
+
 /**
- * Kalkulerer samværsklasse basert på hvor mange netter barnet bor hos forelderen
+ * Kalkulerer samværsklasse basert på hvor mange netter barnet bor hos forelderen og bosted
  */
-export function kalkulerSamværsklasse(
-  samværsgrad: number,
-  bostatus: z.infer<typeof FastBosted>,
-): Samværsklasse {
-  if (bostatus === "DELT_FAST_BOSTED") {
+export const kalkulerSamværsklasse = (
+  antallNetterHosMeg: number,
+  fastBosted: z.infer<typeof FastBosted>,
+): SamværsklasseType | "DELT_BOSTED" => {
+  if (fastBosted === "DELT_FAST_BOSTED") {
     return "DELT_BOSTED";
   }
-  if (samværsgrad === 0 || samværsgrad === 30) {
-    return "SAMVÆRSKLASSE_0";
+
+  const netterHosBidragspliktig =
+    fastBosted === "HOS_MEG" ? 30 - antallNetterHosMeg : antallNetterHosMeg;
+
+  for (const [klasse, grenser] of Object.entries(SAMVÆRSKLASSE_GRENSER)) {
+    if (
+      netterHosBidragspliktig >= grenser.min &&
+      netterHosBidragspliktig <= grenser.max
+    ) {
+      return klasse as SamværsklasseType;
+    }
   }
-  if (samværsgrad <= 3 || samværsgrad >= 27) {
-    return "SAMVÆRSKLASSE_1";
-  }
-  if (samværsgrad <= 8 || samværsgrad >= 22) {
-    return "SAMVÆRSKLASSE_2";
-  }
-  if (samværsgrad <= 13 || samværsgrad >= 17) {
-    return "SAMVÆRSKLASSE_3";
-  }
-  return "SAMVÆRSKLASSE_4";
-}
+
+  return "DELT_BOSTED";
+};
 
 /**
  * Avgjør om forelderen er mottaker eller pliktig basert på samværsgrad
