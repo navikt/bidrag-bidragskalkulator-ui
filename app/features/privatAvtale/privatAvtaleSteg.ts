@@ -34,7 +34,12 @@ export const stegKonfigurasjon: StegKonfigurasjon[] = [
   },
   {
     step: 4,
-    path: RouteConfig.PRIVAT_AVTALE.STEG_4_OPPSUMMERING_OG_AVTALE,
+    path: RouteConfig.PRIVAT_AVTALE.STEG_4_ANDRE_BESTEMMELSER,
+    key: "andreBestemmelser",
+  },
+  {
+    step: 5,
+    path: RouteConfig.PRIVAT_AVTALE.STEG_5_OPPSUMMERING_OG_AVTALE,
     key: "oppsummering",
   },
 ];
@@ -103,6 +108,25 @@ export const privatAvtaleTekster = definerTekster({
       nb: "Avtaledetaljer",
       en: "Agreement details",
       nn: "Avtaledetaljar",
+    },
+  },
+  andreBestemmelser: {
+    meta: {
+      tittel: {
+        nb: "Andre bestemmelser - Barnebidrag privat avtale",
+        en: "Other Conditions - Child support private agreement",
+        nn: "Andre bestemmingar - Barnebidrag privat avtale",
+      },
+      beskrivelse: {
+        nb: "Legg til eventuelle andre bestemmelser som skal gjelde for barnebidragsavtalen.",
+        en: "Add any other conditions that will apply to the child support agreement.",
+        nn: "Legg til eventuelle andre bestemmingar som skal gjelde for avtala.",
+      },
+    },
+    overskrift: {
+      nb: "Andre bestemmelser",
+      en: "Other conditions",
+      nn: "Andre bestemmingar",
     },
   },
   oppsummering: {

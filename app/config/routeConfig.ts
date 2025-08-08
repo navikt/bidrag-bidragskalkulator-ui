@@ -5,7 +5,8 @@ export const RouteConfig = {
     STEG_1_FORELDRE: "/privat-avtale/steg/foreldre",
     STEG_2_BARN_OG_BIDRAG: "/privat-avtale/steg/barn-og-bidrag",
     STEG_3_AVTALEDETALJER: "/privat-avtale/steg/avtaledetaljer",
-    STEG_4_OPPSUMMERING_OG_AVTALE: "/privat-avtale/steg/oppsummering-og-avtale",
+    STEG_4_ANDRE_BESTEMMELSER: "/privat-avtale/steg/andre-bestemmelser",
+    STEG_5_OPPSUMMERING_OG_AVTALE: "/privat-avtale/steg/oppsummering-og-avtale",
     API: "/api/privat-avtale",
   },
   OVERSIKT: {
