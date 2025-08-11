@@ -50,6 +50,9 @@ export const PrivatAvtaleFlerstegsSkjemaSchema = z.object({
     erAndreBestemmelser: z.enum(["true", "false", ""]),
     andreBestemmelser: z.string(),
   }),
+  steg5: z.object({
+    harVedlegg: z.enum(["true", "false", ""]),
+  }),
 });
 
 const lagSteg1Schema = (språk: Språk) =>
@@ -138,12 +141,22 @@ const lagSteg4Schema = (språk: Språk) =>
       },
     );
 
+const lagSteg5Schema = (språk: Språk) =>
+  z.object({
+    harVedlegg: z
+      .enum(["true", "false"], {
+        message: oversett(språk, tekster.feilmeldinger.harVedlegg.påkrevd),
+      })
+      .transform((value) => value === "true"),
+  });
+
 export const lagPrivatAvtaleFlerstegsSchema = (språk: Språk) =>
   z.object({
     steg1: lagSteg1Schema(språk),
     steg2: lagSteg2Schema(språk),
     steg3: lagSteg3Schema(språk),
     steg4: lagSteg4Schema(språk),
+    steg5: lagSteg5Schema(språk),
   });
 
 export type PrivatAvtaleFlerstegsSkjema = z.infer<
@@ -268,6 +281,13 @@ const tekster = definerTekster({
         nb: "Fyll ut andre bestemmelser",
         en: "Fill in other conditions",
         nn: "Fyll ut andre bestemmingar",
+      },
+    },
+    harVedlegg: {
+      påkrevd: {
+        nb: "Fyll ut om det er vedlegg",
+        en: "Fill in if there are attachments",
+        nn: "Fyll ut om det er vedlegg",
       },
     },
   },

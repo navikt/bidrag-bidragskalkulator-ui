@@ -5,6 +5,7 @@ import { OppsummeringAvtaledetaljer } from "~/features/privatAvtale/oppsummering
 import { OppsummeringBarn } from "~/features/privatAvtale/oppsummering/OppsummeringBarn";
 import { OppsummeringForeldre } from "~/features/privatAvtale/oppsummering/OppsummeringForeldre";
 import OppsummeringsVarsel from "~/features/privatAvtale/oppsummering/OppsummeringsVarsel";
+import { OppsummeringVedlegg } from "~/features/privatAvtale/oppsummering/OppsummeringVedlegg";
 import { useUfullstendigeSteg } from "~/features/privatAvtale/oppsummering/useUfullstendigeSteg";
 import { usePrivatAvtaleForm } from "~/features/privatAvtale/PrivatAvtaleFormProvider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -46,6 +47,7 @@ export default function OppsummeringOgAvtale() {
         <OppsummeringBarn />
         <OppsummeringAvtaledetaljer />
         <OppsummeringAndreBestemmelser />
+        <OppsummeringVedlegg />
       </div>
 
       <Button
