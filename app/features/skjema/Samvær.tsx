@@ -1,4 +1,12 @@
-import { Alert, BodyShort, Radio, RadioGroup } from "@navikt/ds-react";
+import {
+  BodyLong,
+  BodyShort,
+  List,
+  Radio,
+  RadioGroup,
+  ReadMore,
+} from "@navikt/ds-react";
+import { ListItem } from "@navikt/ds-react/List";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -6,7 +14,11 @@ import { formatterSum } from "~/utils/tall";
 import type { Samværsklasse } from "./beregning/schema";
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
 import { FastBosted, type ManueltSkjema } from "./schema";
-import { kalkulerSamværsklasse, SAMVÆR_STANDARDVERDI } from "./utils";
+import {
+  kalkulerSamværsklasse,
+  SAMVÆR_STANDARDVERDI,
+  SAMVÆRSKLASSE_GRENSER,
+} from "./utils";
 
 type SamværProps = {
   barnIndex: number;
@@ -91,78 +103,97 @@ export function Samvær({ barnIndex }: SamværProps) {
           valueDescription={samværsgradBeskrivelse}
         />
       )}
-      {bosted && alder && (
-        <Samværsfradrag
-          alder={Number(alder)}
-          samværsklasse={kalkulerSamværsklasse(Number(samvær), bosted)}
-          bostatus={bosted}
-        />
-      )}
+
+      <Samværsfradraginfo
+        alder={alder ? Number(alder) : undefined}
+        samværsklasse={
+          bosted ? kalkulerSamværsklasse(Number(samvær), bosted) : undefined
+        }
+      />
     </>
   );
 }
 
-type SamværsfradragProps = {
-  alder: number;
-  samværsklasse: Samværsklasse;
-  bostatus: "HOS_MEG" | "HOS_MEDFORELDER" | "DELT_FAST_BOSTED";
+type SamværsfradraginfoProps = {
+  alder?: number;
+  samværsklasse?: Samværsklasse;
 };
-const Samværsfradrag = ({
+
+const SAMVÆRSKLASSENUMRE = [0, 1, 2, 3, 4] as const;
+
+const getSamværsklasseNetterPeriode = (
+  klassenummer: (typeof SAMVÆRSKLASSENUMRE)[number],
+) => {
+  const { min, max } = SAMVÆRSKLASSE_GRENSER[`SAMVÆRSKLASSE_${klassenummer}`];
+
+  if (min === max) {
+    return String(min);
+  }
+
+  return `${min}-${max}`;
+};
+
+const Samværsfradraginfo = ({
   alder,
   samværsklasse,
-  bostatus,
-}: SamværsfradragProps) => {
+}: SamværsfradraginfoProps) => {
   const personinformasjon = usePersoninformasjon();
   const { t } = useOversettelse();
-  if (bostatus === "DELT_FAST_BOSTED") {
-    return (
-      <SamværsfradragInfo>
-        {t(tekster.samværsfradrag.DELT_FAST_BOSTED)}
-      </SamværsfradragInfo>
-    );
-  }
-  if (samværsklasse === "SAMVÆRSKLASSE_0") {
-    return (
-      <SamværsfradragInfo>
-        {t(tekster.samværsfradrag[bostatus].SAMVÆRSKLASSE_0)}
-      </SamværsfradragInfo>
-    );
-  }
-  // Vil aldri skje, siden samværsklasse aldri vil være "DELT_BOSTED" når bostatus er "HOS_MEG" eller "HOS_MEDFORELDER"
-  // Dette løser kun en type-narrowing issue for TypeScript
-  if (samværsklasse === "DELT_BOSTED") {
-    return null;
-  }
 
-  const samværsfradrag = personinformasjon.samværsfradrag.find(
-    (fradrag) => alder >= fradrag.alderFra && alder <= fradrag.alderTil,
-  )?.beløpFradrag[samværsklasse];
-
-  if (!samværsfradrag) {
-    return null;
-  }
-  const samværsklasseNummer = Number(samværsklasse.split("_").pop());
+  const samværsfradragForAlder =
+    alder === undefined
+      ? undefined
+      : personinformasjon.samværsfradrag.find(
+          (fradrag) => alder >= fradrag.alderFra && alder <= fradrag.alderTil,
+        );
 
   return (
-    <SamværsfradragInfo>
-      {t(
-        tekster.samværsfradrag[bostatus].SAMVÆRSKLASSE_1_TIL_4(
-          formatterSum(samværsfradrag),
-          samværsklasseNummer,
-        ),
+    <ReadMore header={t(tekster.samværsfradrag.overskrift)}>
+      <BodyLong className="mb-4">
+        {t(tekster.samværsfradrag.beskrivelse)}
+      </BodyLong>
+
+      {alder === undefined && (
+        <BodyShort>{t(tekster.samværsfradrag.manglerAlder)}</BodyShort>
       )}
-    </SamværsfradragInfo>
-  );
-};
 
-type SamværsfradragInfoProps = {
-  children: React.ReactNode;
-};
-const SamværsfradragInfo = ({ children }: SamværsfradragInfoProps) => {
-  return (
-    <Alert variant="info">
-      <BodyShort size="small">{children}</BodyShort>
-    </Alert>
+      {samværsfradragForAlder && alder !== undefined && (
+        <>
+          <BodyShort className="mb-2">
+            {t(tekster.samværsfradrag.fradragslistetittel(alder))}
+          </BodyShort>
+
+          <List>
+            {SAMVÆRSKLASSENUMRE.map((klasse) => {
+              const erValgtSamværsklasse =
+                samværsklasse === `SAMVÆRSKLASSE_${klasse}`;
+
+              const beløpFradrag =
+                klasse === 0
+                  ? 0
+                  : samværsfradragForAlder.beløpFradrag[
+                      `SAMVÆRSKLASSE_${klasse}`
+                    ];
+
+              return (
+                <ListItem key={klasse}>
+                  <span
+                    className={erValgtSamværsklasse ? "font-bold" : undefined}
+                  >
+                    {t(
+                      tekster.samværsfradrag.fradragNetter(
+                        getSamværsklasseNetterPeriode(klasse),
+                        formatterSum(beløpFradrag),
+                      ),
+                    )}
+                  </span>
+                </ListItem>
+              );
+            })}
+          </List>
+        </>
+      )}
+    </ReadMore>
   );
 };
 
@@ -236,44 +267,30 @@ const tekster = definerTekster({
     },
   },
   samværsfradrag: {
-    HOS_MEG: {
-      SAMVÆRSKLASSE_0: {
-        nb: "Når barnet ikke har samvær med den andre forelderen, har forelderen ikke rett på fradrag for samvær.",
-        en: "When the child does not have visitation with the other parent, the parent is not entitled to a deduction for visitation.",
-        nn: "Når barnet ikkje har samvær med den andre forelderen, har forelderen ikkje rett på fradrag for samvær.",
-      },
-      SAMVÆRSKLASSE_1_TIL_4: (samværsfradrag, samværsklasse) => ({
-        nb: `Når barnet har samvær med den andre forelderen, har den andre forelderen rett på fradrag for samvær, som varierer basert på hvilken samværsklasse samværet faller i. I samværsklasse ${samværsklasse} er fradraget ${samværsfradrag} per måned.`,
-        en: `When the child has visitation with the other parent, the other parent is entitled to a deduction for visitation, which varies based on the visitation class. In visitation class ${samværsklasse}, the deduction is ${samværsfradrag} per month.`,
-        nn: `Når barnet har samvær med den andre forelderen, har den andre forelderen rett på fradrag for samvær, som varierer basert på hvilken samværsklasse samværet faller i. I samværsklasse ${samværsklasse} er fradraget ${samværsfradrag} per måned.`,
-      }),
-      DELT_FAST_BOSTED: {
-        nb: "Når barnet har delt fast bosted, har ikke faktisk samvær noen betydning for barnebidraget.",
-        en: "When the child has shared permanent residence, actual visitation does not affect child support.",
-        nn: "Når barnet har delt fast bustad, har ikkje faktisk samvær nokon betydning for barnebidraget.",
-      },
+    overskrift: {
+      nb: "Hvorfor vi spør om bosted og samvær",
+      en: "Why we ask about residence and visitation",
+      nn: "Kvifor vi spør om bustad og samvær",
     },
-    HOS_MEDFORELDER: {
-      SAMVÆRSKLASSE_0: {
-        nb: "Når barnet ikke har samvær med deg, har du ikke rett på fradrag for samvær.",
-        en: "When the child does not have visitation with you, you are not entitled to a deduction for visitation.",
-        nn: "Når barnet ikkje har samvær med deg, har du ikkje rett på fradrag for samvær.",
-      },
-      SAMVÆRSKLASSE_1_TIL_4: (samværsfradrag, samværsklasse) => ({
-        nb: `Når barnet har samvær med deg, har du rett på fradrag for samvær, som varierer basert på hvilken samværsklasse samværet faller i. I samværsklasse ${samværsklasse} er fradraget ${samværsfradrag} per måned.`,
-        en: `When the child has visitation with you, you are entitled to a deduction for visitation, which varies based on the visitation class. In visitation class ${samværsklasse}, the deduction is ${samværsfradrag} per month.`,
-        nn: `Når barnet har samvær med deg, har du rett på fradrag for samvær, som varierer basert på hvilken samværsklasse samværet faller i. I samværsklasse ${samværsklasse} er fradraget ${samværsfradrag} per måned.`,
-      }),
-      DELT_FAST_BOSTED: {
-        nb: "Når barnet har delt fast bosted, har ikke faktisk samvær noen betydning for barnebidraget.",
-        en: "When the child has shared permanent residence, actual visitation does not affect child support.",
-        nn: "Når barnet har delt fast bustad, har ikkje faktisk samvær nokon betydning for barnebidraget.",
-      },
+    beskrivelse: {
+      nb: "Når barnet bor fast hos én forelder og har samvær med den andre, kan den andre forelderen få fradrag i barnebidraget. Fradraget avhenger av barnets alder og hvor mye tid barnet tilbringer hos hver forelder.",
+      en: "When the child has a permanent residence with one parent and visitation with the other, the other parent can receive a deduction in child support. The deduction depends on the age of the child and how much time the child spends with each parent.",
+      nn: "Når barnet bur fast hos éin forelder og har samvær med den andre, kan den andre forelderen få fradrag i barnebidraget. Fradraget avhenger av barnets alder og kor mykje tid barnet tilbringer hos kvar forelder.",
     },
-    DELT_FAST_BOSTED: {
-      nb: "Når barnet har delt fast bosted, har ikke faktisk samvær noen betydning for barnebidraget.",
-      en: "When the child has shared permanent residence, actual visitation does not affect child support.",
-      nn: "Når barnet har delt fast bustad, har ikkje faktisk samvær nokon betydning for barnebidraget.",
+    manglerAlder: {
+      nb: "Fyll ut barnets alder for å se fradraget for samvær.",
+      en: "Fill in the child's age to see the deduction for visitation.",
+      nn: "Fyll ut barnets alder for å sjå fradraget for samvær.",
     },
+    fradragslistetittel: (alder) => ({
+      nb: `Fradrag for samvær med barn ${alder} år:`,
+      en: `Deductions for visitation with child ${alder} years old:`,
+      nn: `Fradrag for samvær med barn ${alder} år:`,
+    }),
+    fradragNetter: (netter, beløp) => ({
+      nb: `${netter} netter: ${beløp} per måned`,
+      en: `${netter} nights: ${beløp} per month`,
+      nn: `${netter} netter: ${beløp} per månad`,
+    }),
   },
 });
