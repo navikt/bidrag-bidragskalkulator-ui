@@ -33,7 +33,11 @@ export default [
           "routes/privat-avtale/steg/avtaledetaljer.tsx",
         ),
         route(
-          RouteConfig.PRIVAT_AVTALE.STEG_4_OPPSUMMERING_OG_AVTALE,
+          RouteConfig.PRIVAT_AVTALE.STEG_4_ANDRE_BESTEMMELSER,
+          "routes/privat-avtale/steg/andre-bestemmelser.tsx",
+        ),
+        route(
+          RouteConfig.PRIVAT_AVTALE.STEG_5_OPPSUMMERING_OG_AVTALE,
           "routes/privat-avtale/steg/oppsummering-og-avtale.tsx",
         ),
       ]),

@@ -46,6 +46,10 @@ export const PrivatAvtaleFlerstegsSkjemaSchema = z.object({
       innhold: z.string().optional(), // TODO: Definer innhold
     }),
   }),
+  steg4: z.object({
+    erAndreBestemmelser: z.enum(["true", "false", ""]),
+    andreBestemmelser: z.string(),
+  }),
 });
 
 const lagSteg1Schema = (språk: Språk) =>
@@ -110,11 +114,36 @@ const lagSteg3Schema = (språk: Språk) =>
     }),
   });
 
+const lagSteg4Schema = (språk: Språk) =>
+  z
+    .object({
+      erAndreBestemmelser: z
+        .enum(["true", "false"], {
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.erAndreBestemmelser.påkrevd,
+          ),
+        })
+        .transform((value) => value === "true"),
+      andreBestemmelser: z.string(),
+    })
+    .refine(
+      (data) =>
+        !data.erAndreBestemmelser || data.andreBestemmelser.trim() !== "",
+      {
+        message: oversett(
+          språk,
+          tekster.feilmeldinger.andreBestemmelser.påkrevd,
+        ),
+      },
+    );
+
 export const lagPrivatAvtaleFlerstegsSchema = (språk: Språk) =>
   z.object({
     steg1: lagSteg1Schema(språk),
     steg2: lagSteg2Schema(språk),
     steg3: lagSteg3Schema(språk),
+    steg4: lagSteg4Schema(språk),
   });
 
 export type PrivatAvtaleFlerstegsSkjema = z.infer<
@@ -225,6 +254,20 @@ const tekster = definerTekster({
         nb: "Fyll ut om dette er en ny avtale",
         en: "Fill in if this is a new agreement",
         nn: "Fyll ut om dette er ein ny avtale",
+      },
+    },
+    erAndreBestemmelser: {
+      påkrevd: {
+        nb: "Fyll ut om det er andre bestemmelser",
+        en: "Fill in if there are other conditions",
+        nn: "Fyll ut om det er andre bestemmingar",
+      },
+    },
+    andreBestemmelser: {
+      påkrevd: {
+        nb: "Fyll ut andre bestemmelser",
+        en: "Fill in other conditions",
+        nn: "Fyll ut andre bestemmingar",
       },
     },
   },
