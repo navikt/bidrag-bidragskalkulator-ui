@@ -1,10 +1,12 @@
 import {
   BodyLong,
   BodyShort,
+  List,
   Radio,
   RadioGroup,
   ReadMore,
 } from "@navikt/ds-react";
+import { ListItem } from "@navikt/ds-react/List";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -125,7 +127,7 @@ const getSamværsklasseNetterPeriode = (
   const { min, max } = SAMVÆRSKLASSE_GRENSER[`SAMVÆRSKLASSE_${klassenummer}`];
 
   if (min === max) {
-    return `${min}`;
+    return String(min);
   }
 
   return `${min}-${max}`;
@@ -148,11 +150,7 @@ const Samværsfradraginfo = ({
   return (
     <ReadMore header={t(tekster.samværsfradrag.overskrift)}>
       <BodyLong className="mb-4">
-        {t(tekster.samværsfradrag.beskrivelseDeltBosted)}
-      </BodyLong>
-
-      <BodyLong className="mb-4">
-        {t(tekster.samværsfradrag.beskrivelseSamvær)}
+        {t(tekster.samværsfradrag.beskrivelse)}
       </BodyLong>
 
       {alder === undefined && (
@@ -165,7 +163,7 @@ const Samværsfradraginfo = ({
             {t(tekster.samværsfradrag.fradragslistetittel(alder))}
           </BodyShort>
 
-          <ul>
+          <List>
             {SAMVÆRSKLASSENUMRE.map((klasse) => {
               const erValgtSamværsklasse =
                 samværsklasse === `SAMVÆRSKLASSE_${klasse}`;
@@ -178,7 +176,7 @@ const Samværsfradraginfo = ({
                     ];
 
               return (
-                <li key={klasse}>
+                <ListItem key={klasse}>
                   <span
                     className={erValgtSamværsklasse ? "font-bold" : undefined}
                   >
@@ -189,10 +187,10 @@ const Samværsfradraginfo = ({
                       ),
                     )}
                   </span>
-                </li>
+                </ListItem>
               );
             })}
-          </ul>
+          </List>
         </>
       )}
     </ReadMore>
@@ -274,15 +272,10 @@ const tekster = definerTekster({
       en: "Why we ask about residence and visitation",
       nn: "Kvifor vi spør om bustad og samvær",
     },
-    beskrivelseSamvær: {
+    beskrivelse: {
       nb: "Når barnet bor fast hos én forelder og har samvær med den andre, kan den andre forelderen få fradrag i barnebidraget. Fradraget avhenger av barnets alder og hvor mye tid barnet tilbringer hos hver forelder.",
       en: "When the child has a permanent residence with one parent and visitation with the other, the other parent can receive a deduction in child support. The deduction depends on the age of the child and how much time the child spends with each parent.",
       nn: "Når barnet bur fast hos éin forelder og har samvær med den andre, kan den andre forelderen få fradrag i barnebidraget. Fradraget avhenger av barnets alder og kor mykje tid barnet tilbringer hos kvar forelder.",
-    },
-    beskrivelseDeltBosted: {
-      nb: "Når barnet har delt fast bosted, har ikke faktisk samvær noen betydning for barnebidraget.",
-      en: "When the child has shared permanent residence, actual visitation does not affect child support.",
-      nn: "Når barnet har delt fast bustad, har ikkje faktisk samvær nokon betydning for barnebidraget.",
     },
     manglerAlder: {
       nb: "Fyll ut barnets alder for å se fradraget for samvær.",

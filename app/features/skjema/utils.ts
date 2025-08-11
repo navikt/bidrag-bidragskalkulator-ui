@@ -1,5 +1,6 @@
 import type z from "zod";
 import { sporHendelse } from "~/utils/analytics";
+import type { Samværsklasse } from "./beregning/schema";
 import type {
   Barn,
   ManuellPersoninformasjon,
@@ -186,17 +187,15 @@ export const SAMVÆRSKLASSE_GRENSER = {
   },
 } as const;
 
-type SamværsklasseType = keyof typeof SAMVÆRSKLASSE_GRENSER;
-
 /**
  * Kalkulerer samværsklasse basert på hvor mange netter barnet bor hos forelderen og bosted
  */
 export const kalkulerSamværsklasse = (
   antallNetterHosMeg: number,
   fastBosted: z.infer<typeof FastBosted>,
-): SamværsklasseType | undefined => {
+): Samværsklasse => {
   if (fastBosted === "DELT_FAST_BOSTED") {
-    return undefined;
+    return "DELT_BOSTED";
   }
 
   const netterHosBidragspliktig =
@@ -207,11 +206,11 @@ export const kalkulerSamværsklasse = (
       netterHosBidragspliktig >= grenser.min &&
       netterHosBidragspliktig <= grenser.max
     ) {
-      return klasse as SamværsklasseType;
+      return klasse as Samværsklasse;
     }
   }
 
-  return undefined;
+  return "DELT_BOSTED";
 };
 
 /**
