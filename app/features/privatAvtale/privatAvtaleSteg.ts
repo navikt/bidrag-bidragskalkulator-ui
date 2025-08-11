@@ -39,7 +39,12 @@ export const stegKonfigurasjon: StegKonfigurasjon[] = [
   },
   {
     step: 5,
-    path: RouteConfig.PRIVAT_AVTALE.STEG_5_OPPSUMMERING_OG_AVTALE,
+    path: RouteConfig.PRIVAT_AVTALE.STEG_5_VEDLEGG,
+    key: "vedlegg",
+  },
+  {
+    step: 6,
+    path: RouteConfig.PRIVAT_AVTALE.STEG_6_OPPSUMMERING_OG_AVTALE,
     key: "oppsummering",
   },
 ];
@@ -127,6 +132,25 @@ export const privatAvtaleTekster = definerTekster({
       nb: "Andre bestemmelser",
       en: "Other conditions",
       nn: "Andre bestemmingar",
+    },
+  },
+  vedlegg: {
+    meta: {
+      tittel: {
+        nb: "Vedlegg - Barnebidrag privat avtale",
+        en: "Attachments - Child support private agreement",
+        nn: "Vedlegg - Barnebidrag privat avtale",
+      },
+      beskrivelse: {
+        nb: "Legg til eventuelle vedlegg som skal følge med avtalen.",
+        en: "Add any attachments that should accompany the agreement.",
+        nn: "Legg til eventuelle vedlegg som skal følge med avtalen.",
+      },
+    },
+    overskrift: {
+      nb: "Vedlegg",
+      en: "Attachments",
+      nn: "Vedlegg",
     },
   },
   oppsummering: {

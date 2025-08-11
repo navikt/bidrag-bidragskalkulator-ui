@@ -6,7 +6,8 @@ export const RouteConfig = {
     STEG_2_BARN_OG_BIDRAG: "/privat-avtale/steg/barn-og-bidrag",
     STEG_3_AVTALEDETALJER: "/privat-avtale/steg/avtaledetaljer",
     STEG_4_ANDRE_BESTEMMELSER: "/privat-avtale/steg/andre-bestemmelser",
-    STEG_5_OPPSUMMERING_OG_AVTALE: "/privat-avtale/steg/oppsummering-og-avtale",
+    STEG_5_VEDLEGG: "/privat-avtale/steg/vedlegg",
+    STEG_6_OPPSUMMERING_OG_AVTALE: "/privat-avtale/steg/oppsummering-og-avtale",
     API: "/api/privat-avtale",
   },
   OVERSIKT: {
