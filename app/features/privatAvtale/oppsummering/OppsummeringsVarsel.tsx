@@ -1,4 +1,5 @@
-import { Alert, Link } from "@navikt/ds-react";
+import { Alert, Link, List } from "@navikt/ds-react";
+import { ListItem } from "@navikt/ds-react/List";
 import { Link as ReactRouterLink } from "react-router";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import type { StegdataType } from "../privatAvtaleSteg";
@@ -14,15 +15,15 @@ export default function OppsummeringsVarsel({ ufullstendigSteg }: Props) {
     <Alert variant="warning">
       {t(tekster.feilmeldingGenerisk)}
 
-      <ul className="list-disc pl-4 mt-2">
+      <List>
         {ufullstendigSteg.map((steg) => (
-          <li key={steg.step}>
+          <ListItem key={steg.step}>
             <Link as={ReactRouterLink} to={steg.path}>
               {t(tekster.gåTilSteg(steg.overskrift))}
             </Link>
-          </li>
+          </ListItem>
         ))}
-      </ul>
+      </List>
     </Alert>
   );
 }
@@ -38,9 +39,4 @@ const tekster = definerTekster({
     nn: `Gå til steget: ${tittel}`,
     en: `Go to step: ${tittel}`,
   }),
-  ikkeUtfylt: {
-    nb: "Ikke utfylt",
-    nn: "Ikkje utfylt",
-    en: "Not filled in",
-  },
 });
