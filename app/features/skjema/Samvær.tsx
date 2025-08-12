@@ -130,7 +130,7 @@ const getSamværsklasseNetterPeriode = (
     return String(min);
   }
 
-  return `${min}-${max}`;
+  return `${min}–${max}`;
 };
 
 const Samværsfradraginfo = ({

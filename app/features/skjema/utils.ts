@@ -119,7 +119,7 @@ export const tilUnderholdskostnadsgruppeMedLabel = (
     const label =
       lavesteAlder === høyesteAlder
         ? `${lavesteAlder} ${lavesteAlder === 1 ? tekster.årEntall : tekster.årFlertall}`
-        : `${lavesteAlder}-${høyesteAlder} ${tekster.årFlertall}`;
+        : `${lavesteAlder}–${høyesteAlder} ${tekster.årFlertall}`;
 
     return {
       label,
