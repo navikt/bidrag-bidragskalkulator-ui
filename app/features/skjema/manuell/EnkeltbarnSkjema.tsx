@@ -1,5 +1,6 @@
 import { PersonCrossIcon } from "@navikt/aksel-icons";
-import { BodyLong, Button, ReadMore, TextField } from "@navikt/ds-react";
+import { BodyLong, Button, List, ReadMore, TextField } from "@navikt/ds-react";
+import { ListItem } from "@navikt/ds-react/List";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { useMemo } from "react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -72,22 +73,22 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
         <BodyLong className="mb-2">
           {t(tekster.alder.lesMer.beskrivelse)}
         </BodyLong>
-        <ul>
+        <List>
           {underholdskostnadsgrupper.map(
             ({ label, underholdskostnad, aldre }) => {
               const fremhevGruppe =
                 barnField.field("alder").touched() &&
                 aldre.includes(Number(alder));
               return (
-                <li key={label}>
+                <ListItem key={label}>
                   <span
                     className={fremhevGruppe ? "font-bold" : undefined}
                   >{`${label}: ${formatterSum(underholdskostnad)}`}</span>
-                </li>
+                </ListItem>
               );
             },
           )}
-        </ul>
+        </List>
       </ReadMore>
 
       <Samvær barnIndex={barnIndex} />
