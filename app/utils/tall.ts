@@ -12,3 +12,14 @@ export const formatterSum = (sum?: number) => {
     maximumFractionDigits: 0,
   });
 };
+
+/**
+ * Sjekker om en string er et gyldig tall
+ */
+export const erGyldigTall = (verdi: string): boolean => {
+  if (!verdi || verdi.trim() === "") {
+    return false;
+  }
+  const tall = Number(verdi);
+  return !isNaN(tall) && isFinite(tall);
+};

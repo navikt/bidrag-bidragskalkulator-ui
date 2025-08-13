@@ -45,6 +45,8 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
     [underholdskostnader, t],
   );
 
+  console.log("---form", form.formState.fieldErrors);
+
   return (
     <fieldset className="p-0 space-y-4">
       <legend className="sr-only">{overskrift}</legend>

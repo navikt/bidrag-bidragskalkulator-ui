@@ -107,6 +107,34 @@ export default function ManuellBarnebidragskalkulator() {
   const skjemarespons =
     !actionData || isValidationErrorResponse(actionData) ? null : actionData;
 
+  const schemaa = lagManueltSkjema(språk);
+  const test = schemaa.safeParse({
+    barn: [
+      {
+        navn: "",
+        alder: "1",
+        bosted: "HOS_MEG",
+        samvær: "20",
+        barnetilsynsutgift: "",
+      },
+    ],
+    deg: {
+      navn: "Kari",
+      inntekt: "300000",
+      antallBarnBorFast: "1",
+      antallBarnDeltBosted: "0",
+      borMedAnnenVoksen: "false",
+    },
+    medforelder: {
+      navn: "Per",
+      inntekt: "250000",
+      antallBarnBorFast: "1",
+      antallBarnDeltBosted: "0",
+      borMedAnnenVoksen: "false",
+    },
+  });
+
+  console.log(test.success, test);
   return (
     <>
       <FormProvider scope={form.scope()}>
