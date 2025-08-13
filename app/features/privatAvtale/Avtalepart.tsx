@@ -16,13 +16,25 @@ export const Avtalepart = ({ part }: Props) => {
   return (
     <div className="space-y-6">
       <TextField
-        {...form.field(`steg1.${part}.fulltNavn`).getInputProps({
-          label: t(tekster[part].fulltNavn.label),
+        {...form.field(`steg1.${part}.fornavn`).getInputProps({
+          label: t(tekster[part].fornavn.label),
           onBlur: sporPrivatAvtaleSpørsmålBesvart(
-            t(tekster[part].fulltNavn.label),
+            t(tekster[part].fornavn.label),
           ),
         })}
-        error={form.field(`steg1.${part}.fulltNavn`).error()}
+        error={form.field(`steg1.${part}.fornavn`).error()}
+        autoComplete="off"
+        htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
+      />
+
+      <TextField
+        {...form.field(`steg1.${part}.etternavn`).getInputProps({
+          label: t(tekster[part].etternavn.label),
+          onBlur: sporPrivatAvtaleSpørsmålBesvart(
+            t(tekster[part].etternavn.label),
+          ),
+        })}
+        error={form.field(`steg1.${part}.etternavn`).error()}
         autoComplete="off"
         htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
       />
@@ -43,11 +55,18 @@ export const Avtalepart = ({ part }: Props) => {
 
 const tekster = definerTekster({
   deg: {
-    fulltNavn: {
+    fornavn: {
       label: {
-        nb: "Fullt navn",
-        nn: "Heile namnet",
-        en: "Full name",
+        nb: "Fornavn",
+        nn: "Førenamn",
+        en: "First name",
+      },
+    },
+    etternavn: {
+      label: {
+        nb: "Etternavn",
+        nn: "Etternamn",
+        en: "Last name",
       },
     },
     ident: {
@@ -59,11 +78,18 @@ const tekster = definerTekster({
     },
   },
   medforelder: {
-    fulltNavn: {
+    fornavn: {
       label: {
-        nb: "Fullt navn",
-        nn: "Heile namnet",
-        en: "Full name",
+        nb: "Fornavn",
+        nn: "Førenamn",
+        en: "First name",
+      },
+    },
+    etternavn: {
+      label: {
+        nb: "Etternavn",
+        nn: "Etternamn",
+        en: "Last name",
       },
     },
     ident: {

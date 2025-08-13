@@ -83,16 +83,14 @@ export const hentPrivatAvtaledokument = async (
 
   const deg = {
     fodselsnummer: skjemaData.steg1.deg.ident,
-    fulltNavn: skjemaData.steg1.deg.fulltNavn,
-    etternavn: skjemaData.steg1.deg.fulltNavn,
-    fornavn: skjemaData.steg1.deg.fulltNavn,
+    etternavn: skjemaData.steg1.deg.etternavn,
+    fornavn: skjemaData.steg1.deg.fornavn,
   };
 
   const medforelder = {
     fodselsnummer: skjemaData.steg1.medforelder.ident,
-    fulltNavn: skjemaData.steg1.medforelder.fulltNavn,
-    etternavn: skjemaData.steg1.medforelder.fulltNavn,
-    fornavn: skjemaData.steg1.medforelder.fulltNavn,
+    etternavn: skjemaData.steg1.medforelder.etternavn,
+    fornavn: skjemaData.steg1.medforelder.fornavn,
   };
 
   const requestData: LagPrivatAvtaleRequest = {
@@ -107,9 +105,8 @@ export const hentPrivatAvtaledokument = async (
     tilInnsending: skjemaData.steg3.avtaledetaljer.medInnkreving,
     barn: skjemaData.steg2.barn.map((barn) => ({
       fodselsnummer: barn.ident,
-      fulltNavn: barn.fulltNavn,
-      fornavn: barn.fulltNavn,
-      etternavn: barn.fulltNavn,
+      fornavn: barn.fornavn,
+      etternavn: barn.etternavn,
       sumBidrag: barn.sum,
     })),
     andreBestemmelser: {

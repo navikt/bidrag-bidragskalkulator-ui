@@ -7,31 +7,36 @@ type Barn = PrivatAvtaleFlerstegsSkjema["steg2"]["barn"][number];
 
 const tomtBarn: Barn = {
   ident: "",
-  fulltNavn: "",
+  fornavn: "",
+  etternavn: "",
   sum: "",
   bidragstype: "",
 };
 
+// TODO Bruke riktige verdier for navn fra skjema
 export const hentPrivatAvtaleFlerstegsSkjemaStandardverdi = (
   forhåndsutfyltInformasjon: UtregningNavigasjonsdata | undefined,
   personinformasjon: HentPersoninformasjonForPrivatAvtaleRespons,
 ): PrivatAvtaleFlerstegsSkjema => {
-  const barn: Barn[] = forhåndsutfyltInformasjon?.barn.map((b) => ({
+  const barn: Barn[] = forhåndsutfyltInformasjon?.barn.map((barn) => ({
     ident: "",
-    fulltNavn: b.navn,
-    sum: b.sum.toString(),
-    bidragstype: b.bidragstype,
+    fornavn: barn.navn,
+    etternavn: barn.navn,
+    sum: barn.sum.toString(),
+    bidragstype: barn.bidragstype,
   })) ?? [tomtBarn];
 
   return {
     steg1: {
       deg: {
         ident: personinformasjon.ident,
-        fulltNavn: personinformasjon.fulltNavn,
+        fornavn: personinformasjon.fornavn,
+        etternavn: personinformasjon.etternavn,
       },
       medforelder: {
         ident: "",
-        fulltNavn: forhåndsutfyltInformasjon?.medforelder.navn ?? "",
+        fornavn: forhåndsutfyltInformasjon?.medforelder.navn ?? "",
+        etternavn: forhåndsutfyltInformasjon?.medforelder.navn ?? "",
       },
     },
     steg2: { barn },

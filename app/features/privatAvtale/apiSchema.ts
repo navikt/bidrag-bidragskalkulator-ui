@@ -4,12 +4,14 @@ export const ApiSpråkSchema = z.enum(["NB", "NN", "EN"]);
 
 export const PrivatAvtalePersoninformasjonSchema = z.object({
   ident: z.string(),
-  fulltNavn: z.string(),
+  fornavn: z.string(),
+  etternavn: z.string(),
 });
 
 const Person = z.object({
   fodselsnummer: z.string(),
-  fulltNavn: z.string(),
+  fornavn: z.string(),
+  etternavn: z.string(),
 });
 
 const Bidragsbarn = Person.extend({
