@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, type ReactNode } from "react";
 import { z } from "zod";
+import type { ApiSpråk } from "~/features/privatAvtale/apiSchema";
 import { parseCookie } from "./cookie";
 
 export enum Språk {
@@ -7,6 +8,13 @@ export enum Språk {
   NorwegianBokmål = "nb",
   NorwegianNynorsk = "nn",
 }
+
+export const språkTilApiSpråk: Record<Språk, ApiSpråk> = {
+  [Språk.English]: "EN",
+  [Språk.NorwegianBokmål]: "NB",
+  [Språk.NorwegianNynorsk]: "NN",
+};
+
 const SpråkSchema = z.nativeEnum(Språk);
 
 const OversettelseContext = createContext<Språk | null>(null);

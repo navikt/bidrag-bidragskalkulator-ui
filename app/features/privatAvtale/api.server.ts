@@ -5,6 +5,7 @@ import {
   hentSpråkFraCookie,
   oversett,
   Språk,
+  språkTilApiSpråk,
 } from "~/utils/i18n";
 import {
   PrivatAvtalePersoninformasjonSchema,
@@ -95,14 +96,14 @@ export const hentPrivatAvtaledokument = async (
   };
 
   const requestData: LagPrivatAvtaleRequest = {
-    innhold: skjemaData.steg3.avtaledetaljer.innhold ?? "",
+    språk: språkTilApiSpråk[språk],
     bidragsmottaker: erBidragsmottaker ? deg : medforelder,
     bidragspliktig: erBidragsmottaker ? medforelder : deg,
     fraDato: skjemaData.steg3.avtaledetaljer.fraDato,
     nyAvtale: skjemaData.steg3.avtaledetaljer.nyAvtale,
     oppgjorsform: skjemaData.steg3.avtaledetaljer.medInnkreving
-      ? "Innkreving"
-      : "Privat",
+      ? "INNKREVING"
+      : "PRIVAT",
     tilInnsending: skjemaData.steg3.avtaledetaljer.medInnkreving,
     barn: skjemaData.steg2.barn.map((barn) => ({
       fodselsnummer: barn.ident,
@@ -111,6 +112,15 @@ export const hentPrivatAvtaledokument = async (
       etternavn: barn.fulltNavn,
       sumBidrag: barn.sum,
     })),
+    andreBestemmelser: {
+      harAndreBestemmelser: skjemaData.steg4.erAndreBestemmelser,
+      beskrivelse: skjemaData.steg4.andreBestemmelser,
+    },
+    vedlegg: {
+      annenDokumentasjon: skjemaData.steg5.harVedlegg
+        ? "SENDES_MED_SKJEMA"
+        : "INGEN_EKSTRA_DOKUMENTASJON",
+    },
   };
 
   return hentPrivatAvtaleFraApi({

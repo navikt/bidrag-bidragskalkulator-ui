@@ -40,7 +40,6 @@ export const hentPrivatAvtaleFlerstegsSkjemaStandardverdi = (
         fraDato: "",
         nyAvtale: "",
         medInnkreving: "",
-        innhold: "",
       },
     },
     steg4: {

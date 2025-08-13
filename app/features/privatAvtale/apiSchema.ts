@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const ApiSpråkSchema = z.enum(["NB", "NN", "EN"]);
+
 export const PrivatAvtalePersoninformasjonSchema = z.object({
   ident: z.string(),
   fulltNavn: z.string(),
@@ -15,15 +17,27 @@ const Bidragsbarn = Person.extend({
 });
 
 export const LagPrivatAvtaleRequestSchema = z.object({
-  innhold: z.string(),
+  språk: ApiSpråkSchema,
   bidragsmottaker: Person,
   bidragspliktig: Person,
   barn: z.array(Bidragsbarn),
   fraDato: z.string(),
   nyAvtale: z.boolean(),
-  oppgjorsform: z.enum(["Privat", "Innkreving"]), // TODO Hva skal denne være?
+  oppgjorsform: z.enum(["PRIVAT", "INNKREVING"]),
   tilInnsending: z.boolean(),
+  andreBestemmelser: z.object({
+    harAndreBestemmelser: z.boolean(),
+    beskrivelse: z.string(),
+  }),
+  vedlegg: z.object({
+    annenDokumentasjon: z.enum([
+      "INGEN_EKSTRA_DOKUMENTASJON",
+      "SENDES_MED_SKJEMA",
+    ]),
+  }),
 });
+
+export type ApiSpråk = z.infer<typeof ApiSpråkSchema>;
 
 export type LagPrivatAvtaleRequest = z.infer<
   typeof LagPrivatAvtaleRequestSchema

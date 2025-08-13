@@ -43,7 +43,6 @@ export const PrivatAvtaleFlerstegsSkjemaSchema = z.object({
       fraDato: z.string(),
       nyAvtale: z.enum(["true", "false", ""]),
       medInnkreving: z.enum(["true", "false", ""]),
-      innhold: z.string().optional(), // TODO: Definer innhold
     }),
   }),
   steg4: z.object({
@@ -113,7 +112,6 @@ const lagSteg3Schema = (språk: Språk) =>
           message: oversett(språk, tekster.feilmeldinger.medInnkreving.påkrevd),
         })
         .transform((value) => value === "true"),
-      innhold: z.string().optional(), // TODO: Definer innhold
     }),
   });
 
