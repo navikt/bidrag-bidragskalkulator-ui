@@ -23,7 +23,8 @@ import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
 export function meta({ matches }: MetaArgs) {
-  const rootData = matches.find((match) => match.pathname === "/")?.data as {
+  const rootData = matches.find((match) => match.pathname === "/")
+    ?.loaderData as {
     språk: Språk;
   };
 
