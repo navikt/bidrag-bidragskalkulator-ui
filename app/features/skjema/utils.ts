@@ -162,11 +162,11 @@ export const hentManueltSkjemaStandardverdi = (
 export const SAMVÆRSKLASSE_GRENSER = {
   SAMVÆRSKLASSE_0: {
     min: 0,
-    max: 0,
+    max: 1,
     klassenummer: 0,
   },
   SAMVÆRSKLASSE_1: {
-    min: 1,
+    min: 2,
     max: 3,
     klassenummer: 1,
   },
