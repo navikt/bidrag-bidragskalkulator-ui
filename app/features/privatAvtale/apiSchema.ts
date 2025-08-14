@@ -16,6 +16,7 @@ const Person = z.object({
 
 const Bidragsbarn = Person.extend({
   sumBidrag: z.number(),
+  fraDato: z.string(),
 });
 
 export const LagPrivatAvtaleRequestSchema = z.object({
@@ -23,7 +24,6 @@ export const LagPrivatAvtaleRequestSchema = z.object({
   bidragsmottaker: Person,
   bidragspliktig: Person,
   barn: z.array(Bidragsbarn),
-  fraDato: z.string(),
   nyAvtale: z.boolean(),
   oppgjorsform: z.enum(["PRIVAT", "INNKREVING"]),
   tilInnsending: z.boolean(),

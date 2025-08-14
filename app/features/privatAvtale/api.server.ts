@@ -97,7 +97,6 @@ export const hentPrivatAvtaledokument = async (
     språk: språkTilApiSpråk[språk],
     bidragsmottaker: erBidragsmottaker ? deg : medforelder,
     bidragspliktig: erBidragsmottaker ? medforelder : deg,
-    fraDato: skjemaData.steg3.avtaledetaljer.fraDato,
     nyAvtale: skjemaData.steg3.avtaledetaljer.nyAvtale,
     oppgjorsform: skjemaData.steg3.avtaledetaljer.medInnkreving
       ? "INNKREVING"
@@ -108,6 +107,7 @@ export const hentPrivatAvtaledokument = async (
       fornavn: barn.fornavn,
       etternavn: barn.etternavn,
       sumBidrag: barn.sum,
+      fraDato: barn.fraDato,
     })),
     andreBestemmelser: {
       harAndreBestemmelser: skjemaData.steg4.erAndreBestemmelser,

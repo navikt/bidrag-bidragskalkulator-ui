@@ -1,6 +1,14 @@
 import { PersonCrossIcon } from "@navikt/aksel-icons";
-import { Button, Radio, RadioGroup, TextField } from "@navikt/ds-react";
+import {
+  Button,
+  DatePicker,
+  Radio,
+  RadioGroup,
+  TextField,
+  useDatepicker,
+} from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
+import { tilÅrMånedDag } from "~/utils/dato";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { NAVN_TEXT_FIELD_HTML_SIZE } from "~/utils/ui";
 import { BidragstypeSchema } from "../skjema/beregning/schema";
@@ -21,6 +29,16 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
   const form = useFormContext<PrivatAvtaleFlerstegsSkjema>();
 
   const barnField = useFormScope(form.scope(`steg2.barn[${barnIndex}]`));
+
+  const { datepickerProps, inputProps } = useDatepicker({
+    fromDate: undefined,
+    onDateChange: (dato) => {
+      barnField.field("fraDato").setValue(dato ? tilÅrMånedDag(dato) : "");
+    },
+    defaultSelected: barnField.value("fraDato")
+      ? new Date(barnField.value("fraDato"))
+      : undefined,
+  });
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
@@ -89,6 +107,16 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
         autoComplete="off"
       />
 
+      <DatePicker {...datepickerProps}>
+        <DatePicker.Input
+          {...inputProps}
+          label={t(tekster.gjelderFra.label)}
+          description={t(tekster.gjelderFra.beskrivelse)}
+          error={barnField.error("fraDato")}
+          onBlur={sporPrivatAvtaleSpørsmålBesvart(t(tekster.gjelderFra.label))}
+        />
+      </DatePicker>
+
       {onFjernBarn && (
         <Button
           type="button"
@@ -156,6 +184,18 @@ const tekster = definerTekster({
       en: `I will pay child support to ${navnMotpart || "the other parent"}`,
       nn: `Eg skal betale barnebidrag til ${navnMotpart || "den andre forelderen"}`,
     }),
+  },
+  gjelderFra: {
+    label: {
+      nb: "Hvilken dag avtalen skal gjelde fra",
+      nn: "Kva dag avtalen skal gjelde frå",
+      en: "The day the agreement should apply from",
+    },
+    beskrivelse: {
+      nb: "Oppgi dato med format dd.mm.åååå",
+      nn: "Oppgi dato med format dd.mm.åååå",
+      en: "Provide the date in the format dd.mm.yyyy",
+    },
   },
   fjernBarn: {
     nb: "Fjern barn",
