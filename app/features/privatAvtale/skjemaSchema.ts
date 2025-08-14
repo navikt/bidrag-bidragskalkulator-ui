@@ -10,8 +10,9 @@ const Person = z.object({
 });
 
 const Bidragsbarn = Person.extend({
-  sum: z.string(), // Fra kalkulator eller innfylt
-  bidragstype: z.enum([...BidragstypeSchema.options, ""]), // Fra kalkulator, skal ikke redigeres (?? eller kanskje?)
+  sum: z.string(),
+  bidragstype: z.enum([...BidragstypeSchema.options, ""]),
+  fraDato: z.string(),
 });
 
 const lagValidertPersonSkjemaSchema = (
@@ -44,7 +45,6 @@ export const PrivatAvtaleFlerstegsSkjemaSchema = z.object({
   }),
   steg3: z.object({
     avtaledetaljer: z.object({
-      fraDato: z.string(),
       nyAvtale: z.enum(["true", "false", ""]),
       medInnkreving: z.enum(["true", "false", ""]),
     }),
@@ -97,6 +97,13 @@ const lagSteg2Schema = (språk: Språk) =>
             tekster.feilmeldinger.barn.bidragstype.ugyldig,
           ),
         }),
+        fraDato: z
+          .string()
+          .nonempty(oversett(språk, tekster.feilmeldinger.barn.fraDato.påkrevd))
+          .refine(
+            erDatostrengÅrMånedDag,
+            oversett(språk, tekster.feilmeldinger.barn.fraDato.ugyldig),
+          ),
       }),
     ),
   });
@@ -104,13 +111,6 @@ const lagSteg2Schema = (språk: Språk) =>
 const lagSteg3Schema = (språk: Språk) =>
   z.object({
     avtaledetaljer: z.object({
-      fraDato: z
-        .string()
-        .nonempty(oversett(språk, tekster.feilmeldinger.fraDato.påkrevd))
-        .refine(
-          erDatostrengÅrMånedDag,
-          oversett(språk, tekster.feilmeldinger.fraDato.ugyldig),
-        ),
       nyAvtale: z
         .enum(["true", "false"], {
           message: oversett(språk, tekster.feilmeldinger.nyAvtale.påkrevd),
@@ -270,17 +270,17 @@ const tekster = definerTekster({
           nn: "Fyll ut bidragstype",
         },
       },
-    },
-    fraDato: {
-      påkrevd: {
-        nb: "Fyll ut dato avtalen skal gjelde fra",
-        en: "Fill in the date the agreement should apply from",
-        nn: "Fyll ut dato avtalen skal gjelde frå",
-      },
-      ugyldig: {
-        nb: "Fyll ut en gyldig dato",
-        en: "Fill in a valid date",
-        nn: "Fyll ut ein gyldig dato",
+      fraDato: {
+        påkrevd: {
+          nb: "Fyll ut dato avtalen skal gjelde fra",
+          en: "Fill in the date the agreement should apply from",
+          nn: "Fyll ut dato avtalen skal gjelde frå",
+        },
+        ugyldig: {
+          nb: "Fyll ut en gyldig dato",
+          en: "Fill in a valid date",
+          nn: "Fyll ut ein gyldig dato",
+        },
       },
     },
     medInnkreving: {

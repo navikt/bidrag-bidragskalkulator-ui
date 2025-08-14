@@ -10,6 +10,7 @@ import {
 } from "@navikt/ds-react/FormSummary";
 import { Link } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
+import { datoTilTekst } from "~/utils/dato";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 import type { PrivatAvtaleFlerstegsSkjema } from "../skjemaSchema";
@@ -96,6 +97,14 @@ const Barnesvar = ({ barn, navnMedforelder = "" }: BarnesvarProps) => {
         <FormSummaryLabel>{t(tekster.belopPerManed)}</FormSummaryLabel>
         <FormSummaryValue>{barn.sum || t(tekster.ikkeUtfylt)}</FormSummaryValue>
       </FormSummaryAnswer>
+      <FormSummaryAnswer>
+        <FormSummaryLabel>{t(tekster.avtaleFra)}</FormSummaryLabel>
+        <FormSummaryValue>
+          {barn.fraDato
+            ? datoTilTekst(new Date(barn.fraDato))
+            : t(tekster.ikkeUtfylt)}
+        </FormSummaryValue>
+      </FormSummaryAnswer>
     </>
   );
 };
@@ -147,6 +156,11 @@ const tekster = definerTekster({
     nb: "Fødselsnummer eller D-nummer (11 siffer)",
     en: "National ID or D-number (11 digits)",
     nn: "Fødselsnummer eller D-nummer (11 siffer)",
+  },
+  avtaleFra: {
+    nb: "Avtalen gjelder fra",
+    nn: "Avtalen gjeld frå",
+    en: "Agreement valid from",
   },
   ikkeUtfylt: {
     nb: "Ikke utfylt",

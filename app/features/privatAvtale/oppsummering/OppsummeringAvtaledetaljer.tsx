@@ -11,7 +11,6 @@ import {
 import { useFormScope } from "@rvf/react";
 import { Link } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
-import { datoTilTekst } from "~/utils/dato";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 
@@ -20,7 +19,7 @@ export function OppsummeringAvtaledetaljer() {
   const scopedForm = useFormScope(form.scope("steg3.avtaledetaljer"));
   const { t } = useOversettelse();
 
-  const { nyAvtale, fraDato, medInnkreving } = scopedForm.value();
+  const { nyAvtale, medInnkreving } = scopedForm.value();
 
   return (
     <FormSummary>
@@ -36,12 +35,6 @@ export function OppsummeringAvtaledetaljer() {
         </FormSummaryEditLink>
       </FormSummaryHeader>
       <FormSummaryAnswers>
-        <FormSummaryAnswer>
-          <FormSummaryLabel>{t(tekster.avtaleFra)}</FormSummaryLabel>
-          <FormSummaryValue>
-            {fraDato ? datoTilTekst(new Date(fraDato)) : t(tekster.ikkeUtfylt)}
-          </FormSummaryValue>
-        </FormSummaryAnswer>
         <FormSummaryAnswer>
           <FormSummaryLabel>{t(tekster.nyAvtale)}</FormSummaryLabel>
           <FormSummaryValue>
@@ -72,11 +65,6 @@ const tekster = definerTekster({
     nb: "Avtaledetaljer",
     nn: "Avtaledetaljar",
     en: "Agreement details",
-  },
-  avtaleFra: {
-    nb: "Avtalen gjelder fra",
-    nn: "Avtalen gjeld frå",
-    en: "Agreement valid from",
   },
   nyAvtale: {
     nb: "Ny avtale",

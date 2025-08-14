@@ -22,6 +22,7 @@ export const PrivatAvtaleBarn = () => {
       etternavn: "",
       sum: "",
       bidragstype: bidragstype ?? "",
+      fraDato: "",
     });
     sporHendelse({
       hendelsetype: "barn lagt til",

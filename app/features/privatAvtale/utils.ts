@@ -11,6 +11,7 @@ const tomtBarn: Barn = {
   etternavn: "",
   sum: "",
   bidragstype: "",
+  fraDato: "",
 };
 
 // TODO Bruke riktige verdier for navn fra skjema
@@ -24,6 +25,7 @@ export const hentPrivatAvtaleFlerstegsSkjemaStandardverdi = (
     etternavn: barn.navn,
     sum: barn.sum.toString(),
     bidragstype: barn.bidragstype,
+    fraDato: "",
   })) ?? [tomtBarn];
 
   return {
@@ -42,7 +44,6 @@ export const hentPrivatAvtaleFlerstegsSkjemaStandardverdi = (
     steg2: { barn },
     steg3: {
       avtaledetaljer: {
-        fraDato: "",
         nyAvtale: "",
         medInnkreving: "",
       },
