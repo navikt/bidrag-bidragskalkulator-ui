@@ -27,9 +27,15 @@ export function OppsummeringForeldre() {
         </FormSummaryHeader>
         <FormSummaryAnswers>
           <FormSummaryAnswer>
-            <FormSummaryLabel>{t(tekster.fulltNavn)}</FormSummaryLabel>
+            <FormSummaryLabel>{t(tekster.fornavn)}</FormSummaryLabel>
             <FormSummaryValue>
-              {deg.fulltNavn || t(tekster.ikkeUtfylt)}
+              {deg.fornavn || t(tekster.ikkeUtfylt)}
+            </FormSummaryValue>
+          </FormSummaryAnswer>
+          <FormSummaryAnswer>
+            <FormSummaryLabel>{t(tekster.etternavn)}</FormSummaryLabel>
+            <FormSummaryValue>
+              {deg.etternavn || t(tekster.ikkeUtfylt)}
             </FormSummaryValue>
           </FormSummaryAnswer>
           <FormSummaryAnswer>
@@ -54,9 +60,15 @@ export function OppsummeringForeldre() {
         </FormSummaryHeader>
         <FormSummaryAnswers>
           <FormSummaryAnswer>
-            <FormSummaryLabel>{t(tekster.fulltNavn)}</FormSummaryLabel>
+            <FormSummaryLabel>{t(tekster.fornavn)}</FormSummaryLabel>
             <FormSummaryValue>
-              {medforelder.fulltNavn || t(tekster.ikkeUtfylt)}
+              {medforelder.fornavn || t(tekster.ikkeUtfylt)}
+            </FormSummaryValue>
+          </FormSummaryAnswer>
+          <FormSummaryAnswer>
+            <FormSummaryLabel>{t(tekster.etternavn)}</FormSummaryLabel>
+            <FormSummaryValue>
+              {medforelder.etternavn || t(tekster.ikkeUtfylt)}
             </FormSummaryValue>
           </FormSummaryAnswer>
           <FormSummaryAnswer>
@@ -87,10 +99,15 @@ const tekster = definerTekster({
     nn: "Om den andre forelderen",
     en: "About the other parent",
   },
-  fulltNavn: {
-    nb: "Fullt navn",
-    nn: "Heile namnet",
-    en: "Full name",
+  fornavn: {
+    nb: "Fornavn",
+    nn: "Førenamn",
+    en: "First name",
+  },
+  etternavn: {
+    nb: "Etternavn",
+    nn: "Etternamn",
+    en: "Last name",
   },
   ident: {
     nb: "Fødselsnummer eller D-nummer (11 siffer)",

@@ -24,15 +24,27 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
+  const medforelderNavn = `${form.field("steg1.medforelder.fornavn").value()} ${form.field("steg1.medforelder.etternavn").value()}`;
+
   return (
     <fieldset className="p-0 space-y-6">
       <legend className="sr-only">{overskrift}</legend>
       <TextField
-        {...barnField.field("fulltNavn").getInputProps({
-          label: t(tekster.fulltNavn.label),
-          onBlur: sporPrivatAvtaleSpørsmålBesvart(t(tekster.fulltNavn.label)),
+        {...barnField.field("fornavn").getInputProps({
+          label: t(tekster.fornavn.label),
+          onBlur: sporPrivatAvtaleSpørsmålBesvart(t(tekster.fornavn.label)),
         })}
-        error={barnField.field("fulltNavn").error()}
+        error={barnField.field("fornavn").error()}
+        htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
+        autoComplete="off"
+      />
+
+      <TextField
+        {...barnField.field("etternavn").getInputProps({
+          label: t(tekster.etternavn.label),
+          onBlur: sporPrivatAvtaleSpørsmålBesvart(t(tekster.etternavn.label)),
+        })}
+        error={barnField.field("etternavn").error()}
         htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
         autoComplete="off"
       />
@@ -62,11 +74,7 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
                 t(tekster.bidragstype.label),
               )}
             >
-              {t(
-                tekster.bidragstype[bidragstype](
-                  form.field("steg1.medforelder.fulltNavn").value(),
-                ),
-              )}
+              {t(tekster.bidragstype[bidragstype](medforelderNavn))}
             </Radio>
           );
         })}
@@ -104,11 +112,18 @@ const tekster = definerTekster({
       nn: `Barn ${nummer}`,
     }),
   },
-  fulltNavn: {
+  fornavn: {
     label: {
-      nb: "Fullt navn",
-      en: "Full name",
-      nn: "Heile namnet",
+      nb: "Fornavn",
+      nn: "Førenamn",
+      en: "First name",
+    },
+  },
+  etternavn: {
+    label: {
+      nb: "Etternavn",
+      nn: "Etternamn",
+      en: "Last name",
     },
   },
   ident: {

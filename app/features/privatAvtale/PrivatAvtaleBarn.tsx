@@ -18,7 +18,8 @@ export const PrivatAvtaleBarn = () => {
   const handleLeggTilBarn = () => {
     barnArray.push({
       ident: "",
-      fulltNavn: "",
+      fornavn: "",
+      etternavn: "",
       sum: "",
       bidragstype: bidragstype ?? "",
     });

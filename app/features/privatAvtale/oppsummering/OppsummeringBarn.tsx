@@ -20,6 +20,7 @@ export function OppsummeringBarn() {
   const skjemaverdier = form.value();
   const { barn } = skjemaverdier.steg2;
   const { medforelder } = skjemaverdier.steg1;
+  const navnMedforelder = `${medforelder.fornavn} ${medforelder.etternavn}`;
 
   return (
     <FormSummary>
@@ -36,7 +37,7 @@ export function OppsummeringBarn() {
       </FormSummaryHeader>
       <FormSummaryAnswers>
         {barn.length === 1 ? (
-          <Barnesvar barn={barn[0]} navnMedforelder={medforelder?.fulltNavn} />
+          <Barnesvar barn={barn[0]} navnMedforelder={navnMedforelder} />
         ) : (
           barn.map((barn, i) => (
             <FormSummaryAnswer key={i}>
@@ -45,10 +46,7 @@ export function OppsummeringBarn() {
               </FormSummaryLabel>
               <FormSummaryValue>
                 <FormSummaryAnswers>
-                  <Barnesvar
-                    barn={barn}
-                    navnMedforelder={medforelder?.fulltNavn}
-                  />
+                  <Barnesvar barn={barn} navnMedforelder={navnMedforelder} />
                 </FormSummaryAnswers>
               </FormSummaryValue>
             </FormSummaryAnswer>
@@ -69,9 +67,15 @@ const Barnesvar = ({ barn, navnMedforelder = "" }: BarnesvarProps) => {
   return (
     <>
       <FormSummaryAnswer>
-        <FormSummaryLabel>{t(tekster.fulltNavn)}</FormSummaryLabel>
+        <FormSummaryLabel>{t(tekster.fornavn)}</FormSummaryLabel>
         <FormSummaryValue>
-          {barn.fulltNavn || t(tekster.ikkeUtfylt)}
+          {barn.fornavn || t(tekster.ikkeUtfylt)}
+        </FormSummaryValue>
+      </FormSummaryAnswer>
+      <FormSummaryAnswer>
+        <FormSummaryLabel>{t(tekster.etternavn)}</FormSummaryLabel>
+        <FormSummaryValue>
+          {barn.etternavn || t(tekster.ikkeUtfylt)}
         </FormSummaryValue>
       </FormSummaryAnswer>
       <FormSummaryAnswer>
@@ -129,10 +133,15 @@ const tekster = definerTekster({
     nn: "Beløp per månad",
     en: "Amount per month",
   },
-  fulltNavn: {
-    nb: "Fullt navn",
-    nn: "Heile namnet",
-    en: "Full name",
+  fornavn: {
+    nb: "Fornavn",
+    nn: "Førenamn",
+    en: "First name",
+  },
+  etternavn: {
+    nb: "Etternavn",
+    nn: "Etternamn",
+    en: "Last name",
   },
   ident: {
     nb: "Fødselsnummer eller D-nummer (11 siffer)",
