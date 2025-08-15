@@ -182,7 +182,7 @@ export const SAMVÆRSKLASSE_GRENSER = {
   },
   SAMVÆRSKLASSE_4: {
     min: 14,
-    max: 16,
+    max: 15,
     klassenummer: 4,
   },
 } as const;
