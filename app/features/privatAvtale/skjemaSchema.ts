@@ -62,7 +62,7 @@ export const PrivatAvtaleFlerstegsSkjemaSchema = z.object({
   }),
 });
 
-const lagSteg1Schema = (språk: Språk) =>
+export const lagSteg1Schema = (språk: Språk) =>
   z.object({
     deg: lagValidertPersonSkjemaSchema(språk, "deg"),
     medforelder: lagValidertPersonSkjemaSchema(språk, "medforelder"),
