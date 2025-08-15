@@ -8,7 +8,7 @@ import { formatterSum } from "~/utils/tall";
 import { NAVN_TEXT_FIELD_HTML_SIZE } from "~/utils/ui";
 import { FormattertTallTextField } from "../FormattertTallTextField";
 import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
-import { Samvær } from "../Samvær";
+import { Samvær } from "../samvær/Samvær";
 import type { ManueltSkjema } from "../schema";
 import {
   sporKalkulatorSpørsmålBesvart,

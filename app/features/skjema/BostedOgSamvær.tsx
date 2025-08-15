@@ -2,7 +2,7 @@ import { useFieldArray, useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
-import { Samvær } from "./Samvær";
+import { Samvær } from "./samvær/Samvær";
 import type { InnloggetSkjema } from "./schema";
 import { finnBarnBasertPåIdent } from "./utils";
 
