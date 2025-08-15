@@ -11,14 +11,14 @@ import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
-import type { Samværsklasse } from "./beregning/schema";
-import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
-import { FastBosted, type ManueltSkjema } from "./schema";
+import type { Samværsklasse } from "../beregning/schema";
+import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
+import { FastBosted, type ManueltSkjema } from "../schema";
 import {
   kalkulerSamværsklasse,
   SAMVÆR_STANDARDVERDI,
   SAMVÆRSKLASSE_GRENSER,
-} from "./utils";
+} from "../utils";
 
 type SamværProps = {
   barnIndex: number;
