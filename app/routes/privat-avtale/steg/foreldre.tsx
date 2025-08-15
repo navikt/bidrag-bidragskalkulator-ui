@@ -2,13 +2,12 @@ import {
   Form,
   redirect,
   useLoaderData,
-  useRouteLoaderData,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
 import {
-  AVTALEPART_SESSION_KEY,
+  PRIVAT_AVTALE_SESSION_KEY,
   commitSession,
   getSession,
 } from "~/config/session.server";
@@ -22,13 +21,11 @@ import { lagSteg1Schema } from "~/features/privatAvtale/skjemaSchema";
 import { sporPrivatAvtaleSpørsmålBesvart } from "~/features/privatAvtale/utils";
 import { FødselsnummerTextField } from "~/features/skjema/FødselsnummerTextField";
 import { NAVN_TEXT_FIELD_HTML_SIZE } from "~/utils/ui";
-import type { loader as stegLayoutLoader } from "./layout";
+import { usePrivatAvtaleLayoutLoaderData } from "./layout";
 
 export default function Steg1Foreldre() {
   const { t, språk } = useOversettelse();
-  const layoutData = useRouteLoaderData<typeof stegLayoutLoader>(
-    "routes/privat-avtale/steg/layout",
-  );
+  const layoutData = usePrivatAvtaleLayoutLoaderData();
   const loaderData = useLoaderData<typeof loader>();
   const form = useForm({
     schema: lagSteg1Schema(språk),
@@ -37,11 +34,13 @@ export default function Steg1Foreldre() {
     id: "steg",
     defaultValues: {
       deg: {
-        fulltNavn: layoutData?.personinformasjon.fulltNavn ?? "",
+        fornavn: layoutData?.personinformasjon.fornavn ?? "",
+        etternavn: layoutData?.personinformasjon.etternavn ?? "",
         ident: layoutData?.personinformasjon.ident ?? "",
       },
       medforelder: {
-        fulltNavn: loaderData?.steg1?.medforelder?.fulltNavn ?? "",
+        fornavn: loaderData?.steg1?.medforelder?.fornavn ?? "",
+        etternavn: loaderData?.steg1?.medforelder?.etternavn ?? "",
         ident: loaderData?.steg1?.medforelder?.ident ?? "",
       },
     },
@@ -50,13 +49,24 @@ export default function Steg1Foreldre() {
   return (
     <Form {...form.getFormProps()} className="space-y-6">
       <TextField
-        {...form.field(`medforelder.fulltNavn`).getInputProps({
-          label: t(tekster.medforelder.fulltNavn.label),
+        {...form.field(`medforelder.fornavn`).getInputProps({
+          label: t(tekster.medforelder.fornavn.label),
           onBlur: sporPrivatAvtaleSpørsmålBesvart(
-            t(tekster.medforelder.fulltNavn.label),
+            t(tekster.medforelder.fornavn.label),
           ),
         })}
-        error={form.field(`medforelder.fulltNavn`).error()}
+        error={form.field(`medforelder.fornavn`).error()}
+        autoComplete="off"
+        htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
+      />
+      <TextField
+        {...form.field(`medforelder.etternavn`).getInputProps({
+          label: t(tekster.medforelder.etternavn.label),
+          onBlur: sporPrivatAvtaleSpørsmålBesvart(
+            t(tekster.medforelder.etternavn.label),
+          ),
+        })}
+        error={form.field(`medforelder.etternavn`).error()}
         autoComplete="off"
         htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
       />
@@ -94,11 +104,18 @@ const tekster = definerTekster({
     },
   },
   medforelder: {
-    fulltNavn: {
+    fornavn: {
       label: {
-        nb: "Fullt navn",
-        nn: "Heile namnet",
-        en: "Full name",
+        nb: "Fornavn",
+        nn: "Fornamn",
+        en: "First name",
+      },
+    },
+    etternavn: {
+      label: {
+        nb: "Etternavn",
+        nn: "Etternamn",
+        en: "Last name",
       },
     },
     ident: {
@@ -113,12 +130,13 @@ const tekster = definerTekster({
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const fulltNavn = String(formData.get("medforelder.fulltNavn") ?? "");
+  const fornavn = String(formData.get("medforelder.fornavn") ?? "");
+  const etternavn = String(formData.get("medforelder.etternavn") ?? "");
   const ident = String(formData.get("medforelder.ident") ?? "");
 
   const session = await getSession(request.headers.get("Cookie"));
-  session.set(AVTALEPART_SESSION_KEY, {
-    steg1: { medforelder: { fulltNavn, ident } },
+  session.set(PRIVAT_AVTALE_SESSION_KEY, {
+    steg1: { medforelder: { fornavn, etternavn, ident } },
   });
 
   return redirect(RouteConfig.PRIVAT_AVTALE.STEG_2_BARN_OG_BIDRAG, {
@@ -132,7 +150,8 @@ export async function action({ request }: ActionFunctionArgs) {
 const Steg1SessionSchema = z.object({
   steg1: z.object({
     medforelder: z.object({
-      fulltNavn: z.string().optional().default(""),
+      fornavn: z.string().optional().default(""),
+      etternavn: z.string().optional().default(""),
       ident: z.string().optional().default(""),
     }),
   }),
@@ -140,7 +159,7 @@ const Steg1SessionSchema = z.object({
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-  const data = session.get(AVTALEPART_SESSION_KEY) ?? null;
+  const data = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? null;
   const parsed = Steg1SessionSchema.safeParse(data);
   return parsed.success ? parsed.data : null;
 }

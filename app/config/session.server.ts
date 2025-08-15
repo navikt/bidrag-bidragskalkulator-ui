@@ -13,4 +13,4 @@ export const sessionStorage = createCookieSessionStorage({
 
 export const { getSession, commitSession, destroySession } = sessionStorage;
 
-export const AVTALEPART_SESSION_KEY = "barnebidrag-privat-avtale";
+export const PRIVAT_AVTALE_SESSION_KEY = "barnebidrag-privat-avtale";

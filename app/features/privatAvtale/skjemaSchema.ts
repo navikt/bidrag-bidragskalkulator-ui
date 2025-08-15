@@ -68,7 +68,7 @@ export const lagSteg1Schema = (språk: Språk) =>
     medforelder: lagValidertPersonSkjemaSchema(språk, "medforelder"),
   });
 
-const lagSteg2Schema = (språk: Språk) =>
+export const lagSteg2Schema = (språk: Språk) =>
   z.object({
     barn: z.array(
       z.object({

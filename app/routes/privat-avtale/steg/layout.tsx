@@ -5,6 +5,7 @@ import {
   Outlet,
   Link as ReactRouterLink,
   useLocation,
+  useRouteLoaderData,
   type LoaderFunctionArgs,
   type MetaFunction,
 } from "react-router";
@@ -47,12 +48,16 @@ export async function loader({
   };
 }
 
+export const usePrivatAvtaleLayoutLoaderData = () => {
+  return useRouteLoaderData<typeof loader>("routes/privat-avtale/steg/layout");
+};
+
 export default function PrivatAvtaleStegLayout() {
   const { state: navigationState, pathname } = useLocation();
-  const bidragsutergningParsed =
+  const bidragsutregningParsed =
     UtregningNavigasjonsdataSchema.safeParse(navigationState);
-  const bidragsutregning = bidragsutergningParsed.success
-    ? bidragsutergningParsed.data
+  const bidragsutregning = bidragsutregningParsed.success
+    ? bidragsutregningParsed.data
     : undefined;
 
   const { t, språk } = useOversettelse();

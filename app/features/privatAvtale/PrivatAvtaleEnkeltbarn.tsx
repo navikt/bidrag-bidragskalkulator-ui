@@ -13,6 +13,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { NAVN_TEXT_FIELD_HTML_SIZE } from "~/utils/ui";
 import { BidragstypeSchema } from "../skjema/beregning/schema";
 import { FormattertTallTextField } from "../skjema/FormattertTallTextField";
+import { FødselsnummerTextField } from "../skjema/FødselsnummerTextField";
 import type { PrivatAvtaleFlerstegsSkjema } from "./skjemaSchema";
 import { sporPrivatAvtaleSpørsmålBesvart } from "./utils";
 
@@ -26,9 +27,9 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
   onFjernBarn,
 }: Props) => {
   const { t } = useOversettelse();
-  const form = useFormContext<PrivatAvtaleFlerstegsSkjema>();
+  const form = useFormContext<PrivatAvtaleFlerstegsSkjema["steg2"]>();
 
-  const barnField = useFormScope(form.scope(`steg2.barn[${barnIndex}]`));
+  const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
 
   const { datepickerProps, inputProps } = useDatepicker({
     fromDate: undefined,
@@ -41,8 +42,6 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
   });
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
-
-  const medforelderNavn = `${form.field("steg1.medforelder.fornavn").value()} ${form.field("steg1.medforelder.etternavn").value()}`;
 
   return (
     <fieldset className="p-0 space-y-6">
@@ -67,11 +66,10 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
         autoComplete="off"
       />
 
-      <TextField
-        {...barnField.field("ident").getInputProps({
-          label: t(tekster.ident.label),
-          onBlur: sporPrivatAvtaleSpørsmålBesvart(t(tekster.ident.label)),
-        })}
+      <FødselsnummerTextField
+        label={t(tekster.ident.label)}
+        {...barnField.field("ident").getControlProps()}
+        onBlur={sporPrivatAvtaleSpørsmålBesvart(t(tekster.ident.label))}
         error={barnField.field("ident").error()}
         htmlSize={13}
         inputMode="numeric"
@@ -92,7 +90,7 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
                 t(tekster.bidragstype.label),
               )}
             >
-              {t(tekster.bidragstype[bidragstype](medforelderNavn))}
+              {t(tekster.bidragstype[bidragstype](""))}
             </Radio>
           );
         })}
