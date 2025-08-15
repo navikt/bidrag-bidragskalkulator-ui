@@ -119,10 +119,12 @@ type SamværsfradraginfoProps = {
   samværsklasse?: Samværsklasse;
 };
 
-const SAMVÆRSKLASSENUMRE = [0, 1, 2, 3, 4] as const;
+const samværsklassenumre = Object.values(SAMVÆRSKLASSE_GRENSER).map(
+  (klasse) => klasse.klassenummer,
+);
 
 const getSamværsklasseNetterPeriode = (
-  klassenummer: (typeof SAMVÆRSKLASSENUMRE)[number],
+  klassenummer: (typeof samværsklassenumre)[number],
 ) => {
   const { min, max } = SAMVÆRSKLASSE_GRENSER[`SAMVÆRSKLASSE_${klassenummer}`];
 
@@ -164,7 +166,7 @@ const Samværsfradraginfo = ({
           </BodyShort>
 
           <List>
-            {SAMVÆRSKLASSENUMRE.map((klasse) => {
+            {samværsklassenumre.map((klasse) => {
               const erValgtSamværsklasse =
                 samværsklasse === `SAMVÆRSKLASSE_${klasse}`;
 
