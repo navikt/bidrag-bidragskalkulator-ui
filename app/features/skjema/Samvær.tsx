@@ -128,10 +128,6 @@ const getSamværsklasseNetterPeriode = (
 ) => {
   const { min, max } = SAMVÆRSKLASSE_GRENSER[`SAMVÆRSKLASSE_${klassenummer}`];
 
-  if (min === max) {
-    return String(min);
-  }
-
   return `${min}–${max}`;
 };
 
