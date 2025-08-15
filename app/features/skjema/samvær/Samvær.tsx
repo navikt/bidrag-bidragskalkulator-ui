@@ -4,6 +4,7 @@ import { Slider } from "~/components/ui/slider";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FastBosted, type ManueltSkjema } from "../schema";
 import { kalkulerSamværsklasse, SAMVÆR_STANDARDVERDI } from "../utils";
+import { SamværOgFerierInfo } from "./SamværOgFerierInfo";
 import { Samværsfradraginfo } from "./Samværsfradraginfo";
 
 type SamværProps = {
@@ -97,6 +98,8 @@ export function Samvær({ barnIndex }: SamværProps) {
           bosted ? kalkulerSamværsklasse(Number(samvær), bosted) : undefined
         }
       />
+
+      <SamværOgFerierInfo />
     </>
   );
 }
