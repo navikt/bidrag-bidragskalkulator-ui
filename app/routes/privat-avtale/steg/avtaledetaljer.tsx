@@ -14,6 +14,8 @@ import {
   commitSession,
   getSession,
 } from "~/config/session.server";
+import { OppgjørsformSchema } from "~/features/privatAvtale/apiSchema";
+import { teksterAvtaledetaljer } from "~/features/privatAvtale/tekster/avtaledetaljer";
 import { sporPrivatAvtaleSpørsmålBesvart } from "~/features/privatAvtale/utils";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
@@ -23,6 +25,7 @@ const INNKREVING_ALTERNATIVER = ["false", "true"] as const;
 const steg3Schema = z.object({
   avtaledetaljer: z.object({
     nyAvtale: z.enum(["true", "false"]),
+    oppgjørsformIdag: z.enum(OppgjørsformSchema.options),
     medInnkreving: z.enum(["true", "false"]),
   }),
 });
@@ -39,6 +42,8 @@ export default function AvtaledetaljerSteg() {
     defaultValues: {
       avtaledetaljer: {
         nyAvtale: loaderData?.steg3?.avtaledetaljer?.nyAvtale ?? "",
+        oppgjørsformIdag:
+          loaderData?.steg3?.avtaledetaljer?.oppgjørsformIdag ?? "",
         medInnkreving: loaderData?.steg3?.avtaledetaljer?.medInnkreving ?? "",
       },
     },
@@ -65,6 +70,28 @@ export default function AvtaledetaljerSteg() {
           );
         })}
       </RadioGroup>
+
+      {form.field("avtaledetaljer.nyAvtale").value() === "false" && (
+        <RadioGroup
+          {...form.getControlProps("avtaledetaljer.oppgjørsformIdag")}
+          error={form.field("avtaledetaljer.oppgjørsformIdag").error()}
+          legend={t(teksterAvtaledetaljer.oppgjørsformIdag.label)}
+        >
+          {OppgjørsformSchema.options.map((alternativ) => {
+            return (
+              <Radio
+                value={alternativ}
+                key={alternativ}
+                onChange={sporPrivatAvtaleSpørsmålBesvart(
+                  t(teksterAvtaledetaljer.oppgjørsformIdag.label),
+                )}
+              >
+                {t(teksterAvtaledetaljer.oppgjørsformIdag[alternativ])}
+              </Radio>
+            );
+          })}
+        </RadioGroup>
+      )}
 
       <RadioGroup
         {...form.getControlProps("avtaledetaljer.medInnkreving")}
@@ -135,6 +162,7 @@ const Steg3SessionSchema = z.object({
     .object({
       avtaledetaljer: z.object({
         nyAvtale: z.enum(["true", "false"]),
+        oppgjørsformIdag: z.enum(OppgjørsformSchema.options),
         medInnkreving: z.enum(["true", "false"]),
       }),
     })

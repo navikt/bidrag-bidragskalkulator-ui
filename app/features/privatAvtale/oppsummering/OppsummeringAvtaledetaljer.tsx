@@ -12,8 +12,8 @@ import { useFormScope } from "@rvf/react";
 import { Link } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { teksterAvtaledetaljer } from "../Avtaledetaljer";
 import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
+import { teksterAvtaledetaljer } from "../tekster/avtaledetaljer";
 
 export function OppsummeringAvtaledetaljer() {
   const { form } = usePrivatAvtaleForm();
