@@ -2,6 +2,8 @@ import { z } from "zod";
 
 export const ApiSpråkSchema = z.enum(["NB", "NN", "EN"]);
 
+export const OppgjørsformSchema = z.enum(["PRIVAT", "INNKREVING"]);
+
 export const PrivatAvtalePersoninformasjonSchema = z.object({
   ident: z.string(),
   fornavn: z.string(),
@@ -24,8 +26,11 @@ export const LagPrivatAvtaleRequestSchema = z.object({
   bidragsmottaker: Person,
   bidragspliktig: Person,
   barn: z.array(Bidragsbarn),
-  nyAvtale: z.boolean(),
-  oppgjorsform: z.enum(["PRIVAT", "INNKREVING"]),
+  oppgjør: z.object({
+    nyAvtale: z.boolean(),
+    oppgjørsformØnsket: OppgjørsformSchema,
+    oppgjørsformIdag: OppgjørsformSchema.optional(),
+  }),
   tilInnsending: z.boolean(),
   andreBestemmelser: z.object({
     harAndreBestemmelser: z.boolean(),

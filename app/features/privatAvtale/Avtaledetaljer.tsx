@@ -2,6 +2,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useFormScope } from "@rvf/react";
+import { OppgjørsformSchema } from "./apiSchema";
 import { usePrivatAvtaleForm } from "./PrivatAvtaleFormProvider";
 import { sporPrivatAvtaleSpørsmålBesvart } from "./utils";
 
@@ -37,6 +38,28 @@ export const Avtaledetaljer = () => {
           );
         })}
       </RadioGroup>
+
+      {form.field("nyAvtale").value() === "false" && (
+        <RadioGroup
+          {...form.getControlProps("oppgjørsformIdag")}
+          error={form.field("oppgjørsformIdag").error()}
+          legend={t(teksterAvtaledetaljer.oppgjørsformIdag.label)}
+        >
+          {OppgjørsformSchema.options.map((alternativ) => {
+            return (
+              <Radio
+                value={alternativ}
+                key={alternativ}
+                onChange={sporPrivatAvtaleSpørsmålBesvart(
+                  t(teksterAvtaledetaljer.oppgjørsformIdag.label),
+                )}
+              >
+                {t(teksterAvtaledetaljer.oppgjørsformIdag[alternativ])}
+              </Radio>
+            );
+          })}
+        </RadioGroup>
+      )}
 
       <RadioGroup
         {...form.getControlProps("medInnkreving")}
@@ -82,6 +105,23 @@ export const teksterAvtaledetaljer = definerTekster({
       nb: "Nei, dette er en endring av en eksisterende avtale",
       nn: "Nei, dette er en endring av en eksisterande avtale",
       en: "No, this is a change to an existing agreement",
+    },
+  },
+  oppgjørsformIdag: {
+    label: {
+      nb: "Hvilken oppgjørsform har dere i dag?",
+      nn: "Kva type oppgjer har de per i dag?",
+      en: "What is your current form of settlement?",
+    },
+    PRIVAT: {
+      nb: "Bidraget gjøres opp oss imellom (privat)",
+      nn: "Bidraget blir gjort opp oss imellom (privat)",
+      en: "Support is settled between us (private)",
+    },
+    INNKREVING: {
+      nb: "Bidraget betales gjennom skatteetaten v/Nav innkreving",
+      nn: "Bidraget blir betalt gjennom skatteetaten v/Nav Innkrevjing",
+      en: "Support is paid through the Tax Administration/Nav Collection",
     },
   },
   medInnkreving: {

@@ -20,7 +20,7 @@ export function OppsummeringAvtaledetaljer() {
   const scopedForm = useFormScope(form.scope("steg3.avtaledetaljer"));
   const { t } = useOversettelse();
 
-  const { nyAvtale, medInnkreving } = scopedForm.value();
+  const { nyAvtale, oppgjørsformIdag, medInnkreving } = scopedForm.value();
 
   return (
     <FormSummary>
@@ -48,6 +48,20 @@ export function OppsummeringAvtaledetaljer() {
                 : t(tekster.ikkeUtfylt)}
           </FormSummaryValue>
         </FormSummaryAnswer>
+
+        {nyAvtale === "false" && (
+          <FormSummaryAnswer>
+            <FormSummaryLabel>
+              {t(teksterAvtaledetaljer.oppgjørsformIdag.label)}
+            </FormSummaryLabel>
+            <FormSummaryValue>
+              {oppgjørsformIdag === ""
+                ? t(tekster.ikkeUtfylt)
+                : t(teksterAvtaledetaljer.oppgjørsformIdag[oppgjørsformIdag])}
+            </FormSummaryValue>
+          </FormSummaryAnswer>
+        )}
+
         <FormSummaryAnswer>
           <FormSummaryLabel>
             {t(teksterAvtaledetaljer.medInnkreving.label)}

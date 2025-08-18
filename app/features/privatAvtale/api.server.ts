@@ -97,10 +97,13 @@ export const hentPrivatAvtaledokument = async (
     språk: språkTilApiSpråk[språk],
     bidragsmottaker: erBidragsmottaker ? deg : medforelder,
     bidragspliktig: erBidragsmottaker ? medforelder : deg,
-    nyAvtale: skjemaData.steg3.avtaledetaljer.nyAvtale,
-    oppgjorsform: skjemaData.steg3.avtaledetaljer.medInnkreving
-      ? "INNKREVING"
-      : "PRIVAT",
+    oppgjør: {
+      nyAvtale: skjemaData.steg3.avtaledetaljer.nyAvtale,
+      oppgjørsformØnsket: skjemaData.steg3.avtaledetaljer.medInnkreving
+        ? "INNKREVING"
+        : "PRIVAT",
+      oppgjørsformIdag: skjemaData.steg3.avtaledetaljer.oppgjørsformIdag,
+    },
     tilInnsending: skjemaData.steg3.avtaledetaljer.medInnkreving,
     barn: skjemaData.steg2.barn.map((barn) => ({
       fodselsnummer: barn.ident,

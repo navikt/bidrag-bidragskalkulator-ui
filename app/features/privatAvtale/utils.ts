@@ -46,6 +46,7 @@ export const hentPrivatAvtaleFlerstegsSkjemaStandardverdi = (
       avtaledetaljer: {
         nyAvtale: "",
         medInnkreving: "",
+        oppgjørsformIdag: "",
       },
     },
     steg4: {
