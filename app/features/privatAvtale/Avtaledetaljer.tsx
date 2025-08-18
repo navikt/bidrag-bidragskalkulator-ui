@@ -21,7 +21,7 @@ export const Avtaledetaljer = () => {
       <RadioGroup
         {...form.getControlProps("nyAvtale")}
         error={form.field("nyAvtale").error()}
-        legend={t(tekster.nyAvtale.label)}
+        legend={t(teksterAvtaledetaljer.nyAvtale.label)}
       >
         {NY_AVTALE_ALTERNATIVER.map((alternativ) => {
           return (
@@ -29,10 +29,10 @@ export const Avtaledetaljer = () => {
               value={alternativ}
               key={alternativ}
               onChange={sporPrivatAvtaleSpørsmålBesvart(
-                t(tekster.nyAvtale.label),
+                t(teksterAvtaledetaljer.nyAvtale.label),
               )}
             >
-              {t(tekster.nyAvtale[alternativ])}
+              {t(teksterAvtaledetaljer.nyAvtale[alternativ])}
             </Radio>
           );
         })}
@@ -41,7 +41,7 @@ export const Avtaledetaljer = () => {
       <RadioGroup
         {...form.getControlProps("medInnkreving")}
         error={form.field("medInnkreving").error()}
-        legend={t(tekster.medInnkreving.label)}
+        legend={t(teksterAvtaledetaljer.medInnkreving.label)}
       >
         {INNKREVING_ALTERNATIVER.map((alternativ) => {
           return (
@@ -49,10 +49,10 @@ export const Avtaledetaljer = () => {
               value={alternativ}
               key={alternativ}
               onChange={sporPrivatAvtaleSpørsmålBesvart(
-                t(tekster.medInnkreving.label),
+                t(teksterAvtaledetaljer.medInnkreving.label),
               )}
             >
-              {t(tekster.medInnkreving[alternativ])}
+              {t(teksterAvtaledetaljer.medInnkreving[alternativ])}
             </Radio>
           );
         })}
@@ -61,13 +61,12 @@ export const Avtaledetaljer = () => {
   );
 };
 
-const tekster = definerTekster({
+export const teksterAvtaledetaljer = definerTekster({
   tittel: {
     nb: "Litt om avtalen",
     nn: "Litt om avtalen",
     en: "About the agreement",
   },
-
   nyAvtale: {
     label: {
       nb: "Er dette en ny avtale?",
@@ -87,14 +86,14 @@ const tekster = definerTekster({
   },
   medInnkreving: {
     label: {
-      nb: "Ønsket oppgjørsform",
-      nn: "Ynskja oppgjerstype",
-      en: "Settlement type",
+      nb: "Hvilken oppgjørsform ønskes?",
+      nn: "Kva type oppgjer ønskjer de?",
+      en: "Which form of settlement do you want?",
     },
     true: {
       nb: "Vi ønsker at bidraget skal betales gjennom Skatteetaten v/Nav Innkreving",
       nn: "Vi ønskjer at bidraget skal betalast gjennom Skatteetaten v/Nav Innkreving",
-      en: "We want the support to be paid through the Tax Administration via Nav Collection",
+      en: "We want the support to be paid through the Tax Administration/Nav Collection",
     },
     false: {
       nb: "Vi ønsker å gjøre opp bidraget oss i mellom (privat)",
