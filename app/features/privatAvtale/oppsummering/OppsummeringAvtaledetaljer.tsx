@@ -12,6 +12,7 @@ import { useFormScope } from "@rvf/react";
 import { Link } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { teksterAvtaledetaljer } from "../Avtaledetaljer";
 import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 
 export function OppsummeringAvtaledetaljer() {
@@ -36,22 +37,26 @@ export function OppsummeringAvtaledetaljer() {
       </FormSummaryHeader>
       <FormSummaryAnswers>
         <FormSummaryAnswer>
-          <FormSummaryLabel>{t(tekster.nyAvtale)}</FormSummaryLabel>
+          <FormSummaryLabel>
+            {t(teksterAvtaledetaljer.nyAvtale.label)}
+          </FormSummaryLabel>
           <FormSummaryValue>
             {nyAvtale === "true"
-              ? t(tekster.ja)
+              ? t(teksterAvtaledetaljer.nyAvtale.true)
               : nyAvtale === "false"
-                ? t(tekster.nei)
+                ? t(teksterAvtaledetaljer.nyAvtale.false)
                 : t(tekster.ikkeUtfylt)}
           </FormSummaryValue>
         </FormSummaryAnswer>
         <FormSummaryAnswer>
-          <FormSummaryLabel>{t(tekster.oppgjørsform)}</FormSummaryLabel>
+          <FormSummaryLabel>
+            {t(teksterAvtaledetaljer.medInnkreving.label)}
+          </FormSummaryLabel>
           <FormSummaryValue>
             {medInnkreving === "true"
-              ? t(tekster.innkrevingGjennomNav)
+              ? t(teksterAvtaledetaljer.medInnkreving.true)
               : medInnkreving === "false"
-                ? t(tekster.privatOppgjor)
+                ? t(teksterAvtaledetaljer.medInnkreving.false)
                 : t(tekster.ikkeUtfylt)}
           </FormSummaryValue>
         </FormSummaryAnswer>
@@ -65,36 +70,6 @@ const tekster = definerTekster({
     nb: "Avtaledetaljer",
     nn: "Avtaledetaljar",
     en: "Agreement details",
-  },
-  nyAvtale: {
-    nb: "Ny avtale",
-    nn: "Ny avtale",
-    en: "New agreement",
-  },
-  oppgjørsform: {
-    nb: "Oppgjørsform",
-    nn: "Oppgjerstype",
-    en: "Payment arrangement",
-  },
-  innkrevingGjennomNav: {
-    nb: "Gjennom Skatteetaten v/Nav Innkreving",
-    nn: "Gjennom Skatteetaten v/Nav Innkreving",
-    en: "Through the Tax Administration via NAV Collection",
-  },
-  privatOppgjor: {
-    nb: "Privat oppgjør",
-    nn: "Privat oppgjer",
-    en: "Private settlement",
-  },
-  ja: {
-    nb: "Ja",
-    nn: "Ja",
-    en: "Yes",
-  },
-  nei: {
-    nb: "Nei",
-    nn: "Nei",
-    en: "No",
   },
   ikkeUtfylt: {
     nb: "Ikke utfylt",

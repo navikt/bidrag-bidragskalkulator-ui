@@ -285,9 +285,9 @@ const tekster = definerTekster({
     },
     medInnkreving: {
       påkrevd: {
-        nb: "Fyll ut oppgjørsform",
+        nb: "Fyll ut ønsket oppgjørsform",
         en: "Fill in the type of settlement",
-        nn: "Fyll ut oppgjerstype",
+        nn: "Fyll ut ynskja oppgjerstype",
       },
     },
     nyAvtale: {
