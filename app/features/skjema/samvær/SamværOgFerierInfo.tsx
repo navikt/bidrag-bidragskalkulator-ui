@@ -1,11 +1,20 @@
 import { BodyLong, ReadMore } from "@navikt/ds-react";
+import { sporHendelseEnGang } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export const SamværOgFerierInfo = () => {
   const { t } = useOversettelse();
 
   return (
-    <ReadMore header={t(tekster.overskrift)}>
+    <ReadMore
+      header={t(tekster.overskrift)}
+      onOpenChange={() =>
+        sporHendelseEnGang({
+          hendelsetype: "infoboks om ferie og samvær utvidet",
+          skjemaId: "barnebidragskalkulator-under-18",
+        })
+      }
+    >
       <BodyLong className="mb-4">{t(tekster.beskrivelse1)}</BodyLong>
       <BodyLong className="mb-4">{t(tekster.beskrivelse2)}</BodyLong>
       <BodyLong>{t(tekster.beskrivelse3)}</BodyLong>

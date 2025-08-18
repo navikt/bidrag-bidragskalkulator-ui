@@ -1,5 +1,6 @@
 import { BodyLong, BodyShort, List, ReadMore } from "@navikt/ds-react";
 import { ListItem } from "@navikt/ds-react/List";
+import { sporHendelseEnGang } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import type { Samværsklasse } from "../beregning/schema";
@@ -38,7 +39,15 @@ export const Samværsfradraginfo = ({
         );
 
   return (
-    <ReadMore header={t(tekster.overskrift)}>
+    <ReadMore
+      header={t(tekster.overskrift)}
+      onOpenChange={() =>
+        sporHendelseEnGang({
+          hendelsetype: "infoboks om samværsfradrag utvidet",
+          skjemaId: "barnebidragskalkulator-under-18",
+        })
+      }
+    >
       <BodyLong className="mb-4">{t(tekster.beskrivelse)}</BodyLong>
 
       {alder === undefined && <BodyShort>{t(tekster.manglerAlder)}</BodyShort>}

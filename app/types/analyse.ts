@@ -29,6 +29,16 @@ type SkjemaFullført = {
   skjemaId: SkjemaId;
 };
 
+type SamværsfradraginfoUtvidet = {
+  hendelsetype: "infoboks om samværsfradrag utvidet";
+  skjemaId: SkjemaIdKalkulator;
+};
+
+type FerieOgSamværinfoUtvidet = {
+  hendelsetype: "infoboks om ferie og samvær utvidet";
+  skjemaId: SkjemaIdKalkulator;
+};
+
 type BeregningsdetaljerUtvidet = {
   hendelsetype: "beregningsdetaljer utvidet";
   skjemaId: SkjemaIdKalkulator;
@@ -72,6 +82,8 @@ export type Sporingshendelse =
   | SkjemaValideringFeilet
   | SkjemaInnsendingFeilet
   | SkjemaFullført
+  | SamværsfradraginfoUtvidet
+  | FerieOgSamværinfoUtvidet
   | BeregningsdetaljerUtvidet
   | BeregningsdetaljerKollapset
   | InntektsinformasjonUtvidet
