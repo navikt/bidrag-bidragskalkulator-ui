@@ -1,6 +1,7 @@
 import { Radio, RadioGroup, Textarea } from "@navikt/ds-react";
 import { parseFormData, useForm, validationError } from "@rvf/react-router";
 import {
+  Form,
   redirect,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
@@ -33,7 +34,7 @@ export default function AndreBestemmelserSteg() {
   });
 
   return (
-    <div className="space-y-6">
+    <Form {...form.getFormProps()} className="space-y-6">
       <RadioGroup
         {...form.getControlProps("erAndreBestemmelser")}
         error={form.field("erAndreBestemmelser").error()}
@@ -63,7 +64,7 @@ export default function AndreBestemmelserSteg() {
           error={form.field("andreBestemmelser").error()}
         />
       )}
-    </div>
+    </Form>
   );
 }
 

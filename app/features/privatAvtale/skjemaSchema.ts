@@ -180,10 +180,10 @@ export const lagSteg4Schema = (språk: Språk) =>
       },
     );
 
-const lagSteg5Schema = (språk: Språk) =>
+export const lagSteg5Schema = (språk: Språk) =>
   z.object({
     harVedlegg: z
-      .enum(["true", "false"], {
+      .enum(["true", "false", ""], {
         message: oversett(språk, tekster.feilmeldinger.harVedlegg.påkrevd),
       })
       .transform((value) => value === "true"),
