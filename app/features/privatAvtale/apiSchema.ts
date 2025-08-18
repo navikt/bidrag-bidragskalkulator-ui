@@ -11,7 +11,7 @@ export const PrivatAvtalePersoninformasjonSchema = z.object({
 });
 
 const Person = z.object({
-  fodselsnummer: z.string(),
+  ident: z.string(),
   fornavn: z.string(),
   etternavn: z.string(),
 });
