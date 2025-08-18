@@ -2,6 +2,7 @@ import { z } from "zod";
 import { erDatostrengÅrMånedDag } from "~/utils/dato";
 import { definerTekster, oversett, Språk } from "~/utils/i18n";
 import { BidragstypeSchema } from "../skjema/beregning/schema";
+import { OppgjørsformSchema } from "./apiSchema";
 
 const Person = z.object({
   ident: z.string(),
@@ -35,6 +36,12 @@ const lagValidertPersonSkjemaSchema = (
 
 export type Person = z.infer<typeof Person>;
 
+const AvtaledetaljerSchema = z.object({
+  nyAvtale: z.enum(["true", "false", ""]),
+  medInnkreving: z.enum(["true", "false", ""]),
+  oppgjørsformIdag: z.enum([...OppgjørsformSchema.options, ""]),
+});
+
 export const PrivatAvtaleFlerstegsSkjemaSchema = z.object({
   steg1: z.object({
     deg: Person,
@@ -44,10 +51,7 @@ export const PrivatAvtaleFlerstegsSkjemaSchema = z.object({
     barn: z.array(Bidragsbarn),
   }),
   steg3: z.object({
-    avtaledetaljer: z.object({
-      nyAvtale: z.enum(["true", "false", ""]),
-      medInnkreving: z.enum(["true", "false", ""]),
-    }),
+    avtaledetaljer: AvtaledetaljerSchema,
   }),
   steg4: z.object({
     erAndreBestemmelser: z.enum(["true", "false", ""]),
@@ -108,21 +112,49 @@ const lagSteg2Schema = (språk: Språk) =>
     ),
   });
 
-const lagSteg3Schema = (språk: Språk) =>
-  z.object({
-    avtaledetaljer: z.object({
-      nyAvtale: z
-        .enum(["true", "false"], {
+const lagSteg3Schema = (språk: Språk) => {
+  return z.object({
+    avtaledetaljer: AvtaledetaljerSchema.superRefine((avtaledetaljer, ctx) => {
+      // Validererer alle felter i superRefine for å muliggjøre validering av
+      // oppgjørsformIdag før både nyAvtale og medInnkreving er gyldig
+      if (avtaledetaljer.nyAvtale === "") {
+        ctx.addIssue({
+          code: "custom",
+          path: ["nyAvtale"],
           message: oversett(språk, tekster.feilmeldinger.nyAvtale.påkrevd),
-        })
-        .transform((value) => value === "true"),
-      medInnkreving: z
-        .enum(["true", "false"], {
+        });
+      }
+
+      if (avtaledetaljer.medInnkreving === "") {
+        ctx.addIssue({
+          code: "custom",
+          path: ["medInnkreving"],
           message: oversett(språk, tekster.feilmeldinger.medInnkreving.påkrevd),
-        })
-        .transform((value) => value === "true"),
-    }),
+        });
+      }
+
+      if (
+        avtaledetaljer.nyAvtale === "false" &&
+        avtaledetaljer.oppgjørsformIdag === ""
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["oppgjørsformIdag"],
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.oppgjørsformIdag.påkrevd,
+          ),
+        });
+      }
+    }).transform((data) => ({
+      ...data,
+      nyAvtale: data.nyAvtale === "true",
+      medInnkreving: data.medInnkreving === "true",
+      oppgjørsformIdag:
+        data.oppgjørsformIdag === "" ? undefined : data.oppgjørsformIdag,
+    })),
   });
+};
 
 const lagSteg4Schema = (språk: Språk) =>
   z
@@ -288,6 +320,13 @@ const tekster = definerTekster({
         nb: "Fyll ut ønsket oppgjørsform",
         en: "Fill in the type of settlement",
         nn: "Fyll ut ynskja oppgjerstype",
+      },
+    },
+    oppgjørsformIdag: {
+      påkrevd: {
+        nb: "Fyll ut hvilken oppgjørsform dere har i dag",
+        en: "Fill in which settlement type you have today",
+        nn: "Fyll ut hvilken oppgjerstype de har i dag",
       },
     },
     nyAvtale: {
