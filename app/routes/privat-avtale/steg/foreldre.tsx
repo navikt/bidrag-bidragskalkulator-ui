@@ -7,15 +7,15 @@ import {
 } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
 import {
-  PRIVAT_AVTALE_SESSION_KEY,
   commitSession,
   getSession,
+  PRIVAT_AVTALE_SESSION_KEY,
 } from "~/config/session.server";
 
-import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
 
 import { TextField } from "@navikt/ds-react";
-import { useForm } from "@rvf/react-router";
+import { parseFormData, useForm, validationError } from "@rvf/react-router";
 import { z } from "zod";
 import { lagSteg1Schema } from "~/features/privatAvtale/skjemaSchema";
 import { sporPrivatAvtaleSpørsmålBesvart } from "~/features/privatAvtale/utils";
@@ -129,14 +129,18 @@ const tekster = definerTekster({
 });
 
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const fornavn = String(formData.get("medforelder.fornavn") ?? "");
-  const etternavn = String(formData.get("medforelder.etternavn") ?? "");
-  const ident = String(formData.get("medforelder.ident") ?? "");
+  const resultat = await parseFormData(
+    request,
+    lagSteg1Schema(Språk.NorwegianBokmål),
+  );
+
+  if (!resultat) {
+    return validationError(resultat);
+  }
 
   const session = await getSession(request.headers.get("Cookie"));
   session.set(PRIVAT_AVTALE_SESSION_KEY, {
-    steg1: { medforelder: { fornavn, etternavn, ident } },
+    steg1: { medforelder: resultat.data?.medforelder },
   });
 
   return redirect(RouteConfig.PRIVAT_AVTALE.STEG_2_BARN_OG_BIDRAG, {
