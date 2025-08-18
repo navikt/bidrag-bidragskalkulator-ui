@@ -9,7 +9,7 @@ import { NAVN_TEXT_FIELD_HTML_SIZE } from "~/utils/ui";
 import { FormattertTallTextField } from "../FormattertTallTextField";
 import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
 import { Samvær } from "../samvær/Samvær";
-import type { ManueltSkjema } from "../schema";
+import { MAKS_ALDER_BARNETILSYNSUTGIFT, type ManueltSkjema } from "../schema";
 import {
   sporKalkulatorSpørsmålBesvart,
   tilUnderholdskostnadsgruppeMedLabel,
@@ -29,7 +29,8 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
 
   const alder = barnField.value("alder");
   const visSpørsmålOmBarnetilsynsutgift =
-    barnField.field("alder").touched() && Number(alder) < 11;
+    barnField.field("alder").touched() &&
+    Number(alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT;
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
   const navnBarn = barnField.field("navn").touched()

@@ -3,7 +3,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
 import { usePersoninformasjon } from "./personinformasjon/usePersoninformasjon";
 import { Samvær } from "./samvær/Samvær";
-import type { InnloggetSkjema } from "./schema";
+import { MAKS_ALDER_BARNETILSYNSUTGIFT, type InnloggetSkjema } from "./schema";
 import { finnBarnBasertPåIdent } from "./utils";
 
 export const BostedOgSamvær = () => {
@@ -23,7 +23,7 @@ export const BostedOgSamvær = () => {
 
         const alder = barnInfo?.alder ?? "";
         const visSpørsmålOmBarnetilsynsutgift =
-          alder !== "" && Number(alder) < 11;
+          alder !== "" && Number(alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT;
 
         return (
           <div key={key} className="border p-4 rounded-md space-y-4">
