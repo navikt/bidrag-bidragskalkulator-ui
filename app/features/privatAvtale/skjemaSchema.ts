@@ -156,11 +156,11 @@ const lagSteg3Schema = (språk: Språk) => {
   });
 };
 
-const lagSteg4Schema = (språk: Språk) =>
+export const lagSteg4Schema = (språk: Språk) =>
   z
     .object({
       erAndreBestemmelser: z
-        .enum(["true", "false"], {
+        .enum(["true", "false", ""], {
           message: oversett(
             språk,
             tekster.feilmeldinger.erAndreBestemmelser.påkrevd,
