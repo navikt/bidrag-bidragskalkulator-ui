@@ -40,6 +40,9 @@ export const AndreBestemmelser = () => {
         <Textarea
           {...form.field("andreBestemmelser").getInputProps({
             label: t(tekster.andreBestemmelser.label),
+            onBlur: sporPrivatAvtaleSpørsmålBesvart(
+              t(tekster.andreBestemmelser.label),
+            ),
           })}
           error={form.field("andreBestemmelser").error()}
         />

@@ -64,7 +64,8 @@ export const sporPrivatAvtaleSpørsmålBesvart =
   (
     event:
       | React.FocusEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLInputElement>,
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     if (event.target.value) {
       sporHendelse({
