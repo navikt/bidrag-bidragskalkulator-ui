@@ -37,8 +37,8 @@ export const hentPrivatAvtaleFlerstegsSkjemaStandardverdi = (
       },
       medforelder: {
         ident: "",
-        fornavn: forhåndsutfyltInformasjon?.medforelder.navn ?? "",
-        etternavn: forhåndsutfyltInformasjon?.medforelder.navn ?? "",
+        fornavn: "",
+        etternavn: "",
       },
     },
     steg2: { barn },

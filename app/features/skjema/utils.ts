@@ -143,14 +143,12 @@ export const hentManueltSkjemaStandardverdi = (
       },
     ],
     deg: {
-      navn: personinformasjon.person.fulltNavn,
       inntekt: String(personinformasjon.inntekt ?? ""),
       antallBarnBorFast: "",
       antallBarnDeltBosted: "",
       borMedAnnenVoksen: "",
     },
     medforelder: {
-      navn: "",
       inntekt: "",
       antallBarnBorFast: "",
       antallBarnDeltBosted: "",

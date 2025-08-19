@@ -11,11 +11,6 @@ export const Inntektsopplysninger = () => {
   const form = useFormContext<ManueltSkjema | InnloggetSkjema>();
   const { t } = useOversettelse();
 
-  const medforelderNavnField = form.field("medforelder.navn");
-  const medforelderNavn = medforelderNavnField.touched()
-    ? medforelderNavnField.value()
-    : "";
-
   return (
     <div className="flex flex-col gap-4">
       <FormattertTallTextField
@@ -45,10 +40,10 @@ export const Inntektsopplysninger = () => {
 
       <FormattertTallTextField
         {...form.field("medforelder.inntekt").getControlProps()}
-        label={t(tekster.hvaErInntektenTilDenAndreForelderen(medforelderNavn))}
+        label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
         error={form.field("medforelder.inntekt").error()}
         onBlur={sporKalkulatorSpørsmålBesvart(
-          t(tekster.hvaErInntektenTilDenAndreForelderen("")),
+          t(tekster.hvaErInntektenTilDenAndreForelderen),
         )}
         htmlSize={18}
       />
@@ -86,11 +81,11 @@ const tekster = definerTekster({
       nn: "Inntekter som ikkje skal oppgjevast på skattemeldinga, skal ikkje takast med i utrekningsgrunnlaget, til dømes skattefrie husleigeinntekter.",
     },
   },
-  hvaErInntektenTilDenAndreForelderen: (navn) => ({
-    nb: `Hva er årsinntekten til ${navn || "den andre forelderen"}?`,
-    en: `What is ${navn || "the other parent"}'s annual income?`,
-    nn: `Kva er årsinntekta til ${navn || "den andre forelderen"}?`,
-  }),
+  hvaErInntektenTilDenAndreForelderen: {
+    nb: "Hva er årsinntekten til den andre forelderen?",
+    en: "What is the other parent's annual income?",
+    nn: "Kva er årsinntekta til den andre forelderen?",
+  },
   beregnBarnebidraget: {
     nb: "Beregn barnebidraget",
     en: "Calculate child support",

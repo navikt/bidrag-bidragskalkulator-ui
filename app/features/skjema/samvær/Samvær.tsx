@@ -16,7 +16,6 @@ export function Samvær({ barnIndex }: SamværProps) {
   const form = useFormContext<ManueltSkjema>();
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
   const samvær = barnField.value("samvær") || SAMVÆR_STANDARDVERDI;
-  const navnMedforelder = form.value("medforelder.navn");
   const samværsgradBeskrivelse =
     samvær === "1"
       ? t(tekster.samvær.enNatt)
@@ -41,7 +40,7 @@ export function Samvær({ barnIndex }: SamværProps) {
         {FastBosted.options.map((bosted) => {
           return (
             <Radio value={bosted} key={bosted}>
-              {t(tekster.bosted.valg[bosted](navnMedforelder))}
+              {t(tekster.bosted.valg[bosted])}
             </Radio>
           );
         })}
@@ -117,21 +116,21 @@ const tekster = definerTekster({
         en: "Select where the child will live",
         nn: "Velg kvar barnet skal bu",
       },
-      DELT_FAST_BOSTED: () => ({
+      DELT_FAST_BOSTED: {
         nb: "Vi har avtale om fast bosted hos begge (delt fast bosted)",
         en: "We have an agreement on permanent residence with both of us (shared permanent residence)",
         nn: "Vi har avtale om fast bustad hos begge (delt fast bustad)",
-      }),
-      HOS_MEG: (navn) => ({
-        nb: `Barnet bor fast hos meg, og har samvær med ${navn || "den andre forelderen"}`,
-        en: `The child lives with me and has visitation with ${navn || "the other co-parent"}`,
-        nn: `Barnet bur fast hos meg, og har samvær med ${navn || "den andre forelderen"}`,
-      }),
-      HOS_MEDFORELDER: (navn) => ({
-        nb: `Barnet bor fast hos ${navn || "den andre forelderen"}, og har samvær med meg`,
-        en: `The child lives with ${navn || "the other co-parent"} and has visitation with me`,
-        nn: `Barnet bur fast hos ${navn || "den andre forelderen"}, og har samvær med meg`,
-      }),
+      },
+      HOS_MEG: {
+        nb: "Barnet bor fast hos meg, og har samvær med den andre forelderen",
+        en: "The child lives with me and has visitation with the other co-parent",
+        nn: "Barnet bur fast hos meg, og har samvær med den andre forelderen",
+      },
+      HOS_MEDFORELDER: {
+        nb: "Barnet bor fast hos den andre forelderen, og har samvær med meg",
+        en: "The child lives with the other co-parent and has visitation with me",
+        nn: "Barnet bur fast hos den andre forelderen, og har samvær med meg",
+      },
     },
   },
   samvær: {
