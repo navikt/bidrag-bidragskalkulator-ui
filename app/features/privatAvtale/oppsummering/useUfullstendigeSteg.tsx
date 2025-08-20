@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { usePrivatAvtaleForm } from "~/features/privatAvtale/PrivatAvtaleFormProvider";
 import {
   stegdata,
   type StegdataType,
 } from "~/features/privatAvtale/privatAvtaleSteg";
 import { lagPrivatAvtaleFlerstegsSchema } from "~/features/privatAvtale/skjemaSchema";
+import { useOppsummeringsdata } from "~/routes/privat-avtale/steg/oppsummering-og-avtale";
 import { useOversettelse } from "~/utils/i18n";
 
 /**
@@ -16,7 +16,7 @@ import { useOversettelse } from "~/utils/i18n";
  * @returns Array av StegdataType som representerer ufullstendige steg
  */
 export const useUfullstendigeSteg = (): StegdataType[] => {
-  const { form } = usePrivatAvtaleForm();
+  const skjemaverdier = useOppsummeringsdata();
   const { språk } = useOversettelse();
 
   const alleSteg = useMemo(() => stegdata(språk), [språk]);
@@ -24,10 +24,9 @@ export const useUfullstendigeSteg = (): StegdataType[] => {
     () => lagPrivatAvtaleFlerstegsSchema(språk),
     [språk],
   );
-  const skjemadata = useMemo(() => form.value(), [form]);
 
   const ufullstendigeSteg = useMemo(() => {
-    const valideringsresultat = validator.safeParse(skjemadata);
+    const valideringsresultat = validator.safeParse(skjemaverdier);
 
     if (valideringsresultat.success) {
       return [];
@@ -47,7 +46,7 @@ export const useUfullstendigeSteg = (): StegdataType[] => {
       .filter((steg): steg is StegdataType => steg !== null);
 
     return stegdata;
-  }, [validator, skjemadata, alleSteg]);
+  }, [validator, skjemaverdier, alleSteg]);
 
   return ufullstendigeSteg;
 };

@@ -158,7 +158,11 @@ const Steg2SessionSchema = z.object({
           ident: z.string().optional().default(""),
           fornavn: z.string().optional().default(""),
           etternavn: z.string().optional().default(""),
-          sum: z.string().optional().default(""),
+          sum: z
+            .string()
+            .or(z.number().transform((val) => val.toString()))
+            .optional()
+            .default(""),
           bidragstype: z.enum(BidragstypeSchema.options),
           fraDato: z.string().optional().default(""),
         }),
@@ -187,7 +191,19 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const session = await getSession(request.headers.get("Cookie"));
   const eksisterende = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? {};
-  const oppdatert = { ...eksisterende, steg2: { barn: resultat.data.barn } };
+  const oppdatert = {
+    ...eksisterende,
+    steg2: {
+      barn: resultat.data.barn.map((barn) => ({
+        ident: barn.ident,
+        fornavn: barn.fornavn,
+        etternavn: barn.etternavn,
+        sum: barn.sum.toString(),
+        bidragstype: barn.bidragstype,
+        fraDato: barn.fraDato,
+      })),
+    },
+  };
   session.set(PRIVAT_AVTALE_SESSION_KEY, oppdatert);
 
   return redirect(RouteConfig.PRIVAT_AVTALE.STEG_3_AVTALEDETALJER, {

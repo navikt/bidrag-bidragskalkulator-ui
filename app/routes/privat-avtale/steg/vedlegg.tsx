@@ -4,7 +4,8 @@ import { Radio, RadioGroup } from "@navikt/ds-react";
 import { parseFormData, useForm, validationError } from "@rvf/react-router";
 import {
   Form,
-  redirect,
+  redirectDocument,
+  useLoaderData,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "react-router";
@@ -22,13 +23,17 @@ const AVTALEN_HAR_VEDLEGG_ALTERNATIVER = ["true", "false"] as const;
 
 export default function VedleggStep() {
   const { t, språk } = useOversettelse();
-  const form = useForm({
+  const loaderData = useLoaderData<typeof loader>();
+  const form = useForm<
+    { harVedlegg: "true" | "false" | "" },
+    z.infer<typeof lagSteg5Schema>
+  >({
     schema: lagSteg5Schema(språk),
     submitSource: "state",
     method: "post",
     id: "steg",
     defaultValues: {
-      harVedlegg: "",
+      harVedlegg: loaderData?.steg5?.harVedlegg ?? "",
     },
   });
 
@@ -59,7 +64,7 @@ export default function VedleggStep() {
 
 const Steg5SessionSchema = z.object({
   steg5: z.object({
-    harVedlegg: z.enum(["true", "false", ""]),
+    harVedlegg: z.enum(["true", "false"]),
   }),
 });
 
@@ -82,12 +87,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const session = await getSession(request.headers.get("Cookie"));
   const eksisterende = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? {};
-  const oppdatert = { ...eksisterende, steg5: { ...resultat.data } };
+  const oppdatert = {
+    ...eksisterende,
+    steg5: { harVedlegg: resultat.data.harVedlegg.toString() },
+  };
   session.set(PRIVAT_AVTALE_SESSION_KEY, oppdatert);
 
-  return redirect(RouteConfig.PRIVAT_AVTALE.STEG_6_OPPSUMMERING_OG_AVTALE, {
-    headers: { "Set-Cookie": await commitSession(session) },
-  });
+  return redirectDocument(
+    RouteConfig.PRIVAT_AVTALE.STEG_6_OPPSUMMERING_OG_AVTALE,
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    },
+  );
 };
 
 const tekster = definerTekster({

@@ -3,6 +3,7 @@ import { parseFormData, useForm, validationError } from "@rvf/react-router";
 import {
   Form,
   redirect,
+  useLoaderData,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "react-router";
@@ -21,6 +22,7 @@ const ER_ANDRE_BESTEMMELSER_ALTERNATIVER = ["true", "false"] as const;
 
 export default function AndreBestemmelserSteg() {
   const { t, språk } = useOversettelse();
+  const loaderData = useLoaderData<typeof loader>();
 
   const form = useForm({
     schema: lagSteg4Schema(språk),
@@ -28,8 +30,8 @@ export default function AndreBestemmelserSteg() {
     method: "post",
     id: "steg",
     defaultValues: {
-      erAndreBestemmelser: "",
-      andreBestemmelser: "",
+      erAndreBestemmelser: loaderData?.steg4?.erAndreBestemmelser ?? "",
+      andreBestemmelser: loaderData?.steg4?.andreBestemmelser ?? "",
     },
   });
 
@@ -87,7 +89,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const session = await getSession(request.headers.get("Cookie"));
   const eksisterende = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? {};
-  const oppdatert = { ...eksisterende, steg4: { ...resultat.data } };
+  const oppdatert = {
+    ...eksisterende,
+    steg4: {
+      erAndreBestemmelser: resultat.data.erAndreBestemmelser.toString(),
+      andreBestemmelser: resultat.data.erAndreBestemmelser
+        ? resultat.data.andreBestemmelser
+        : "",
+    },
+  };
   session.set(PRIVAT_AVTALE_SESSION_KEY, oppdatert);
 
   return redirect(RouteConfig.PRIVAT_AVTALE.STEG_5_VEDLEGG, {

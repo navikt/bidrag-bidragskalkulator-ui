@@ -139,8 +139,10 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const session = await getSession(request.headers.get("Cookie"));
+  const eksisterende = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? {};
   session.set(PRIVAT_AVTALE_SESSION_KEY, {
-    steg1: { medforelder: resultat.data?.medforelder },
+    ...eksisterende,
+    steg1: resultat.data,
   });
 
   return redirect(RouteConfig.PRIVAT_AVTALE.STEG_2_BARN_OG_BIDRAG, {

@@ -112,12 +112,12 @@ export const lagSteg2Schema = (språk: Språk) =>
     ),
   });
 
-const lagSteg3Schema = (språk: Språk) => {
+export const lagSteg3Schema = (språk: Språk) => {
   return z.object({
     avtaledetaljer: AvtaledetaljerSchema.superRefine((avtaledetaljer, ctx) => {
       // Validererer alle felter i superRefine for å muliggjøre validering av
       // oppgjørsformIdag før både nyAvtale og medInnkreving er gyldig
-      if (avtaledetaljer.nyAvtale === "") {
+      if (!avtaledetaljer.nyAvtale) {
         ctx.addIssue({
           code: "custom",
           path: ["nyAvtale"],
@@ -125,7 +125,7 @@ const lagSteg3Schema = (språk: Språk) => {
         });
       }
 
-      if (avtaledetaljer.medInnkreving === "") {
+      if (!avtaledetaljer.medInnkreving) {
         ctx.addIssue({
           code: "custom",
           path: ["medInnkreving"],
@@ -146,13 +146,7 @@ const lagSteg3Schema = (språk: Språk) => {
           ),
         });
       }
-    }).transform((data) => ({
-      ...data,
-      nyAvtale: data.nyAvtale === "true",
-      medInnkreving: data.medInnkreving === "true",
-      oppgjørsformIdag:
-        data.oppgjørsformIdag === "" ? undefined : data.oppgjørsformIdag,
-    })),
+    }),
   });
 };
 
@@ -177,13 +171,14 @@ export const lagSteg4Schema = (språk: Språk) =>
           språk,
           tekster.feilmeldinger.andreBestemmelser.påkrevd,
         ),
+        path: ["andreBestemmelser"],
       },
     );
 
 export const lagSteg5Schema = (språk: Språk) =>
   z.object({
     harVedlegg: z
-      .enum(["true", "false", ""], {
+      .enum(["true", "false"], {
         message: oversett(språk, tekster.feilmeldinger.harVedlegg.påkrevd),
       })
       .transform((value) => value === "true"),

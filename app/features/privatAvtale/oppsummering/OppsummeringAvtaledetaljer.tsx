@@ -8,19 +8,15 @@ import {
   FormSummaryLabel,
   FormSummaryValue,
 } from "@navikt/ds-react/FormSummary";
-import { useFormScope } from "@rvf/react";
 import { Link } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
+import { useOppsummeringsdata } from "~/routes/privat-avtale/steg/oppsummering-og-avtale";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 import { teksterAvtaledetaljer } from "../tekster/avtaledetaljer";
 
 export function OppsummeringAvtaledetaljer() {
-  const { form } = usePrivatAvtaleForm();
-  const scopedForm = useFormScope(form.scope("steg3.avtaledetaljer"));
   const { t } = useOversettelse();
-
-  const { nyAvtale, oppgjørsformIdag, medInnkreving } = scopedForm.value();
+  const skjemaverdier = useOppsummeringsdata();
 
   return (
     <FormSummary>
@@ -41,23 +37,27 @@ export function OppsummeringAvtaledetaljer() {
             {t(teksterAvtaledetaljer.nyAvtale.label)}
           </FormSummaryLabel>
           <FormSummaryValue>
-            {nyAvtale === "true"
+            {skjemaverdier.steg3?.avtaledetaljer?.nyAvtale === "true"
               ? t(teksterAvtaledetaljer.nyAvtale.true)
-              : nyAvtale === "false"
+              : skjemaverdier.steg3?.avtaledetaljer?.nyAvtale === "false"
                 ? t(teksterAvtaledetaljer.nyAvtale.false)
                 : t(tekster.ikkeUtfylt)}
           </FormSummaryValue>
         </FormSummaryAnswer>
 
-        {nyAvtale === "false" && (
+        {skjemaverdier.steg3?.avtaledetaljer?.nyAvtale === "false" && (
           <FormSummaryAnswer>
             <FormSummaryLabel>
               {t(teksterAvtaledetaljer.oppgjørsformIdag.label)}
             </FormSummaryLabel>
             <FormSummaryValue>
-              {oppgjørsformIdag === ""
+              {skjemaverdier.steg3?.avtaledetaljer?.oppgjørsformIdag === ""
                 ? t(tekster.ikkeUtfylt)
-                : t(teksterAvtaledetaljer.oppgjørsformIdag[oppgjørsformIdag])}
+                : t(
+                    teksterAvtaledetaljer.oppgjørsformIdag[
+                      skjemaverdier.steg3?.avtaledetaljer?.oppgjørsformIdag
+                    ],
+                  )}
             </FormSummaryValue>
           </FormSummaryAnswer>
         )}
@@ -67,9 +67,9 @@ export function OppsummeringAvtaledetaljer() {
             {t(teksterAvtaledetaljer.medInnkreving.label)}
           </FormSummaryLabel>
           <FormSummaryValue>
-            {medInnkreving === "true"
+            {skjemaverdier.steg3?.avtaledetaljer?.medInnkreving === "true"
               ? t(teksterAvtaledetaljer.medInnkreving.true)
-              : medInnkreving === "false"
+              : skjemaverdier.steg3?.avtaledetaljer?.medInnkreving === "false"
                 ? t(teksterAvtaledetaljer.medInnkreving.false)
                 : t(tekster.ikkeUtfylt)}
           </FormSummaryValue>

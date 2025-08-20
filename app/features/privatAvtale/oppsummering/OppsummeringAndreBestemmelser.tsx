@@ -8,18 +8,14 @@ import {
   FormSummaryLabel,
   FormSummaryValue,
 } from "@navikt/ds-react/FormSummary";
-import { useFormScope } from "@rvf/react";
 import { Link } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
+import { useOppsummeringsdata } from "~/routes/privat-avtale/steg/oppsummering-og-avtale";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
 
 export const OppsummeringAndreBestemmelser = () => {
-  const { form } = usePrivatAvtaleForm();
-  const scopedForm = useFormScope(form.scope("steg4"));
+  const skjemaverdier = useOppsummeringsdata();
   const { t } = useOversettelse();
-
-  const { erAndreBestemmelser, andreBestemmelser } = scopedForm.value();
 
   return (
     <FormSummary>
@@ -41,21 +37,21 @@ export const OppsummeringAndreBestemmelser = () => {
             {t(tekster.erAndreBestemmelser.label)}
           </FormSummaryLabel>
           <FormSummaryValue>
-            {erAndreBestemmelser === "true"
+            {skjemaverdier.steg4?.erAndreBestemmelser === "true"
               ? t(tekster.erAndreBestemmelser.true)
-              : erAndreBestemmelser === "false"
+              : skjemaverdier.steg4?.erAndreBestemmelser === "false"
                 ? t(tekster.erAndreBestemmelser.false)
                 : t(tekster.ikkeUtfylt)}
           </FormSummaryValue>
         </FormSummaryAnswer>
 
-        {erAndreBestemmelser === "true" && (
+        {skjemaverdier.steg4?.erAndreBestemmelser === "true" && (
           <FormSummaryAnswer>
             <FormSummaryLabel>
               {t(tekster.andreBestemmelser.label)}
             </FormSummaryLabel>
             <FormSummaryValue>
-              {andreBestemmelser || t(tekster.ikkeUtfylt)}
+              {skjemaverdier.steg4?.andreBestemmelser || t(tekster.ikkeUtfylt)}
             </FormSummaryValue>
           </FormSummaryAnswer>
         )}

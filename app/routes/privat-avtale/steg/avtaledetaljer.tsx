@@ -10,32 +10,25 @@ import {
 import { z } from "zod";
 import { RouteConfig } from "~/config/routeConfig";
 import {
-  PRIVAT_AVTALE_SESSION_KEY,
   commitSession,
   getSession,
+  PRIVAT_AVTALE_SESSION_KEY,
 } from "~/config/session.server";
 import { OppgjørsformSchema } from "~/features/privatAvtale/apiSchema";
+import { lagSteg3Schema } from "~/features/privatAvtale/skjemaSchema";
 import { teksterAvtaledetaljer } from "~/features/privatAvtale/tekster/avtaledetaljer";
 import { sporPrivatAvtaleSpørsmålBesvart } from "~/features/privatAvtale/utils";
-import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
 
 const NY_AVTALE_ALTERNATIVER = ["true", "false"] as const;
 const INNKREVING_ALTERNATIVER = ["false", "true"] as const;
 
-const steg3Schema = z.object({
-  avtaledetaljer: z.object({
-    nyAvtale: z.enum(["true", "false"]),
-    oppgjørsformIdag: z.enum(OppgjørsformSchema.options),
-    medInnkreving: z.enum(["true", "false"]),
-  }),
-});
-
 export default function AvtaledetaljerSteg() {
-  const { t } = useOversettelse();
+  const { t, språk } = useOversettelse();
   const loaderData = useLoaderData<typeof loader>();
 
   const form = useForm({
-    schema: steg3Schema,
+    schema: lagSteg3Schema(språk),
     submitSource: "state",
     method: "post",
     id: "steg",
@@ -162,7 +155,7 @@ const Steg3SessionSchema = z.object({
     .object({
       avtaledetaljer: z.object({
         nyAvtale: z.enum(["true", "false"]),
-        oppgjørsformIdag: z.enum(OppgjørsformSchema.options),
+        oppgjørsformIdag: z.enum([...OppgjørsformSchema.options, ""]),
         medInnkreving: z.enum(["true", "false"]),
       }),
     })
@@ -178,7 +171,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await parseFormData(request, steg3Schema);
+  const formData = await parseFormData(
+    request,
+    lagSteg3Schema(Språk.NorwegianBokmål),
+  );
+  console.log(formData);
   if (formData.error) {
     return validationError(formData.error, formData.submittedData);
   }

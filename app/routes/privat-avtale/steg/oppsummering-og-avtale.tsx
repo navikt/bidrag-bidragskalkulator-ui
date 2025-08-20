@@ -1,5 +1,14 @@
 import { Alert, Button } from "@navikt/ds-react";
-import { useEffect } from "react";
+import {
+  data,
+  Form,
+  useActionData,
+  useNavigation,
+  useRouteLoaderData,
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
+} from "react-router";
+import { getSession, PRIVAT_AVTALE_SESSION_KEY } from "~/config/session.server";
 import { OppsummeringAndreBestemmelser } from "~/features/privatAvtale/oppsummering/OppsummeringAndreBestemmelser";
 import { OppsummeringAvtaledetaljer } from "~/features/privatAvtale/oppsummering/OppsummeringAvtaledetaljer";
 import { OppsummeringBarn } from "~/features/privatAvtale/oppsummering/OppsummeringBarn";
@@ -7,40 +16,28 @@ import { OppsummeringForeldre } from "~/features/privatAvtale/oppsummering/Oppsu
 import OppsummeringsVarsel from "~/features/privatAvtale/oppsummering/OppsummeringsVarsel";
 import { OppsummeringVedlegg } from "~/features/privatAvtale/oppsummering/OppsummeringVedlegg";
 import { useUfullstendigeSteg } from "~/features/privatAvtale/oppsummering/useUfullstendigeSteg";
-import { usePrivatAvtaleForm } from "~/features/privatAvtale/PrivatAvtaleFormProvider";
+import {
+  PrivatAvtaleFlerstegsSkjemaSchema,
+  type PrivatAvtaleFlerstegsSkjema,
+} from "~/features/privatAvtale/skjemaSchema";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export default function OppsummeringOgAvtale() {
-  const { form, feilVedHentingAvAvtale, antallNedlastedeFiler } =
-    usePrivatAvtaleForm();
   const { t } = useOversettelse();
-
-  const { isSubmitting, submitStatus } = form.formState;
-  const innsendingsfeil = submitStatus === "error" && feilVedHentingAvAvtale;
-  const innsendingVellykket =
-    submitStatus === "success" && antallNedlastedeFiler;
+  const actionData = useActionData<typeof action>();
+  const navigation = useNavigation();
 
   const ufullstendigeSteg = useUfullstendigeSteg();
   const harUfullstendigeSteg = ufullstendigeSteg.length > 0;
-
-  useEffect(() => {
-    if (innsendingsfeil || innsendingVellykket) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  }, [innsendingsfeil, innsendingVellykket]);
+  const senderInn = navigation.state === "submitting";
 
   return (
     <div className="flex flex-col gap-6">
       {harUfullstendigeSteg && (
-        <OppsummeringsVarsel ufullstendigSteg={ufullstendigeSteg} />
+        <OppsummeringsVarsel ufullstendigeSteg={ufullstendigeSteg} />
       )}
-      {innsendingsfeil && (
-        <Alert variant="error">{feilVedHentingAvAvtale}</Alert>
-      )}
-      {innsendingVellykket && (
-        <Alert variant="success">
-          {t(tekster.suksessmelding(antallNedlastedeFiler))}
-        </Alert>
+      {actionData && "error" in actionData && (
+        <Alert variant="error">{actionData.error}</Alert>
       )}
       <div className="flex flex-col gap-4">
         <OppsummeringForeldre />
@@ -50,18 +47,56 @@ export default function OppsummeringOgAvtale() {
         <OppsummeringVedlegg />
       </div>
 
-      <Button
-        variant="primary"
-        className="w-full sm:w-60"
-        type="submit"
-        disabled={harUfullstendigeSteg}
-        loading={isSubmitting}
-      >
-        {isSubmitting ? t(tekster.lasterNed) : t(tekster.lastNedKnapp)}
-      </Button>
+      <Form method="post">
+        <Button
+          variant="primary"
+          className="w-full sm:w-60"
+          type="submit"
+          disabled={harUfullstendigeSteg}
+          loading={senderInn}
+        >
+          {senderInn ? t(tekster.lasterNed) : t(tekster.lastNedKnapp)}
+        </Button>
+      </Form>
     </div>
   );
 }
+
+export const headers = () => {
+  return { "Cache-Control": "no-store" };
+};
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  const sessionData = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? null;
+  const resultat =
+    PrivatAvtaleFlerstegsSkjemaSchema.partial().safeParse(sessionData);
+  if (!resultat.success) {
+    return {};
+  }
+  return data(resultat.data, { headers: { "Cache-Control": "no-store" } });
+};
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  const data = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? null;
+
+  const resultat = PrivatAvtaleFlerstegsSkjemaSchema.safeParse(data);
+  if (!resultat.success) {
+    return { error: "Ugyldig skjema" };
+  }
+
+  // TODO: Implementer generering av PDF og nedlastning
+
+  return resultat.data;
+};
+
+export const useOppsummeringsdata = () => {
+  const data = useRouteLoaderData(
+    "routes/privat-avtale/steg/oppsummering-og-avtale",
+  ) as PrivatAvtaleFlerstegsSkjema;
+  return data;
+};
 
 const tekster = definerTekster({
   lastNedKnapp: {

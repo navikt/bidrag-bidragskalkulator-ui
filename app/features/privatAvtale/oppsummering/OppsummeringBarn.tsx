@@ -10,18 +10,16 @@ import {
 } from "@navikt/ds-react/FormSummary";
 import { Link } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
+import { useOppsummeringsdata } from "~/routes/privat-avtale/steg/oppsummering-og-avtale";
 import { datoTilTekst } from "~/utils/dato";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { usePrivatAvtaleForm } from "../PrivatAvtaleFormProvider";
+import { formatterFødselsnummer } from "~/utils/string";
 import type { PrivatAvtaleFlerstegsSkjema } from "../skjemaSchema";
 
 export function OppsummeringBarn() {
-  const { form } = usePrivatAvtaleForm();
   const { t } = useOversettelse();
-  const skjemaverdier = form.value();
-  const { barn } = skjemaverdier.steg2;
-  const { medforelder } = skjemaverdier.steg1;
-  const navnMedforelder = `${medforelder.fornavn} ${medforelder.etternavn}`;
+  const skjemaverdier = useOppsummeringsdata();
+  const navnMedforelder = `${skjemaverdier.steg1?.medforelder?.fornavn} ${skjemaverdier.steg1?.medforelder?.etternavn}`;
 
   return (
     <FormSummary>
@@ -37,10 +35,13 @@ export function OppsummeringBarn() {
         </FormSummaryEditLink>
       </FormSummaryHeader>
       <FormSummaryAnswers>
-        {barn.length === 1 ? (
-          <Barnesvar barn={barn[0]} navnMedforelder={navnMedforelder} />
+        {skjemaverdier.steg2?.barn?.length === 1 ? (
+          <Barnesvar
+            barn={skjemaverdier.steg2.barn[0]}
+            navnMedforelder={navnMedforelder}
+          />
         ) : (
-          barn.map((barn, i) => (
+          skjemaverdier.steg2?.barn?.map((barn, i) => (
             <FormSummaryAnswer key={i}>
               <FormSummaryLabel>
                 {t(tekster.barnLabel)} {i + 1}
@@ -82,7 +83,7 @@ const Barnesvar = ({ barn, navnMedforelder = "" }: BarnesvarProps) => {
       <FormSummaryAnswer>
         <FormSummaryLabel>{t(tekster.ident)}</FormSummaryLabel>
         <FormSummaryValue>
-          {barn.ident || t(tekster.ikkeUtfylt)}
+          {formatterFødselsnummer(barn.ident) || t(tekster.ikkeUtfylt)}
         </FormSummaryValue>
       </FormSummaryAnswer>
       <FormSummaryAnswer>
