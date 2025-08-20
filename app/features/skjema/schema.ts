@@ -3,7 +3,7 @@ import { definerTekster, oversett, Språk } from "~/utils/i18n";
 
 export const MAKS_ALDER_BARNETILSYNSUTGIFT = 10;
 
-export const FastBosted = z.enum([
+export const FastBostedSchema = z.enum([
   "DELT_FAST_BOSTED",
   "HOS_MEG",
   "HOS_MEDFORELDER",
@@ -11,7 +11,7 @@ export const FastBosted = z.enum([
 
 export const InnloggetBarnSkjemaSchema = z.object({
   ident: z.string().length(11),
-  bosted: z.enum([...FastBosted.options, ""]),
+  bosted: z.enum([...FastBostedSchema.options, ""]),
   samvær: z.string(),
   barnetilsynsutgift: z.string(),
 });
@@ -35,7 +35,7 @@ export const InnloggetSkjemaSchema = z.object({
 
 export const ManueltBarnSkjemaSchema = z.object({
   alder: z.string(),
-  bosted: z.enum([...FastBosted.options, ""]),
+  bosted: z.enum([...FastBostedSchema.options, ""]),
   samvær: z.string(),
   barnetilsynsutgift: z.string(),
 });
@@ -62,7 +62,7 @@ export const lagInnloggetBarnSkjema = (språk: Språk) => {
       ident: z
         .string()
         .length(11, oversett(språk, tekster.feilmeldinger.barnIdent.ugyldig)),
-      bosted: z.enum(FastBosted.options, {
+      bosted: z.enum(FastBostedSchema.options, {
         message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
       }),
       samvær: z
@@ -190,7 +190,7 @@ const lagManueltBarnSkjema = (språk: Språk) => {
         .refine((verdi) => verdi <= 25, {
           message: oversett(språk, tekster.feilmeldinger.barn.alder.maksimum),
         }),
-      bosted: z.enum(FastBosted.options, {
+      bosted: z.enum(FastBostedSchema.options, {
         message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
       }),
       samvær: z
