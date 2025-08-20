@@ -8,11 +8,6 @@ test.describe("Beregningstest", () => {
 
     await sjekkTilgjengelighet(page);
 
-    await page
-      .getByLabel("Hva heter den andre forelderen?")
-      .fill("Testforelder");
-    await page.getByLabel("Hva heter den andre forelderen?").blur();
-
     await page.getByLabel("Hva heter barnet?").fill("Testperson");
     await page.getByLabel("Hva heter barnet?").blur();
 
@@ -30,19 +25,19 @@ test.describe("Beregningstest", () => {
       .fill("0");
 
     const medforelderensHusstand = page.getByRole("group", {
-      name: "Om Testforelder",
+      name: "Om den andre forelderen",
     });
     await medforelderensHusstand.getByLabel("Nei").check();
     await medforelderensHusstand
-      .getByLabel("Antall barn som bor fast hos Testforelder")
+      .getByLabel("Antall barn som bor fast hos den andre forelderen")
       .fill("0");
     await medforelderensHusstand
-      .getByLabel("Antall barn med delt bosted hos Testforelder")
+      .getByLabel("Antall barn med delt bosted hos den andre forelderen")
       .fill("0");
 
     await page.getByLabel("Hva er årsinntekten din?").fill("400000");
     await page
-      .getByLabel("Hva er årsinntekten til Testforelder?")
+      .getByLabel("Hva er årsinntekten til den andre forelderen?")
       .fill("600000");
 
     await sjekkTilgjengelighet(page);
