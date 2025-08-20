@@ -14,18 +14,14 @@ const tomtBarn: Barn = {
   fraDato: "",
 };
 
-// TODO Bruke riktige verdier for navn fra skjema
 export const hentPrivatAvtaleFlerstegsSkjemaStandardverdi = (
   forhåndsutfyltInformasjon: UtregningNavigasjonsdata | undefined,
   personinformasjon: HentPersoninformasjonForPrivatAvtaleRespons,
 ): PrivatAvtaleFlerstegsSkjema => {
   const barn: Barn[] = forhåndsutfyltInformasjon?.barn.map((barn) => ({
-    ident: "",
-    fornavn: barn.navn,
-    etternavn: barn.navn,
+    ...tomtBarn,
     sum: barn.sum.toString(),
     bidragstype: barn.bidragstype,
-    fraDato: "",
   })) ?? [tomtBarn];
 
   return {

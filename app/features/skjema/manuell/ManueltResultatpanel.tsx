@@ -65,19 +65,6 @@ export const ManueltResultatpanel = ({
           ? "PLIKTIG"
           : "INGEN";
 
-  const { barn } = form.value();
-
-  const navigasjonState = {
-    barn: data.resultater.map((resultat) => ({
-      alder: resultat.alder,
-      navn:
-        barn.find((b) => Number(b.alder) === Number(resultat.alder))?.navn ??
-        "",
-      sum: resultat.sum,
-      bidragstype: resultat.bidragstype,
-    })),
-  };
-
   return (
     <Alert variant="info">
       <Heading
@@ -97,7 +84,7 @@ export const ManueltResultatpanel = ({
       <Button
         as={ReactRouterLink}
         to={RouteConfig.PRIVAT_AVTALE.INDEX}
-        state={navigasjonState}
+        state={data.resultater}
         variant="primary"
         className="mb-6"
         onClick={() =>
@@ -140,13 +127,13 @@ export const ManueltResultatpanel = ({
                     {resultat.bidragstype === "MOTTAKER"
                       ? t(
                           tekster.detaljer.motta(
-                            barn.value().navn,
+                            barn.value().alder,
                             resultat.sum,
                           ),
                         )
                       : t(
                           tekster.detaljer.betale(
-                            barn.value().navn,
+                            barn.value().alder,
                             resultat.sum,
                           ),
                         )}
@@ -306,47 +293,47 @@ const tekster = definerTekster({
       en: "The child support above is a summary of what you should pay or receive per month for each of the children. For each child, the calculation looks like this:",
       nn: "Fostringstilskotet over er ei oppsummering av kva du skal betale eller motta per månad for kvart av barna. For kvart barn ser rekninga slik ut:",
     },
-    motta: (navn, kostnad) => ({
+    motta: (alder, kostnad) => ({
       nb: (
         <>
-          For {navn} skal du motta{" "}
+          For {alder}-åringen skal du motta{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
       en: (
         <>
-          For {navn}, you should receive{" "}
+          For the {alder} year old, you should receive{" "}
           <strong>{formatterSum(kostnad as number)}</strong> in child support
           per month.
         </>
       ),
       nn: (
         <>
-          For {navn} skal du motta{" "}
+          For {alder}-åringen skal du motta{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i fostringstilskot
           per månad.
         </>
       ),
     }),
-    betale: (navn, kostnad) => ({
+    betale: (alder, kostnad) => ({
       nb: (
         <>
-          For {navn} skal du betale{" "}
+          For {alder}-åringen skal du betale{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
       en: (
         <>
-          For {navn}, you should pay{" "}
+          For the {alder} year old, you should pay{" "}
           <strong>{formatterSum(kostnad as number)}</strong> in child support
           per month.
         </>
       ),
       nn: (
         <>
-          For {navn} skal du betale{" "}
+          For {alder}-åringen skal du betale{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i fostringstilskot
           per månad.
         </>

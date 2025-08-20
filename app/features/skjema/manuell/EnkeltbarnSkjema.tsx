@@ -5,7 +5,6 @@ import { useFormContext, useFormScope } from "@rvf/react";
 import { useMemo } from "react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
-import { NAVN_TEXT_FIELD_HTML_SIZE } from "~/utils/ui";
 import { FormattertTallTextField } from "../FormattertTallTextField";
 import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
 import { Samvær } from "../samvær/Samvær";
@@ -33,9 +32,6 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
     Number(alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT;
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
-  const navnBarn = barnField.field("navn").touched()
-    ? barnField.field("navn").value()
-    : "";
 
   const underholdskostnadsgrupper = useMemo(
     () =>
@@ -50,19 +46,9 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
     <fieldset className="p-0 space-y-4">
       <legend className="sr-only">{overskrift}</legend>
       <TextField
-        {...barnField.field("navn").getInputProps({
-          onBlur: sporKalkulatorSpørsmålBesvart(t(tekster.navn.label)),
-          label: t(tekster.navn.label),
-        })}
-        description={t(tekster.navn.description)}
-        error={barnField.field("navn").error()}
-        autoComplete="off"
-        htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
-      />
-      <TextField
         {...barnField.field("alder").getInputProps({
-          label: t(tekster.alder.label(navnBarn)),
-          onBlur: sporKalkulatorSpørsmålBesvart(t(tekster.alder.label(""))),
+          label: t(tekster.alder.label),
+          onBlur: sporKalkulatorSpørsmålBesvart(t(tekster.alder.label)),
         })}
         error={barnField.field("alder").error()}
         htmlSize={8}
@@ -129,24 +115,12 @@ const tekster = definerTekster({
       nn: `Barn ${nummer}`,
     }),
   },
-  navn: {
-    label: {
-      nb: "Hva heter barnet?",
-      en: "What is the child's name?",
-      nn: "Kva heiter barnet?",
-    },
-    description: {
-      nb: "Skriv inn barnets fulle navn",
-      en: "Enter the child's full name",
-      nn: "Skriv inn barnets fulle namn",
-    },
-  },
   alder: {
-    label: (navn) => ({
-      nb: `Hvor gammel er ${navn || "barnet"}?`,
-      en: `How old is ${navn || "the child"}?`,
-      nn: `Hvor gammal er ${navn || "barnet"}?`,
-    }),
+    label: {
+      nb: `Hvor gammel er barnet?`,
+      en: `How old is the child?`,
+      nn: `Hvor gammal er barnet?`,
+    },
     lesMer: {
       tittel: {
         nb: "Hvorfor vi spør om alder",
