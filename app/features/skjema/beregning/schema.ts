@@ -61,12 +61,7 @@ export const BidragsutregningBarnSchema = z.object({
 });
 
 export const UtregningNavigasjonsdataSchema = z.object({
-  barn: z.array(
-    z.object({
-      navn: z.string(),
-      ...BidragsutregningBarnSchema.shape,
-    }),
-  ),
+  barn: z.array(BidragsutregningBarnSchema),
 });
 
 export const ManuellBidragsutregningSchema = z.object({

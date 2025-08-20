@@ -17,7 +17,6 @@ export const ManuellBarnSkjema = () => {
 
   const handleLeggTilBarn = () => {
     barnArray.push({
-      navn: "",
       alder: "",
       bosted: sisteBarn.value().bosted,
       samvær: sisteBarn.value().samvær,
