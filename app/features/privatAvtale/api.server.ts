@@ -82,13 +82,13 @@ export const hentPrivatAvtaledokument = async (
   const erBidragsmottaker = bidragstype === "MOTTAKER";
 
   const deg = {
-    fodselsnummer: skjemaData.steg1.deg.ident,
+    ident: skjemaData.steg1.deg.ident,
     etternavn: skjemaData.steg1.deg.etternavn,
     fornavn: skjemaData.steg1.deg.fornavn,
   };
 
   const medforelder = {
-    fodselsnummer: skjemaData.steg1.medforelder.ident,
+    ident: skjemaData.steg1.medforelder.ident,
     etternavn: skjemaData.steg1.medforelder.etternavn,
     fornavn: skjemaData.steg1.medforelder.fornavn,
   };
@@ -106,7 +106,7 @@ export const hentPrivatAvtaledokument = async (
     },
     tilInnsending: skjemaData.steg3.avtaledetaljer.medInnkreving,
     barn: skjemaData.steg2.barn.map((barn) => ({
-      fodselsnummer: barn.ident,
+      ident: barn.ident,
       fornavn: barn.fornavn,
       etternavn: barn.etternavn,
       sumBidrag: barn.sum,
