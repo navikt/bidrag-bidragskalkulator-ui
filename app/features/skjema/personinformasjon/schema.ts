@@ -31,23 +31,25 @@ const SamværsfradragSchema = z.array(
   }),
 );
 
-/**
- * Schemaet for responsen fra personinformasjon API-et.
- */
-export const PersoninformasjonSchema = z.object({
-  person: PersonSchema,
-  inntekt: z.number().int().nonnegative().nullable(),
-  barnerelasjoner: z.array(RelasjonSchema),
+export const KalkulatorgrunnlagsdataSchema = z.object({
   underholdskostnader: z.record(z.string(), z.number().int().nonnegative()),
   samværsfradrag: SamværsfradragSchema,
 });
 
-export const ManuellPersoninformasjonSchema = z.object({
+/**
+ * Schemaet for responsen fra personinformasjon API-et.
+ */
+export const PersoninformasjonSchema = KalkulatorgrunnlagsdataSchema.extend({
   person: PersonSchema,
   inntekt: z.number().int().nonnegative().nullable(),
-  underholdskostnader: z.record(z.string(), z.number().int().nonnegative()),
-  samværsfradrag: SamværsfradragSchema,
+  barnerelasjoner: z.array(RelasjonSchema),
 });
+
+export const ManuellPersoninformasjonSchema =
+  KalkulatorgrunnlagsdataSchema.extend({
+    person: PersonSchema,
+    inntekt: z.number().int().nonnegative().nullable(),
+  });
 
 export type Barn = z.infer<typeof BarnSchema>;
 
@@ -55,4 +57,8 @@ export type Personinformasjon = z.infer<typeof PersoninformasjonSchema>;
 
 export type ManuellPersoninformasjon = z.infer<
   typeof ManuellPersoninformasjonSchema
+>;
+
+export type Kalkulatorgrunnlagsdata = z.infer<
+  typeof KalkulatorgrunnlagsdataSchema
 >;

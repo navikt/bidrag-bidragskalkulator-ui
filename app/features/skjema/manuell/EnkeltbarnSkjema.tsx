@@ -3,10 +3,10 @@ import { BodyLong, Button, List, ReadMore, TextField } from "@navikt/ds-react";
 import { ListItem } from "@navikt/ds-react/List";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { useMemo } from "react";
+import { useKalkulatorgrunnlagsdata } from "~/routes/kalkulator";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import { FormattertTallTextField } from "../FormattertTallTextField";
-import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
 import { Samvær } from "../samvær/Samvær";
 import { MAKS_ALDER_BARNETILSYNSUTGIFT, type ManueltSkjema } from "../schema";
 import {
@@ -20,7 +20,7 @@ type Props = {
 };
 
 export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
-  const { underholdskostnader } = usePersoninformasjon();
+  const { underholdskostnader } = useKalkulatorgrunnlagsdata();
   const { t } = useOversettelse();
   const form = useFormContext<ManueltSkjema>();
 

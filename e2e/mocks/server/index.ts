@@ -3,7 +3,7 @@ import { createServer } from "http";
 import { parse } from "url";
 import {
   handleBidragsberegning,
-  handlePersonInformasjon,
+  handleKalkulatorGrunnlagsdata,
   handleÅpenBidragsberegning,
 } from "./handlers";
 import { sendJsonRespons, settCorsHeadere } from "./utils";
@@ -18,9 +18,9 @@ type Route = {
 };
 const routes: Route[] = [
   {
-    path: "/api/v1/person/informasjon",
+    path: "/api/v1/person/grunnlagsdata",
     method: "GET",
-    handler: handlePersonInformasjon,
+    handler: handleKalkulatorGrunnlagsdata,
     name: "Personinformasjon",
   },
   {

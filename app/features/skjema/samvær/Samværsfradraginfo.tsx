@@ -1,10 +1,10 @@
 import { BodyLong, BodyShort, List, ReadMore } from "@navikt/ds-react";
 import { ListItem } from "@navikt/ds-react/List";
+import { useKalkulatorgrunnlagsdata } from "~/routes/kalkulator";
 import { sporHendelseEnGang } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import type { Samværsklasse } from "../beregning/schema";
-import { usePersoninformasjon } from "../personinformasjon/usePersoninformasjon";
 import { SAMVÆRSKLASSE_GRENSER } from "../utils";
 
 type SamværsfradraginfoProps = {
@@ -28,13 +28,13 @@ export const Samværsfradraginfo = ({
   alder,
   samværsklasse,
 }: SamværsfradraginfoProps) => {
-  const personinformasjon = usePersoninformasjon();
+  const { samværsfradrag } = useKalkulatorgrunnlagsdata();
   const { t } = useOversettelse();
 
   const samværsfradragForAlder =
     alder === undefined
       ? undefined
-      : personinformasjon.samværsfradrag.find(
+      : samværsfradrag.find(
           (fradrag) => alder >= fradrag.alderFra && alder <= fradrag.alderTil,
         );
 
