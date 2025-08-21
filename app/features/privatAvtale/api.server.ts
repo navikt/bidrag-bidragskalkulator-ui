@@ -23,15 +23,18 @@ export const hentPrivatAvtaleFraApi = async ({
   språk: Språk;
   token: string;
 }): Promise<Response> => {
-  const response = await fetch(`${env.SERVER_URL}/api/v1/privat-avtale`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/pdf",
-      Authorization: `Bearer ${token}`,
+  const response = await fetch(
+    `${env.SERVER_URL}/api/v1/privat-avtale/under-18`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/pdf",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(requestData),
     },
-    body: JSON.stringify(requestData),
-  });
+  );
 
   if (!response.ok) {
     const status = response.status;
@@ -116,11 +119,9 @@ export const hentPrivatAvtaledokument = async (
       harAndreBestemmelser: skjemaData.steg4.erAndreBestemmelser,
       beskrivelse: skjemaData.steg4.andreBestemmelser,
     },
-    vedlegg: {
-      annenDokumentasjon: skjemaData.steg5.harVedlegg
-        ? "SENDES_MED_SKJEMA"
-        : "INGEN_EKSTRA_DOKUMENTASJON",
-    },
+    vedlegg: skjemaData.steg5.harVedlegg
+      ? "SENDES_MED_SKJEMA"
+      : "INGEN_EKSTRA_DOKUMENTASJON",
   };
 
   return hentPrivatAvtaleFraApi({

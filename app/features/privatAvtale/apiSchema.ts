@@ -36,12 +36,7 @@ export const LagPrivatAvtaleRequestSchema = z.object({
     harAndreBestemmelser: z.boolean(),
     beskrivelse: z.string(),
   }),
-  vedlegg: z.object({
-    annenDokumentasjon: z.enum([
-      "INGEN_EKSTRA_DOKUMENTASJON",
-      "SENDES_MED_SKJEMA",
-    ]),
-  }),
+  vedlegg: z.enum(["INGEN_EKSTRA_DOKUMENTASJON", "SENDES_MED_SKJEMA"]),
 });
 
 export type ApiSpråk = z.infer<typeof ApiSpråkSchema>;
