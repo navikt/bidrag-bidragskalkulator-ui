@@ -1,4 +1,8 @@
-import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
+import {
+  definerTekster,
+  hentSpråkFraCookie,
+  useOversettelse,
+} from "~/utils/i18n";
 
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { parseFormData, useForm, validationError } from "@rvf/react-router";
@@ -76,10 +80,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const resultat = await parseFormData(
-    request,
-    lagSteg5Schema(Språk.NorwegianBokmål),
-  );
+  const cookieHeader = request.headers.get("Cookie");
+  const språk = hentSpråkFraCookie(cookieHeader);
+  const resultat = await parseFormData(request, lagSteg5Schema(språk));
 
   if (resultat.error) {
     return validationError(resultat.error, resultat.submittedData);

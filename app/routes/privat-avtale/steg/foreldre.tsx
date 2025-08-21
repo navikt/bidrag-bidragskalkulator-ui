@@ -12,7 +12,11 @@ import {
   PRIVAT_AVTALE_SESSION_KEY,
 } from "~/config/session.server";
 
-import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
+import {
+  definerTekster,
+  hentSpråkFraCookie,
+  useOversettelse,
+} from "~/utils/i18n";
 
 import { TextField } from "@navikt/ds-react";
 import { parseFormData, useForm, validationError } from "@rvf/react-router";
@@ -129,10 +133,9 @@ const tekster = definerTekster({
 });
 
 export async function action({ request }: ActionFunctionArgs) {
-  const resultat = await parseFormData(
-    request,
-    lagSteg1Schema(Språk.NorwegianBokmål),
-  );
+  const cookieHeader = request.headers.get("Cookie");
+  const språk = hentSpråkFraCookie(cookieHeader);
+  const resultat = await parseFormData(request, lagSteg1Schema(språk));
 
   if (!resultat) {
     return validationError(resultat);

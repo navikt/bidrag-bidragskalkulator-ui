@@ -15,8 +15,6 @@ export default [
       "routes/min-side/dokument.tsx",
     ),
 
-    route(RouteConfig.PRIVAT_AVTALE.API, "routes/api/privat-avtale.ts"),
-
     layout("routes/privat-avtale/layout.tsx", [
       route(RouteConfig.PRIVAT_AVTALE.INDEX, "routes/privat-avtale/index.tsx"),
       layout("routes/privat-avtale/steg/layout.tsx", [

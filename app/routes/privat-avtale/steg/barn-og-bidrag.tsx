@@ -30,7 +30,11 @@ import {
 } from "~/features/privatAvtale/skjemaSchema";
 import { BidragstypeSchema } from "~/features/skjema/beregning/schema";
 import { sporHendelse } from "~/utils/analytics";
-import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
+import {
+  definerTekster,
+  hentSpråkFraCookie,
+  useOversettelse,
+} from "~/utils/i18n";
 
 export default function BarnOgBidragSteg() {
   const { t, språk } = useOversettelse();
@@ -180,10 +184,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const resultat = await parseFormData(
-    request,
-    lagSteg2Schema(Språk.NorwegianBokmål),
-  );
+  const cookieHeader = request.headers.get("Cookie");
+  const språk = hentSpråkFraCookie(cookieHeader);
+  const resultat = await parseFormData(request, lagSteg2Schema(språk));
 
   if (resultat.error) {
     return validationError(resultat.error, resultat.submittedData);

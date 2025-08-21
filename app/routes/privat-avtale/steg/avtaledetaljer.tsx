@@ -18,7 +18,11 @@ import { OppgjørsformSchema } from "~/features/privatAvtale/apiSchema";
 import { lagSteg3Schema } from "~/features/privatAvtale/skjemaSchema";
 import { teksterAvtaledetaljer } from "~/features/privatAvtale/tekster/avtaledetaljer";
 import { sporPrivatAvtaleSpørsmålBesvart } from "~/features/privatAvtale/utils";
-import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
+import {
+  definerTekster,
+  hentSpråkFraCookie,
+  useOversettelse,
+} from "~/utils/i18n";
 
 const NY_AVTALE_ALTERNATIVER = ["true", "false"] as const;
 const INNKREVING_ALTERNATIVER = ["false", "true"] as const;
@@ -171,11 +175,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await parseFormData(
-    request,
-    lagSteg3Schema(Språk.NorwegianBokmål),
-  );
-  console.log(formData);
+  const cookieHeader = request.headers.get("Cookie");
+  const språk = hentSpråkFraCookie(cookieHeader);
+  const formData = await parseFormData(request, lagSteg3Schema(språk));
+
   if (formData.error) {
     return validationError(formData.error, formData.submittedData);
   }

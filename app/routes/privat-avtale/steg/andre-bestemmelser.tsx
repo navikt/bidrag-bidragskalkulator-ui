@@ -16,7 +16,11 @@ import {
 } from "~/config/session.server";
 import { lagSteg4Schema } from "~/features/privatAvtale/skjemaSchema";
 import { sporPrivatAvtaleSpørsmålBesvart } from "~/features/privatAvtale/utils";
-import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
+import {
+  definerTekster,
+  hentSpråkFraCookie,
+  useOversettelse,
+} from "~/utils/i18n";
 
 const ER_ANDRE_BESTEMMELSER_ALTERNATIVER = ["true", "false"] as const;
 
@@ -78,10 +82,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const resultat = await parseFormData(
-    request,
-    lagSteg4Schema(Språk.NorwegianBokmål),
-  );
+  const cookieHeader = request.headers.get("Cookie");
+  const språk = hentSpråkFraCookie(cookieHeader);
+  const resultat = await parseFormData(request, lagSteg4Schema(språk));
 
   if (resultat.error) {
     return validationError(resultat.error, resultat.submittedData);
