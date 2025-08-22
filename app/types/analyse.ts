@@ -29,6 +29,11 @@ type SkjemaFullført = {
   skjemaId: SkjemaId;
 };
 
+type BarnetsAlderInfoUtvidet = {
+  hendelsetype: "infoboks om barnets alder utvidet";
+  skjemaId: SkjemaIdKalkulator;
+};
+
 type SamværsfradraginfoUtvidet = {
   hendelsetype: "infoboks om samværsfradrag utvidet";
   skjemaId: SkjemaIdKalkulator;
@@ -82,6 +87,7 @@ export type Sporingshendelse =
   | SkjemaValideringFeilet
   | SkjemaInnsendingFeilet
   | SkjemaFullført
+  | BarnetsAlderInfoUtvidet
   | SamværsfradraginfoUtvidet
   | FerieOgSamværinfoUtvidet
   | BeregningsdetaljerUtvidet
