@@ -88,31 +88,34 @@ const samværsfradrag = [
   },
 ];
 
+export const kalkulatorGrunnlagsdata = {
+  underholdskostnader,
+  samværsfradrag,
+};
+
 /**
  * Default mock data for personinformasjon endepunkt
  */
 export const defaultPersoninformasjon: Personinformasjon = {
+  ...kalkulatorGrunnlagsdata,
   person: {
     ident: "12345678901",
     fulltNavn: "Test Megersen",
   },
   inntekt: 500000,
   barnerelasjoner: [],
-  underholdskostnader,
-  samværsfradrag,
 };
 
 /**
  * Default mock data for manuell personinformasjon endepunkt
  */
 export const defaultManuellPersoninformasjon: ManuellPersoninformasjon = {
+  ...kalkulatorGrunnlagsdata,
   person: {
     ident: "12345678901",
     fulltNavn: "Test Megersen",
   },
   inntekt: 500000,
-  underholdskostnader,
-  samværsfradrag,
 };
 
 /**
@@ -167,6 +170,8 @@ export function genererPersoninformasjon(
       overrides?.barnerelasjoner || defaultPersoninformasjon.barnerelasjoner,
   };
 }
+
+export const genererKalkulatorGrunnlagsdata = () => kalkulatorGrunnlagsdata;
 
 /**
  * Genererer mock manuell personinformasjon med mulighet for å overstyre verdier

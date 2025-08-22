@@ -1,11 +1,7 @@
 import type z from "zod";
 import { sporHendelse } from "~/utils/analytics";
 import type { Samværsklasse } from "./beregning/schema";
-import type {
-  Barn,
-  ManuellPersoninformasjon,
-  Personinformasjon,
-} from "./personinformasjon/schema";
+import type { Barn, Personinformasjon } from "./personinformasjon/schema";
 import type {
   FastBosted,
   InnloggetBarnSkjema,
@@ -129,31 +125,27 @@ export const tilUnderholdskostnadsgruppeMedLabel = (
   });
 };
 
-export const hentManueltSkjemaStandardverdi = (
-  personinformasjon: ManuellPersoninformasjon,
-): ManueltSkjema => {
-  return {
-    barn: [
-      {
-        alder: "",
-        bosted: "",
-        samvær: SAMVÆR_STANDARDVERDI,
-        barnetilsynsutgift: "",
-      },
-    ],
-    deg: {
-      inntekt: String(personinformasjon.inntekt ?? ""),
-      antallBarnBorFast: "",
-      antallBarnDeltBosted: "",
-      borMedAnnenVoksen: "",
+export const MANUELT_SKJEMA_STANDARDVERDI: ManueltSkjema = {
+  barn: [
+    {
+      alder: "",
+      bosted: "",
+      samvær: SAMVÆR_STANDARDVERDI,
+      barnetilsynsutgift: "",
     },
-    medforelder: {
-      inntekt: "",
-      antallBarnBorFast: "",
-      antallBarnDeltBosted: "",
-      borMedAnnenVoksen: "",
-    },
-  };
+  ],
+  deg: {
+    inntekt: "",
+    antallBarnBorFast: "",
+    antallBarnDeltBosted: "",
+    borMedAnnenVoksen: "",
+  },
+  medforelder: {
+    inntekt: "",
+    antallBarnBorFast: "",
+    antallBarnDeltBosted: "",
+    borMedAnnenVoksen: "",
+  },
 };
 
 export const SAMVÆRSKLASSE_GRENSER = {

@@ -16,7 +16,6 @@ export const Inntektsopplysninger = () => {
       <FormattertTallTextField
         {...form.field("deg.inntekt").getControlProps()}
         label={t(tekster.dinInntekt.label)}
-        description={t(tekster.dinInntekt.beskrivelse)}
         error={form.field("deg.inntekt").error()}
         onBlur={sporKalkulatorSpørsmålBesvart(t(tekster.dinInntekt.label))}
         htmlSize={18}
@@ -57,11 +56,6 @@ const tekster = definerTekster({
       nb: "Hva er årsinntekten din?",
       en: "What is your annual income?",
       nn: "Kva er årsinntekta di?",
-    },
-    beskrivelse: {
-      nb: "Inntekten din er hentet fra Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
-      en: "Your income is fetched from The Norwegian Tax Administration, and is all income registered on you in the last 12 months. Adjust the amount if it does not match.",
-      nn: "Inntekta di er henta frå Skatteetaten, og er all inntekt registrert på deg de siste 12 månedene. Juster tallet hvis det ikke stemmer.",
     },
   },
   inntektsinformasjon: {
