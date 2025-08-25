@@ -116,9 +116,9 @@ const tekster = definerTekster({
   },
   barnetilsynsutgift: {
     label: {
-      nb: "Kostnad for barnepass",
-      en: "Child care costs",
-      nn: "Kostnad for barnepass",
+      nb: "Hva koster barnepass for barnet?",
+      en: "What are the child care costs for the child?",
+      nn: "Kva kostar barnepass for barnet?",
     },
     description: {
       nb: "Barnepass inkluderer barnehage (uten penger til kost, bleier og lignende), skolefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma",
