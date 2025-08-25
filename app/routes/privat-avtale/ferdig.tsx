@@ -1,6 +1,7 @@
 import { Button, Heading } from "@navikt/ds-react";
 import { PageBlock } from "@navikt/ds-react/Page";
-import { useLoaderData, type LoaderFunctionArgs } from "react-router";
+import { redirect, useLoaderData, type LoaderFunctionArgs } from "react-router";
+import { RouteConfig } from "~/config/routeConfig";
 import { getSession, PRIVAT_AVTALE_SESSION_KEY } from "~/config/session.server";
 import { PrivatAvtaleFlerstegsSkjemaSchema } from "~/features/privatAvtale/skjemaSchema";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -8,6 +9,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 export default function FerdigSteg() {
   const { t } = useOversettelse();
   const loaderData = useLoaderData<typeof loader>();
+
   const harInnkreving =
     loaderData.steg3?.avtaledetaljer?.medInnkreving === "true";
   return (
@@ -84,5 +86,5 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (resultat.success) {
     return resultat.data;
   }
-  return {};
+  return redirect(RouteConfig.PRIVAT_AVTALE.INDEX);
 };
