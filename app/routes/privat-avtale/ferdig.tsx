@@ -13,7 +13,7 @@ export default function FerdigSteg() {
   const harInnkreving =
     loaderData.steg3?.avtaledetaljer?.medInnkreving === "true";
   return (
-    <PageBlock className="flex flex-col gap-3" width="text">
+    <PageBlock className="flex flex-col gap-3 mb-8" width="text">
       <Heading level="1" size="large">
         {t(tekster.tittel)}
       </Heading>
@@ -24,7 +24,7 @@ export default function FerdigSteg() {
       </Heading>
       <p>{t(tekster.signerOgArkiver)}</p>
       {harInnkreving && (
-        <div className="mb-8">
+        <div>
           <p className="mb-3">{t(tekster.sendTilNav)}</p>
           <Button
             as="a"
