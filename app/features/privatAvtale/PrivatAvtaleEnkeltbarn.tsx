@@ -90,7 +90,7 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
                 t(tekster.bidragstype.label),
               )}
             >
-              {t(tekster.bidragstype[bidragstype](""))}
+              {t(tekster.bidragstype[bidragstype])}
             </Radio>
           );
         })}
@@ -172,16 +172,16 @@ const tekster = definerTekster({
       en: "Will you receive or pay child support?",
       nn: "Skal du motta eller betale barnebidrag?",
     },
-    MOTTAKER: (navnMotpart) => ({
-      nb: `Jeg skal motta barnebidrag fra ${navnMotpart || "den andre forelderen"}`,
-      en: `I will receive child support from ${navnMotpart || "the other parent"}`,
-      nn: `Eg skal motta barnebidrag frå ${navnMotpart || "den andre forelderen"}`,
-    }),
-    PLIKTIG: (navnMotpart) => ({
-      nb: `Jeg skal betale barnebidrag til ${navnMotpart || "den andre forelderen"}`,
-      en: `I will pay child support to ${navnMotpart || "the other parent"}`,
-      nn: `Eg skal betale barnebidrag til ${navnMotpart || "den andre forelderen"}`,
-    }),
+    MOTTAKER: {
+      nb: `Jeg skal motta barnebidrag fra den andre forelderen`,
+      en: `I will receive child support from the other parent`,
+      nn: `Eg skal motta barnebidrag frå den andre forelderen`,
+    },
+    PLIKTIG: {
+      nb: `Jeg skal betale barnebidrag til den andre forelderen`,
+      en: `I will pay child support to the other parent`,
+      nn: `Eg skal betale barnebidrag til den andre forelderen`,
+    },
   },
   gjelderFra: {
     label: {
