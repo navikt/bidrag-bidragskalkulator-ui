@@ -109,9 +109,4 @@ const tekster = definerTekster({
         ? "The agreement was generated and downloaded."
         : `${antallFiler} agreements were generated and downloaded.`,
   }),
-  feilmelding: {
-    nb: "Det oppsto en feil under generering av avtalen.",
-    nn: "Det oppstod ein feil under generering av avtalen.",
-    en: "An error occurred while generating the agreement.",
-  },
 });
