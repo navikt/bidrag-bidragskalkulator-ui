@@ -46,7 +46,7 @@ export default function OppsummeringOgAvtale() {
         action={RouteConfig.PRIVAT_AVTALE.STEG_6_LAST_NED}
         reloadDocument
         onSubmit={() => {
-          navigate(RouteConfig.PRIVAT_AVTALE.INDEX);
+          navigate(RouteConfig.PRIVAT_AVTALE.FERDIG);
         }}
       >
         <Button
