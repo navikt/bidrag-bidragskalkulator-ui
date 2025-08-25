@@ -1,13 +1,9 @@
 import type z from "zod";
 import { sporHendelse } from "~/utils/analytics";
 import type { Samværsklasse } from "./beregning/schema";
+import type { Barn, Personinformasjon } from "./personinformasjon/schema";
 import type {
-  Barn,
-  ManuellPersoninformasjon,
-  Personinformasjon,
-} from "./personinformasjon/schema";
-import type {
-  FastBosted,
+  FastBostedSchema,
   InnloggetBarnSkjema,
   InnloggetSkjema,
   ManueltSkjema,
@@ -129,31 +125,27 @@ export const tilUnderholdskostnadsgruppeMedLabel = (
   });
 };
 
-export const hentManueltSkjemaStandardverdi = (
-  personinformasjon: ManuellPersoninformasjon,
-): ManueltSkjema => {
-  return {
-    barn: [
-      {
-        alder: "",
-        bosted: "",
-        samvær: SAMVÆR_STANDARDVERDI,
-        barnetilsynsutgift: "",
-      },
-    ],
-    deg: {
-      inntekt: String(personinformasjon.inntekt ?? ""),
-      antallBarnBorFast: "",
-      antallBarnDeltBosted: "",
-      borMedAnnenVoksen: "",
+export const MANUELT_SKJEMA_STANDARDVERDI: ManueltSkjema = {
+  barn: [
+    {
+      alder: "",
+      bosted: "",
+      samvær: SAMVÆR_STANDARDVERDI,
+      barnetilsynsutgift: "",
     },
-    medforelder: {
-      inntekt: "",
-      antallBarnBorFast: "",
-      antallBarnDeltBosted: "",
-      borMedAnnenVoksen: "",
-    },
-  };
+  ],
+  deg: {
+    inntekt: "",
+    antallBarnBorFast: "",
+    antallBarnDeltBosted: "",
+    borMedAnnenVoksen: "",
+  },
+  medforelder: {
+    inntekt: "",
+    antallBarnBorFast: "",
+    antallBarnDeltBosted: "",
+    borMedAnnenVoksen: "",
+  },
 };
 
 export const SAMVÆRSKLASSE_GRENSER = {
@@ -189,7 +181,7 @@ export const SAMVÆRSKLASSE_GRENSER = {
  */
 export const kalkulerSamværsklasse = (
   antallNetterHosMeg: number,
-  fastBosted: z.infer<typeof FastBosted>,
+  fastBosted: z.infer<typeof FastBostedSchema>,
 ): Samværsklasse => {
   if (fastBosted === "DELT_FAST_BOSTED") {
     return "DELT_BOSTED";
@@ -214,7 +206,7 @@ export const kalkulerSamværsklasse = (
  * Avgjør om forelderen er mottaker eller pliktig basert på samværsgrad
  */
 export function kalkulerBidragstype(
-  bostatus: z.infer<typeof FastBosted>,
+  bostatus: z.infer<typeof FastBostedSchema>,
   inntektForelder1: number,
   inntektForelder2: number,
 ): "MOTTAKER" | "PLIKTIG" {
@@ -243,7 +235,13 @@ export const finnMotpartBasertPåIdent = (
 };
 
 export const sporKalkulatorSpørsmålBesvart =
-  (spørsmål: string) => (event: React.FocusEvent<HTMLInputElement>) => {
+  (spørsmål: string) =>
+  (
+    event:
+      | React.FocusEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
     if (!!event.target.value) {
       sporHendelse({
         hendelsetype: "skjema spørsmål besvart",

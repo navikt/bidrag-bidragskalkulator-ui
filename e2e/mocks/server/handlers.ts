@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "http";
 import {
-  genererPersoninformasjon,
+  genererKalkulatorGrunnlagsdata,
   genererBidragsutregning as generererBidragsutregning,
   genererManuellBidragsutregning as generererManuellBidragsutregning,
 } from "../data";
@@ -10,11 +10,11 @@ import { handlePostRequest, sendJsonRespons } from "./utils";
  * Handler for personinformasjons-endepunkt
  * GET /api/v1/person/informasjon
  */
-export function handlePersonInformasjon(
+export function handleKalkulatorGrunnlagsdata(
   _: IncomingMessage,
   res: ServerResponse,
 ) {
-  const mockData = genererPersoninformasjon();
+  const mockData = genererKalkulatorGrunnlagsdata();
   sendJsonRespons(res, 200, mockData);
 }
 

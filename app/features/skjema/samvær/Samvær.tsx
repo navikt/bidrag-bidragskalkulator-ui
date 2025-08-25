@@ -1,9 +1,14 @@
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
+import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { FastBosted, type ManueltSkjema } from "../schema";
-import { kalkulerSamværsklasse, SAMVÆR_STANDARDVERDI } from "../utils";
+import { FastBostedSchema, type ManueltSkjema } from "../schema";
+import {
+  kalkulerSamværsklasse,
+  SAMVÆR_STANDARDVERDI,
+  sporKalkulatorSpørsmålBesvart,
+} from "../utils";
 import { SamværOgFerierInfo } from "./SamværOgFerierInfo";
 import { Samværsfradraginfo } from "./Samværsfradraginfo";
 
@@ -26,6 +31,17 @@ export function Samvær({ barnIndex }: SamværProps) {
   const borHosMedforelder = bosted === "HOS_MEDFORELDER";
   const alder = barnField.value("alder");
 
+  const sporSamvær = (verdi: string) => {
+    if (verdi) {
+      sporHendelse({
+        hendelsetype: "skjema spørsmål besvart",
+        skjemaId: "barnebidragskalkulator-under-18",
+        spørsmålId: barnField.getControlProps("samvær").name,
+        spørsmål: t(tekster.samvær.label),
+      });
+    }
+  };
+
   return (
     <>
       <RadioGroup
@@ -37,9 +53,13 @@ export function Samvær({ barnIndex }: SamværProps) {
         error={barnField.field("bosted").error()}
         legend={t(tekster.bosted.label)}
       >
-        {FastBosted.options.map((bosted) => {
+        {FastBostedSchema.options.map((bosted) => {
           return (
-            <Radio value={bosted} key={bosted}>
+            <Radio
+              value={bosted}
+              key={bosted}
+              onChange={sporKalkulatorSpørsmålBesvart(t(tekster.bosted.label))}
+            >
               {t(tekster.bosted.valg[bosted])}
             </Radio>
           );
@@ -48,7 +68,9 @@ export function Samvær({ barnIndex }: SamværProps) {
 
       {borHosMeg && (
         <Slider
-          {...barnField.field("samvær").getControlProps()}
+          {...barnField.field("samvær").getControlProps({
+            onChange: sporSamvær,
+          })}
           label={t(tekster.samvær.label)}
           description={t(tekster.samvær.beskrivelse)}
           error={barnField.field("samvær").error()}
@@ -70,7 +92,9 @@ export function Samvær({ barnIndex }: SamværProps) {
       )}
       {borHosMedforelder && (
         <Slider
-          {...barnField.field("samvær").getControlProps()}
+          {...barnField.field("samvær").getControlProps({
+            onChange: sporSamvær,
+          })}
           label={t(tekster.samvær.label)}
           description={t(tekster.samvær.beskrivelse)}
           error={barnField.field("samvær").error()}
