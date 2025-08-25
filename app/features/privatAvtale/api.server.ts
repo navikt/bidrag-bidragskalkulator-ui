@@ -51,6 +51,7 @@ export const hentPrivatAvtaleFraApi = async ({
     console.error(
       `Feil ved generering av privat avtale: ${status} ${response.statusText}`,
     );
+    console.error("Response body:", await response.text());
 
     return new Response(feilmelding, {
       status,
@@ -105,7 +106,8 @@ export const hentPrivatAvtaledokument = async (
       oppgjørsformØnsket: skjemadata.steg3.avtaledetaljer.medInnkreving
         ? "INNKREVING"
         : "PRIVAT",
-      oppgjørsformIdag: skjemadata.steg3.avtaledetaljer.oppgjørsformIdag,
+      oppgjørsformIdag:
+        skjemadata.steg3.avtaledetaljer.oppgjørsformIdag || undefined,
     },
     tilInnsending: skjemadata.steg3.avtaledetaljer.medInnkreving === "true",
     barn: skjemadata.steg2.barn.map((barn) => ({

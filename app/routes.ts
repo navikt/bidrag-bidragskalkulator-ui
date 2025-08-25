@@ -42,6 +42,10 @@ export default [
           RouteConfig.PRIVAT_AVTALE.STEG_6_OPPSUMMERING_OG_AVTALE,
           "routes/privat-avtale/steg/oppsummering-og-avtale.tsx",
         ),
+        route(
+          RouteConfig.PRIVAT_AVTALE.STEG_6_LAST_NED,
+          "routes/privat-avtale/steg/last-ned.ts",
+        ),
       ]),
     ]),
 
