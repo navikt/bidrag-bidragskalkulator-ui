@@ -9,6 +9,7 @@ export const RouteConfig = {
     STEG_5_VEDLEGG: "/privat-avtale/steg/vedlegg",
     STEG_6_OPPSUMMERING_OG_AVTALE: "/privat-avtale/steg/oppsummering-og-avtale",
     STEG_6_LAST_NED: "/privat-avtale/steg/last-ned",
+    FERDIG: "/privat-avtale/steg/ferdig",
   },
   OVERSIKT: {
     INDEX: "/oversikt",
