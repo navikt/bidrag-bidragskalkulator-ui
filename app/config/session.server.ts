@@ -15,20 +15,51 @@ export const sessionStorage = createCookieSessionStorage({
   },
 });
 
-export async function hentAllSesjonsdata(request: Request) {
-  return hentSesjonsdata(request, PrivatAvtaleFlerstegsSkjemaSchema);
-}
-
+/**
+ * Returnerer response options for en redirect som oppdaterer sesjonsdata.
+ *
+ * Man sender inn requestet og dataen man ønsker å oppdatere sesjonen med.
+ *
+ * @example
+ * ```tsx
+ * function action({ request }: ActionFunctionArgs) {
+ *   return redirect(
+ *     "some-path",
+ *     oppdaterSesjonsdata(request, { oppdaterte: 'data' })
+ *   );
+ * }
+ *
+ * @param request Requestet
+ * @param data Dataen du ønsker å oppdatere sesjonen med
+ * @returns andre-argumentet til `data`, `redirect` eller `redirectDocument`-funksjonene
+ */
 export async function oppdaterSesjonsdata(
   request: Request,
   data: Record<string, unknown>,
 ) {
   const session = await getSession(request.headers.get("Cookie"));
-  const eksisterende = await hentAllSesjonsdata(request);
+  const eksisterende = await hentSesjonsdata(
+    request,
+    PrivatAvtaleFlerstegsSkjemaSchema,
+  );
   session.set(PRIVAT_AVTALE_SESSION_KEY, { ...eksisterende, ...data });
   return { headers: { "Set-Cookie": await commitSession(session) } };
 }
 
+/**
+ * Henter sesjonsdata for en spesifikk request og validerer det mot et schema.
+ *
+ * @example
+ * ```tsx
+ * function loader({ request }: LoaderArgs) {
+ *   return hentSesjonsdata(request, PrivatAvtaleFlerstegsSkjemaSchema);
+ * }
+ * ```
+ *
+ * @param request request objektet fra action eller loader
+ * @param schema Zod schemaet som dataen skal valideres mot
+ * @returns de validerte sesjonsdataene eller null hvis valideringen feilet
+ */
 export async function hentSesjonsdata<T>(
   request: Request,
   schema: z.ZodSchema<T>,
