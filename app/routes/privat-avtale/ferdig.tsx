@@ -1,7 +1,6 @@
 import { Button, Heading } from "@navikt/ds-react";
 import { PageBlock } from "@navikt/ds-react/Page";
-import { data, useLoaderData, type LoaderFunctionArgs } from "react-router";
-import type z from "zod";
+import { useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { getSession, PRIVAT_AVTALE_SESSION_KEY } from "~/config/session.server";
 import { PrivatAvtaleFlerstegsSkjemaSchema } from "~/features/privatAvtale/skjemaSchema";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -80,13 +79,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const session = await getSession(request.headers.get("Cookie"));
   const sessionData = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? null;
   const partialskjema = PrivatAvtaleFlerstegsSkjemaSchema.partial();
-  type PartialSkjemaType = z.infer<typeof partialskjema>;
   const resultat = partialskjema.safeParse(sessionData);
 
   if (resultat.success) {
-    return data<PartialSkjemaType>(resultat.data, {
-      headers: { "Cache-Control": "no-store" },
-    });
+    return resultat.data;
   }
-  return data<PartialSkjemaType>({});
+  return {};
 };
