@@ -2,7 +2,7 @@ import { Button } from "@navikt/ds-react";
 import {
   data,
   Form,
-  useNavigation,
+  useNavigate,
   useRouteLoaderData,
   type LoaderFunctionArgs,
 } from "react-router";
@@ -23,11 +23,10 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export default function OppsummeringOgAvtale() {
   const { t } = useOversettelse();
-  const navigation = useNavigation();
+  const navigate = useNavigate();
 
   const ufullstendigeSteg = useUfullstendigeSteg();
   const harUfullstendigeSteg = ufullstendigeSteg.length > 0;
-  const senderInn = navigation.state === "submitting";
 
   return (
     <div className="flex flex-col gap-6">
@@ -46,15 +45,17 @@ export default function OppsummeringOgAvtale() {
         method="post"
         action={RouteConfig.PRIVAT_AVTALE.STEG_6_LAST_NED}
         reloadDocument
+        onSubmit={() => {
+          navigate(RouteConfig.PRIVAT_AVTALE.INDEX);
+        }}
       >
         <Button
           variant="primary"
           className="w-full sm:w-60"
           type="submit"
           disabled={harUfullstendigeSteg}
-          loading={senderInn}
         >
-          {senderInn ? t(tekster.lasterNed) : t(tekster.lastNedKnapp)}
+          {t(tekster.lastNedKnapp)}
         </Button>
       </Form>
     </div>
