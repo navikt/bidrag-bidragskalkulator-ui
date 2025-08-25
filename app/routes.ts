@@ -46,12 +46,10 @@ export default [
           RouteConfig.PRIVAT_AVTALE.STEG_6_LAST_NED,
           "routes/privat-avtale/steg/last-ned.ts",
         ),
-        route(
-          RouteConfig.PRIVAT_AVTALE.FERDIG,
-          "routes/privat-avtale/steg/ferdig.tsx",
-        ),
       ]),
     ]),
+
+    route(RouteConfig.PRIVAT_AVTALE.FERDIG, "routes/privat-avtale/ferdig.tsx"),
 
     route(
       RouteConfig.OVERSIKT.DOKUMENTER.HENT_DOKUMENT.route,

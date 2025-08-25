@@ -1,4 +1,5 @@
 import { Button, Heading } from "@navikt/ds-react";
+import { PageBlock } from "@navikt/ds-react/Page";
 import { data, useLoaderData, type LoaderFunctionArgs } from "react-router";
 import type z from "zod";
 import { getSession, PRIVAT_AVTALE_SESSION_KEY } from "~/config/session.server";
@@ -11,19 +12,19 @@ export default function FerdigSteg() {
   const harInnkreving =
     loaderData.steg3?.avtaledetaljer?.medInnkreving === "true";
   return (
-    <div>
-      <Heading level="2" size="xlarge">
+    <PageBlock className="flex flex-col gap-3" width="text">
+      <Heading level="1" size="large">
         {t(tekster.tittel)}
       </Heading>
       <p>{t(tekster.fallback)}</p>
-      <ul />
-      <Heading level="3" size="large">
+      <hr />
+      <Heading level="2" size="medium">
         {t(tekster.hvaNå)}
       </Heading>
       <p>{t(tekster.signerOgArkiver)}</p>
       {harInnkreving && (
-        <>
-          <p>{t(tekster.sendTilNav)}</p>
+        <div className="mb-8">
+          <p className="mb-3">{t(tekster.sendTilNav)}</p>
           <Button
             as="a"
             variant="primary"
@@ -32,11 +33,15 @@ export default function FerdigSteg() {
           >
             {t(tekster.cta)}
           </Button>
-        </>
+        </div>
       )}
-    </div>
+    </PageBlock>
   );
 }
+
+export const headers = () => ({
+  "Cache-Control": "no-store",
+});
 
 const tekster = definerTekster({
   tittel: {
