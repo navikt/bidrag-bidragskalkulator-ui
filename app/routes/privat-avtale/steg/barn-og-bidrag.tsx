@@ -17,12 +17,7 @@ import {
 } from "react-router";
 import { z } from "zod";
 import { RouteConfig } from "~/config/routeConfig";
-import {
-  commitSession,
-  getSession,
-  hentSesjonsdata,
-  PRIVAT_AVTALE_SESSION_KEY,
-} from "~/config/session.server";
+import { hentSesjonsdata, oppdaterSesjonsdata } from "~/config/session.server";
 import { PrivatAvtaleEnkeltbarnSkjema } from "~/features/privatAvtale/PrivatAvtaleEnkeltbarn";
 import {
   lagSteg2Schema,
@@ -190,24 +185,19 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(resultat.error, resultat.submittedData);
   }
 
-  const session = await getSession(request.headers.get("Cookie"));
-  const eksisterende = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? {};
-  const oppdatert = {
-    ...eksisterende,
-    steg2: {
-      barn: resultat.data.barn.map((barn) => ({
-        ident: barn.ident,
-        fornavn: barn.fornavn,
-        etternavn: barn.etternavn,
-        sum: barn.sum.toString(),
-        bidragstype: barn.bidragstype,
-        fraDato: barn.fraDato,
-      })),
-    },
-  };
-  session.set(PRIVAT_AVTALE_SESSION_KEY, oppdatert);
-
-  return redirect(RouteConfig.PRIVAT_AVTALE.STEG_3_AVTALEDETALJER, {
-    headers: { "Set-Cookie": await commitSession(session) },
-  });
+  return redirect(
+    RouteConfig.PRIVAT_AVTALE.STEG_3_AVTALEDETALJER,
+    await oppdaterSesjonsdata(request, {
+      steg2: {
+        barn: resultat.data.barn.map((barn) => ({
+          ident: barn.ident,
+          fornavn: barn.fornavn,
+          etternavn: barn.etternavn,
+          sum: barn.sum.toString(),
+          bidragstype: barn.bidragstype,
+          fraDato: barn.fraDato,
+        })),
+      },
+    }),
+  );
 }

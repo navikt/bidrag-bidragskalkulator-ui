@@ -1,6 +1,7 @@
 import { createCookieSessionStorage } from "react-router";
 import type z from "zod";
 import { env } from "~/config/env.server";
+import { PrivatAvtaleFlerstegsSkjemaSchema } from "~/features/privatAvtale/skjemaSchema";
 
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
@@ -13,6 +14,20 @@ export const sessionStorage = createCookieSessionStorage({
     maxAge: 60 * 60, // 1 hour
   },
 });
+
+export async function hentAllSesjonsdata(request: Request) {
+  return hentSesjonsdata(request, PrivatAvtaleFlerstegsSkjemaSchema);
+}
+
+export async function oppdaterSesjonsdata(
+  request: Request,
+  data: Record<string, unknown>,
+) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const eksisterende = await hentAllSesjonsdata(request);
+  session.set(PRIVAT_AVTALE_SESSION_KEY, { ...eksisterende, ...data });
+  return { headers: { "Set-Cookie": await commitSession(session) } };
+}
 
 export async function hentSesjonsdata<T>(
   request: Request,

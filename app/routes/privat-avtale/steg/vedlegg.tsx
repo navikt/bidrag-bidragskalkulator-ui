@@ -15,12 +15,7 @@ import {
 } from "react-router";
 import z from "zod";
 import { RouteConfig } from "~/config/routeConfig";
-import {
-  commitSession,
-  getSession,
-  hentSesjonsdata,
-  PRIVAT_AVTALE_SESSION_KEY,
-} from "~/config/session.server";
+import { hentSesjonsdata, oppdaterSesjonsdata } from "~/config/session.server";
 import { lagSteg5Schema } from "~/features/privatAvtale/skjemaSchema";
 import { sporPrivatAvtaleSpørsmålBesvart } from "~/features/privatAvtale/utils";
 
@@ -86,21 +81,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return validationError(resultat.error, resultat.submittedData);
   }
 
-  const session = await getSession(request.headers.get("Cookie"));
-  const eksisterende = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? {};
-  const oppdatert = {
-    ...eksisterende,
-    steg5: { harVedlegg: resultat.data.harVedlegg.toString() },
-  };
-  session.set(PRIVAT_AVTALE_SESSION_KEY, oppdatert);
-
   return redirectDocument(
     RouteConfig.PRIVAT_AVTALE.STEG_6_OPPSUMMERING_OG_AVTALE,
-    {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    },
+    await oppdaterSesjonsdata(request, {
+      steg5: { harVedlegg: resultat.data.harVedlegg.toString() },
+    }),
   );
 };
 

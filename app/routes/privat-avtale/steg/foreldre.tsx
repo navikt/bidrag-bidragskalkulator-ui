@@ -6,12 +6,7 @@ import {
   type LoaderFunctionArgs,
 } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
-import {
-  commitSession,
-  getSession,
-  hentSesjonsdata,
-  PRIVAT_AVTALE_SESSION_KEY,
-} from "~/config/session.server";
+import { hentSesjonsdata, oppdaterSesjonsdata } from "~/config/session.server";
 
 import {
   definerTekster,
@@ -142,18 +137,12 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(resultat);
   }
 
-  const session = await getSession(request.headers.get("Cookie"));
-  const eksisterende = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? {};
-  session.set(PRIVAT_AVTALE_SESSION_KEY, {
-    ...eksisterende,
-    steg1: resultat.data,
-  });
-
-  return redirect(RouteConfig.PRIVAT_AVTALE.STEG_2_BARN_OG_BIDRAG, {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
-  });
+  return redirect(
+    RouteConfig.PRIVAT_AVTALE.STEG_2_BARN_OG_BIDRAG,
+    await oppdaterSesjonsdata(request, {
+      steg1: resultat.data,
+    }),
+  );
 }
 
 // Skjema for å validere innholdet i sesjonscookien
