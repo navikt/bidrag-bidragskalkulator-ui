@@ -16,7 +16,7 @@ import { ListItem } from "@navikt/ds-react/List";
 import { useFormContext } from "@rvf/react";
 import { Link as ReactRouterLink } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
-import { sporHendelse, sporHendelseEnGang } from "~/utils/analytics";
+import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import { type ManuellBidragsutregning } from "../beregning/schema";
@@ -104,12 +104,13 @@ export const ManueltResultatpanel = ({
           aria-labelledby="detaljer"
           size="small"
           onToggle={(open) => {
-            sporHendelseEnGang({
-              hendelsetype: open
-                ? "beregningsdetaljer utvidet"
-                : "beregningsdetaljer kollapset",
-              skjemaId: "barnebidragskalkulator-under-18",
-            });
+            if (open) {
+              sporHendelse({
+                hendelsetype: "les mer utvidet",
+                tekst: t(tekster.detaljer.overskrift),
+                id: "kalkulator-beregningsdetaljer",
+              });
+            }
           }}
         >
           <ExpansionCardHeader>
