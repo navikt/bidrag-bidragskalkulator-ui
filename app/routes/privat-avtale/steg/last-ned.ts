@@ -1,7 +1,7 @@
 import archiver from "archiver";
 import { PassThrough, Readable } from "node:stream";
 import type { ActionFunctionArgs } from "react-router";
-import { getSession, PRIVAT_AVTALE_SESSION_KEY } from "~/config/session.server";
+import { hentSesjonsdata } from "~/config/session.server";
 import { medToken } from "~/features/autentisering/api.server";
 import { hentPrivatAvtaledokument } from "~/features/privatAvtale/api.server";
 import {
@@ -13,26 +13,23 @@ import {
   type Bidragstype,
 } from "~/features/skjema/beregning/schema";
 import { tilÅrMånedDag } from "~/utils/dato";
-import { Språk } from "~/utils/i18n";
+import { hentSpråkFraCookie } from "~/utils/i18n";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const cookieString = request.headers.get("Cookie");
-  const session = await getSession(cookieString);
-  const data = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? null;
+  const språk = hentSpråkFraCookie(request.headers.get("Cookie"));
+  const sesjonsdata = await hentSesjonsdata(
+    request,
+    lagPrivatAvtaleFlerstegsSchema(språk),
+  );
 
-  const resultat = lagPrivatAvtaleFlerstegsSchema(
-    Språk.NorwegianBokmål,
-  ).safeParse(data);
-  if (!resultat.success) {
+  if (!sesjonsdata) {
     return { error: "Ugyldig skjema" };
   }
-
-  const skjemadata: PrivatAvtaleFlerstegsSkjemaValidert = resultat.data;
 
   const barnPerBidragstype = BidragstypeSchema.options
     .map((type) => ({
       type,
-      barn: skjemadata.steg2.barn
+      barn: sesjonsdata.steg2.barn
         .filter((b) => b.bidragstype === type)
         .map((barn) => ({ ...barn, sum: Number(barn.sum) })),
     }))
@@ -40,9 +37,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (barnPerBidragstype.length === 1) {
     const pdfBuffer = await hentPrivatAvtalePdf(request, {
-      ...skjemadata,
+      ...sesjonsdata,
       steg2: {
-        barn: skjemadata.steg2.barn,
+        barn: sesjonsdata.steg2.barn,
       },
     });
 
@@ -63,7 +60,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   await Promise.all(
     barnPerBidragstype.map(async ({ type, barn }) => {
       const buffer = await hentPrivatAvtalePdf(request, {
-        ...skjemadata,
+        ...sesjonsdata,
         steg2: { barn },
       });
 
