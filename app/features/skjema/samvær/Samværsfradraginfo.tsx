@@ -1,7 +1,7 @@
 import { BodyLong, BodyShort, List, ReadMore } from "@navikt/ds-react";
 import { ListItem } from "@navikt/ds-react/List";
 import { useKalkulatorgrunnlagsdata } from "~/routes/kalkulator";
-import { sporHendelseEnGang } from "~/utils/analytics";
+import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import type { Samværsklasse } from "../beregning/schema";
@@ -41,12 +41,15 @@ export const Samværsfradraginfo = ({
   return (
     <ReadMore
       header={t(tekster.overskrift)}
-      onOpenChange={() =>
-        sporHendelseEnGang({
-          hendelsetype: "infoboks om samværsfradrag utvidet",
-          skjemaId: "barnebidragskalkulator-under-18",
-        })
-      }
+      onOpenChange={(open) => {
+        if (open) {
+          sporHendelse({
+            hendelsetype: "les mer utvidet",
+            tekst: t(tekster.overskrift),
+            id: "kalkulator-bosted-og-samvær",
+          });
+        }
+      }}
     >
       <BodyLong className="mb-4">{t(tekster.beskrivelse)}</BodyLong>
 

@@ -1,5 +1,5 @@
 import { BodyLong, ReadMore } from "@navikt/ds-react";
-import { sporHendelseEnGang } from "~/utils/analytics";
+import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export const SamværOgFerierInfo = () => {
@@ -8,12 +8,15 @@ export const SamværOgFerierInfo = () => {
   return (
     <ReadMore
       header={t(tekster.overskrift)}
-      onOpenChange={() =>
-        sporHendelseEnGang({
-          hendelsetype: "infoboks om ferie og samvær utvidet",
-          skjemaId: "barnebidragskalkulator-under-18",
-        })
-      }
+      onOpenChange={(open) => {
+        if (open) {
+          sporHendelse({
+            hendelsetype: "les mer utvidet",
+            tekst: t(tekster.overskrift),
+            id: "kalkulator-ferie-og-samvær",
+          });
+        }
+      }}
     >
       <BodyLong className="mb-4">{t(tekster.beskrivelse1)}</BodyLong>
       <BodyLong className="mb-4">{t(tekster.beskrivelse2)}</BodyLong>

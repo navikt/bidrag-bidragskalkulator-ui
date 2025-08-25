@@ -3,7 +3,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
 
 import { BodyLong, ReadMore } from "@navikt/ds-react";
-import { sporHendelseEnGang } from "~/utils/analytics";
+import { sporHendelse } from "~/utils/analytics";
 import type { InnloggetSkjema, ManueltSkjema } from "./schema";
 import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
@@ -24,9 +24,10 @@ export const Inntektsopplysninger = () => {
         header={t(tekster.inntektsinformasjon.overskrift)}
         onOpenChange={(open) => {
           if (open) {
-            sporHendelseEnGang({
-              hendelsetype: "inntektsinformasjon utvidet",
-              skjemaId: "barnebidragskalkulator-under-18",
+            sporHendelse({
+              hendelsetype: "les mer utvidet",
+              tekst: t(tekster.inntektsinformasjon.overskrift),
+              id: "kalkulator-inntekt",
             });
           }
         }}

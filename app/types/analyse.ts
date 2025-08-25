@@ -29,34 +29,18 @@ type SkjemaFullført = {
   skjemaId: SkjemaId;
 };
 
-type BarnetsAlderInfoUtvidet = {
-  hendelsetype: "infoboks om barnets alder utvidet";
-  skjemaId: SkjemaIdKalkulator;
-};
-
-type SamværsfradraginfoUtvidet = {
-  hendelsetype: "infoboks om samværsfradrag utvidet";
-  skjemaId: SkjemaIdKalkulator;
-};
-
-type FerieOgSamværinfoUtvidet = {
-  hendelsetype: "infoboks om ferie og samvær utvidet";
-  skjemaId: SkjemaIdKalkulator;
-};
-
-type BeregningsdetaljerUtvidet = {
-  hendelsetype: "beregningsdetaljer utvidet";
-  skjemaId: SkjemaIdKalkulator;
-};
-
-type BeregningsdetaljerKollapset = {
-  hendelsetype: "beregningsdetaljer kollapset";
-  skjemaId: SkjemaIdKalkulator;
-};
-
-type InntektsinformasjonUtvidet = {
-  hendelsetype: "inntektsinformasjon utvidet";
-  skjemaId: SkjemaIdKalkulator;
+export type LesMerUtvidet = {
+  hendelsetype: "les mer utvidet";
+  /**
+   * Teksten man trykker på for å lese mer
+   */
+  tekst: string;
+  id:
+    | "kalkulator-barnets-alder"
+    | "kalkulator-bosted-og-samvær"
+    | "kalkulator-ferie-og-samvær"
+    | "kalkulator-beregningsdetaljer"
+    | "kalkulator-inntekt";
 };
 
 type BarnLagtTil = {
@@ -87,12 +71,7 @@ export type Sporingshendelse =
   | SkjemaValideringFeilet
   | SkjemaInnsendingFeilet
   | SkjemaFullført
-  | BarnetsAlderInfoUtvidet
-  | SamværsfradraginfoUtvidet
-  | FerieOgSamværinfoUtvidet
-  | BeregningsdetaljerUtvidet
-  | BeregningsdetaljerKollapset
-  | InntektsinformasjonUtvidet
+  | LesMerUtvidet
   | BarnLagtTil
   | BarnFjernet
   | SkjemaSpørsmålBesvart

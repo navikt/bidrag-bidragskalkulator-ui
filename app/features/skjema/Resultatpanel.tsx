@@ -13,7 +13,7 @@ import {
   ExpansionCardTitle,
 } from "@navikt/ds-react/ExpansionCard";
 import { ListItem } from "@navikt/ds-react/List";
-import { sporHendelse, sporHendelseEnGang } from "~/utils/analytics";
+import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import type { Bidragsutregning } from "./beregning/schema";
@@ -100,12 +100,13 @@ export const Resultatpanel = ({ data, ref }: ResultatpanelProps) => {
         aria-labelledby="detaljer"
         size="small"
         onToggle={(open) => {
-          sporHendelseEnGang({
-            hendelsetype: open
-              ? "beregningsdetaljer utvidet"
-              : "beregningsdetaljer kollapset",
-            skjemaId: "barnebidragskalkulator-under-18",
-          });
+          if (open) {
+            sporHendelse({
+              hendelsetype: "les mer utvidet",
+              tekst: t(tekster.detaljer.overskrift),
+              id: "kalkulator-beregningsdetaljer",
+            });
+          }
         }}
       >
         <ExpansionCardHeader>
