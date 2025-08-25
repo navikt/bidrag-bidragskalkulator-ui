@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import {
   Outlet,
   Link as ReactRouterLink,
-  useLoaderData,
   useLocation,
+  useRouteLoaderData,
   type LoaderFunctionArgs,
   type MetaFunction,
 } from "react-router";
@@ -14,7 +14,6 @@ import { medToken } from "~/features/autentisering/api.server";
 import { hentPersoninformasjonForPrivatAvtale } from "~/features/privatAvtale/api.server";
 import type { HentPersoninformasjonForPrivatAvtaleRespons } from "~/features/privatAvtale/apiSchema";
 import { hentSideMetadata } from "~/features/privatAvtale/pageMeta";
-import { PrivatAvtaleFormProvider } from "~/features/privatAvtale/PrivatAvtaleFormProvider";
 import { stegdata } from "~/features/privatAvtale/privatAvtaleSteg";
 import { UtregningNavigasjonsdataSchema } from "~/features/skjema/beregning/schema";
 import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
@@ -49,13 +48,16 @@ export async function loader({
   };
 }
 
+export const usePrivatAvtaleLayoutLoaderData = () => {
+  return useRouteLoaderData<typeof loader>("routes/privat-avtale/steg/layout");
+};
+
 export default function PrivatAvtaleStegLayout() {
-  const { personinformasjon } = useLoaderData<typeof loader>();
   const { state: navigationState, pathname } = useLocation();
-  const bidragsutergningParsed =
+  const bidragsutregningParsed =
     UtregningNavigasjonsdataSchema.safeParse(navigationState);
-  const bidragsutregning = bidragsutergningParsed.success
-    ? bidragsutergningParsed.data
+  const bidragsutregning = bidragsutregningParsed.success
+    ? bidragsutregningParsed.data
     : undefined;
 
   const { t, språk } = useOversettelse();
@@ -102,14 +104,8 @@ export default function PrivatAvtaleStegLayout() {
         <Heading id="skjemaoverskrift" level="2" size="large">
           {aktivSteg?.overskrift}
         </Heading>
-        {personinformasjon && (
-          <PrivatAvtaleFormProvider
-            personinformasjon={personinformasjon}
-            bidragsutregning={bidragsutregning}
-          >
-            <Outlet />
-          </PrivatAvtaleFormProvider>
-        )}
+
+        <Outlet />
 
         <div className="flex gap-5">
           <Button
@@ -123,9 +119,9 @@ export default function PrivatAvtaleStegLayout() {
 
           {nesteSteg && (
             <Button
-              as={ReactRouterLink}
-              to={nesteSteg}
+              type="submit"
               variant="primary"
+              form="steg"
               icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
             >

@@ -30,6 +30,7 @@ export default defineConfig({
       ENVIRONMENT: "local",
       UMAMI_WEBSITE_ID: "mock-umami-id",
       INGRESS: "http://localhost:5173",
+      SESSION_SECRET: "e2e-secret",
     },
   },
 });

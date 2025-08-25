@@ -5,10 +5,10 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 import type { StegdataType } from "../privatAvtaleSteg";
 
 type Props = {
-  ufullstendigSteg: StegdataType[];
+  ufullstendigeSteg: StegdataType[];
 };
 
-export default function OppsummeringsVarsel({ ufullstendigSteg }: Props) {
+export default function OppsummeringsVarsel({ ufullstendigeSteg }: Props) {
   const { t } = useOversettelse();
 
   return (
@@ -16,7 +16,7 @@ export default function OppsummeringsVarsel({ ufullstendigSteg }: Props) {
       {t(tekster.feilmeldingGenerisk)}
 
       <List>
-        {ufullstendigSteg.map((steg) => (
+        {ufullstendigeSteg.map((steg) => (
           <ListItem key={steg.step}>
             <Link as={ReactRouterLink} to={steg.path}>
               {t(tekster.gåTilSteg(steg.overskrift))}

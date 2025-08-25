@@ -1,11 +1,12 @@
 import { z } from "zod";
 
 const baseSchema = z.object({
-  SERVER_URL: z.string().url().describe("URL til APIet vårt"),
+  SERVER_URL: z.url().describe("URL til APIet vårt"),
   UMAMI_WEBSITE_ID: z
     .string()
     .describe("ID for umami (sporingsverktøyet vårt)"),
-  INGRESS: z.string().url().describe("Hvilken URL tjenesten kjører på"),
+  INGRESS: z.url().describe("Hvilken URL tjenesten kjører på"),
+  SESSION_SECRET: z.string().describe("Hemmelighet for sesjonscookie"),
 });
 
 const localEnvSchema = baseSchema.extend({

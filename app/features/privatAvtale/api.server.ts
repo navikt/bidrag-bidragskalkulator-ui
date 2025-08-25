@@ -51,6 +51,7 @@ export const hentPrivatAvtaleFraApi = async ({
     console.error(
       `Feil ved generering av privat avtale: ${status} ${response.statusText}`,
     );
+    console.error("Response body:", await response.text());
 
     return new Response(feilmelding, {
       status,
@@ -67,12 +68,12 @@ export const hentPrivatAvtaleFraApi = async ({
 export const hentPrivatAvtaledokument = async (
   token: string,
   request: Request,
+  skjemadata: PrivatAvtaleFlerstegsSkjemaValidert,
 ) => {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
-  const skjemaData: PrivatAvtaleFlerstegsSkjemaValidert = await request.json();
 
-  const bidragstyper = skjemaData.steg2.barn.map((barn) => barn.bidragstype);
+  const bidragstyper = skjemadata.steg2.barn.map((barn) => barn.bidragstype);
   const isMottaker = bidragstyper.includes("MOTTAKER");
   const isPliktig = bidragstyper.includes("PLIKTIG");
 
@@ -81,19 +82,19 @@ export const hentPrivatAvtaledokument = async (
     return Promise.reject(oversett(språk, tekster.feil.mottakerOgPliktig));
   }
 
-  const { bidragstype } = summerBidrag(skjemaData.steg2.barn);
+  const { bidragstype } = summerBidrag(skjemadata.steg2.barn);
   const erBidragsmottaker = bidragstype === "MOTTAKER";
 
   const deg = {
-    ident: skjemaData.steg1.deg.ident,
-    etternavn: skjemaData.steg1.deg.etternavn,
-    fornavn: skjemaData.steg1.deg.fornavn,
+    ident: skjemadata.steg1.deg.ident,
+    etternavn: skjemadata.steg1.deg.etternavn,
+    fornavn: skjemadata.steg1.deg.fornavn,
   };
 
   const medforelder = {
-    ident: skjemaData.steg1.medforelder.ident,
-    etternavn: skjemaData.steg1.medforelder.etternavn,
-    fornavn: skjemaData.steg1.medforelder.fornavn,
+    ident: skjemadata.steg1.medforelder.ident,
+    etternavn: skjemadata.steg1.medforelder.etternavn,
+    fornavn: skjemadata.steg1.medforelder.fornavn,
   };
 
   const requestData: LagPrivatAvtaleRequest = {
@@ -101,14 +102,15 @@ export const hentPrivatAvtaledokument = async (
     bidragsmottaker: erBidragsmottaker ? deg : medforelder,
     bidragspliktig: erBidragsmottaker ? medforelder : deg,
     oppgjør: {
-      nyAvtale: skjemaData.steg3.avtaledetaljer.nyAvtale,
-      oppgjørsformØnsket: skjemaData.steg3.avtaledetaljer.medInnkreving
+      nyAvtale: skjemadata.steg3.avtaledetaljer.nyAvtale === "true",
+      oppgjørsformØnsket: skjemadata.steg3.avtaledetaljer.medInnkreving
         ? "INNKREVING"
         : "PRIVAT",
-      oppgjørsformIdag: skjemaData.steg3.avtaledetaljer.oppgjørsformIdag,
+      oppgjørsformIdag:
+        skjemadata.steg3.avtaledetaljer.oppgjørsformIdag || undefined,
     },
-    tilInnsending: skjemaData.steg3.avtaledetaljer.medInnkreving,
-    barn: skjemaData.steg2.barn.map((barn) => ({
+    tilInnsending: skjemadata.steg3.avtaledetaljer.medInnkreving === "true",
+    barn: skjemadata.steg2.barn.map((barn) => ({
       ident: barn.ident,
       fornavn: barn.fornavn,
       etternavn: barn.etternavn,
@@ -116,10 +118,10 @@ export const hentPrivatAvtaledokument = async (
       fraDato: barn.fraDato,
     })),
     andreBestemmelser: {
-      harAndreBestemmelser: skjemaData.steg4.erAndreBestemmelser,
-      beskrivelse: skjemaData.steg4.andreBestemmelser,
+      harAndreBestemmelser: skjemadata.steg4.erAndreBestemmelser,
+      beskrivelse: skjemadata.steg4.andreBestemmelser,
     },
-    vedlegg: skjemaData.steg5.harVedlegg
+    vedlegg: skjemadata.steg5.harVedlegg
       ? "SENDES_MED_SKJEMA"
       : "INGEN_EKSTRA_DOKUMENTASJON",
   };

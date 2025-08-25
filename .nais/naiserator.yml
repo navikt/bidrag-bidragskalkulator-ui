@@ -21,6 +21,8 @@ spec:
       value: {{UMAMI_WEBSITE_ID}}
     - name: INGRESS
       value: {{INGRESS}}
+  envFrom: 
+    - secret: bidragskalkulator-secrets
   accessPolicy:
     outbound:
       rules:

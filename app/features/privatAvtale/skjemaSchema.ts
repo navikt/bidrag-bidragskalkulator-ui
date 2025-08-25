@@ -62,13 +62,13 @@ export const PrivatAvtaleFlerstegsSkjemaSchema = z.object({
   }),
 });
 
-const lagSteg1Schema = (språk: Språk) =>
+export const lagSteg1Schema = (språk: Språk) =>
   z.object({
     deg: lagValidertPersonSkjemaSchema(språk, "deg"),
     medforelder: lagValidertPersonSkjemaSchema(språk, "medforelder"),
   });
 
-const lagSteg2Schema = (språk: Språk) =>
+export const lagSteg2Schema = (språk: Språk) =>
   z.object({
     barn: z.array(
       z.object({
@@ -112,12 +112,12 @@ const lagSteg2Schema = (språk: Språk) =>
     ),
   });
 
-const lagSteg3Schema = (språk: Språk) => {
+export const lagSteg3Schema = (språk: Språk) => {
   return z.object({
     avtaledetaljer: AvtaledetaljerSchema.superRefine((avtaledetaljer, ctx) => {
       // Validererer alle felter i superRefine for å muliggjøre validering av
       // oppgjørsformIdag før både nyAvtale og medInnkreving er gyldig
-      if (avtaledetaljer.nyAvtale === "") {
+      if (!avtaledetaljer.nyAvtale) {
         ctx.addIssue({
           code: "custom",
           path: ["nyAvtale"],
@@ -125,7 +125,7 @@ const lagSteg3Schema = (språk: Språk) => {
         });
       }
 
-      if (avtaledetaljer.medInnkreving === "") {
+      if (!avtaledetaljer.medInnkreving) {
         ctx.addIssue({
           code: "custom",
           path: ["medInnkreving"],
@@ -146,21 +146,15 @@ const lagSteg3Schema = (språk: Språk) => {
           ),
         });
       }
-    }).transform((data) => ({
-      ...data,
-      nyAvtale: data.nyAvtale === "true",
-      medInnkreving: data.medInnkreving === "true",
-      oppgjørsformIdag:
-        data.oppgjørsformIdag === "" ? undefined : data.oppgjørsformIdag,
-    })),
+    }),
   });
 };
 
-const lagSteg4Schema = (språk: Språk) =>
+export const lagSteg4Schema = (språk: Språk) =>
   z
     .object({
       erAndreBestemmelser: z
-        .enum(["true", "false"], {
+        .enum(["true", "false", ""], {
           message: oversett(
             språk,
             tekster.feilmeldinger.erAndreBestemmelser.påkrevd,
@@ -177,10 +171,11 @@ const lagSteg4Schema = (språk: Språk) =>
           språk,
           tekster.feilmeldinger.andreBestemmelser.påkrevd,
         ),
+        path: ["andreBestemmelser"],
       },
     );
 
-const lagSteg5Schema = (språk: Språk) =>
+export const lagSteg5Schema = (språk: Språk) =>
   z.object({
     harVedlegg: z
       .enum(["true", "false"], {

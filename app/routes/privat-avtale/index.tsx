@@ -9,8 +9,7 @@ import { stegdata } from "~/features/privatAvtale/privatAvtaleSteg";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
 export function meta({ matches }: MetaArgs) {
-  const rootData = matches.find((match) => match.pathname === "/")
-    ?.loaderData as {
+  const rootData = matches.find((match) => match.pathname === "/")?.data as {
     språk: Språk;
   };
 
