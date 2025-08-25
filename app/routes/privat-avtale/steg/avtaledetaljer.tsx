@@ -12,6 +12,7 @@ import { RouteConfig } from "~/config/routeConfig";
 import {
   commitSession,
   getSession,
+  hentSesjonsdata,
   PRIVAT_AVTALE_SESSION_KEY,
 } from "~/config/session.server";
 import { OppgjørsformSchema } from "~/features/privatAvtale/apiSchema";
@@ -168,10 +169,7 @@ const Steg3SessionSchema = z.object({
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const session = await getSession(request.headers.get("Cookie"));
-  const data = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? null;
-  const parsed = Steg3SessionSchema.safeParse(data);
-  return parsed.success ? parsed.data : null;
+  return hentSesjonsdata(request, Steg3SessionSchema);
 }
 
 export async function action({ request }: ActionFunctionArgs) {

@@ -9,6 +9,7 @@ import { RouteConfig } from "~/config/routeConfig";
 import {
   commitSession,
   getSession,
+  hentSesjonsdata,
   PRIVAT_AVTALE_SESSION_KEY,
 } from "~/config/session.server";
 
@@ -167,8 +168,5 @@ const Steg1SessionSchema = z.object({
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const session = await getSession(request.headers.get("Cookie"));
-  const data = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? null;
-  const parsed = Steg1SessionSchema.safeParse(data);
-  return parsed.success ? parsed.data : null;
+  return hentSesjonsdata(request, Steg1SessionSchema);
 }

@@ -20,6 +20,7 @@ import { RouteConfig } from "~/config/routeConfig";
 import {
   commitSession,
   getSession,
+  hentSesjonsdata,
   PRIVAT_AVTALE_SESSION_KEY,
 } from "~/config/session.server";
 import { PrivatAvtaleEnkeltbarnSkjema } from "~/features/privatAvtale/PrivatAvtaleEnkeltbarn";
@@ -177,10 +178,7 @@ const Steg2SessionSchema = z.object({
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const session = await getSession(request.headers.get("Cookie"));
-  const data = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? null;
-  const parsed = Steg2SessionSchema.safeParse(data);
-  return parsed.success ? parsed.data : null;
+  return hentSesjonsdata(request, Steg2SessionSchema);
 }
 
 export async function action({ request }: ActionFunctionArgs) {

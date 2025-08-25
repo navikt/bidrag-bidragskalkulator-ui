@@ -18,6 +18,7 @@ import { RouteConfig } from "~/config/routeConfig";
 import {
   commitSession,
   getSession,
+  hentSesjonsdata,
   PRIVAT_AVTALE_SESSION_KEY,
 } from "~/config/session.server";
 import { lagSteg5Schema } from "~/features/privatAvtale/skjemaSchema";
@@ -73,10 +74,7 @@ const Steg5SessionSchema = z.object({
 });
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getSession(request.headers.get("Cookie"));
-  const data = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? null;
-  const parsed = Steg5SessionSchema.safeParse(data);
-  return parsed.success ? parsed.data : null;
+  return hentSesjonsdata(request, Steg5SessionSchema);
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {

@@ -12,6 +12,7 @@ import { RouteConfig } from "~/config/routeConfig";
 import {
   commitSession,
   getSession,
+  hentSesjonsdata,
   PRIVAT_AVTALE_SESSION_KEY,
 } from "~/config/session.server";
 import { lagSteg4Schema } from "~/features/privatAvtale/skjemaSchema";
@@ -75,10 +76,7 @@ export default function AndreBestemmelserSteg() {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getSession(request.headers.get("Cookie"));
-  const data = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? null;
-  const parsed = Steg4SessionSchema.safeParse(data);
-  return parsed.success ? parsed.data : null;
+  return hentSesjonsdata(request, Steg4SessionSchema);
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
