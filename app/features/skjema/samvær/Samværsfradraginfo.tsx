@@ -112,13 +112,13 @@ const tekster = definerTekster({
     nn: "Fyll ut kor gammalt barnet er for å sjå fradraget for samvær.",
   },
   fradragslistetittel: (alder) => ({
-    nb: `Fradrag for samvær med barn ${alder} år:`,
-    en: `Deductions for visitation with child ${alder} years old:`,
-    nn: `Fradrag for samvær med barn ${alder} år:`,
+    nb: `Fradrag per måned for samvær med barn på ${alder} år:`,
+    en: `Deductions per month for visitation with child ${alder} years old:`,
+    nn: `Fradrag per månad for samvær med barn på ${alder} år:`,
   }),
   fradragNetter: (netter, beløp) => ({
-    nb: `${netter} netter: ${beløp} per måned`,
-    en: `${netter} nights: ${beløp} per month`,
-    nn: `${netter} netter: ${beløp} per månad`,
+    nb: `${netter} netter: ${beløp}`,
+    en: `${netter} nights: ${beløp}`,
+    nn: `${netter} netter: ${beløp}`,
   }),
 });
