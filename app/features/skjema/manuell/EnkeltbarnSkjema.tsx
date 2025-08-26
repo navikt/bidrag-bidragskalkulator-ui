@@ -140,22 +140,22 @@ const tekster = definerTekster({
         nn: "Kvifor vi spør om alder",
       },
       beskrivelse: {
-        nb: "Det viktigste grunnlaget for beregningen er hvor mye det koster å forsørge et barn – også kjent som underholdskostnaden. Disse summene hentes fra SIFOs referansebudsjetter, og oppdateres hvert år. Underholdskostnaden for barn i ulike aldre er i dag:",
-        en: "The main basis for the calculation is how much it costs to support a child – also known as the maintenance cost. These amounts are taken from SIFO's reference budgets and are updated every year. The maintenance cost for children of different ages today is:",
-        nn: "Det viktigaste grunnlaget for beregninga er kor mykje det kostar å forsørgje eit barn – også kjent som underhaldskostnaden. Desse summene hentast frå SIFOs referansebudsjett, og oppdaterast kvart år. Underhaldskostnaden for barn i ulike aldrar er i dag:",
+        nb: "Når vi beregner barnebidraget, er det viktig å vite hvor mye det koster å forsørge et barn (underholdskostnaden). Underholdskostnaden endrer seg med barnets alder, og den hentes fra SIFOs referansebudsjetter, som oppdateres hvert år. Underholdskostanden per måned for barn i ulike aldre er i dag:",
+        nn: "Når vi reknar ut fostringstilskotet, er det viktig å vite kor mykje det kostar å forsørgje eit barn (underhaldskostnaden). Underhaldskostnaden endrar seg med barnet sitt alder, og den blir henta frå SIFOs referansebudsjett, som blir oppdatert kvart år. Underhaldskostnaden per månad for barn i ulike aldrar er i dag:",
+        en: "When we calculate child support, it is important to know how much it costs to support a child (the maintenance cost). The maintenance cost changes with the child's age, and it is taken from SIFO's reference budgets, which are updated every year. The maintenance cost per month for children of different ages today is:",
       },
     },
   },
   barnetilsynsutgift: {
     label: {
-      nb: "Kostnad for barnepass",
-      en: "Child care costs",
-      nn: "Kostnad for barnepass",
+      nb: "Hva koster barnepass for barnet per måned?",
+      en: "What are the childcare costs for the child per month?",
+      nn: "Kva kostar barnepass for barnet per månad?",
     },
     description: {
-      nb: "Barnepass inkluderer barnehage (uten penger til kost, bleier og lignende), skolefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma",
-      en: "Childcare includes kindergarten (excluding expenses for food, diapers etc), after-school program (SFO), the Activity School (AKS) or nanny",
-      nn: "Barnepass inkluderer barnehage (uten penger til kost, bleier og lignende), skulefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma",
+      nb: "Barnepass inkluderer barnehage (uten penger til kost, bleier og lignende), skolefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma. Kostnader for barnepass kalles også tilsynsutgifter.",
+      en: "Childcare includes kindergarten (excluding expenses for food, diapers etc), after-school program (SFO), the Activity School (AKS) or nanny. Childcare costs are also referred to as supervision expenses.",
+      nn: "Barnepass inkluderer barnehage (uten penger til kost, bleier og lignende), skulefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma. Kostnader for barnepass kallast også tilsynsutgifter.",
     },
   },
   år: {

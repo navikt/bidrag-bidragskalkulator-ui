@@ -71,9 +71,9 @@ const tekster = definerTekster({
       nn: "Inntekta di inkluderar personinntekt og kapitalinntekter over 10\u00A0000 kroner. For bidragsmottakarar skal det i tillegg takast med utvida barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet.",
     },
     beskrivelseDel2: {
-      nb: "Inntekter som ikke skal oppgis på skattemeldingen, skal ikke tas med i beregningsgrunnlaget, for eksempel skattefrie husleieinntekter.",
-      en: "Income that shall not be reported on the tax return shall not be included in the calculation basis, for example tax-exempt rental income.",
-      nn: "Inntekter som ikkje skal oppgjevast på skattemeldinga, skal ikkje takast med i utrekningsgrunnlaget, til dømes skattefrie husleigeinntekter.",
+      nb: "Inntekter som du ikke oppgir i skattemeldingen, skal du ikke ta med her, for eksempel skattefrie husleieinntekter.",
+      en: "Income that you do not report in your tax return should not be included here, such as tax-free rental income.",
+      nn: "Inntekter som du ikkje oppgjevast i skattemeldinga, skal du ikkje ta med her, til dømes skattefrie husleigeinntekter.",
     },
   },
   hvaErInntektenTilDenAndreForelderen: {

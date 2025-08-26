@@ -232,18 +232,23 @@ const tekster = definerTekster({
         <Link href="https://www.nav.no/fyllut/nav540005" target="_blank">
           fastsetting av barnebidrag
         </Link>
-        . Vær oppmerksom på at det koster 1314 kroner, og at
-        saksbehandlingstiden er 5 måneder.
+        . Vær oppmerksom på at det koster{" "}
+        <span className="whitespace-nowrap">1 314</span> kroner for hver
+        forelder, og at saksbehandlingstiden er 5 måneder.
       </>
     ),
     en: (
       <>
         If you cannot agree, you can ask Nav for help to determine child
         support. This is done by applying for{" "}
-        <Link href="https://www.nav.no/fyllut/nav540005" target="_blank">
+        <Link
+          href="https://www.nav.no/fyllut/nav540005?lang=en"
+          target="_blank"
+        >
           determination of child support
         </Link>
-        . It costs 1314 kroner, and the processing time is 5 months.
+        . It costs <span className="whitespace-nowrap">1 314</span> kroner for
+        each parent, and the processing time is 5 months.
       </>
     ),
     nn: (
@@ -253,16 +258,17 @@ const tekster = definerTekster({
         <Link href="https://www.nav.no/fyllut/nav540005" target="_blank">
           fastsetjing av fostringstilskot
         </Link>
-        . Ver merksam på at det kostar 1314 kroner, og at sakshandsamingstida er
-        5 månadar.
+        . Ver merksam på at det kostar{" "}
+        <span className="whitespace-nowrap">1 314</span> kroner for kvar
+        forelder, og at sakshandsamingstida er 5 månadar.
       </>
     ),
   },
   detaljer: {
     overskrift: {
-      nb: "Hvordan bidraget er beregnet",
+      nb: "Hvordan barnebidraget er beregnet",
       en: "How the child support is calculated",
-      nn: "Korleis er fostringstilskotet rekna ut?",
+      nn: "Korleis fostringstilskotet er rekna ut",
     },
     underholdskostnadPerBarn: (alder, kostnad) => ({
       nb: (
@@ -290,9 +296,9 @@ const tekster = definerTekster({
       nn: "Desse summane skal du og den andre forelderen dele mellom dykk. Korleis fordelinga mellom dykk blir, er avhengig av inntekt og samver, i tillegg til ei rekkje andre forhold. ",
     },
     utregningPerBarn: {
-      nb: "Barnebidraget over er en summering av hva du skal betale eller motta per måned for hvert av barna. Per barn ser beregningen slik ut:",
-      en: "The child support above is a summary of what you should pay or receive per month for each of the children. For each child, the calculation looks like this:",
-      nn: "Fostringstilskotet over er ei oppsummering av kva du skal betale eller motta per månad for kvart av barna. For kvart barn ser rekninga slik ut:",
+      nb: "Beløpet over er en beregning av hvor mye du til sammen skal betale eller motta per måned. For hvert barn ser beregningen slik ut:",
+      en: "The amount above is a calculation of how much you should pay or receive in total per month. For each child, the calculation looks like this:",
+      nn: "Beløpet over er ei berekning av kor mykje du til saman skal betale eller motta per månad. For kvart barn ser berekninga slik ut:",
     },
     motta: (alder, kostnad) => ({
       nb: (
