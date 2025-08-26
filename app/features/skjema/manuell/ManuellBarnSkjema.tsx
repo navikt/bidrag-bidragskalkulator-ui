@@ -55,7 +55,7 @@ export const ManuellBarnSkjema = () => {
   return (
     <div className="border p-4 rounded-md space-y-4">
       <fieldset className="p-0">
-        <legend className="text-xl mb-6">{t(tekster.overskrift)}</legend>
+        <legend className="text-xl mb-5">{t(tekster.overskrift)}</legend>
         {barnArray.map((key, _, index) => {
           return (
             <React.Fragment key={key}>
