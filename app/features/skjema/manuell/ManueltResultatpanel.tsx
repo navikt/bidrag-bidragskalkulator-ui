@@ -66,27 +66,30 @@ export const ManueltResultatpanel = ({
           : "INGEN";
 
   return (
-    <Alert variant="info">
-      <Heading
-        level="2"
-        size="small"
-        ref={ref}
-        tabIndex={-1}
-        className="focus:outline-0"
-      >
-        {totalSum > 0
-          ? t(tekster.overskrift.betale(Math.abs(totalSum)))
-          : t(tekster.overskrift.motta(Math.abs(totalSum)))}
-      </Heading>
-      {totalSum === 0 && <BodyLong spacing>{t(tekster.nullBidrag)}</BodyLong>}
-      <BodyLong spacing>{t(tekster.hvordanAvtale)}</BodyLong>
+    <div className="border p-4 rounded-md mt-8 lg:mt-12 flex flex-col gap-7">
+      <Alert variant="success">
+        <Heading
+          level="2"
+          size="small"
+          ref={ref}
+          tabIndex={-1}
+          className="focus:outline-0"
+        >
+          {totalSum > 0
+            ? t(tekster.overskrift.betale(Math.abs(totalSum)))
+            : t(tekster.overskrift.motta(Math.abs(totalSum)))}
+        </Heading>
+        {totalSum === 0 && <BodyLong>{t(tekster.nullBidrag)}</BodyLong>}
+      </Alert>
+
+      <BodyLong>{t(tekster.hvordanAvtale)}</BodyLong>
 
       <Button
         as={ReactRouterLink}
         to={RouteConfig.PRIVAT_AVTALE.INDEX}
         state={data.resultater}
         variant="primary"
-        className="mb-6"
+        className="self-start"
         onClick={() =>
           sporHendelse({
             hendelsetype: "lag privat avtale klikket",
@@ -97,7 +100,7 @@ export const ManueltResultatpanel = ({
         {t(tekster.lagPrivatAvtale.tekst)}
       </Button>
 
-      <BodyLong spacing>{t(tekster.hvisManIkkeKommerTilEnighet)}</BodyLong>
+      <BodyLong>{t(tekster.hvisManIkkeKommerTilEnighet)}</BodyLong>
 
       <div className="flex flex-col gap-3">
         <ExpansionCard
@@ -180,7 +183,7 @@ export const ManueltResultatpanel = ({
           </ExpansionCardContent>
         </ExpansionCard>
       </div>
-    </Alert>
+    </div>
   );
 };
 
@@ -194,24 +197,24 @@ const tekster = definerTekster({
     betale: (sum) => ({
       nb: `Du skal betale ${formatterSum(
         sum as number,
-      )} i barnebidrag per måned.`,
+      )} i barnebidrag per måned`,
       en: `You should pay ${formatterSum(
         sum as number,
-      )} in child support per month.`,
+      )} in child support per month`,
       nn: `Du skal betale ${formatterSum(
         sum as number,
-      )} i fostringstilskot per månad.`,
+      )} i fostringstilskot per månad`,
     }),
     motta: (sum) => ({
       nb: `Du skal motta ${formatterSum(
         sum as number,
-      )} i barnebidrag per måned.`,
+      )} i barnebidrag per måned`,
       en: `You should receive ${formatterSum(
         sum as number,
-      )} in child support per month.`,
+      )} in child support per month`,
       nn: `Du skal motta ${formatterSum(
         sum as number,
-      )} i fostringstilskot per månad.`,
+      )} i fostringstilskot per månad`,
     }),
   },
   nullBidrag: {
@@ -396,7 +399,7 @@ const tekster = definerTekster({
       nn: "tilsynsutgifter (barnehage, skulefritidsordning, dagmamma)",
     },
     beskrivelse2: {
-      nb: "Det er underholdkostnadene Nav tar utgangspunkt i når vi fastsetter barnebidraget.",
+      nb: "Det er underholdskostnadene Nav tar utgangspunkt i når vi fastsetter barnebidraget.",
       en: "It is the maintenance costs that Nav uses as a basis when determining the support.",
       nn: "Det er underhaldskostnadene Nav tek utgangspunkt i når vi fastset fostringstilskotet.",
     },
