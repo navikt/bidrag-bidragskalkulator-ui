@@ -9,11 +9,7 @@ import {
 } from "react-router";
 import { z } from "zod";
 import { RouteConfig } from "~/config/routeConfig";
-import {
-  commitSession,
-  getSession,
-  PRIVAT_AVTALE_SESSION_KEY,
-} from "~/config/session.server";
+import { hentSesjonsdata, oppdaterSesjonsdata } from "~/config/session.server";
 import { OppgjørsformSchema } from "~/features/privatAvtale/apiSchema";
 import { lagSteg3Schema } from "~/features/privatAvtale/skjemaSchema";
 import { teksterAvtaledetaljer } from "~/features/privatAvtale/tekster/avtaledetaljer";
@@ -168,10 +164,7 @@ const Steg3SessionSchema = z.object({
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const session = await getSession(request.headers.get("Cookie"));
-  const data = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? null;
-  const parsed = Steg3SessionSchema.safeParse(data);
-  return parsed.success ? parsed.data : null;
+  return hentSesjonsdata(request, Steg3SessionSchema);
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -183,17 +176,12 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(formData.error, formData.submittedData);
   }
 
-  const session = await getSession(request.headers.get("Cookie"));
-  const eksisterende = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? {};
-  const oppdatert = {
-    ...eksisterende,
-    steg3: {
-      avtaledetaljer: formData.data.avtaledetaljer,
-    },
-  };
-  session.set(PRIVAT_AVTALE_SESSION_KEY, oppdatert);
-
-  return redirect(RouteConfig.PRIVAT_AVTALE.STEG_4_ANDRE_BESTEMMELSER, {
-    headers: { "Set-Cookie": await commitSession(session) },
-  });
+  return redirect(
+    RouteConfig.PRIVAT_AVTALE.STEG_4_ANDRE_BESTEMMELSER,
+    await oppdaterSesjonsdata(request, {
+      steg3: {
+        avtaledetaljer: formData.data.avtaledetaljer,
+      },
+    }),
+  );
 }

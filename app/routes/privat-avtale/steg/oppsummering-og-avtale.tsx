@@ -7,7 +7,7 @@ import {
   type LoaderFunctionArgs,
 } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
-import { getSession, PRIVAT_AVTALE_SESSION_KEY } from "~/config/session.server";
+import { hentSesjonsdata } from "~/config/session.server";
 import { OppsummeringAndreBestemmelser } from "~/features/privatAvtale/oppsummering/OppsummeringAndreBestemmelser";
 import { OppsummeringAvtaledetaljer } from "~/features/privatAvtale/oppsummering/OppsummeringAvtaledetaljer";
 import { OppsummeringBarn } from "~/features/privatAvtale/oppsummering/OppsummeringBarn";
@@ -67,14 +67,14 @@ export const headers = () => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getSession(request.headers.get("Cookie"));
-  const sessionData = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? null;
-  const resultat =
-    PrivatAvtaleFlerstegsSkjemaSchema.partial().safeParse(sessionData);
-  if (!resultat.success) {
+  const sesjonsdata = await hentSesjonsdata(
+    request,
+    PrivatAvtaleFlerstegsSkjemaSchema.partial(),
+  );
+  if (!sesjonsdata) {
     return {};
   }
-  return data(resultat.data, { headers: { "Cache-Control": "no-store" } });
+  return data(sesjonsdata, { headers: { "Cache-Control": "no-store" } });
 };
 
 export const useOppsummeringsdata = () => {
