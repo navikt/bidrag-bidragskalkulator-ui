@@ -12,46 +12,55 @@ export const Inntektsopplysninger = () => {
   const { t } = useOversettelse();
 
   return (
-    <div className="flex flex-col gap-4">
-      <FormattertTallTextField
-        {...form.field("deg.inntekt").getControlProps()}
-        label={t(tekster.dinInntekt.label)}
-        error={form.field("deg.inntekt").error()}
-        onBlur={sporKalkulatorSpørsmålBesvart(t(tekster.dinInntekt.label))}
-        htmlSize={18}
-      />
-      <ReadMore
-        header={t(tekster.inntektsinformasjon.overskrift)}
-        onOpenChange={(open) => {
-          if (open) {
-            sporHendelse({
-              hendelsetype: "les mer utvidet",
-              tekst: t(tekster.inntektsinformasjon.overskrift),
-              id: "kalkulator-inntekt",
-            });
-          }
-        }}
-      >
-        <BodyLong spacing>
-          {t(tekster.inntektsinformasjon.beskrivelseDel1)}
-        </BodyLong>
-        <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel2)}</BodyLong>
-      </ReadMore>
+    <div className="border p-4 rounded-md">
+      <fieldset className="p-0 flex flex-col gap-4">
+        <legend className="text-xl mb-5">{t(tekster.tittel)}</legend>
 
-      <FormattertTallTextField
-        {...form.field("medforelder.inntekt").getControlProps()}
-        label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
-        error={form.field("medforelder.inntekt").error()}
-        onBlur={sporKalkulatorSpørsmålBesvart(
-          t(tekster.hvaErInntektenTilDenAndreForelderen),
-        )}
-        htmlSize={18}
-      />
+        <FormattertTallTextField
+          {...form.field("deg.inntekt").getControlProps()}
+          label={t(tekster.dinInntekt.label)}
+          error={form.field("deg.inntekt").error()}
+          onBlur={sporKalkulatorSpørsmålBesvart(t(tekster.dinInntekt.label))}
+          htmlSize={18}
+        />
+        <ReadMore
+          header={t(tekster.inntektsinformasjon.overskrift)}
+          onOpenChange={(open) => {
+            if (open) {
+              sporHendelse({
+                hendelsetype: "les mer utvidet",
+                tekst: t(tekster.inntektsinformasjon.overskrift),
+                id: "kalkulator-inntekt",
+              });
+            }
+          }}
+        >
+          <BodyLong spacing>
+            {t(tekster.inntektsinformasjon.beskrivelseDel1)}
+          </BodyLong>
+          <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel2)}</BodyLong>
+        </ReadMore>
+
+        <FormattertTallTextField
+          {...form.field("medforelder.inntekt").getControlProps()}
+          label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
+          error={form.field("medforelder.inntekt").error()}
+          onBlur={sporKalkulatorSpørsmålBesvart(
+            t(tekster.hvaErInntektenTilDenAndreForelderen),
+          )}
+          htmlSize={18}
+        />
+      </fieldset>
     </div>
   );
 };
 
 const tekster = definerTekster({
+  tittel: {
+    nb: "Inntekt",
+    en: "Income",
+    nn: "Inntekt",
+  },
   dinInntekt: {
     label: {
       nb: "Hva er årsinntekten din?",
@@ -80,10 +89,5 @@ const tekster = definerTekster({
     nb: "Hva er årsinntekten til den andre forelderen?",
     en: "What is the other parent's annual income?",
     nn: "Kva er årsinntekta til den andre forelderen?",
-  },
-  beregnBarnebidraget: {
-    nb: "Beregn barnebidraget",
-    en: "Calculate child support",
-    nn: "Rekn ut fostringstilskot",
   },
 });
