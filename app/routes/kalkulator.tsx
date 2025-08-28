@@ -183,13 +183,6 @@ const tekster = definerTekster({
     en: "Child support calculator",
     nn: <>Fostringstilskots&shy;kalkulator</>,
   },
-  ingenBarn: {
-    info: {
-      nb: "Vi finner ingen barn å beregne bidrag for.",
-      en: "We cannot find any children to calculate support for.",
-      nn: "Vi finn ingen barn å rekne bidrag for.",
-    },
-  },
 });
 
 export const handle = {
