@@ -75,10 +75,6 @@ export default function ManuellBarnebidragskalkulator() {
         block: "center",
       });
       settErEndretSidenUtregning(false);
-      sporHendelse({
-        hendelsetype: "skjema fullført",
-        skjemaId: "barnebidragskalkulator-under-18",
-      });
     },
     onInvalidSubmit: () => {
       sporHendelse({
@@ -88,13 +84,6 @@ export default function ManuellBarnebidragskalkulator() {
           document.activeElement instanceof HTMLInputElement
             ? document.activeElement.name
             : null,
-      });
-    },
-    onSubmitFailure: (error) => {
-      sporHendelse({
-        hendelsetype: "skjema innsending feilet",
-        skjemaId: "barnebidragskalkulator-under-18",
-        feil: String(error),
       });
     },
   });
@@ -108,6 +97,25 @@ export default function ManuellBarnebidragskalkulator() {
 
   const skjemarespons =
     !actionData || isValidationErrorResponse(actionData) ? null : actionData;
+
+  useEffect(() => {
+    if (skjemarespons) {
+      const harFeil = "error" in skjemarespons;
+
+      if (harFeil) {
+        sporHendelse({
+          hendelsetype: "skjema innsending feilet",
+          skjemaId: "barnebidragskalkulator-under-18",
+          feil: skjemarespons.error,
+        });
+      } else {
+        sporHendelse({
+          hendelsetype: "skjema fullført",
+          skjemaId: "barnebidragskalkulator-under-18",
+        });
+      }
+    }
+  }, [skjemarespons]);
 
   return (
     <>
