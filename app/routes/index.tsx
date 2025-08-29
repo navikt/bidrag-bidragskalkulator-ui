@@ -105,9 +105,9 @@ const tekster = definerTekster({
         en: "Calculator",
       },
       url: {
-        nb: "https://www.nav.no/barnebidrag/tjenester/kalkulator",
-        nn: "https://www.nav.no/barnebidrag/tjenester/kalkulator",
-        en: "https://www.nav.no/barnebidrag/tjenester/kalkulator",
+        nb: "https://www.nav.no/barnebidrag/tjenester",
+        nn: "https://www.nav.no/barnebidrag/tjenester",
+        en: "https://www.nav.no/barnebidrag/tjenester",
       },
     },
   },
@@ -132,9 +132,9 @@ const tekster = definerTekster({
     nn: "Vi vidareutviklar fostringstilskotskalkulatoren for å gjere den enklare å bruke. Den gamle kalkulatoren er framleis tilgjengeleg, men vi håper at du vil prøve den nye kalkulatoren og dele erfaringane dine.",
   },
   beskrivelse2: {
-    nb: "Hvis den som skal betale barnebidrag også betaler barnebidrag for andre barn, må du bruke den gamle kalkulatoren.",
+    nb: "Hvis den som skal betale barnebidrag, også betaler barnebidrag for andre barn, må du bruke den gamle kalkulatoren.",
     en: "If the person required to pay child support is already paying child support for other children, you must use the old calculator.",
-    nn: "Dersom den som skal betale barnebidrag allereie betalar barnebidrag for andre barn, må denne kalkulatoren brukast.",
+    nn: "Dersom den som skal betale barnebidrag, allereie betalar barnebidrag for andre barn, må denne kalkulatoren brukast.",
   },
   lenketekstNyKalkulator: {
     nb: "Prøv den nye kalkulatoren",
