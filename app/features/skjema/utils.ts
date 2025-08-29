@@ -1,57 +1,9 @@
 import type z from "zod";
 import { sporHendelse } from "~/utils/analytics";
 import type { Samværsklasse } from "./beregning/schema";
-import type { Barn, Personinformasjon } from "./personinformasjon/schema";
-import type {
-  FastBostedSchema,
-  InnloggetBarnSkjema,
-  InnloggetSkjema,
-  ManueltSkjema,
-} from "./schema";
+import type { FastBostedSchema, ManueltSkjema } from "./schema";
 
 export const SAMVÆR_STANDARDVERDI = "15";
-
-export const tilInnloggetBarnSkjema = (person: Barn): InnloggetBarnSkjema => {
-  return {
-    ident: person.ident,
-    bosted: "",
-    samvær: SAMVÆR_STANDARDVERDI,
-    barnetilsynsutgift: "",
-  };
-};
-
-export const getInnloggetSkjemaStandardverdi = (
-  personinformasjon: Personinformasjon,
-): InnloggetSkjema => {
-  const harKunEnMotpart = personinformasjon.barnerelasjoner.length === 1;
-
-  const motpartIdent = harKunEnMotpart
-    ? (personinformasjon.barnerelasjoner[0].motpart?.ident ?? "")
-    : "";
-
-  const barn = harKunEnMotpart
-    ? personinformasjon.barnerelasjoner[0].fellesBarn.map(
-        tilInnloggetBarnSkjema,
-      )
-    : [];
-
-  return {
-    motpartIdent,
-    barn,
-    deg: {
-      inntekt: String(personinformasjon.inntekt ?? ""),
-      antallBarnBorFast: "",
-      antallBarnDeltBosted: "",
-      borMedAnnenVoksen: "",
-    },
-    medforelder: {
-      inntekt: "",
-      antallBarnBorFast: "",
-      antallBarnDeltBosted: "",
-      borMedAnnenVoksen: "",
-    },
-  };
-};
 
 type Underholdskostnadsgrupper = {
   underholdskostnad: number;
@@ -215,24 +167,6 @@ export function kalkulerBidragstype(
   }
   return bostatus === "HOS_MEG" ? "MOTTAKER" : "PLIKTIG";
 }
-
-export const finnBarnBasertPåIdent = (
-  ident: string,
-  personinformasjon: Personinformasjon,
-) => {
-  return personinformasjon.barnerelasjoner
-    .flatMap((relasjon) => relasjon.fellesBarn)
-    .find((barn) => barn.ident === ident);
-};
-
-export const finnMotpartBasertPåIdent = (
-  ident: string,
-  personinformasjon: Personinformasjon,
-) => {
-  return personinformasjon.barnerelasjoner.find(
-    (relasjon) => relasjon.motpart?.ident === ident,
-  )?.motpart;
-};
 
 export const sporKalkulatorSpørsmålBesvart =
   (spørsmål: string) =>

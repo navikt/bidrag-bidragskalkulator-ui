@@ -9,10 +9,10 @@ import type { ActionFunctionArgs, MetaArgs } from "react-router";
 import { useActionData, useRouteLoaderData } from "react-router";
 import { BetaNotis } from "~/features/BetaNotis";
 import { hentManuellBidragsutregning } from "~/features/skjema/beregning/api.server";
+import { hentKalkulatorgrunnlagsdata } from "~/features/skjema/grunnlagsdata/api.server";
 import { IntroPanel } from "~/features/skjema/IntroPanel";
 import { ManueltBidragsskjema } from "~/features/skjema/manuell/ManueltBidragsskjema";
 import { ManueltResultatpanel } from "~/features/skjema/manuell/ManueltResultatpanel";
-import { hentKalkulatorgrunnlagsdata } from "~/features/skjema/personinformasjon/api.server";
 import {
   type ManueltSkjema,
   type ManueltSkjemaValidert,

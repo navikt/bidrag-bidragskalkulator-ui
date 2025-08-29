@@ -1,11 +1,8 @@
-import type {
-  Bidragsutregning,
-  ManuellBidragsutregning,
-} from "~/features/skjema/beregning/schema";
+import type { ManuellBidragsutregning } from "~/features/skjema/beregning/schema";
 import type {
   ManuellPersoninformasjon,
   Personinformasjon,
-} from "~/features/skjema/personinformasjon/schema";
+} from "~/features/skjema/grunnlagsdata/schema";
 
 const underholdskostnader = {
   "0": 8313,
@@ -119,28 +116,6 @@ export const defaultManuellPersoninformasjon: ManuellPersoninformasjon = {
 };
 
 /**
- * Default mock data for bidragkalkuleringsendpoint
- */
-export const defaultBidragsutregning: Bidragsutregning = {
-  resultater: [
-    {
-      ident: "11111111111",
-      fulltNavn: "Test Testersen",
-      fornavn: "Test",
-      sum: 2500,
-      bidragstype: "PLIKTIG",
-    },
-    {
-      ident: "22222222222",
-      fulltNavn: "Anna Testersen",
-      fornavn: "Anna",
-      sum: 3000,
-      bidragstype: "PLIKTIG",
-    },
-  ],
-};
-
-/**
  * Default mock data for manual bidragkalkuleringsendpoint
  */
 export const defaultManuellBidragsutregning: ManuellBidragsutregning = {
@@ -186,19 +161,6 @@ export function genererManuellPersoninformasjon(
       ...defaultManuellPersoninformasjon.person,
       ...overrides?.person,
     },
-  };
-}
-
-/**
- * Genererer mock autentisert bidragsutregning med mulighet for å overstyre verdier
- */
-export function genererBidragsutregning(
-  overrides?: Partial<Bidragsutregning>,
-): Bidragsutregning {
-  return {
-    ...defaultBidragsutregning,
-    ...overrides,
-    resultater: overrides?.resultater || defaultBidragsutregning.resultater,
   };
 }
 
