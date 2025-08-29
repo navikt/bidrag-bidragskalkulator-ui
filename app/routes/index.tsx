@@ -1,6 +1,7 @@
-import { BodyLong, Button, Heading, Link } from "@navikt/ds-react";
+import { BodyLong, Button, Heading } from "@navikt/ds-react";
 import type { MetaArgs } from "react-router";
 import { Link as ReactRouterLink } from "react-router";
+import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
 export function meta({ matches }: MetaArgs) {
@@ -37,15 +38,30 @@ const Landingsside = () => {
       <BodyLong spacing>{t(tekster.beskrivelse1)}</BodyLong>
       <BodyLong spacing>{t(tekster.beskrivelse2)}</BodyLong>
       <div className="flex flex-col gap-4">
-        <Button as={ReactRouterLink} to="/kalkulator" className="self-start">
+        <Button
+          as={ReactRouterLink}
+          to="/kalkulator"
+          className="self-start"
+          onClick={() => {
+            sporHendelse({
+              hendelsetype: "gå til kalkulator klikket",
+              kalkulatorversjon: "ny",
+            });
+          }}
+        >
           {t(tekster.lenketekstNyKalkulator)}
         </Button>
         <Button
-          as={Link}
+          as="a"
           href="https://tjenester.nav.no/bidragskalkulator/innledning"
           className="self-start"
           variant="secondary"
-          underline={false}
+          onClick={() => {
+            sporHendelse({
+              hendelsetype: "gå til kalkulator klikket",
+              kalkulatorversjon: "gammel",
+            });
+          }}
         >
           {t(tekster.lenketekstGammelKalkulator)}
         </Button>
