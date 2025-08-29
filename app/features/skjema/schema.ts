@@ -9,30 +9,6 @@ export const FastBostedSchema = z.enum([
   "HOS_MEDFORELDER",
 ]);
 
-export const InnloggetBarnSkjemaSchema = z.object({
-  ident: z.string().length(11),
-  bosted: z.enum([...FastBostedSchema.options, ""]),
-  samvær: z.string(),
-  barnetilsynsutgift: z.string(),
-});
-
-export const InnloggetSkjemaSchema = z.object({
-  motpartIdent: z.string().length(11),
-  barn: z.array(InnloggetBarnSkjemaSchema),
-  deg: z.object({
-    inntekt: z.string(),
-    antallBarnBorFast: z.string(),
-    antallBarnDeltBosted: z.string(),
-    borMedAnnenVoksen: z.enum(["true", "false", ""]),
-  }),
-  medforelder: z.object({
-    inntekt: z.string(),
-    antallBarnBorFast: z.string(),
-    antallBarnDeltBosted: z.string(),
-    borMedAnnenVoksen: z.enum(["true", "false", ""]),
-  }),
-});
-
 export const ManueltBarnSkjemaSchema = z.object({
   alder: z.string(),
   bosted: z.enum([...FastBostedSchema.options, ""]),
@@ -55,37 +31,6 @@ export const ManueltSkjemaSchema = z.object({
     borMedAnnenVoksen: z.enum(["true", "false", ""]),
   }),
 });
-
-export const lagInnloggetBarnSkjema = (språk: Språk) => {
-  return z
-    .object({
-      ident: z
-        .string()
-        .length(11, oversett(språk, tekster.feilmeldinger.barnIdent.ugyldig)),
-      bosted: z.enum(FastBostedSchema.options, {
-        message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
-      }),
-      samvær: z
-        .string()
-        .refine((verdi) => verdi.trim() !== "", {
-          message: oversett(språk, tekster.feilmeldinger.samvær.påkrevd),
-        })
-        .transform((verdi) => Number(verdi.trim()))
-        .refine((verdi) => verdi >= 0, {
-          message: oversett(språk, tekster.feilmeldinger.samvær.minimum),
-        })
-        .refine((verdi) => verdi <= 30, {
-          message: oversett(språk, tekster.feilmeldinger.samvær.maksimum),
-        }),
-      barnetilsynsutgift: z.string(),
-    })
-    .transform((data) => {
-      return {
-        ...data,
-        barnetilsynsutgift: Number(data.barnetilsynsutgift.trim()), // OBS Denne valideres ikke
-      };
-    });
-};
 
 export const lagForelderSkjema = (språk: Språk) => {
   return z.object({
@@ -151,21 +96,6 @@ export const lagForelderSkjema = (språk: Språk) => {
         ),
       })
       .transform((value) => value === "true"),
-  });
-};
-
-export const lagInnloggetSkjema = (språk: Språk) => {
-  return z.object({
-    motpartIdent: z
-      .string()
-      .nonempty(oversett(språk, tekster.feilmeldinger.motpartIdent.påkrevd))
-      .length(11, oversett(språk, tekster.feilmeldinger.motpartIdent.ugyldig)),
-    barn: z
-      .array(lagInnloggetBarnSkjema(språk))
-      .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
-      .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
-    deg: lagForelderSkjema(språk),
-    medforelder: lagForelderSkjema(språk),
   });
 };
 
@@ -262,11 +192,6 @@ export const lagManueltSkjema = (språk: Språk) => {
   });
 };
 
-export type InnloggetBarnSkjema = z.infer<typeof InnloggetBarnSkjemaSchema>;
-export type InnloggetSkjema = z.infer<typeof InnloggetSkjemaSchema>;
-export type InnloggetSkjemaValidert = z.infer<
-  ReturnType<typeof lagInnloggetSkjema>
->;
 export type ManueltBarnSkjema = z.infer<typeof ManueltBarnSkjemaSchema>;
 export type ManueltSkjema = z.infer<typeof ManueltSkjemaSchema>;
 export type ManueltSkjemaValidert = z.infer<

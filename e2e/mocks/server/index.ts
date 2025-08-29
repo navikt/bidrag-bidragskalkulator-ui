@@ -2,7 +2,6 @@ import type { IncomingMessage, ServerResponse } from "http";
 import { createServer } from "http";
 import { parse } from "url";
 import {
-  handleBidragsberegning,
   handleKalkulatorGrunnlagsdata,
   handleÅpenBidragsberegning,
 } from "./handlers";
@@ -22,12 +21,6 @@ const routes: Route[] = [
     method: "GET",
     handler: handleKalkulatorGrunnlagsdata,
     name: "Personinformasjon",
-  },
-  {
-    path: "/api/v1/beregning/barnebidrag",
-    method: "POST",
-    handler: handleBidragsberegning,
-    name: "Bidragsberegning (autentisert)",
   },
   {
     path: "/api/v1/beregning/barnebidrag/åpen",
