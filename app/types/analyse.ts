@@ -67,6 +67,11 @@ type SkjemaSpørsmålBesvart = {
   spørsmål: string;
 };
 
+type GåTilKalkulatorKlikket = {
+  hendelsetype: "gå til kalkulator klikket";
+  kalkulatorversjon: "ny" | "gammel";
+};
+
 export type Sporingshendelse =
   | SkjemaValideringFeilet
   | SkjemaInnsendingFeilet
@@ -75,4 +80,5 @@ export type Sporingshendelse =
   | BarnLagtTil
   | BarnFjernet
   | SkjemaSpørsmålBesvart
+  | GåTilKalkulatorKlikket
   | LagPrivatAvtaleKlikket;
