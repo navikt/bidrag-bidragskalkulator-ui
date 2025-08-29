@@ -85,10 +85,9 @@ export const hentManuellBidragsutregning = async (request: Request) => {
 
   const skjemaData = parsedFormData.data;
 
-  const { inntekt: inntektForelder1, ...dittBoforhold } =
-    parsedFormData.data.deg;
-  const { inntekt: inntektForelder2, ...medforelderBoforhold } =
-    parsedFormData.data.medforelder;
+  const { inntekt: inntektForelder1 } = skjemaData.deg;
+  const { inntekt: inntektForelder2 } = skjemaData.medforelder;
+  const { dittBoforhold, medforelderBoforhold } = skjemaData;
 
   const requestData: ManueltBidragsutregningsgrunnlag = {
     inntektForelder1,

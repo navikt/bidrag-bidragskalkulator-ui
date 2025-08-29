@@ -17,7 +17,16 @@ test.describe("Beregningstest", () => {
       .fill("1000");
 
     const dinHusstand = page.getByRole("group", { name: "Om deg" });
-    await dinHusstand.getByLabel("Nei").check();
+    const dinHusstandBorMedAnnenVoksen = page.getByRole("group", {
+      name: "Bor du med en annen voksen?",
+    });
+    await dinHusstandBorMedAnnenVoksen.getByLabel("Nei").check();
+
+    const dinHusstandBorMedAndreBarn = page.getByRole("group", {
+      name: "Bor du med andre barn enn de som er nevnt over?",
+    });
+    await dinHusstandBorMedAndreBarn.getByLabel("Ja").check();
+
     await dinHusstand.getByLabel("Antall barn som bor fast hos deg").fill("0");
     await dinHusstand
       .getByLabel("Antall barn med delt bosted hos deg")
@@ -26,7 +35,15 @@ test.describe("Beregningstest", () => {
     const medforelderensHusstand = page.getByRole("group", {
       name: "Om den andre forelderen",
     });
-    await medforelderensHusstand.getByLabel("Nei").check();
+    const medforelderensHusstandBorMedAnnenVoksen = page.getByRole("group", {
+      name: "Bor den andre forelderen med en annen voksen?",
+    });
+    await medforelderensHusstandBorMedAnnenVoksen.getByLabel("Nei").check();
+
+    const medforelderensHusstandBorMedAndreBarn = page.getByRole("group", {
+      name: "Bor den andre forelderen med andre barn enn de som er nevnt over?",
+    });
+    await medforelderensHusstandBorMedAndreBarn.getByLabel("Ja").check();
     await medforelderensHusstand
       .getByLabel("Antall barn som bor fast hos den andre forelderen")
       .fill("0");
