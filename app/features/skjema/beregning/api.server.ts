@@ -85,16 +85,23 @@ export const hentManuellBidragsutregning = async (request: Request) => {
 
   const skjemaData = parsedFormData.data;
 
-  const { inntekt: inntektForelder1, ...dittBoforhold } =
-    parsedFormData.data.deg;
-  const { inntekt: inntektForelder2, ...medforelderBoforhold } =
-    parsedFormData.data.medforelder;
+  const { inntekt: inntektForelder1 } = skjemaData.deg;
+  const { inntekt: inntektForelder2 } = skjemaData.medforelder;
+  const { dittBoforhold, medforelderBoforhold } = skjemaData;
 
   const requestData: ManueltBidragsutregningsgrunnlag = {
     inntektForelder1,
     inntektForelder2,
-    dittBoforhold,
-    medforelderBoforhold,
+    dittBoforhold: {
+      borMedAnnenVoksen: dittBoforhold.borMedAnnenVoksen,
+      antallBarnBorFast: dittBoforhold.antallBarnBorFast,
+      antallBarnDeltBosted: dittBoforhold.antallBarnDeltBosted,
+    },
+    medforelderBoforhold: {
+      borMedAnnenVoksen: medforelderBoforhold.borMedAnnenVoksen,
+      antallBarnBorFast: medforelderBoforhold.antallBarnBorFast,
+      antallBarnDeltBosted: medforelderBoforhold.antallBarnDeltBosted,
+    },
     barn: skjemaData.barn.map((barn) => {
       const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
       const bidragstype = kalkulerBidragstype(
