@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from "@navikt/aksel-icons";
 import {
   Alert,
   BodyLong,
@@ -14,8 +15,6 @@ import {
 } from "@navikt/ds-react/ExpansionCard";
 import { ListItem } from "@navikt/ds-react/List";
 import { useFormContext } from "@rvf/react";
-import { Link as ReactRouterLink } from "react-router";
-import { RouteConfig } from "~/config/routeConfig";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
@@ -85,11 +84,14 @@ export const ManueltResultatpanel = ({
       <BodyLong>{t(tekster.hvordanAvtale)}</BodyLong>
 
       <Button
-        as={ReactRouterLink}
-        to={RouteConfig.PRIVAT_AVTALE.INDEX}
-        state={data.resultater}
+        as="a"
+        href={t(tekster.lagPrivatAvtale.lenke)}
         variant="primary"
         className="self-start"
+        target="_blank"
+        rel="noopener noreferrer"
+        icon={<ExternalLinkIcon title={t(tekster.lagPrivatAvtale.nyFane)} />}
+        iconPosition="right"
         onClick={() =>
           sporHendelse({
             hendelsetype: "lag privat avtale klikket",
