@@ -109,6 +109,11 @@ type GåTilKalkulatorKlikket = {
   kalkulatorversjon: "ny" | "gammel";
 };
 
+type GåTilGammelKalkulatorKlikketFraNyKalkulator = {
+  hendelsetype: "gå til gammel kalkulator klikket fra ny kalkulator";
+  kilde: "infoboks" | "intropanel";
+};
+
 type SøkOmFastsettingAvBarnebidragKlikket = {
   hendelsetype: "søk om fastsetting av barnebidrag klikket";
   skjemaId: SkjemaIdKalkulator;
@@ -124,4 +129,5 @@ export type Sporingshendelse =
   | SkjemaSpørsmålBesvart
   | GåTilKalkulatorKlikket
   | SøkOmFastsettingAvBarnebidragKlikket
+  | GåTilGammelKalkulatorKlikketFraNyKalkulator
   | LagPrivatAvtaleKlikket;
