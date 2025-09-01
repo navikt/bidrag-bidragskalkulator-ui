@@ -65,6 +65,11 @@ type SkjemaSpørsmålBesvart = {
   skjemaId: SkjemaId;
   spørsmålId: string;
   spørsmål: string;
+  /**
+   * Svaret som er fylt ut.
+   * OBS! Husk personvern, brukes unntaksvis
+   */
+  svar?: string;
 };
 
 type GåTilKalkulatorKlikket = {

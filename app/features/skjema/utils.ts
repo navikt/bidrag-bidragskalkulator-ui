@@ -88,15 +88,21 @@ export const MANUELT_SKJEMA_STANDARDVERDI: ManueltSkjema = {
   ],
   deg: {
     inntekt: "",
-    antallBarnBorFast: "",
-    antallBarnDeltBosted: "",
-    borMedAnnenVoksen: "",
   },
   medforelder: {
     inntekt: "",
+  },
+  dittBoforhold: {
+    borMedAnnenVoksen: "",
+    borMedAndreBarn: "",
     antallBarnBorFast: "",
     antallBarnDeltBosted: "",
+  },
+  medforelderBoforhold: {
     borMedAnnenVoksen: "",
+    borMedAndreBarn: "",
+    antallBarnBorFast: "",
+    antallBarnDeltBosted: "",
   },
 };
 

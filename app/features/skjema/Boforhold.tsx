@@ -3,18 +3,30 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
 
 import { Radio, RadioGroup, Stack } from "@navikt/ds-react";
+import { sporHendelse } from "~/utils/analytics";
 import type { ManueltSkjema } from "./schema";
 import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
 const BOR_MED_ANNEN_VOKSEN_ALTERNATIVER = ["true", "false"] as const;
+const BOR_MED_ANDRE_BARN_ALTERNATIVER = ["true", "false"] as const;
 
 type Props = {
-  part: "deg" | "medforelder";
+  part: "dittBoforhold" | "medforelderBoforhold";
 };
 
-export const Husstandsmedlemmer = ({ part }: Props) => {
+export const Boforhold = ({ part }: Props) => {
   const form = useFormContext<ManueltSkjema>();
   const { t } = useOversettelse();
+
+  const borMedAndreBarn =
+    form.field(`${part}.borMedAndreBarn`).value() === "true";
+
+  const vedEndreBorMedAndreBarn = (value: string) => {
+    if (value === "false") {
+      form.resetField(`${part}.antallBarnBorFast`);
+      form.resetField(`${part}.antallBarnDeltBosted`);
+    }
+  };
 
   return (
     <div className="border p-4 rounded-md">
@@ -42,34 +54,73 @@ export const Husstandsmedlemmer = ({ part }: Props) => {
           </Stack>
         </RadioGroup>
 
-        <FormattertTallTextField
-          {...form.field(`${part}.antallBarnBorFast`).getControlProps()}
-          label={t(tekster[part].antallBarnBorFast.label)}
-          error={form.field(`${part}.antallBarnBorFast`).error()}
-          description={t(tekster[part].antallBarnBorFast.beskrivelse)}
-          onBlur={sporKalkulatorSpørsmålBesvart(
-            t(tekster[part].antallBarnBorFast.label),
-          )}
-          htmlSize={8}
+        <RadioGroup
+          {...form.field(`${part}.borMedAndreBarn`).getInputProps({
+            onChange: vedEndreBorMedAndreBarn,
+            legend: t(tekster[part].borMedAndreBarn.label),
+            error: form.field(`${part}.borMedAndreBarn`).error(),
+            children: (
+              <Stack
+                gap="0 6"
+                direction={{ xs: "column", sm: "row" }}
+                wrap={false}
+              >
+                {BOR_MED_ANDRE_BARN_ALTERNATIVER.map((alternativ) => {
+                  return (
+                    <Radio
+                      value={alternativ}
+                      key={alternativ}
+                      onChange={(event) => {
+                        sporHendelse({
+                          hendelsetype: "skjema spørsmål besvart",
+                          skjemaId: "barnebidragskalkulator-under-18",
+                          spørsmålId: event.target.name,
+                          spørsmål: t(tekster[part].borMedAndreBarn.label),
+                          svar: tekster[part].borMedAndreBarn[alternativ].nb,
+                        });
+                      }}
+                    >
+                      {t(tekster[part].borMedAndreBarn[alternativ])}
+                    </Radio>
+                  );
+                })}
+              </Stack>
+            ),
+          })}
         />
 
-        <FormattertTallTextField
-          {...form.field(`${part}.antallBarnDeltBosted`).getControlProps()}
-          label={t(tekster[part].antallBarnDeltBosted.label)}
-          error={form.field(`${part}.antallBarnDeltBosted`).error()}
-          description={t(tekster[part].antallBarnDeltBosted.beskrivelse)}
-          onBlur={sporKalkulatorSpørsmålBesvart(
-            t(tekster[part].antallBarnDeltBosted.label),
-          )}
-          htmlSize={8}
-        />
+        {borMedAndreBarn && (
+          <>
+            <FormattertTallTextField
+              {...form.field(`${part}.antallBarnBorFast`).getControlProps()}
+              label={t(tekster[part].antallBarnBorFast.label)}
+              error={form.field(`${part}.antallBarnBorFast`).error()}
+              description={t(tekster[part].antallBarnBorFast.beskrivelse)}
+              onBlur={sporKalkulatorSpørsmålBesvart(
+                t(tekster[part].antallBarnBorFast.label),
+              )}
+              htmlSize={8}
+            />
+
+            <FormattertTallTextField
+              {...form.field(`${part}.antallBarnDeltBosted`).getControlProps()}
+              label={t(tekster[part].antallBarnDeltBosted.label)}
+              error={form.field(`${part}.antallBarnDeltBosted`).error()}
+              description={t(tekster[part].antallBarnDeltBosted.beskrivelse)}
+              onBlur={sporKalkulatorSpørsmålBesvart(
+                t(tekster[part].antallBarnDeltBosted.label),
+              )}
+              htmlSize={8}
+            />
+          </>
+        )}
       </fieldset>
     </div>
   );
 };
 
 const tekster = definerTekster({
-  deg: {
+  dittBoforhold: {
     tittel: {
       nb: "Om deg",
       nn: "Om deg",
@@ -116,8 +167,25 @@ const tekster = definerTekster({
         en: "No",
       },
     },
+    borMedAndreBarn: {
+      label: {
+        nb: "Bor du med andre barn enn de som er nevnt over?",
+        nn: "Bur du med andre barn enn dei som er nemnt over?",
+        en: "Do you live with other children than those mentioned above?",
+      },
+      true: {
+        nb: "Ja",
+        nn: "Ja",
+        en: "Yes",
+      },
+      false: {
+        nb: "Nei",
+        nn: "Nei",
+        en: "No",
+      },
+    },
   },
-  medforelder: {
+  medforelderBoforhold: {
     tittel: {
       nb: "Om den andre forelderen",
       nn: "Om den andre forelderen",
@@ -152,6 +220,23 @@ const tekster = definerTekster({
         nb: "Bor den andre forelderen med en annen voksen?",
         nn: "Bur den andre forelderen med ein annan vaksen?",
         en: "Does the other parent live with another adult?",
+      },
+      true: {
+        nb: "Ja",
+        nn: "Ja",
+        en: "Yes",
+      },
+      false: {
+        nb: "Nei",
+        nn: "Nei",
+        en: "No",
+      },
+    },
+    borMedAndreBarn: {
+      label: {
+        nb: "Bor den andre forelderen med andre barn enn de som er nevnt over?",
+        nn: "Bur den andre forelderen med andre barn enn dei som er nemnt over?",
+        en: "Does the other parent live with other children than those mentioned above?",
       },
       true: {
         nb: "Ja",
