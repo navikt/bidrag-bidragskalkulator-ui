@@ -3,6 +3,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "./FormattertTallTextField";
 
 import { Radio, RadioGroup, Stack } from "@navikt/ds-react";
+import { sporHendelse } from "~/utils/analytics";
 import type { ManueltSkjema } from "./schema";
 import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
@@ -69,9 +70,15 @@ export const Boforhold = ({ part }: Props) => {
                     <Radio
                       value={alternativ}
                       key={alternativ}
-                      onChange={sporKalkulatorSpørsmålBesvart(
-                        t(tekster[part].borMedAndreBarn.label),
-                      )}
+                      onChange={(event) => {
+                        sporHendelse({
+                          hendelsetype: "skjema spørsmål besvart",
+                          skjemaId: "barnebidragskalkulator-under-18",
+                          spørsmålId: event.target.name,
+                          spørsmål: t(tekster[part].borMedAndreBarn.label),
+                          svar: tekster[part].borMedAndreBarn[alternativ].nb,
+                        });
+                      }}
                     >
                       {t(tekster[part].borMedAndreBarn[alternativ])}
                     </Radio>
