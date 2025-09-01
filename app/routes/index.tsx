@@ -132,9 +132,9 @@ const tekster = definerTekster({
     nn: "Vi vidareutviklar fostringstilskotskalkulatoren for å gjere den enklare å bruke. Den gamle kalkulatoren er framleis tilgjengeleg, men vi håper at du vil prøve den nye kalkulatoren og dele erfaringane dine.",
   },
   beskrivelse2: {
-    nb: "Hvis den som skal betale barnebidrag, også betaler barnebidrag for andre barn, må du bruke den gamle kalkulatoren.",
-    en: "If the person required to pay child support is already paying child support for other children, you must use the old calculator.",
-    nn: "Dersom den som skal betale barnebidrag, allereie betalar barnebidrag for andre barn, må denne kalkulatoren brukast.",
+    nb: "Hvis den som skal betale barnebidrag, også betaler barnebidrag for andre barn, må du bruke den gamle kalkulatoren. Den gamle kalkulatoren regner ut om den som skal betale barnebidrag for flere barn, har evne til å betale for alle. Den nye kalkulatoren har ikke denne funksjonaliteten ennå.",
+    en: "If the person required to pay child support is already paying child support for other children, you must use the old calculator. The old calculator calculates whether the person required to pay child support for multiple children has the ability to pay for all. The new calculator does not have this functionality yet.",
+    nn: "Dersom den som skal betale barnebidrag, allereie betalar barnebidrag for andre barn, må denne kalkulatoren brukast. Den gamle kalkulatoren reknar ut om den som skal betale barnebidrag for fleire barn, har evne til å betale for alle. Den nye kalkulatoren har ikkje denne funksjonaliteten enno.",
   },
   lenketekstNyKalkulator: {
     nb: "Prøv den nye kalkulatoren",
