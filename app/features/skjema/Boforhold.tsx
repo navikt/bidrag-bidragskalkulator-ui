@@ -11,31 +11,36 @@ const BOR_MED_ANNEN_VOKSEN_ALTERNATIVER = ["true", "false"] as const;
 const BOR_MED_ANDRE_BARN_ALTERNATIVER = ["true", "false"] as const;
 
 type Props = {
-  part: "dittBoforhold" | "medforelderBoforhold";
+  part: "deg" | "medforelder";
 };
 
 export const Boforhold = ({ part }: Props) => {
   const form = useFormContext<ManueltSkjema>();
   const { t } = useOversettelse();
 
+  const skjemagruppe =
+    part === "deg" ? "dittBoforhold" : "medforelderBoforhold";
+
   const borMedAndreBarn =
-    form.field(`${part}.borMedAndreBarn`).value() === "true";
+    form.field(`${skjemagruppe}.borMedAndreBarn`).value() === "true";
 
   const vedEndreBorMedAndreBarn = (value: string) => {
     if (value === "false") {
-      form.resetField(`${part}.antallBarnBorFast`);
-      form.resetField(`${part}.antallBarnDeltBosted`);
+      form.resetField(`${skjemagruppe}.antallBarnBorFast`);
+      form.resetField(`${skjemagruppe}.antallBarnDeltBosted`);
     }
   };
 
   return (
     <div className="border p-4 rounded-md">
       <fieldset className="p-0 flex flex-col gap-4">
-        <legend className="text-xl mb-5">{t(tekster[part].tittel)}</legend>
+        <legend className="text-xl mb-5">
+          {t(tekster[skjemagruppe].tittel)}
+        </legend>
         <RadioGroup
-          {...form.field(`${part}.borMedAnnenVoksen`).getInputProps()}
-          error={form.field(`${part}.borMedAnnenVoksen`).error()}
-          legend={t(tekster[part].borMedAnnenVoksen.label)}
+          {...form.field(`${skjemagruppe}.borMedAnnenVoksen`).getInputProps()}
+          error={form.field(`${skjemagruppe}.borMedAnnenVoksen`).error()}
+          legend={t(tekster[skjemagruppe].borMedAnnenVoksen.label)}
         >
           <Stack gap="0 6" direction={{ xs: "column", sm: "row" }} wrap={false}>
             {BOR_MED_ANNEN_VOKSEN_ALTERNATIVER.map((alternativ) => {
@@ -44,10 +49,11 @@ export const Boforhold = ({ part }: Props) => {
                   value={alternativ}
                   key={alternativ}
                   onChange={sporKalkulatorSpørsmålBesvart(
-                    t(tekster[part].borMedAnnenVoksen.label),
+                    `${part}-bor-med-voksen`,
+                    t(tekster[skjemagruppe].borMedAnnenVoksen.label),
                   )}
                 >
-                  {t(tekster[part].borMedAnnenVoksen[alternativ])}
+                  {t(tekster[skjemagruppe].borMedAnnenVoksen[alternativ])}
                 </Radio>
               );
             })}
@@ -55,10 +61,10 @@ export const Boforhold = ({ part }: Props) => {
         </RadioGroup>
 
         <RadioGroup
-          {...form.field(`${part}.borMedAndreBarn`).getInputProps({
+          {...form.field(`${skjemagruppe}.borMedAndreBarn`).getInputProps({
             onChange: vedEndreBorMedAndreBarn,
-            legend: t(tekster[part].borMedAndreBarn.label),
-            error: form.field(`${part}.borMedAndreBarn`).error(),
+            legend: t(tekster[skjemagruppe].borMedAndreBarn.label),
+            error: form.field(`${skjemagruppe}.borMedAndreBarn`).error(),
             children: (
               <Stack
                 gap="0 6"
@@ -70,17 +76,21 @@ export const Boforhold = ({ part }: Props) => {
                     <Radio
                       value={alternativ}
                       key={alternativ}
-                      onChange={(event) => {
+                      onChange={() => {
                         sporHendelse({
                           hendelsetype: "skjema spørsmål besvart",
                           skjemaId: "barnebidragskalkulator-under-18",
-                          spørsmålId: event.target.name,
-                          spørsmål: t(tekster[part].borMedAndreBarn.label),
-                          svar: tekster[part].borMedAndreBarn[alternativ].nb,
+                          spørsmålId: `${part}-bor-med-andre-barn`,
+                          spørsmål: t(
+                            tekster[skjemagruppe].borMedAndreBarn.label,
+                          ),
+                          svar: tekster[skjemagruppe].borMedAndreBarn[
+                            alternativ
+                          ].nb,
                         });
                       }}
                     >
-                      {t(tekster[part].borMedAndreBarn[alternativ])}
+                      {t(tekster[skjemagruppe].borMedAndreBarn[alternativ])}
                     </Radio>
                   );
                 })}
@@ -92,23 +102,33 @@ export const Boforhold = ({ part }: Props) => {
         {borMedAndreBarn && (
           <>
             <FormattertTallTextField
-              {...form.field(`${part}.antallBarnBorFast`).getControlProps()}
-              label={t(tekster[part].antallBarnBorFast.label)}
-              error={form.field(`${part}.antallBarnBorFast`).error()}
-              description={t(tekster[part].antallBarnBorFast.beskrivelse)}
+              {...form
+                .field(`${skjemagruppe}.antallBarnBorFast`)
+                .getControlProps()}
+              label={t(tekster[skjemagruppe].antallBarnBorFast.label)}
+              error={form.field(`${skjemagruppe}.antallBarnBorFast`).error()}
+              description={t(
+                tekster[skjemagruppe].antallBarnBorFast.beskrivelse,
+              )}
               onBlur={sporKalkulatorSpørsmålBesvart(
-                t(tekster[part].antallBarnBorFast.label),
+                `${part}-antall-barn-bor-fast`,
+                t(tekster[skjemagruppe].antallBarnBorFast.label),
               )}
               htmlSize={8}
             />
 
             <FormattertTallTextField
-              {...form.field(`${part}.antallBarnDeltBosted`).getControlProps()}
-              label={t(tekster[part].antallBarnDeltBosted.label)}
-              error={form.field(`${part}.antallBarnDeltBosted`).error()}
-              description={t(tekster[part].antallBarnDeltBosted.beskrivelse)}
+              {...form
+                .field(`${skjemagruppe}.antallBarnDeltBosted`)
+                .getControlProps()}
+              label={t(tekster[skjemagruppe].antallBarnDeltBosted.label)}
+              error={form.field(`${skjemagruppe}.antallBarnDeltBosted`).error()}
+              description={t(
+                tekster[skjemagruppe].antallBarnDeltBosted.beskrivelse,
+              )}
               onBlur={sporKalkulatorSpørsmålBesvart(
-                t(tekster[part].antallBarnDeltBosted.label),
+                `${part}-antall-barn-bor-delt-bosted`,
+                t(tekster[skjemagruppe].antallBarnDeltBosted.label),
               )}
               htmlSize={8}
             />
