@@ -16,8 +16,8 @@ export function ManueltBidragsskjema({ form }: Props) {
   return (
     <form {...form.getFormProps()} className="flex flex-col gap-4">
       <ManuellBarnSkjema />
-      <Boforhold part="dittBoforhold" />
-      <Boforhold part="medforelderBoforhold" />
+      <Boforhold part="deg" />
+      <Boforhold part="medforelder" />
       <Inntektsopplysninger />
 
       <Button

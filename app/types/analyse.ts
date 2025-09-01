@@ -12,6 +12,38 @@ export const skjemanavnMapping: Record<SkjemaId, Skjemanavn> = {
   "barnebidrag-privat-avtale-under-18": "Privat avtale under 18 år",
 };
 
+export type PrivatAvtaleSpørsmålId =
+  | "barn-fornavn"
+  | "barn-etternavn"
+  | "barn-ident"
+  | "barn-bidragstype"
+  | "barn-barnebidrag-beløp"
+  | "barn-gjelder-fra"
+  | "har-andre-bestemmelser"
+  | "andre-bestemmelser-beskrivelse"
+  | "er-ny-avtale"
+  | "oppgjørsform-idag"
+  | "med-innkreving"
+  | "medforelder-fornavn"
+  | "medforelder-etternavn"
+  | "medforelder-ident"
+  | "har-vedlegg";
+export type KalkulatorSpørsmålId =
+  | "barn-alder"
+  | "barn-fast-bosted"
+  | "barn-samvær"
+  | "barn-barnepass"
+  | "deg-bor-med-voksen"
+  | "deg-bor-med-andre-barn"
+  | "deg-antall-barn-bor-fast"
+  | "deg-antall-barn-bor-delt-bosted"
+  | "deg-inntekt"
+  | "medforelder-bor-med-voksen"
+  | "medforelder-bor-med-andre-barn"
+  | "medforelder-antall-barn-bor-fast"
+  | "medforelder-antall-barn-bor-delt-bosted"
+  | "medforelder-inntekt";
+
 type SkjemaValideringFeilet = {
   hendelsetype: "skjema validering feilet";
   skjemaId: SkjemaId;
@@ -63,7 +95,7 @@ type LagPrivatAvtaleKlikket = {
 type SkjemaSpørsmålBesvart = {
   hendelsetype: "skjema spørsmål besvart";
   skjemaId: SkjemaId;
-  spørsmålId: string;
+  spørsmålId: KalkulatorSpørsmålId | PrivatAvtaleSpørsmålId;
   spørsmål: string;
   /**
    * Svaret som er fylt ut.

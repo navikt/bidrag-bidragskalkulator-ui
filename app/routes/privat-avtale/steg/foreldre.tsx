@@ -52,6 +52,7 @@ export default function Steg1Foreldre() {
         {...form.field(`medforelder.fornavn`).getInputProps({
           label: t(tekster.medforelder.fornavn.label),
           onBlur: sporPrivatAvtaleSpørsmålBesvart(
+            "medforelder-fornavn",
             t(tekster.medforelder.fornavn.label),
           ),
         })}
@@ -63,6 +64,7 @@ export default function Steg1Foreldre() {
         {...form.field(`medforelder.etternavn`).getInputProps({
           label: t(tekster.medforelder.etternavn.label),
           onBlur: sporPrivatAvtaleSpørsmålBesvart(
+            "medforelder-etternavn",
             t(tekster.medforelder.etternavn.label),
           ),
         })}
@@ -74,6 +76,7 @@ export default function Steg1Foreldre() {
       <FødselsnummerTextField
         {...form.field(`medforelder.ident`).getControlProps()}
         onBlur={sporPrivatAvtaleSpørsmålBesvart(
+          "medforelder-ident",
           t(tekster.medforelder.ident.label),
         )}
         label={t(tekster.medforelder.ident.label)}

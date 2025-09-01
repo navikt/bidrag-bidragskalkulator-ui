@@ -49,7 +49,10 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
       <TextField
         {...barnField.field("fornavn").getInputProps({
           label: t(tekster.fornavn.label),
-          onBlur: sporPrivatAvtaleSpørsmålBesvart(t(tekster.fornavn.label)),
+          onBlur: sporPrivatAvtaleSpørsmålBesvart(
+            "barn-fornavn",
+            t(tekster.fornavn.label),
+          ),
         })}
         error={barnField.field("fornavn").error()}
         htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
@@ -59,7 +62,10 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
       <TextField
         {...barnField.field("etternavn").getInputProps({
           label: t(tekster.etternavn.label),
-          onBlur: sporPrivatAvtaleSpørsmålBesvart(t(tekster.etternavn.label)),
+          onBlur: sporPrivatAvtaleSpørsmålBesvart(
+            "barn-etternavn",
+            t(tekster.etternavn.label),
+          ),
         })}
         error={barnField.field("etternavn").error()}
         htmlSize={NAVN_TEXT_FIELD_HTML_SIZE}
@@ -69,7 +75,10 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
       <FødselsnummerTextField
         label={t(tekster.ident.label)}
         {...barnField.field("ident").getControlProps()}
-        onBlur={sporPrivatAvtaleSpørsmålBesvart(t(tekster.ident.label))}
+        onBlur={sporPrivatAvtaleSpørsmålBesvart(
+          "barn-ident",
+          t(tekster.ident.label),
+        )}
         error={barnField.field("ident").error()}
         htmlSize={13}
         inputMode="numeric"
@@ -87,6 +96,7 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
               value={bidragstype}
               key={bidragstype}
               onChange={sporPrivatAvtaleSpørsmålBesvart(
+                "barn-bidragstype",
                 t(tekster.bidragstype.label),
               )}
             >
@@ -100,7 +110,10 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
         {...barnField.field("sum").getControlProps()}
         error={barnField.field("sum").error()}
         label={t(tekster.beløp.label)}
-        onBlur={sporPrivatAvtaleSpørsmålBesvart(t(tekster.beløp.label))}
+        onBlur={sporPrivatAvtaleSpørsmålBesvart(
+          "barn-barnebidrag-beløp",
+          t(tekster.beløp.label),
+        )}
         htmlSize={8}
         autoComplete="off"
       />
@@ -111,7 +124,10 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
           label={t(tekster.gjelderFra.label)}
           description={t(tekster.gjelderFra.beskrivelse)}
           error={barnField.error("fraDato")}
-          onBlur={sporPrivatAvtaleSpørsmålBesvart(t(tekster.gjelderFra.label))}
+          onBlur={sporPrivatAvtaleSpørsmålBesvart(
+            "barn-gjelder-fra",
+            t(tekster.gjelderFra.label),
+          )}
         />
       </DatePicker>
 

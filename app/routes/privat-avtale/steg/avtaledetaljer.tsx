@@ -55,6 +55,7 @@ export default function AvtaledetaljerSteg() {
               value={alternativ}
               key={alternativ}
               onChange={sporPrivatAvtaleSpørsmålBesvart(
+                "er-ny-avtale",
                 t(tekster.nyAvtale.label),
               )}
             >
@@ -76,6 +77,7 @@ export default function AvtaledetaljerSteg() {
                 value={alternativ}
                 key={alternativ}
                 onChange={sporPrivatAvtaleSpørsmålBesvart(
+                  "oppgjørsform-idag",
                   t(teksterAvtaledetaljer.oppgjørsformIdag.label),
                 )}
               >
@@ -96,6 +98,7 @@ export default function AvtaledetaljerSteg() {
             value={alternativ}
             key={alternativ}
             onChange={sporPrivatAvtaleSpørsmålBesvart(
+              "med-innkreving",
               t(tekster.medInnkreving.label),
             )}
           >

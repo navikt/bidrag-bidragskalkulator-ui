@@ -49,6 +49,7 @@ export default function AndreBestemmelserSteg() {
               value={alternativ}
               key={alternativ}
               onChange={sporPrivatAvtaleSpørsmålBesvart(
+                "har-andre-bestemmelser",
                 t(tekster.erAndreBestemmelser.label),
               )}
             >
@@ -62,6 +63,10 @@ export default function AndreBestemmelserSteg() {
         <Textarea
           {...form.field("andreBestemmelser").getInputProps({
             label: t(tekster.andreBestemmelser.label),
+            onBlur: sporPrivatAvtaleSpørsmålBesvart(
+              "andre-bestemmelser-beskrivelse",
+              t(tekster.andreBestemmelser.label),
+            ),
           })}
           error={form.field("andreBestemmelser").error()}
         />

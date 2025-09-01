@@ -50,6 +50,7 @@ export default function VedleggStep() {
               value={alternativ}
               key={alternativ}
               onChange={sporPrivatAvtaleSpørsmålBesvart(
+                "har-vedlegg",
                 t(tekster.harVedlegg.label),
               )}
             >

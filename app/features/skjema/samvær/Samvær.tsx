@@ -36,7 +36,7 @@ export function Samvær({ barnIndex }: SamværProps) {
       sporHendelse({
         hendelsetype: "skjema spørsmål besvart",
         skjemaId: "barnebidragskalkulator-under-18",
-        spørsmålId: barnField.getControlProps("samvær").name,
+        spørsmålId: "barn-samvær",
         spørsmål: t(tekster.samvær.label),
       });
     }
@@ -58,7 +58,10 @@ export function Samvær({ barnIndex }: SamværProps) {
             <Radio
               value={bosted}
               key={bosted}
-              onChange={sporKalkulatorSpørsmålBesvart(t(tekster.bosted.label))}
+              onChange={sporKalkulatorSpørsmålBesvart(
+                "barn-fast-bosted",
+                t(tekster.bosted.label),
+              )}
             >
               {t(tekster.bosted.valg[bosted])}
             </Radio>

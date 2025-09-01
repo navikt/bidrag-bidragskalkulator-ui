@@ -20,7 +20,10 @@ export const Inntektsopplysninger = () => {
           {...form.field("deg.inntekt").getControlProps()}
           label={t(tekster.dinInntekt.label)}
           error={form.field("deg.inntekt").error()}
-          onBlur={sporKalkulatorSpørsmålBesvart(t(tekster.dinInntekt.label))}
+          onBlur={sporKalkulatorSpørsmålBesvart(
+            "deg-inntekt",
+            t(tekster.dinInntekt.label),
+          )}
           htmlSize={18}
         />
         <ReadMore
@@ -46,6 +49,7 @@ export const Inntektsopplysninger = () => {
           label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
           error={form.field("medforelder.inntekt").error()}
           onBlur={sporKalkulatorSpørsmålBesvart(
+            "medforelder-inntekt",
             t(tekster.hvaErInntektenTilDenAndreForelderen),
           )}
           htmlSize={18}

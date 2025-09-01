@@ -49,7 +49,10 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
       <TextField
         {...barnField.field("alder").getInputProps({
           label: t(tekster.alder.label),
-          onBlur: sporKalkulatorSpørsmålBesvart(t(tekster.alder.label)),
+          onBlur: sporKalkulatorSpørsmålBesvart(
+            "barn-alder",
+            t(tekster.alder.label),
+          ),
         })}
         error={barnField.field("alder").error()}
         htmlSize={8}
@@ -97,6 +100,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
           {...barnField.field("barnetilsynsutgift").getControlProps()}
           label={t(tekster.barnetilsynsutgift.label)}
           onBlur={sporKalkulatorSpørsmålBesvart(
+            "barn-barnepass",
             t(tekster.barnetilsynsutgift.label),
           )}
           description={t(tekster.barnetilsynsutgift.description)}

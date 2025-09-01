@@ -1,4 +1,5 @@
 import type z from "zod";
+import type { KalkulatorSpørsmålId } from "~/types/analyse";
 import { sporHendelse } from "~/utils/analytics";
 import type { Samværsklasse } from "./beregning/schema";
 import type { FastBostedSchema, ManueltSkjema } from "./schema";
@@ -175,7 +176,7 @@ export function kalkulerBidragstype(
 }
 
 export const sporKalkulatorSpørsmålBesvart =
-  (spørsmål: string) =>
+  (spørsmålId: KalkulatorSpørsmålId, spørsmål: string) =>
   (
     event:
       | React.FocusEvent<HTMLInputElement>
@@ -186,7 +187,7 @@ export const sporKalkulatorSpørsmålBesvart =
       sporHendelse({
         hendelsetype: "skjema spørsmål besvart",
         skjemaId: "barnebidragskalkulator-under-18",
-        spørsmålId: event.target.name,
+        spørsmålId,
         spørsmål,
       });
     }
