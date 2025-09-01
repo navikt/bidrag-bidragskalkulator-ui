@@ -1,4 +1,5 @@
 import { BodyLong, GuidePanel, Link } from "@navikt/ds-react";
+import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 export function IntroPanel() {
@@ -12,6 +13,13 @@ export function IntroPanel() {
     </GuidePanel>
   );
 }
+
+const sporGåTilGammelKalkulatorKlikket = () => {
+  sporHendelse({
+    hendelsetype: "gå til gammel kalkulator klikket fra ny kalkulator",
+    kilde: "intropanel",
+  });
+};
 
 const tekster = definerTekster({
   innhold1: {
@@ -29,7 +37,10 @@ const tekster = definerTekster({
       <>
         Hvis den som skal betale barnebidrag, også betaler barnebidrag for andre
         barn, må du bruke{" "}
-        <Link href="https://tjenester.nav.no/bidragskalkulator/innledning">
+        <Link
+          href="https://tjenester.nav.no/bidragskalkulator/innledning"
+          onClick={sporGåTilGammelKalkulatorKlikket}
+        >
           den gamle kalkulatoren
         </Link>
         .
@@ -39,7 +50,10 @@ const tekster = definerTekster({
       <>
         If the person required to pay child support is already paying child
         support for other children, you must use{" "}
-        <Link href="https://tjenester.nav.no/bidragskalkulator/innledning">
+        <Link
+          href="https://tjenester.nav.no/bidragskalkulator/innledning"
+          onClick={sporGåTilGammelKalkulatorKlikket}
+        >
           the old calculator
         </Link>
         .
@@ -49,7 +63,10 @@ const tekster = definerTekster({
       <>
         Dersom den som skal betale barnebidrag, allereie betalar barnebidrag for
         andre barn, må du bruke{" "}
-        <Link href="https://tjenester.nav.no/bidragskalkulator/innledning">
+        <Link
+          href="https://tjenester.nav.no/bidragskalkulator/innledning"
+          onClick={sporGåTilGammelKalkulatorKlikket}
+        >
           den gamle kalkulatoren
         </Link>
         .
