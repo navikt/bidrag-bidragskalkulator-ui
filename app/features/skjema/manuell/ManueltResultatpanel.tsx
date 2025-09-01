@@ -189,6 +189,13 @@ export const ManueltResultatpanel = ({
   );
 };
 
+const sporSøkOmFastsettingAvBarnebidragKlikket = () => {
+  sporHendelse({
+    hendelsetype: "søk om fastsetting av barnebidrag klikket",
+    skjemaId: "barnebidragskalkulator-under-18",
+  });
+};
+
 const tekster = definerTekster({
   noeGikkFeil: {
     nb: "Noe gikk feil under beregningen",
@@ -234,7 +241,11 @@ const tekster = definerTekster({
       <>
         Hvis dere ikke blir enige, kan dere søke Nav om hjelp til å fastsette
         barnebidraget. Dette gjør dere ved å søke om{" "}
-        <Link href="https://www.nav.no/fyllut/nav540005" target="_blank">
+        <Link
+          href="https://www.nav.no/fyllut/nav540005"
+          target="_blank"
+          onClick={sporSøkOmFastsettingAvBarnebidragKlikket}
+        >
           fastsetting av barnebidrag
         </Link>
         . Vær oppmerksom på at det koster{" "}
@@ -249,6 +260,7 @@ const tekster = definerTekster({
         <Link
           href="https://www.nav.no/fyllut/nav540005?lang=en"
           target="_blank"
+          onClick={sporSøkOmFastsettingAvBarnebidragKlikket}
         >
           determination of child support
         </Link>
@@ -260,7 +272,11 @@ const tekster = definerTekster({
       <>
         Om de ikkje blir einige, kan de søkje Nav om hjelp til å fastsetje
         forstringstilskotet. Det gjer de ved å søkje om{" "}
-        <Link href="https://www.nav.no/fyllut/nav540005" target="_blank">
+        <Link
+          href="https://www.nav.no/fyllut/nav540005"
+          target="_blank"
+          onClick={sporSøkOmFastsettingAvBarnebidragKlikket}
+        >
           fastsetjing av fostringstilskot
         </Link>
         . Ver merksam på at det kostar{" "}

@@ -109,6 +109,11 @@ type GåTilKalkulatorKlikket = {
   kalkulatorversjon: "ny" | "gammel";
 };
 
+type SøkOmFastsettingAvBarnebidragKlikket = {
+  hendelsetype: "søk om fastsetting av barnebidrag klikket";
+  skjemaId: SkjemaIdKalkulator;
+};
+
 export type Sporingshendelse =
   | SkjemaValideringFeilet
   | SkjemaInnsendingFeilet
@@ -118,4 +123,5 @@ export type Sporingshendelse =
   | BarnFjernet
   | SkjemaSpørsmålBesvart
   | GåTilKalkulatorKlikket
+  | SøkOmFastsettingAvBarnebidragKlikket
   | LagPrivatAvtaleKlikket;
