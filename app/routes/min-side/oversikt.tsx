@@ -3,7 +3,7 @@ import { type LoaderFunctionArgs, type MetaArgs } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
 import { hentBidragsdokumenterFraApi } from "~/features/oversikt/api.server";
 import { MineDokumenter } from "~/features/oversikt/MineDokumenter";
-import { hentManuellPersoninformasjon } from "~/features/skjema/personinformasjon/api.server";
+import { hentManuellPersoninformasjon } from "~/features/skjema/grunnlagsdata/api.server";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 import { erResponse } from "~/utils/respons";
 

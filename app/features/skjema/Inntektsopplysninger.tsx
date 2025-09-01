@@ -4,11 +4,11 @@ import { FormattertTallTextField } from "./FormattertTallTextField";
 
 import { BodyLong, ReadMore } from "@navikt/ds-react";
 import { sporHendelse } from "~/utils/analytics";
-import type { InnloggetSkjema, ManueltSkjema } from "./schema";
+import type { ManueltSkjema } from "./schema";
 import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
 export const Inntektsopplysninger = () => {
-  const form = useFormContext<ManueltSkjema | InnloggetSkjema>();
+  const form = useFormContext<ManueltSkjema>();
   const { t } = useOversettelse();
 
   return (

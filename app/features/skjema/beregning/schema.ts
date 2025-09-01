@@ -16,19 +16,6 @@ export type Samværsklasse =
   | "SAMVÆRSKLASSE_4"
   | "DELT_BOSTED";
 
-export type Bidragsutregningsgrunnlag = {
-  barn: {
-    ident: string;
-    samværsklasse: Samværsklasse;
-    bidragstype: Bidragstype;
-    barnetilsynsutgift: number;
-  }[];
-  inntektForelder1: number;
-  inntektForelder2: number;
-  dittBoforhold: Boforhold | null; // Boforhold for den påloggede personen. Må være satt hvis bidragstype for minst ett barn er PLIKTIG
-  medforelderBoforhold: Boforhold | null; // Boforhold for den andre forelderen. Må være satt hvis bidragstype for minst ett barn er MOTTAKER
-};
-
 export type ManueltBidragsutregningsgrunnlag = {
   barn: {
     alder: number;
@@ -41,18 +28,6 @@ export type ManueltBidragsutregningsgrunnlag = {
   dittBoforhold: Boforhold | null; // Boforhold for den påloggede personen. Må være satt hvis bidragstype for minst ett barn er PLIKTIG
   medforelderBoforhold: Boforhold | null; // Boforhold for den andre forelderen. Må være satt hvis bidragstype for minst ett barn er MOTTAKER
 };
-
-export const BidragsutregningSchema = z.object({
-  resultater: z.array(
-    z.object({
-      ident: z.string(),
-      fulltNavn: z.string(),
-      fornavn: z.string(),
-      sum: z.number(),
-      bidragstype: BidragstypeSchema,
-    }),
-  ),
-});
 
 export const BidragsutregningBarnSchema = z.object({
   alder: z.number(),
@@ -70,7 +45,6 @@ export const ManuellBidragsutregningSchema = z.object({
 
 export type Bidragstype = z.infer<typeof BidragstypeSchema>;
 export type BidragsutregningBarn = z.infer<typeof BidragsutregningBarnSchema>;
-export type Bidragsutregning = z.infer<typeof BidragsutregningSchema>;
 export type ManuellBidragsutregning = z.infer<
   typeof ManuellBidragsutregningSchema
 >;
