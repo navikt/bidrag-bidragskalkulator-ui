@@ -1,6 +1,6 @@
 import { type TextFieldProps } from "@navikt/ds-react";
 import { type Ref } from "react";
-import { InternalFormatterbartTextField } from "./InternalFormatterbartTextField";
+import { InternalFormatterbartTextField } from "../../features/skjema/InternalFormatterbartTextField";
 
 export type DSFieldProps = TextFieldProps &
   React.RefAttributes<HTMLInputElement>;

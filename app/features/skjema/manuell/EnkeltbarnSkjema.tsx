@@ -7,7 +7,7 @@ import { useKalkulatorgrunnlagsdata } from "~/routes/kalkulator";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
-import { FormattertTallTextField } from "../FormattertTallTextField";
+import { FormattertTallTextField } from "../../../components/ui/FormattertTallTextField";
 import { Samvær } from "../samvær/Samvær";
 import { MAKS_ALDER_BARNETILSYNSUTGIFT, type ManueltSkjema } from "../schema";
 import {

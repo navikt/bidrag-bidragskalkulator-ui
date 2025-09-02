@@ -1,6 +1,6 @@
 import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { FormattertTallTextField } from "./FormattertTallTextField";
+import { FormattertTallTextField } from "../../components/ui/FormattertTallTextField";
 
 import { BodyLong, ReadMore } from "@navikt/ds-react";
 import { sporHendelse } from "~/utils/analytics";
