@@ -3,9 +3,7 @@ import { type LoaderFunctionArgs, type MetaArgs } from "react-router";
 import { medToken } from "~/features/autentisering/api.server";
 import { hentBidragsdokumenterFraApi } from "~/features/oversikt/api.server";
 import { MineDokumenter } from "~/features/oversikt/MineDokumenter";
-import { hentManuellPersoninformasjon } from "~/features/skjema/grunnlagsdata/api.server";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
-import { erResponse } from "~/utils/respons";
 
 export function meta({ matches }: MetaArgs) {
   const rootData = matches.find((match) => match.pathname === "/")
@@ -25,15 +23,7 @@ export function meta({ matches }: MetaArgs) {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const [bidragsdokumenter, personinformasjon] = await Promise.all([
-    medToken(request, hentBidragsdokumenterFraApi),
-    medToken(request, hentManuellPersoninformasjon),
-  ]);
-
-  if (erResponse(bidragsdokumenter)) return bidragsdokumenter;
-  if (erResponse(personinformasjon)) return personinformasjon;
-
-  return { bidragsdokumenter, personinformasjon };
+  return medToken(request, hentBidragsdokumenterFraApi);
 }
 
 export default function MinOversikt() {
