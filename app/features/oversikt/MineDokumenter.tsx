@@ -17,9 +17,7 @@ export const MineDokumenter: React.FC = () => {
     throw new Error("Kunne ikke hente data for MineDokumenter");
   }
 
-  const {
-    bidragsdokumenter: { journalposter },
-  } = loaderData;
+  const { journalposter } = loaderData;
 
   return (
     <div className="space-y-4">

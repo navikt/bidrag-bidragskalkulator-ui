@@ -1,8 +1,4 @@
 import type { ManuellBidragsutregning } from "~/features/skjema/beregning/schema";
-import type {
-  ManuellPersoninformasjon,
-  Personinformasjon,
-} from "~/features/skjema/grunnlagsdata/schema";
 
 const underholdskostnader = {
   "0": 8313,
@@ -91,31 +87,6 @@ export const kalkulatorGrunnlagsdata = {
 };
 
 /**
- * Default mock data for personinformasjon endepunkt
- */
-export const defaultPersoninformasjon: Personinformasjon = {
-  ...kalkulatorGrunnlagsdata,
-  person: {
-    ident: "12345678901",
-    fulltNavn: "Test Megersen",
-  },
-  inntekt: 500000,
-  barnerelasjoner: [],
-};
-
-/**
- * Default mock data for manuell personinformasjon endepunkt
- */
-export const defaultManuellPersoninformasjon: ManuellPersoninformasjon = {
-  ...kalkulatorGrunnlagsdata,
-  person: {
-    ident: "12345678901",
-    fulltNavn: "Test Megersen",
-  },
-  inntekt: 500000,
-};
-
-/**
  * Default mock data for manual bidragkalkuleringsendpoint
  */
 export const defaultManuellBidragsutregning: ManuellBidragsutregning = {
@@ -128,41 +99,7 @@ export const defaultManuellBidragsutregning: ManuellBidragsutregning = {
   ],
 };
 
-/**
- * Genererer mock personinformasjon med mulighet for å overstyre verdier
- */
-export function genererPersoninformasjon(
-  overrides?: Partial<Personinformasjon>,
-): Personinformasjon {
-  return {
-    ...defaultPersoninformasjon,
-    ...overrides,
-    person: {
-      ...defaultPersoninformasjon.person,
-      ...overrides?.person,
-    },
-    barnerelasjoner:
-      overrides?.barnerelasjoner || defaultPersoninformasjon.barnerelasjoner,
-  };
-}
-
 export const genererKalkulatorGrunnlagsdata = () => kalkulatorGrunnlagsdata;
-
-/**
- * Genererer mock manuell personinformasjon med mulighet for å overstyre verdier
- */
-export function genererManuellPersoninformasjon(
-  overrides?: Partial<ManuellPersoninformasjon>,
-): ManuellPersoninformasjon {
-  return {
-    ...defaultManuellPersoninformasjon,
-    ...overrides,
-    person: {
-      ...defaultManuellPersoninformasjon.person,
-      ...overrides?.person,
-    },
-  };
-}
 
 /**
  * Genererer mock manuell bidragsutregning med mulighet for å overstyre verdier
