@@ -7,13 +7,16 @@ import { useKalkulatorgrunnlagsdata } from "~/routes/kalkulator";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
-import { FormattertTallTextField } from "../../../components/ui/FormattertTallTextField";
-import { Samvær } from "../samvær/Samvær";
-import { MAKS_ALDER_BARNETILSYNSUTGIFT, type ManueltSkjema } from "../schema";
+import { FormattertTallTextField } from "../../components/ui/FormattertTallTextField";
+import { Samvær } from "./samvær/Samvær";
+import {
+  MAKS_ALDER_BARNETILSYNSUTGIFT,
+  type BarnebidragSkjema,
+} from "./schema";
 import {
   sporKalkulatorSpørsmålBesvart,
   tilUnderholdskostnadsgruppeMedLabel,
-} from "../utils";
+} from "./utils";
 
 type Props = {
   barnIndex: number;
@@ -23,7 +26,7 @@ type Props = {
 export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
   const { underholdskostnader } = useKalkulatorgrunnlagsdata();
   const { t } = useOversettelse();
-  const form = useFormContext<ManueltSkjema>();
+  const form = useFormContext<BarnebidragSkjema>();
 
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
 

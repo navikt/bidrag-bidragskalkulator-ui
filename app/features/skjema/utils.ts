@@ -2,7 +2,7 @@ import type z from "zod";
 import type { KalkulatorSpørsmålId } from "~/types/analyse";
 import { sporHendelse } from "~/utils/analytics";
 import type { Samværsklasse } from "./beregning/schema";
-import type { FastBostedSchema, ManueltSkjema } from "./schema";
+import type { BarnebidragSkjema, FastBostedSchema } from "./schema";
 
 export const SAMVÆR_STANDARDVERDI = "15";
 
@@ -78,7 +78,7 @@ export const tilUnderholdskostnadsgruppeMedLabel = (
   });
 };
 
-export const MANUELT_SKJEMA_STANDARDVERDI: ManueltSkjema = {
+export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
   barn: [
     {
       alder: "",

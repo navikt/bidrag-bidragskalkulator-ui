@@ -8,17 +8,17 @@ import { useEffect, useRef, useState } from "react";
 import type { ActionFunctionArgs, MetaArgs } from "react-router";
 import { useActionData, useRouteLoaderData } from "react-router";
 import { BetaNotis } from "~/features/BetaNotis";
-import { hentManuellBidragsutregning } from "~/features/skjema/beregning/api.server";
+import { Barnebidragsskjema } from "~/features/skjema/Barnebidragsskjema";
+import { hentBarnebidragsutregning } from "~/features/skjema/beregning/api.server";
 import { hentKalkulatorgrunnlagsdata } from "~/features/skjema/grunnlagsdata/api.server";
 import { IntroPanel } from "~/features/skjema/IntroPanel";
-import { ManueltBidragsskjema } from "~/features/skjema/manuell/ManueltBidragsskjema";
-import { ManueltResultatpanel } from "~/features/skjema/manuell/ManueltResultatpanel";
+import { Resultatpanel } from "~/features/skjema/Resultatpanel";
 import {
-  type ManueltSkjema,
-  type ManueltSkjemaValidert,
-  lagManueltSkjema,
+  lagBarnebidragSkjema,
+  type BarnebidragSkjema,
+  type BarnebidragSkjemaValidert,
 } from "~/features/skjema/schema";
-import { MANUELT_SKJEMA_STANDARDVERDI } from "~/features/skjema/utils";
+import { BARNEBIDRAG_SKJEMA_STANDARDVERDI } from "~/features/skjema/utils";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
@@ -40,7 +40,7 @@ export function meta({ matches }: MetaArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  return hentManuellBidragsutregning(request);
+  return hentBarnebidragsutregning(request);
 }
 
 export async function loader() {
@@ -55,7 +55,7 @@ export const useKalkulatorgrunnlagsdata = () => {
   return loaderData;
 };
 
-export default function ManuellBarnebidragskalkulator() {
+export default function Barnebidragskalkulator() {
   const actionData = useActionData<typeof action>();
   const resultatRef = useRef<HTMLDivElement>(null);
   const { t } = useOversettelse();
@@ -63,11 +63,11 @@ export default function ManuellBarnebidragskalkulator() {
 
   const { språk } = useOversettelse();
 
-  const form = useForm<ManueltSkjema, ManueltSkjemaValidert>({
-    schema: lagManueltSkjema(språk),
+  const form = useForm<BarnebidragSkjema, BarnebidragSkjemaValidert>({
+    schema: lagBarnebidragSkjema(språk),
     submitSource: "state",
     method: "post",
-    defaultValues: MANUELT_SKJEMA_STANDARDVERDI,
+    defaultValues: BARNEBIDRAG_SKJEMA_STANDARDVERDI,
     onSubmitSuccess: () => {
       resultatRef.current?.focus({ preventScroll: true });
       resultatRef.current?.scrollIntoView({
@@ -127,7 +127,7 @@ export default function ManuellBarnebidragskalkulator() {
           </Heading>
 
           <IntroPanel />
-          <ManueltBidragsskjema form={form} />
+          <Barnebidragsskjema form={form} />
 
           {isValidationErrorResponse(actionData) && (
             <div className="mt-6">
@@ -139,7 +139,7 @@ export default function ManuellBarnebidragskalkulator() {
             </div>
           )}
           {skjemarespons && !erEndretSidenUtregning && (
-            <ManueltResultatpanel data={skjemarespons} ref={resultatRef} />
+            <Resultatpanel data={skjemarespons} ref={resultatRef} />
           )}
         </div>
       </FormProvider>

@@ -7,21 +7,21 @@ import {
   oversett,
   Språk,
 } from "~/utils/i18n";
-import { lagManueltSkjema } from "../schema";
+import { lagBarnebidragSkjema } from "../schema";
 import { kalkulerBidragstype, kalkulerSamværsklasse } from "../utils";
 import {
-  ManuellBidragsutregningSchema,
-  type ManuellBidragsutregning,
-  type ManueltBidragsutregningsgrunnlag,
+  BarnebidragsutregningSchema,
+  type Barnebidragsutregning,
+  type Barnebidragsutregningsgrunnlag,
 } from "./schema";
 
-export const hentManuellBidragsutregningFraApi = async ({
+export const hentBarnebidragsutregningFraApi = async ({
   requestData,
   språk,
 }: {
-  requestData: ManueltBidragsutregningsgrunnlag;
+  requestData: Barnebidragsutregningsgrunnlag;
   språk: Språk;
-}): Promise<ManuellBidragsutregning | { error: string }> => {
+}): Promise<Barnebidragsutregning | { error: string }> => {
   try {
     const response = await fetch(
       `${env.SERVER_URL}/api/v1/beregning/barnebidrag/åpen`,
@@ -41,7 +41,7 @@ export const hentManuellBidragsutregningFraApi = async ({
       };
     }
     const json = await response.json();
-    const parsed = ManuellBidragsutregningSchema.safeParse(json);
+    const parsed = BarnebidragsutregningSchema.safeParse(json);
 
     if (!parsed.success) {
       return {
@@ -73,10 +73,10 @@ const tekster = definerTekster({
   },
 });
 
-export const hentManuellBidragsutregning = async (request: Request) => {
+export const hentBarnebidragsutregning = async (request: Request) => {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
-  const skjema = lagManueltSkjema(språk);
+  const skjema = lagBarnebidragSkjema(språk);
   const parsedFormData = await parseFormData(request, skjema);
 
   if (parsedFormData.error) {
@@ -89,7 +89,7 @@ export const hentManuellBidragsutregning = async (request: Request) => {
   const { inntekt: inntektForelder2 } = skjemaData.medforelder;
   const { dittBoforhold, medforelderBoforhold } = skjemaData;
 
-  const requestData: ManueltBidragsutregningsgrunnlag = {
+  const requestData: Barnebidragsutregningsgrunnlag = {
     inntektForelder1,
     inntektForelder2,
     dittBoforhold,
@@ -111,7 +111,7 @@ export const hentManuellBidragsutregning = async (request: Request) => {
     }),
   };
 
-  return hentManuellBidragsutregningFraApi({
+  return hentBarnebidragsutregningFraApi({
     requestData,
     språk,
   });

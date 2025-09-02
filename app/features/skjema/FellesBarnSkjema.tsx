@@ -4,12 +4,12 @@ import { useField, useFieldArray, useFormContext } from "@rvf/react";
 import React from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import type { ManueltSkjema } from "../schema";
 import { EnkeltbarnSkjema } from "./EnkeltbarnSkjema";
+import type { BarnebidragSkjema } from "./schema";
 
-export const ManuellBarnSkjema = () => {
+export const FellesBarnSkjema = () => {
   const { t } = useOversettelse();
-  const form = useFormContext<ManueltSkjema>();
+  const form = useFormContext<BarnebidragSkjema>();
 
   const barnArray = useFieldArray(form.scope("barn"));
   const sisteBarn = useField(form.scope(`barn[${barnArray.length() - 1}]`));

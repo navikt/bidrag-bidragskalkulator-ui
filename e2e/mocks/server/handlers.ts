@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "http";
 import {
+  genererBidragsutregning,
   genererKalkulatorGrunnlagsdata,
-  genererManuellBidragsutregning as generererManuellBidragsutregning,
 } from "../data";
 import { handlePostRequest, sendJsonRespons } from "./utils";
 
@@ -18,7 +18,7 @@ export function handleKalkulatorGrunnlagsdata(
 }
 
 /**
- * Handler for åpen (manuell) bidragsberegning
+ * Handler for åpen bidragsberegning
  * POST /api/v1/beregning/barnebidrag/åpen
  */
 export function handleÅpenBidragsberegning(
@@ -26,7 +26,7 @@ export function handleÅpenBidragsberegning(
   res: ServerResponse,
 ) {
   handlePostRequest(req, res, () => {
-    const mockData = generererManuellBidragsutregning();
+    const mockData = genererBidragsutregning();
     sendJsonRespons(res, 200, mockData);
   });
 }

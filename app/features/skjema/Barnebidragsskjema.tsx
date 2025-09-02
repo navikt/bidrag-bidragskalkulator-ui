@@ -1,21 +1,21 @@
 import { Button } from "@navikt/ds-react";
 import { type FormApi } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { Boforhold } from "../Boforhold";
-import { Inntektsopplysninger } from "../Inntektsopplysninger";
-import { type ManueltSkjema } from "../schema";
-import { ManuellBarnSkjema } from "./ManuellBarnSkjema";
+import { Boforhold } from "./Boforhold";
+import { FellesBarnSkjema } from "./FellesBarnSkjema";
+import { Inntektsopplysninger } from "./Inntektsopplysninger";
+import { type BarnebidragSkjema } from "./schema";
 
 type Props = {
-  form: FormApi<ManueltSkjema>;
+  form: FormApi<BarnebidragSkjema>;
 };
 
-export function ManueltBidragsskjema({ form }: Props) {
+export function Barnebidragsskjema({ form }: Props) {
   const { t } = useOversettelse();
 
   return (
     <form {...form.getFormProps()} className="flex flex-col gap-4">
-      <ManuellBarnSkjema />
+      <FellesBarnSkjema />
       <Boforhold part="deg" />
       <Boforhold part="medforelder" />
       <Inntektsopplysninger />

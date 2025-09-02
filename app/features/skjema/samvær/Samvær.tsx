@@ -3,7 +3,7 @@ import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { FastBostedSchema, type ManueltSkjema } from "../schema";
+import { FastBostedSchema, type BarnebidragSkjema } from "../schema";
 import {
   kalkulerSamværsklasse,
   SAMVÆR_STANDARDVERDI,
@@ -18,7 +18,7 @@ type SamværProps = {
 
 export function Samvær({ barnIndex }: SamværProps) {
   const { t } = useOversettelse();
-  const form = useFormContext<ManueltSkjema>();
+  const form = useFormContext<BarnebidragSkjema>();
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
   const samvær = barnField.value("samvær") || SAMVÆR_STANDARDVERDI;
   const samværsgradBeskrivelse =

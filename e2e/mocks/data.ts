@@ -1,4 +1,4 @@
-import type { ManuellBidragsutregning } from "~/features/skjema/beregning/schema";
+import type { Barnebidragsutregning } from "~/features/skjema/beregning/schema";
 
 const underholdskostnader = {
   "0": 8313,
@@ -28,6 +28,7 @@ const underholdskostnader = {
   "24": 12288,
   "25": 12288,
 };
+
 const samværsfradrag = [
   {
     alderFra: 0,
@@ -89,7 +90,7 @@ export const kalkulatorGrunnlagsdata = {
 /**
  * Default mock data for manual bidragkalkuleringsendpoint
  */
-export const defaultManuellBidragsutregning: ManuellBidragsutregning = {
+export const defaultBidragsutregning: Barnebidragsutregning = {
   resultater: [
     {
       alder: 8,
@@ -102,15 +103,14 @@ export const defaultManuellBidragsutregning: ManuellBidragsutregning = {
 export const genererKalkulatorGrunnlagsdata = () => kalkulatorGrunnlagsdata;
 
 /**
- * Genererer mock manuell bidragsutregning med mulighet for å overstyre verdier
+ * Genererer mock bidragsutregning med mulighet for å overstyre verdier
  */
-export function genererManuellBidragsutregning(
-  overrides?: Partial<ManuellBidragsutregning>,
-): ManuellBidragsutregning {
+export function genererBidragsutregning(
+  overrides?: Partial<Barnebidragsutregning>,
+): Barnebidragsutregning {
   return {
-    ...defaultManuellBidragsutregning,
+    ...defaultBidragsutregning,
     ...overrides,
-    resultater:
-      overrides?.resultater || defaultManuellBidragsutregning.resultater,
+    resultater: overrides?.resultater || defaultBidragsutregning.resultater,
   };
 }
