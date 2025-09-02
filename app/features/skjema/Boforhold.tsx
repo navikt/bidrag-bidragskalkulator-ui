@@ -4,7 +4,7 @@ import { FormattertTallTextField } from "../../components/ui/FormattertTallTextF
 
 import { Radio, RadioGroup, Stack } from "@navikt/ds-react";
 import { sporHendelse } from "~/utils/analytics";
-import type { ManueltSkjema } from "./schema";
+import type { BarnebidragSkjema } from "./schema";
 import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
 const BOR_MED_ANNEN_VOKSEN_ALTERNATIVER = ["true", "false"] as const;
@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const Boforhold = ({ part }: Props) => {
-  const form = useFormContext<ManueltSkjema>();
+  const form = useFormContext<BarnebidragSkjema>();
   const { t } = useOversettelse();
 
   const skjemagruppe =

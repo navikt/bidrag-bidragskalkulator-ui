@@ -9,15 +9,15 @@ export const FastBostedSchema = z.enum([
   "HOS_MEDFORELDER",
 ]);
 
-export const ManueltBarnSkjemaSchema = z.object({
+const BarnSkjemaSchema = z.object({
   alder: z.string(),
   bosted: z.enum([...FastBostedSchema.options, ""]),
   samvær: z.string(),
   barnetilsynsutgift: z.string(),
 });
 
-export const ManueltSkjemaSchema = z.object({
-  barn: z.array(ManueltBarnSkjemaSchema),
+const BarnebidragSkjemaSchema = z.object({
+  barn: z.array(BarnSkjemaSchema),
   deg: z.object({
     inntekt: z.string(),
   }),
@@ -153,7 +153,7 @@ export const lagForelderSkjema = (språk: Språk) => {
   });
 };
 
-const lagManueltBarnSkjema = (språk: Språk) => {
+const lagBarnSkjema = (språk: Språk) => {
   return z
     .object({
       alder: z
@@ -235,10 +235,10 @@ const lagManueltBarnSkjema = (språk: Språk) => {
     });
 };
 
-export const lagManueltSkjema = (språk: Språk) => {
+export const lagBarnebidragSkjema = (språk: Språk) => {
   return z.object({
     barn: z
-      .array(lagManueltBarnSkjema(språk))
+      .array(lagBarnSkjema(språk))
       .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
       .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
     deg: lagForelderSkjema(språk),
@@ -248,10 +248,9 @@ export const lagManueltSkjema = (språk: Språk) => {
   });
 };
 
-export type ManueltBarnSkjema = z.infer<typeof ManueltBarnSkjemaSchema>;
-export type ManueltSkjema = z.infer<typeof ManueltSkjemaSchema>;
-export type ManueltSkjemaValidert = z.infer<
-  ReturnType<typeof lagManueltSkjema>
+export type BarnebidragSkjema = z.infer<typeof BarnebidragSkjemaSchema>;
+export type BarnebidragSkjemaValidert = z.infer<
+  ReturnType<typeof lagBarnebidragSkjema>
 >;
 
 const tekster = definerTekster({

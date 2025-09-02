@@ -1,6 +1,3 @@
-export {
-  defaultManuellBidragsutregning,
-  genererManuellBidragsutregning as generateManuellBidragsutregning,
-} from "./data";
+export { defaultBidragsutregning, genererBidragsutregning } from "./data";
 
 export { startMockServer, stopMockServer } from "./server";

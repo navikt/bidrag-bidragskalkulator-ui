@@ -18,20 +18,17 @@ import { useFormContext } from "@rvf/react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
-import { type ManuellBidragsutregning } from "../beregning/schema";
-import type { ManueltSkjema } from "../schema";
+import { type Barnebidragsutregning } from "./beregning/schema";
+import type { BarnebidragSkjema } from "./schema";
 
-type ManueltResultatpanelProps = {
-  data: ManuellBidragsutregning | { error: string };
+type Props = {
+  data: Barnebidragsutregning | { error: string };
   ref: React.RefObject<HTMLDivElement | null>;
 };
 
-export const ManueltResultatpanel = ({
-  data,
-  ref,
-}: ManueltResultatpanelProps) => {
+export const Resultatpanel = ({ data, ref }: Props) => {
   const { t } = useOversettelse();
-  const form = useFormContext<ManueltSkjema>();
+  const form = useFormContext<BarnebidragSkjema>();
 
   if ("error" in data) {
     return (
