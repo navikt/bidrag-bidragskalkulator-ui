@@ -17,7 +17,7 @@ type Route = {
 };
 const routes: Route[] = [
   {
-    path: "/api/v1/person/grunnlagsdata",
+    path: "/api/v1/bidragskalkulator/grunnlagsdata",
     method: "GET",
     handler: handleKalkulatorGrunnlagsdata,
     name: "Personinformasjon",
