@@ -3,7 +3,7 @@ import { KalkulatorgrunnlagsdataSchema } from "./schema";
 
 export const hentKalkulatorgrunnlagsdata = async () => {
   const response = await fetch(
-    `${env.SERVER_URL}/api/v1/person/grunnlagsdata`,
+    `${env.SERVER_URL}/api/v1/bidragskalkulator/grunnlagsdata`,
     {
       method: "GET",
     },
