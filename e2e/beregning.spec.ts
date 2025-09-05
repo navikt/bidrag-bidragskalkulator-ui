@@ -51,9 +51,13 @@ test.describe("Beregningstest", () => {
       .getByLabel("Antall barn med delt bosted hos den andre forelderen")
       .fill("0");
 
-    await page.getByLabel("Hva er årsinntekten din?").fill("400000");
     await page
-      .getByLabel("Hva er årsinntekten til den andre forelderen?")
+      .getByLabel("Hva har du hatt i inntekt de siste 12 månedene?")
+      .fill("400000");
+    await page
+      .getByLabel(
+        "Hva har den andre forelderen hatt i inntekt de siste 12 månedene?",
+      )
       .fill("600000");
 
     await sjekkTilgjengelighet(page);

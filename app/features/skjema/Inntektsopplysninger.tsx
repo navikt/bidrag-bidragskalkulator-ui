@@ -41,7 +41,10 @@ export const Inntektsopplysninger = () => {
           <BodyLong spacing>
             {t(tekster.inntektsinformasjon.beskrivelseDel1)}
           </BodyLong>
-          <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel2)}</BodyLong>
+          <BodyLong spacing>
+            {t(tekster.inntektsinformasjon.beskrivelseDel2)}
+          </BodyLong>
+          <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel3)}</BodyLong>
         </ReadMore>
 
         <FormattertTallTextField
@@ -67,31 +70,36 @@ const tekster = definerTekster({
   },
   dinInntekt: {
     label: {
-      nb: "Hva er årsinntekten din?",
-      en: "What is your annual income?",
-      nn: "Kva er årsinntekta di?",
+      nb: "Hva har du hatt i inntekt de siste 12 månedene?",
+      en: "What have you had in income the last 12 months?",
+      nn: "Kva har du hatt i inntekt dei siste 12 månadene?",
     },
   },
   inntektsinformasjon: {
     overskrift: {
-      nb: "Hva som skal tas med i inntekten din",
-      en: "What should be included in your income",
-      nn: "Kva som skal takast med i inntekta di",
+      nb: "Hva som skal tas med i inntektene",
+      en: "What should be included in the income",
+      nn: "Kva som skal takast med i inntektene",
     },
     beskrivelseDel1: {
-      nb: "Inntekten din inkluderer personinntekt og kapitalinntekter over 10\u00A0000 kroner. For bidragsmottakere skal det i tillegg tas med utvidet barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet.",
-      en: "Your income includes personal income and capital income over 10,000 NOK. For support recipients, extended child benefit, extra small child supplement, and cash benefit for the support child.",
-      nn: "Inntekta di inkluderar personinntekt og kapitalinntekter over 10\u00A0000 kroner. For bidragsmottakarar skal det i tillegg takast med utvida barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet.",
+      nb: "Her oppgir du all skattepliktig inntekt de siste 12 månedene. Det er for eksempel lønnsinntekter, feriepenger, overtidsbetaling, utbetalinger fra Nav, renteinntekter, skattepliktige utleieinntekter eller aksjeinntekter.",
+      en: "Here you report all taxable income for the last 12 months. This includes, for example, salary income, holiday pay, overtime pay, payments from Nav, interest income, taxable rental income, or share income.",
+      nn: "Her oppgir du all skattepliktig inntekt dei siste 12 månadene. Det er til dømes lønnsinntekter, feriepengar, overtidsbetaling, utbetalingar frå Nav, renteinntekter, skattepliktige husleigeinntekter eller aksjeinntekter.",
     },
     beskrivelseDel2: {
+      nb: "Utvidet barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal regnes med for den som har barna mest. Dersom dere deler den utvidede barnetrygden, skal begge foreldrene legge det til sin inntekt.",
+      en: "Increased child benefit, extra small child supplement, and cash benefit for the support child should be included for the parent who has the children most of the time. If you share the extended child benefit, both parents should include it in their income.",
+      nn: "Utvida barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal takast med for den som har barna mest. Dersom de deler den utvida barnetrygda, skal begge foreldra leggje det til i inntekta si.",
+    },
+    beskrivelseDel3: {
       nb: "Inntekter som du ikke oppgir i skattemeldingen, skal du ikke ta med her, for eksempel skattefrie husleieinntekter.",
       en: "Income that you do not report in your tax return should not be included here, such as tax-free rental income.",
-      nn: "Inntekter som du ikkje oppgjevast i skattemeldinga, skal du ikkje ta med her, til dømes skattefrie husleigeinntekter.",
+      nn: "Inntekter som du ikkje oppgir i skattemeldinga, skal du ikkje ta med her, til dømes skattefrie husleigeinntekter.",
     },
   },
   hvaErInntektenTilDenAndreForelderen: {
-    nb: "Hva er årsinntekten til den andre forelderen?",
-    en: "What is the other parent's annual income?",
-    nn: "Kva er årsinntekta til den andre forelderen?",
+    nb: "Hva har den andre forelderen hatt i inntekt de siste 12 månedene?",
+    en: "What has the other parent had in income the last 12 months?",
+    nn: "Kva har den andre forelderen hatt i inntekt dei siste 12 månadene?",
   },
 });
