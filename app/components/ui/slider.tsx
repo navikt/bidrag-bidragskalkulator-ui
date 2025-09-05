@@ -36,7 +36,6 @@ function Slider({
   const id = eksternId ?? generertId;
   const labelId = `${id}-label`;
   const descriptionId = `${id}-description`;
-  const liveRegionId = `${id}-live-region`;
   const verdi = value
     ? [Number(value)]
     : defaultValue
@@ -110,11 +109,7 @@ function Slider({
       )}
 
       {valueDescription && (
-        <BodyShort
-          id={liveRegionId}
-          aria-live="polite"
-          className="font-bold mt-1"
-        >
+        <BodyShort aria-live="polite" className="font-bold mt-1">
           {valueDescription}
         </BodyShort>
       )}
