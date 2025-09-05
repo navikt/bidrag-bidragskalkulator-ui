@@ -16,7 +16,7 @@ test.describe("Beregningstest", () => {
       .getByLabel("Hva koster barnepass for barnet per måned?")
       .fill("1000");
 
-    const dinHusstand = page.getByRole("group", { name: "Om deg" });
+    const dinHusstand = page.getByRole("group", { name: "Din bosituasjon" });
     const dinHusstandBorMedAnnenVoksen = page.getByRole("group", {
       name: "Bor du med en annen voksen?",
     });
@@ -33,7 +33,7 @@ test.describe("Beregningstest", () => {
       .fill("0");
 
     const medforelderensHusstand = page.getByRole("group", {
-      name: "Om den andre forelderen",
+      name: "Den andre forelderen sin bosituasjon",
     });
     const medforelderensHusstandBorMedAnnenVoksen = page.getByRole("group", {
       name: "Bor den andre forelderen med en annen voksen?",
