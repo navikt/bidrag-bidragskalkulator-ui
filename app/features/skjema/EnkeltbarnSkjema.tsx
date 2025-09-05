@@ -136,9 +136,9 @@ const tekster = definerTekster({
   },
   alder: {
     label: {
-      nb: `Hvor gammel er barnet?`,
+      nb: `Hvor gammelt er barnet?`,
       en: `How old is the child?`,
-      nn: `Hvor gammal er barnet?`,
+      nn: `Kor gammalt er barnet?`,
     },
     lesMer: {
       tittel: {
