@@ -14,7 +14,7 @@ type Props = {
   part: "deg" | "medforelder";
 };
 
-export const Boforhold = ({ part }: Props) => {
+export const BoforholdEnkeltPart = ({ part }: Props) => {
   const form = useFormContext<BarnebidragSkjema>();
   const { t } = useOversettelse();
 
