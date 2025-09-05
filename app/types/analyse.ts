@@ -70,6 +70,7 @@ export type LesMerUtvidet = {
   id:
     | "kalkulator-personopplysninger"
     | "kalkulator-barnets-alder"
+    | "kalkulator-fast-bosted"
     | "kalkulator-bosted-og-samvær"
     | "kalkulator-ferie-og-samvær"
     | "kalkulator-beregningsdetaljer"
