@@ -33,7 +33,7 @@ const tekster = definerTekster({
   },
   beskrivelse1: {
     nb: "Hvis dere fordeler feriene på samme måte som dere fordeler samværet ellers i året, vil det vanligvis ikke påvirke barnebidraget.",
-    en: "If you distribute the holidays in the same way as you distribute the visitation throughout the year, it will usually not affect child support.",
+    en: "If you distribute the holidays in the same way as you distribute the visitation throughout the year, it will usually not affect the child support amount.",
     nn: "Dersom de fordeler feriane på same måte som dei fordeler samværet elles i året, vil det vanlegvis ikkje påverke barnebidraget.",
   },
   beskrivelse2: {

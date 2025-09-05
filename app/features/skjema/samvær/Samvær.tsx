@@ -137,7 +137,7 @@ const tekster = definerTekster({
   bosted: {
     label: {
       nb: "Hvor skal barnet bo fast?",
-      en: "Where will the child have a permanent address?",
+      en: "Where will the child have a permanent residence?",
       nn: "Kvar skal barnet bu fast?",
     },
     valg: {
@@ -153,21 +153,21 @@ const tekster = definerTekster({
       },
       HOS_MEG: {
         nb: "Barnet bor fast hos meg, og har samvær med den andre forelderen",
-        en: "The child lives with me and has visitation with the other co-parent",
+        en: "The child has permanent residence with me and has visitation with their other parent",
         nn: "Barnet bur fast hos meg, og har samvær med den andre forelderen",
       },
       HOS_MEDFORELDER: {
         nb: "Barnet bor fast hos den andre forelderen, og har samvær med meg",
-        en: "The child lives with the other co-parent and has visitation with me",
+        en: "The child has permanent residence with their other parent and has visitation with me",
         nn: "Barnet bur fast hos den andre forelderen, og har samvær med meg",
       },
     },
   },
   samvær: {
     label: {
-      nb: "Hvor mye vil barnet være sammen med deg?",
-      en: "How much will the child stay with you?",
-      nn: "Kor mykje vil barnet vere saman med deg?",
+      nb: "Hvor mye skal barnet være sammen med deg?",
+      en: "How much time is the child going to spend with you?",
+      nn: "Kor mykje skal barnet vere saman med deg?",
     },
     beskrivelse: {
       nb: "Estimer hvor mange netter barnet vil være hos deg i snitt per måned",
