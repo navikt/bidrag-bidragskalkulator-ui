@@ -1,4 +1,5 @@
 import { BodyLong, Button, Heading, List, ReadMore } from "@navikt/ds-react";
+import { ListItem } from "@navikt/ds-react/List";
 import type { MetaArgs } from "react-router";
 import { Link as ReactRouterLink } from "react-router";
 import { sporHendelse } from "~/utils/analytics";
@@ -37,7 +38,12 @@ const Landingsside = () => {
           {t(tekster.undertittel)}
         </Heading>
         <BodyLong spacing>{t(tekster.beskrivelse1)}</BodyLong>
-        <BodyLong spacing>{t(tekster.beskrivelse2)}</BodyLong>
+
+        <BodyLong>{t(tekster.brukGammelKalkulator.overskrift)}</BodyLong>
+        <List className="mb-7">
+          <ListItem>{t(tekster.brukGammelKalkulator.situasjon1)}</ListItem>
+          <ListItem>{t(tekster.brukGammelKalkulator.situasjon2)}</ListItem>
+        </List>
         <div className="flex flex-col gap-4">
           <Button
             as={ReactRouterLink}
@@ -174,10 +180,22 @@ const tekster = definerTekster({
     en: "We are further developing the child support calculator to make it easier to use. The old calculator is still available, but we hope you will try the new calculator and share your experiences.",
     nn: "Vi vidareutviklar fostringstilskotskalkulatoren for å gjere den enklare å bruke. Den gamle kalkulatoren er framleis tilgjengeleg, men vi håper at du vil prøve den nye kalkulatoren og dele erfaringane dine.",
   },
-  beskrivelse2: {
-    nb: "Hvis den som skal betale barnebidrag, også betaler barnebidrag for andre barn, må du bruke den gamle kalkulatoren. Den gamle kalkulatoren regner ut om den som skal betale barnebidrag for flere barn, har evne til å betale for alle. Den nye kalkulatoren har ikke denne funksjonaliteten ennå.",
-    en: "If the person required to pay child support is already paying child support for other children, you must use the old calculator. The old calculator calculates whether the person required to pay child support for multiple children has the ability to pay for all. The new calculator does not have this functionality yet.",
-    nn: "Dersom den som skal betale barnebidrag, allereie betalar barnebidrag for andre barn, må denne kalkulatoren brukast. Den gamle kalkulatoren reknar ut om den som skal betale barnebidrag for fleire barn, har evne til å betale for alle. Den nye kalkulatoren har ikkje denne funksjonaliteten enno.",
+  brukGammelKalkulator: {
+    overskrift: {
+      nb: "I noen tilfeller bør du likevel bruke den gamle kalkulatoren:",
+      en: "In some cases, you should still use the old calculator:",
+      nn: "I nokre tilfelle bør du likevel bruke den gamle kalkulatoren:",
+    },
+    situasjon1: {
+      nb: "hvis den som skal betale barnebidrag, også betaler barnebidrag for andre barn",
+      en: "if the person who is to pay child support also pays child support for other children",
+      nn: "hvis den som skal betale fostringstilskot, også betaler fostringstilskot for andre barn",
+    },
+    situasjon2: {
+      nb: "hvis du ønsker å sjekke om du bør søke endring på barnebidrag som allerede er bestemt (fastsatt) av Nav",
+      en: "if you want to check whether you should apply for a change in child support that has already been determined by Nav",
+      nn: "dersom du ønsker å sjekke om du bør søkje endring på fostringstilskot som allereie er bestemt (fastsett) av Nav",
+    },
   },
   lenketekstNyKalkulator: {
     nb: "Prøv den nye kalkulatoren",

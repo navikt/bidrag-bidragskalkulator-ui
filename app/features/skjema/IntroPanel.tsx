@@ -1,4 +1,5 @@
-import { BodyLong, GuidePanel, Link } from "@navikt/ds-react";
+import { BodyLong, GuidePanel, Link, List } from "@navikt/ds-react";
+import { ListItem } from "@navikt/ds-react/List";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
@@ -9,7 +10,12 @@ export function IntroPanel() {
     <GuidePanel poster>
       <BodyLong spacing>{t(tekster.innhold1)}</BodyLong>
       <BodyLong spacing>{t(tekster.innhold2)}</BodyLong>
-      <BodyLong>{t(tekster.innhold3)}</BodyLong>
+      <BodyLong>{t(tekster.brukGammelKalkulator.overskrift)}</BodyLong>
+
+      <List>
+        <ListItem>{t(tekster.brukGammelKalkulator.situasjon1)}</ListItem>
+        <ListItem>{t(tekster.brukGammelKalkulator.situasjon2)}</ListItem>
+      </List>
     </GuidePanel>
   );
 }
@@ -32,45 +38,54 @@ const tekster = definerTekster({
     en: "The sum can be used to make an agreement with the other parent. If you have children with multiple parents, you only select the children you have with the parent you want to agree on child support with.",
     nn: "Summen bruker du til å avtale fostringstilskot med den andre forelderen. Dersom du har barn med fleire, velger du berre dei barna du har med den forelderen som du ønsker å avtale fostringstilskot med.",
   },
-  innhold3: {
-    nb: (
-      <>
-        Hvis den som skal betale barnebidrag, også betaler barnebidrag for andre
-        barn, må du bruke{" "}
-        <Link
-          href="https://tjenester.nav.no/bidragskalkulator/innledning"
-          onClick={sporGåTilGammelKalkulatorKlikket}
-        >
-          den gamle kalkulatoren
-        </Link>
-        .
-      </>
-    ),
-    en: (
-      <>
-        If the person required to pay child support is already paying child
-        support for other children, you must use{" "}
-        <Link
-          href="https://tjenester.nav.no/bidragskalkulator/innledning"
-          onClick={sporGåTilGammelKalkulatorKlikket}
-        >
-          the old calculator
-        </Link>
-        .
-      </>
-    ),
-    nn: (
-      <>
-        Dersom den som skal betale barnebidrag, allereie betalar barnebidrag for
-        andre barn, må du bruke{" "}
-        <Link
-          href="https://tjenester.nav.no/bidragskalkulator/innledning"
-          onClick={sporGåTilGammelKalkulatorKlikket}
-        >
-          den gamle kalkulatoren
-        </Link>
-        .
-      </>
-    ),
+  brukGammelKalkulator: {
+    overskrift: {
+      nb: (
+        <>
+          I noen tilfeller bør du bruke{" "}
+          <Link
+            href="https://tjenester.nav.no/bidragskalkulator/innledning"
+            onClick={sporGåTilGammelKalkulatorKlikket}
+          >
+            den gamle kalkulatoren
+          </Link>
+          :
+        </>
+      ),
+      en: (
+        <>
+          In some cases, you should use{" "}
+          <Link
+            href="https://tjenester.nav.no/bidragskalkulator/innledning"
+            onClick={sporGåTilGammelKalkulatorKlikket}
+          >
+            the old calculator
+          </Link>
+          :
+        </>
+      ),
+      nn: (
+        <>
+          I nokre tilfelle bør du bruke{" "}
+          <Link
+            href="https://tjenester.nav.no/bidragskalkulator/innledning"
+            onClick={sporGåTilGammelKalkulatorKlikket}
+          >
+            den gamle kalkulatoren
+          </Link>
+          :
+        </>
+      ),
+    },
+    situasjon1: {
+      nb: "hvis den som skal betale barnebidrag, også betaler barnebidrag for andre barn",
+      en: "if the person who is to pay child support also pays child support for other children",
+      nn: "dersom den som skal betale fostringstilskot, også betaler fostringstilskot for andre barn",
+    },
+    situasjon2: {
+      nb: "hvis du ønsker å sjekke om du bør søke endring på barnebidrag som allerede er bestemt (fastsatt) av Nav",
+      en: "if you want to check whether you should apply for a change in child support that has already been determined (set) by Nav",
+      nn: "dersom du ønskjer å sjekke om du bør søkje endring på fostringstilskot som allereie er bestemt (fastsett) av Nav",
+    },
   },
 });
