@@ -107,9 +107,13 @@ function Slider({
           ))}
         </div>
       )}
+
       {valueDescription && (
-        <BodyShort className="font-bold mt-1">{valueDescription}</BodyShort>
+        <BodyShort aria-live="polite" className="font-bold mt-1">
+          {valueDescription}
+        </BodyShort>
       )}
+
       {error && <ErrorMessage aria-live="assertive">{error}</ErrorMessage>}
     </div>
   );
