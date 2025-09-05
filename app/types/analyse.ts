@@ -74,6 +74,7 @@ export type LesMerUtvidet = {
     | "kalkulator-bosted-og-samvær"
     | "kalkulator-ferie-og-samvær"
     | "kalkulator-beregningsdetaljer"
+    | "kalkulator-bidraget-dekker"
     | "kalkulator-inntekt";
 };
 

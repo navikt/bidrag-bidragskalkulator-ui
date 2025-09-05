@@ -147,7 +147,19 @@ export const Resultatpanel = ({ data, ref }: Props) => {
           </ExpansionCardContent>
         </ExpansionCard>
 
-        <ExpansionCard aria-labelledby="hva-dekkes" size="small">
+        <ExpansionCard
+          aria-labelledby="hva-dekkes"
+          size="small"
+          onToggle={(open) => {
+            if (open) {
+              sporHendelse({
+                hendelsetype: "les mer utvidet",
+                tekst: t(tekster.bidragetSkalDekke.tittel),
+                id: "kalkulator-bidraget-dekker",
+              });
+            }
+          }}
+        >
           <ExpansionCardHeader>
             <ExpansionCardTitle as="h3" size="small" id="hva-dekkes">
               {t(tekster.bidragetSkalDekke.tittel)}
