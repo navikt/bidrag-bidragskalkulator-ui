@@ -1,3 +1,4 @@
+import { FaroErrorBoundary } from "@grafana/faro-react";
 import { Page } from "@navikt/ds-react";
 import { injectDecoratorClientSide } from "@navikt/nav-dekoratoren-moduler";
 import { useEffect } from "react";
@@ -8,6 +9,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
   type HeadersArgs,
   type LoaderFunctionArgs,
 } from "react-router";
@@ -19,6 +21,7 @@ import { InternalServerError } from "./features/feilhåndtering/500";
 import { lagHeaders } from "./features/headers/headers.server";
 import { hentApplikasjonsside } from "./utils/applikasjonssider";
 import { hentSpråkFraCookie } from "./utils/i18n";
+import { getFaro } from "./utils/telemetri";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
@@ -36,6 +39,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       språk,
       umamiWebsiteId: env.UMAMI_WEBSITE_ID,
       applikasjonsside,
+      telemetriUrl: env.TELEMETRY_URL,
     },
     {
       headers,
@@ -48,7 +52,15 @@ export const headers = ({ loaderHeaders }: HeadersArgs) => {
 };
 
 export default function App() {
-  return <Outlet />;
+  const { telemetriUrl } = useLoaderData<typeof loader>();
+  useEffect(() => {
+    getFaro(telemetriUrl);
+  }, [telemetriUrl]);
+  return (
+    <FaroErrorBoundary>
+      <Outlet />
+    </FaroErrorBoundary>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

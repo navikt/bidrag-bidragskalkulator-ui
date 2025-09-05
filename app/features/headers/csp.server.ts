@@ -5,7 +5,7 @@ export function lagCspHeader() {
   return buildCspHeader(
     {
       "script-src-elem": ["'self'", "https://umami.nav.no"],
-      "connect-src": ["'self'", "https://umami.nav.no"],
+      "connect-src": ["'self'", "https://umami.nav.no", env.TELEMETRY_URL],
       "style-src-elem": ["'self'"],
     },
     { env: env.ENVIRONMENT === "local" ? "dev" : env.ENVIRONMENT },
