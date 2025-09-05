@@ -68,6 +68,7 @@ export type LesMerUtvidet = {
    */
   tekst: string;
   id:
+    | "kalkulator-personopplysninger"
     | "kalkulator-barnets-alder"
     | "kalkulator-bosted-og-samvær"
     | "kalkulator-ferie-og-samvær"

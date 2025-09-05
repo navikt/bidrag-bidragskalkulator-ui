@@ -1,4 +1,4 @@
-import { BodyLong, Button, Heading } from "@navikt/ds-react";
+import { BodyLong, Button, Heading, List, ReadMore } from "@navikt/ds-react";
 import type { MetaArgs } from "react-router";
 import { Link as ReactRouterLink } from "react-router";
 import { sporHendelse } from "~/utils/analytics";
@@ -32,40 +32,83 @@ const Landingsside = () => {
 
       <BodyLong spacing>{t(tekster.beskrivelse)}</BodyLong>
 
-      <Heading size="large" level="2" spacing>
-        {t(tekster.undertittel)}
-      </Heading>
-      <BodyLong spacing>{t(tekster.beskrivelse1)}</BodyLong>
-      <BodyLong spacing>{t(tekster.beskrivelse2)}</BodyLong>
-      <div className="flex flex-col gap-4">
-        <Button
-          as={ReactRouterLink}
-          to="/kalkulator"
-          className="self-start"
-          onClick={() => {
-            sporHendelse({
-              hendelsetype: "gå til kalkulator klikket",
-              kalkulatorversjon: "ny",
-            });
+      <section className="mb-7">
+        <Heading size="large" level="2" spacing>
+          {t(tekster.undertittel)}
+        </Heading>
+        <BodyLong spacing>{t(tekster.beskrivelse1)}</BodyLong>
+        <BodyLong spacing>{t(tekster.beskrivelse2)}</BodyLong>
+        <div className="flex flex-col gap-4">
+          <Button
+            as={ReactRouterLink}
+            to="/kalkulator"
+            className="self-start"
+            onClick={() => {
+              sporHendelse({
+                hendelsetype: "gå til kalkulator klikket",
+                kalkulatorversjon: "ny",
+              });
+            }}
+          >
+            {t(tekster.lenketekstNyKalkulator)}
+          </Button>
+          <Button
+            as="a"
+            href="https://tjenester.nav.no/bidragskalkulator/innledning"
+            className="self-start"
+            variant="secondary"
+            onClick={() => {
+              sporHendelse({
+                hendelsetype: "gå til kalkulator klikket",
+                kalkulatorversjon: "gammel",
+              });
+            }}
+          >
+            {t(tekster.lenketekstGammelKalkulator)}
+          </Button>
+        </div>
+      </section>
+
+      <section>
+        <Heading size="medium" level="3" spacing>
+          {t(tekster.personopplysninger.overskrift)}
+        </Heading>
+        <BodyLong spacing>{t(tekster.personopplysninger.beskrivelse)}</BodyLong>
+        <ReadMore
+          header={t(tekster.personopplysninger.lesMer.tittel)}
+          onClick={(open) => {
+            if (open) {
+              sporHendelse({
+                hendelsetype: "les mer utvidet",
+                tekst: t(tekster.personopplysninger.lesMer.tittel),
+                id: "kalkulator-personopplysninger",
+              });
+            }
           }}
         >
-          {t(tekster.lenketekstNyKalkulator)}
-        </Button>
-        <Button
-          as="a"
-          href="https://tjenester.nav.no/bidragskalkulator/innledning"
-          className="self-start"
-          variant="secondary"
-          onClick={() => {
-            sporHendelse({
-              hendelsetype: "gå til kalkulator klikket",
-              kalkulatorversjon: "gammel",
-            });
-          }}
-        >
-          {t(tekster.lenketekstGammelKalkulator)}
-        </Button>
-      </div>
+          {t(tekster.personopplysninger.lesMer.beskrivelse)}
+          <List>
+            <List.Item>
+              {t(tekster.personopplysninger.lesMer.listepunkter.alder)}
+            </List.Item>
+            <List.Item>
+              {t(tekster.personopplysninger.lesMer.listepunkter.bosituasjon)}
+            </List.Item>
+            <List.Item>
+              {t(tekster.personopplysninger.lesMer.listepunkter.samvær)}
+            </List.Item>
+            <List.Item>
+              {t(
+                tekster.personopplysninger.lesMer.listepunkter
+                  .andreVoksneOgBarn,
+              )}
+            </List.Item>
+            <List.Item>
+              {t(tekster.personopplysninger.lesMer.listepunkter.inntekt)}
+            </List.Item>
+          </List>
+        </ReadMore>
+      </section>
     </div>
   );
 };
@@ -145,6 +188,57 @@ const tekster = definerTekster({
     nb: "Gå til den gamle kalkulatoren",
     en: "Go to the old calculator",
     nn: "Gå til den gamle kalkulatoren",
+  },
+  personopplysninger: {
+    overskrift: {
+      nb: "Personopplysninger i den nye kalkulatoren",
+      en: "Personal information in the new calculator",
+      nn: "Personopplysningar i den nye kalkulatoren",
+    },
+    beskrivelse: {
+      nb: "I den nye kalkulatoren er det du som må legge inn opplysninger for å finne ut hva barnebidraget kan være. Vi lagrer ingen opplysninger om deg, og det du legger inn av informasjon, kan ikke spores tilbake til deg.",
+      en: "In the new calculator, you must enter information to find out what the child support amount may be. We do not store any information about you, and the information you enter cannot be traced back to you.",
+      nn: "I den nye kalkulatoren er det du som må leggje inn opplysningar for å finne ut kva fostringstilskotet kan vere. Vi lagrar ingen opplysningar om deg, og det du legg inn av informasjon, kan ikkje sporast tilbake til deg.",
+    },
+    lesMer: {
+      tittel: {
+        nb: "Hva vi spør om i den nye kalkulatoren",
+        en: "What we ask for in the new calculator",
+        nn: "Kva vi spør om i den nye kalkulatoren",
+      },
+      beskrivelse: {
+        nb: "For å komme frem til en bidragssum, må du legge inn denne informasjonen:",
+        en: "To arrive at a contribution amount, you must enter this information:",
+        nn: "For å kome fram til eit bidragssum, må du leggje inn denne informasjonen:",
+      },
+      listepunkter: {
+        alder: {
+          nb: "alderen til barnet ditt",
+          en: "the age of your child",
+          nn: "alderen til barnet ditt",
+        },
+        bosituasjon: {
+          nb: "barnets bosituasjon",
+          en: "the child's living situation",
+          nn: "barnets busituasjon",
+        },
+        samvær: {
+          nb: "hvor mye samvær barnet har med dere som foreldre",
+          en: "how much contact the child has with you as parents",
+          nn: "kor mykje samvær barnet har med dykk som foreldre",
+        },
+        andreVoksneOgBarn: {
+          nb: "bosituasjon med andre voksne og barn for deg og den andre forelderen",
+          en: "living situation with other adults and children for you and the other parent",
+          nn: "busituasjon med andre vaksne og barn for deg og den andre forelderen",
+        },
+        inntekt: {
+          nb: "din og den andre forelderens inntekt",
+          en: "your and the other parent's income",
+          nn: "din og den andre forelderen sin inntekt",
+        },
+      },
+    },
   },
 });
 
