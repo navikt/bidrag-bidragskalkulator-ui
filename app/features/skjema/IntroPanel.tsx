@@ -35,7 +35,7 @@ const tekster = definerTekster({
   },
   innhold2: {
     nb: "Summen bruker du til å avtale barnebidrag med den andre forelderen. Hvis du har barn med flere, velger du kun de barna du har med den forelderen som du ønsker å avtale barnebidrag med.",
-    en: "The sum can be used to make an agreement with the other parent. If you have children with multiple parents, you only select the children you have with the parent you want to agree on child support with.",
+    en: "The amount can be used to make an agreement with the other parent. If you have children with multiple parents, you only select the children you have with the parent you want to agree on child support with.",
     nn: "Summen bruker du til å avtale fostringstilskot med den andre forelderen. Dersom du har barn med fleire, velger du berre dei barna du har med den forelderen som du ønsker å avtale fostringstilskot med.",
   },
   brukGammelKalkulator: {
@@ -54,7 +54,7 @@ const tekster = definerTekster({
       ),
       en: (
         <>
-          In some cases, you should use{" "}
+          In some situations, you should still use{" "}
           <Link
             href="https://tjenester.nav.no/bidragskalkulator/innledning"
             onClick={sporGåTilGammelKalkulatorKlikket}
@@ -79,7 +79,7 @@ const tekster = definerTekster({
     },
     situasjon1: {
       nb: "hvis den som skal betale barnebidrag, også betaler barnebidrag for andre barn",
-      en: "if the person who is to pay child support also pays child support for other children",
+      en: "if the parent who is to pay child support also pays child support for other children",
       nn: "dersom den som skal betale fostringstilskot, også betaler fostringstilskot for andre barn",
     },
     situasjon2: {

@@ -183,12 +183,12 @@ const tekster = definerTekster({
   brukGammelKalkulator: {
     overskrift: {
       nb: "I noen tilfeller bør du likevel bruke den gamle kalkulatoren:",
-      en: "In some cases, you should still use the old calculator:",
+      en: "In some situations, you should still use the old calculator:",
       nn: "I nokre tilfelle bør du likevel bruke den gamle kalkulatoren:",
     },
     situasjon1: {
       nb: "hvis den som skal betale barnebidrag, også betaler barnebidrag for andre barn",
-      en: "if the person who is to pay child support also pays child support for other children",
+      en: "if the parent who is to pay child support also pays child support for other children",
       nn: "hvis den som skal betale fostringstilskot, også betaler fostringstilskot for andre barn",
     },
     situasjon2: {
@@ -221,12 +221,12 @@ const tekster = definerTekster({
     lesMer: {
       tittel: {
         nb: "Hva vi spør om i den nye kalkulatoren",
-        en: "What we ask for in the new calculator",
+        en: "What information we ask for in the new calculator",
         nn: "Kva vi spør om i den nye kalkulatoren",
       },
       beskrivelse: {
         nb: "For å komme frem til en bidragssum, må du legge inn denne informasjonen:",
-        en: "To arrive at a contribution amount, you must enter this information:",
+        en: "To arrive at a child support amount, you must enter this information:",
         nn: "For å kome fram til eit bidragssum, må du leggje inn denne informasjonen:",
       },
       listepunkter: {
