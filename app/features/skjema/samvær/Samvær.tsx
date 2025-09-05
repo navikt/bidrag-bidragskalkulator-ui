@@ -9,6 +9,7 @@ import {
   SAMVÆR_STANDARDVERDI,
   sporKalkulatorSpørsmålBesvart,
 } from "../utils";
+import { FastBostedInfo } from "./FastBostedInfo";
 import { SamværOgFerierInfo } from "./SamværOgFerierInfo";
 import { Samværsfradraginfo } from "./Samværsfradraginfo";
 
@@ -117,6 +118,8 @@ export function Samvær({ barnIndex }: SamværProps) {
           valueDescription={samværsgradBeskrivelse}
         />
       )}
+
+      <FastBostedInfo />
 
       <Samværsfradraginfo
         alder={alder ? Number(alder) : undefined}
