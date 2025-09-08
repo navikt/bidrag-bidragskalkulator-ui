@@ -148,7 +148,7 @@ const tekster = definerTekster({
       },
       beskrivelse: {
         nb: "Når vi beregner barnebidraget, er det viktig å vite hvor mye det koster å forsørge et barn (underholdskostnaden). Underholdskostnaden endrer seg med barnets alder, og den hentes fra SIFOs referansebudsjetter, som oppdateres hvert år. Underholdskostanden per måned for barn i ulike aldre er i dag:",
-        nn: "Når vi reknar ut fostringstilskotet, er det viktig å vite kor mykje det kostar å forsørgje eit barn (underhaldskostnaden). Underhaldskostnaden endrar seg med barnet sitt alder, og den blir henta frå SIFOs referansebudsjett, som blir oppdatert kvart år. Underhaldskostnaden per månad for barn i ulike aldrar er i dag:",
+        nn: "Når vi reknar ut fostringstilskotet, er det viktig å vite kor mykje det kostar å forsørge eit barn (underhaldskostnaden). Underhaldskostnaden endrar seg med alderen til barnet, og han blir henta frå referansebudsjettet til SIFO, som blir oppdatert kvart år. Underhaldskostnaden per månad for barn i ulike aldrar er i dag:",
         en: "When we calculate child support, it is important to know how much it costs to support a child (the maintenance cost). The maintenance cost changes with the child's age, and it is taken from SIFO's reference budgets, which are updated every year. The current maintenance cost per month for children in different ages is:",
       },
     },
@@ -162,7 +162,7 @@ const tekster = definerTekster({
     description: {
       nb: "Barnepass inkluderer barnehage (uten penger til kost, bleier og lignende), skolefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma. Kostnader for barnepass kalles også tilsynsutgifter.",
       en: "Childcare includes kindergarten (excluding expenses for food, diapers etc), after-school program (SFO), the Activity School (AKS) or nanny. Childcare costs are also referred to as supervision expenses.",
-      nn: "Barnepass inkluderer barnehage (uten penger til kost, bleier og lignende), skulefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma. Kostnader for barnepass kallast også tilsynsutgifter.",
+      nn: "Barnepass inkluderer barnehage (utan pengar til kost, bleier og liknande), skulefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma. Kostnadar for barnepass blir óg kalla tilsynsutgifter.",
     },
   },
   år: {

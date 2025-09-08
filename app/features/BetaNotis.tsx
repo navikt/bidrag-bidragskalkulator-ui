@@ -46,14 +46,14 @@ const tekster = definerTekster({
     ),
     nn: (
       <>
-        Dette er vår nye kalkulator for utregning av fostringstilskot.{" "}
+        Dette er den nye kalkulatoren vår for å rekne ut fostringstilskot.{" "}
         <Link
           href="https://tjenester.nav.no/bidragskalkulator/innledning?0"
           onClick={sporGåTilGammelKalkulatorKlikket}
         >
           Den gamle kalkulatoren
         </Link>{" "}
-        er framleis mogleg å bruke, dersom du ønskjer det.
+        er framleis mogleg å bruke, dersom du ønsker det.
       </>
     ),
   },

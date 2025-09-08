@@ -142,12 +142,12 @@ const tekster = definerTekster({
     },
     true: {
       nb: "Vi ønsker at bidraget skal betales gjennom Skatteetaten v/Nav Innkreving",
-      nn: "Vi ønskjer at bidraget skal betalast gjennom Skatteetaten v/Nav Innkreving",
+      nn: "Vi ønsker at bidraget skal betalast gjennom Skatteetaten v/Nav Innkreving",
       en: "We want the support to be paid through the Tax Administration via Nav Collection",
     },
     false: {
       nb: "Vi ønsker å gjøre opp bidraget oss i mellom (privat)",
-      nn: "Vi ønskjer å gjere opp bidraget oss imellom (privat)",
+      nn: "Vi ønsker å gjere opp bidraget oss imellom (privat)",
       en: "We want to settle the support between us (private)",
     },
   },

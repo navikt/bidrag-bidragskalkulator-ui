@@ -36,7 +36,7 @@ const tekster = definerTekster({
   innhold2: {
     nb: "Summen bruker du til å avtale barnebidrag med den andre forelderen. Hvis du har barn med flere, velger du kun de barna du har, med den forelderen som du ønsker å avtale barnebidrag med.",
     en: "The amount can be used to make an agreement with the other parent. If you have children with multiple parents, you only select the children you have with the parent you want to agree on child support with.",
-    nn: "Summen bruker du til å avtale fostringstilskot med den andre forelderen. Dersom du har barn med fleire, velger du berre dei barna du har, med den forelderen som du ønsker å avtale fostringstilskot med.",
+    nn: "Summen bruker du til å avtale fostringstilskot med den andre forelderen. Dersom du har barn med fleire, vel du berre dei barna du har, med den forelderen som du ønsker å avtale fostringstilskot med.",
   },
   brukGammelKalkulator: {
     overskrift: {
@@ -85,7 +85,7 @@ const tekster = definerTekster({
     situasjon2: {
       nb: "hvis du ønsker å sjekke om du bør søke endring på barnebidrag som allerede er bestemt (fastsatt) av Nav",
       en: "if you want to check whether you should apply for a change in child support that has already been determined (set) by Nav",
-      nn: "dersom du ønskjer å sjekke om du bør søkje endring på fostringstilskot som allereie er bestemt (fastsett) av Nav",
+      nn: "dersom du ønsker å sjekke om du bør søke endring på fostringstilskot som allereie er bestemt (fastsett) av Nav",
     },
   },
 });

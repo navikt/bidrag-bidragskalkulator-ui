@@ -33,11 +33,11 @@ const tekster = definerTekster({
   beskrivelse1: {
     nb: "Fast bosted betyr der barnet har folkeregistrert adresse. Barn kan bare være folkeregistert på ett sted. Den som barnet er folkeregistret hos, har rett til å alene bestemme over flytting innenlands, barnehage, SFO/AKS og fritidsaktiviteter for barnet.",
     en: "Permanent residence means where the child is registered in the National Registry. A child can only be registered in one place. The person with whom the child is registered has the right to make decisions alone regarding domestic relocation, kindergarten, after-school programs, and leisure activities for the child.",
-    nn: "Fast bustad tyder der barnet har folkeregistrert adresse. Barn kan berre vere folkeregistert på eitt stad. Den som barnet er folkeregistret hjå, har rett til å aleine bestemme over flytting innanlands, barnehage, SFO/AKS og fritidsaktivitetar for barnet.",
+    nn: "Fast bustad betyr der barnet har folkeregistrert adresse. Barn kan berre vere folkeregistert på ein stad. Den som barnet er folkeregistret hos, har rett til å aleine bestemme over flytting innanlands, barnehage, SFO/AKS og fritidsaktivitetar for barnet.",
   },
   beskrivelse2: {
     nb: "Delt fast bosted betyr at dere har laget en juridisk bindende avtale om at begge skal bestemme dette, selv om barnet bare er folkeregistrert hos én av dere.",
     en: "Shared permanent residence means that you have made a legally binding agreement that both of you will make these decisions, even though the child is only registered with one of you.",
-    nn: "Delt fast bustad tyder at de har laga ein juridisk bindande avtale om at begge skal bestemme dette, sjølv om barnet berre er folkeregistrert hjå éin av dykk.",
+    nn: "Delt fast bustad betyr at de har laga ein juridisk bindande avtale om at begge skal bestemme dette, sjølv om barnet berre er folkeregistrert hos éin av dykk.",
   },
 });

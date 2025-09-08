@@ -27,7 +27,7 @@ const tekster = definerTekster({
   innhold2: {
     nb: "Nav blir ikke involvert når dere inngår en privat avtale. Hvis dere ønsker at Skatteetaten skal kreve inn og utbetale allerede avtalt barnebidrag, må dere sende gjeldende private avtale til Nav. Vi tar det så videre med Skatteetaten.",
     en: "Nav will not be involved when you make a private agreement. If you want the Norwegian Tax Administration to collect and pay out the agreed child support, you must send the current private agreement to Nav. We will then forward it to the Norwegian Tax Administration.",
-    nn: "Nav blir ikkje involvert når de inngår ein privat avtale. Dersom de ønskjer at Skatteetaten skal krevje inn og utbetale allereie avtalt fostringstilskot, må de sende gjeldande private avtale til Nav. Vi tek det så vidare med Skatteetaten.",
+    nn: "Nav blir ikkje involvert når de inngår ein privat avtale. Dersom de ønsker at Skatteetaten skal krevje inn og utbetale allereie avtalt fostringstilskot, må de sende gjeldande private avtale til Nav. Vi tek det så vidare med Skatteetaten.",
   },
   lenkeTilKalkulator: {
     nb: "Bruk kalkulatoren for å bestemme barnebidrag",

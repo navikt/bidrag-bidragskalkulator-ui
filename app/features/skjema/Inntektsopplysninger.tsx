@@ -73,19 +73,19 @@ const tekster = definerTekster({
     label: {
       nb: "Hva har du hatt i inntekt de siste 12 månedene?",
       en: "What have you had in income the last 12 months?",
-      nn: "Kva har du hatt i inntekt dei siste 12 månadene?",
+      nn: "Kva har du hatt i inntekt dei siste 12 månadane?",
     },
   },
   inntektsinformasjon: {
     overskrift: {
       nb: "Hva du skal ta med som inntekt",
       en: "What should be included in the income",
-      nn: "Kva som skal takast med i inntektene",
+      nn: "Kva du skal ta med i inntektene",
     },
     beskrivelseDel1: {
       nb: "Her oppgir du all skattepliktig inntekt de siste 12 månedene. Det er for eksempel lønnsinntekter, feriepenger, overtidsbetaling, utbetalinger fra Nav, renteinntekter, skattepliktige utleieinntekter eller aksjeinntekter.",
       en: "Here you report all taxable income for the last 12 months. This includes, for example, salary income, holiday pay, overtime pay, payments from Nav, interest income, taxable rental income, or share income.",
-      nn: "Her oppgir du all skattepliktig inntekt dei siste 12 månadene. Det er til dømes lønnsinntekter, feriepengar, overtidsbetaling, utbetalingar frå Nav, renteinntekter, skattepliktige husleigeinntekter eller aksjeinntekter.",
+      nn: "Her oppgir du all skattepliktig inntekt dei siste 12 månadane. Det er til dømes løn, feriepengar, overtidsbetaling, utbetalingar frå Nav, renteinntekter, skattepliktige husleigeinntekter eller aksjeinntekter.",
     },
     beskrivelseDel2: {
       nb: "Utvidet barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal også regnes med for den av foreldrene som mottar dette. Dersom dere deler den utvidede barnetrygden, skal begge foreldrene legge det til sin inntekt.",
@@ -101,6 +101,6 @@ const tekster = definerTekster({
   hvaErInntektenTilDenAndreForelderen: {
     nb: "Hva har den andre forelderen hatt i inntekt de siste 12 månedene?",
     en: "What has the other parent had in income the last 12 months?",
-    nn: "Kva har den andre forelderen hatt i inntekt dei siste 12 månadene?",
+    nn: "Kva har den andre forelderen hatt i inntekt dei siste 12 månadane?",
   },
 });

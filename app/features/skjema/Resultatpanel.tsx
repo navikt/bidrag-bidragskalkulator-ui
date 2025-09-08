@@ -226,7 +226,7 @@ const tekster = definerTekster({
   nullBidrag: {
     nb: "Det kan være fordi dere har delt nettene med barnet likt mellom dere, og fordi det er liten forskjell mellom inntektene deres.",
     en: "It may be because you have divided the nights with the child equally between you, and because there is a small difference between your incomes.",
-    nn: "Det kan vere fordi dere har delt nettene med barnet likt mellom dere, og fordi det er liten forskjell mellom inntektene deres.",
+    nn: "Det kan vere fordi de har delt nettene med barnet likt mellom dykk, og fordi det er liten forskjell mellom inntektene dykkar.",
   },
   hvordanAvtale: {
     nb: "Den endelige summen på barnebidraget avtaler du med den andre forelderen. Da står dere fritt til å endre avtalen på et senere tidspunkt, om ting som inntekt eller samvær skulle endre seg. Om du vil, kan du opprette en slik avtale her:",
@@ -267,14 +267,14 @@ const tekster = definerTekster({
     ),
     nn: (
       <>
-        Om de ikkje blir einige, kan de søkje Nav om hjelp til å fastsetje
-        forstringstilskotet. Det gjer de ved å søkje om{" "}
+        Om de ikkje blir einige, kan de søke Nav om hjelp til å fastsette
+        forstringstilskotet. Det gjer de ved å søke om{" "}
         <Link
           href="https://www.nav.no/fyllut/nav540005"
           target="_blank"
           onClick={sporSøkOmFastsettingAvBarnebidragKlikket}
         >
-          fastsetjing av fostringstilskot
+          fastsetting av fostringstilskot
         </Link>
         . Ver merksam på at det kostar{" "}
         <span className="whitespace-nowrap">1 314</span> kroner for kvar
@@ -391,7 +391,7 @@ const tekster = definerTekster({
     beskrivelse1: {
       nb: "Når dere inngår en privat avtale om barnebidrag, bestemmer dere selv hva barnebidraget skal dekke. Som et minimum må barnebidraget dekke kostnadene ved å forsørge barnet i hverdagen, også kalt underholdskostnadene.",
       en: "When you enter into a private agreement on child support, you decide for yourselves what the support should cover. As a minimum, the support must cover the costs of caring for the child in everyday life, also known as maintenance costs.",
-      nn: "Når de inngår ein privat avtale om fostringstilskot, bestemmer de sjølve kva fostringstilskotet skal dekke. Som eit minimum må fostringstilskotet dekke kostnadane ved å forsørgje barnet i kvardagen, også kalla underhaldskostnadar.",
+      nn: "Når de inngår ein privat avtale om fostringstilskot, bestemmer de sjølve kva fostringstilskotet skal dekke. Som eit minimum må fostringstilskotet dekke kostnadane ved å forsørge barnet i kvardagen, også kalla underhaldskostnadar.",
     },
     listeIntro: {
       nb: "Dette inkluderer:",
@@ -416,7 +416,7 @@ const tekster = definerTekster({
     beskrivelse2: {
       nb: "Det er underholdskostnadene Nav tar utgangspunkt i når vi fastsetter barnebidraget.",
       en: "It is the maintenance costs that Nav uses as a basis when determining the support.",
-      nn: "Det er underhaldskostnadene Nav tek utgangspunkt i når vi fastset fostringstilskotet.",
+      nn: "Det er underhaldskostnadane Nav tar utgangspunkt i når vi fastset fostringstilskotet.",
     },
     lesMer: {
       nb: "Les mer om hva barnebidraget skal dekke",

@@ -305,7 +305,7 @@ const tekster = definerTekster({
       påkrevd: {
         nb: "Fyll inn kostnader til barnepass",
         en: "Fill in costs for child care",
-        nn: "Fyll inn kostnader til barnepass",
+        nn: "Fyll inn kostnadar til barnepass",
       },
       minimum: {
         nb: "Kostnader til barnepass må være minst 0",
@@ -384,14 +384,14 @@ const tekster = definerTekster({
     husstandsmedlemmer: {
       antallBarnBorFast: {
         påkrevd: {
-          nb: "Fyll inn antall barn ",
-          en: "Fill in the number of children ",
-          nn: "Fyll inn talet på barn ",
+          nb: "Fyll inn antall barn",
+          en: "Fill in the number of children",
+          nn: "Fyll inn antal barn",
         },
         tall: {
           nb: "Antall barn må være et tall",
           en: "Number of children must be a number",
-          nn: "Antall barn må vere eit tal",
+          nn: "Antal barn må vere eit tal",
         },
         minimum: {
           nb: "Fyll inn et positivt antall",
@@ -403,12 +403,12 @@ const tekster = definerTekster({
         påkrevd: {
           nb: "Fyll inn antall barn",
           en: "Fill in the number of children",
-          nn: "Fyll inn talet på barn",
+          nn: "Fyll inn antal barn",
         },
         tall: {
           nb: "Antall barn må være et tall",
           en: "Number of children must be a number",
-          nn: "Antall barn må vere eit tal",
+          nn: "Antal barn må vere eit tal",
         },
         minimum: {
           nb: "Fyll inn et positivt antall",

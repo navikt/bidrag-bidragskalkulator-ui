@@ -142,24 +142,24 @@ const tekster = definerTekster({
     antallBarnBorFast: {
       label: {
         nb: "Antall egne barn under 18 år som bor fast hos deg",
-        nn: "Antal egne barn under 18 år som bur fast hjå deg",
+        nn: "Antal eigne barn under 18 år som bur fast hos deg",
         en: "Number of own children under 18 years living with you",
       },
       beskrivelse: {
         nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
-        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal ikkje teljast med her.",
+        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal du ikkje telje med her.",
         en: "Children you have previously entered in the calculator should not be included here.",
       },
     },
     antallBarnDeltBosted: {
       label: {
         nb: "Antall egne barn under 18 år med delt bosted hos deg",
-        nn: "Antal eigne barn under 18 år med delt bustad hjå deg",
+        nn: "Antal eigne barn under 18 år med delt bustad hos deg",
         en: "Number of own children under 18 years with shared custody living with you",
       },
       beskrivelse: {
         nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
-        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal ikkje teljast med her.",
+        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal du ikkje telje med her.",
         en: "Children you have previously entered in the calculator should not be included here.",
       },
     },
@@ -183,7 +183,7 @@ const tekster = definerTekster({
     borMedAndreBarn: {
       label: {
         nb: "Bor du med andre egne barn enn de som er nevnt over?",
-        nn: "Bur du med andre egne barn enn dei som er nemnt over?",
+        nn: "Bur du med andre eigne barn enn dei som er nemnde over?",
         en: "Do you live with other own children than those mentioned above?",
       },
       true: {
@@ -207,24 +207,24 @@ const tekster = definerTekster({
     antallBarnBorFast: {
       label: {
         nb: "Antall egne barn under 18 år som bor fast hos den andre forelderen",
-        nn: "Antal eigne barn under 18 år som bur fast hjå den andre forelderen",
+        nn: "Antal eigne barn under 18 år som bur fast hos den andre forelderen",
         en: "Number of own children under 18 years living with the other parent",
       },
       beskrivelse: {
         nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
-        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal ikkje teljast med her.",
+        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal du ikkje telje med her.",
         en: "Children you have previously entered in the calculator should not be included here.",
       },
     },
     antallBarnDeltBosted: {
       label: {
         nb: "Antall egne barn under 18 år med delt bosted hos den andre forelderen",
-        nn: "Antal eigne barn under 18 år med delt bustad hjå den andre forelderen",
+        nn: "Antal eigne barn under 18 år med delt bustad hos den andre forelderen",
         en: "Number of own children under 18 years with shared custody living with the other parent",
       },
       beskrivelse: {
         nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
-        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal ikkje teljast med her.",
+        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal du ikkje telje med her.",
         en: "Children you have previously entered in the calculator should not be included here.",
       },
     },
@@ -248,7 +248,7 @@ const tekster = definerTekster({
     borMedAndreBarn: {
       label: {
         nb: "Bor den andre forelderen med andre egne barn enn de som er nevnt over?",
-        nn: "Bur den andre forelderen med andre eigne barn enn dei som er nemnt over?",
+        nn: "Bur den andre forelderen med andre eigne barn enn dei som er nemnde over?",
         en: "Does the other parent live with other own children than those mentioned above?",
       },
       true: {
