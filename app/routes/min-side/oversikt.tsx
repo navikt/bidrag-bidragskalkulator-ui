@@ -1,5 +1,6 @@
 import { Heading } from "@navikt/ds-react";
 import { type LoaderFunctionArgs, type MetaArgs } from "react-router";
+import { env } from "~/config/env.server";
 import { medToken } from "~/features/autentisering/api.server";
 import { hentBidragsdokumenterFraApi } from "~/features/oversikt/api.server";
 import { MineDokumenter } from "~/features/oversikt/MineDokumenter";
@@ -23,6 +24,9 @@ export function meta({ matches }: MetaArgs) {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  if (env.ENVIRONMENT === "prod") {
+    throw new Response("Not found", { status: 404 });
+  }
   return medToken(request, hentBidragsdokumenterFraApi);
 }
 

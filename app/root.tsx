@@ -1,9 +1,10 @@
 import { FaroErrorBoundary } from "@grafana/faro-react";
-import { Page } from "@navikt/ds-react";
+import { BodyShort, Heading, Link, Page } from "@navikt/ds-react";
 import { injectDecoratorClientSide } from "@navikt/nav-dekoratoren-moduler";
 import { useEffect } from "react";
 import {
   data,
+  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
@@ -17,10 +18,11 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { env } from "./config/env.server";
 import { lagDekoratørHtmlFragmenter } from "./features/dektoratøren/htmlFragmenter";
+import { NotFound } from "./features/feilhåndtering/404";
 import { InternalServerError } from "./features/feilhåndtering/500";
 import { lagHeaders } from "./features/headers/headers.server";
 import { hentApplikasjonsside } from "./utils/applikasjonssider";
-import { hentSpråkFraCookie } from "./utils/i18n";
+import { hentSpråkFraCookie, OversettelseProvider, Språk } from "./utils/i18n";
 import { getFaro } from "./utils/telemetri";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -72,7 +74,23 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   let innhold: React.ReactNode;
 
-  if (import.meta.env.DEV && error && error instanceof Error) {
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    innhold = (
+      <OversettelseProvider språk={Språk.NorwegianBokmål}>
+        <NotFound />
+        <div className="pb-16">
+          <Heading level="2" size="large" spacing>
+            Page not found
+          </Heading>
+          <BodyShort spacing>The page you requested cannot be found.</BodyShort>
+          <BodyShort>
+            Go to the <Link href="https://www.nav.no/en">front page</Link>, or
+            use one of the links in the menu.
+          </BodyShort>
+        </div>
+      </OversettelseProvider>
+    );
+  } else if (import.meta.env.DEV && error && error instanceof Error) {
     innhold = <InternalServerError stack={error.stack} />;
   } else {
     innhold = <InternalServerError />;
