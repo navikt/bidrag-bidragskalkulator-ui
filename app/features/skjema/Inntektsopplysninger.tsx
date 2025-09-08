@@ -83,7 +83,7 @@ const tekster = definerTekster({
       nn: "Kva du skal ta med i inntektene",
     },
     beskrivelseDel1: {
-      nb: "Her oppgir du all skattepliktig inntekt de siste 12 månedene. Det er for eksempel lønnsinntekter, feriepenger, overtidsbetaling, utbetalinger fra Nav, renteinntekter, skattepliktige utleieinntekter eller aksjeinntekter.",
+      nb: "Her oppgir du all skattepliktig inntekt de siste 12 månedene. Det er for eksempel lønn, feriepenger, overtidsbetaling, utbetalinger fra Nav, renteinntekter, skattepliktige utleieinntekter eller aksjeinntekter.",
       en: "Here you report all taxable income for the last 12 months. This includes, for example, salary income, holiday pay, overtime pay, payments from Nav, interest income, taxable rental income, or share income.",
       nn: "Her oppgir du all skattepliktig inntekt dei siste 12 månadane. Det er til dømes løn, feriepengar, overtidsbetaling, utbetalingar frå Nav, renteinntekter, skattepliktige husleigeinntekter eller aksjeinntekter.",
     },
