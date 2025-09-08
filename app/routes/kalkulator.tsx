@@ -72,11 +72,14 @@ export default function Barnebidragskalkulator() {
     method: "post",
     defaultValues: BARNEBIDRAG_SKJEMA_STANDARDVERDI,
     onSubmitSuccess: () => {
-      resultatRef.current?.focus({ preventScroll: true });
-      resultatRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
+      if (visResultat) {
+        resultatRef.current?.focus({ preventScroll: true });
+        resultatRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+
       settErEndretSidenUtregning(false);
     },
     onInvalidSubmit: () => {
@@ -88,6 +91,11 @@ export default function Barnebidragskalkulator() {
             ? document.activeElement.name
             : null,
       });
+    },
+    onSubmitFailure: () => {
+      if (erValideringsfeil) {
+        resultatRef.current?.focus();
+      }
     },
   });
 
@@ -101,6 +109,8 @@ export default function Barnebidragskalkulator() {
 
   const skjemarespons =
     !actionData || isValidationErrorResponse(actionData) ? null : actionData;
+  const visResultat = skjemarespons && !erEndretSidenUtregning;
+  const erValideringsfeil = isValidationErrorResponse(actionData);
 
   useEffect(() => {
     if (skjemarespons) {
@@ -121,6 +131,26 @@ export default function Barnebidragskalkulator() {
     }
   }, [skjemarespons]);
 
+  useEffect(() => {
+    if (visResultat) {
+      requestAnimationFrame(() => {
+        resultatRef.current?.focus({ preventScroll: true });
+        resultatRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      });
+    }
+  }, [visResultat]);
+
+  useEffect(() => {
+    if (erValideringsfeil) {
+      requestAnimationFrame(() => {
+        resultatRef.current?.focus();
+      });
+    }
+  }, [erValideringsfeil]);
+
   return (
     <>
       <FormProvider scope={form.scope()}>
@@ -133,7 +163,7 @@ export default function Barnebidragskalkulator() {
           <IntroPanel />
           <Barnebidragsskjema form={form} />
 
-          {isValidationErrorResponse(actionData) && (
+          {erValideringsfeil && (
             <div className="mt-6">
               <Alert variant="error">
                 <BodyLong ref={resultatRef} tabIndex={-1}>
@@ -142,7 +172,7 @@ export default function Barnebidragskalkulator() {
               </Alert>
             </div>
           )}
-          {skjemarespons && !erEndretSidenUtregning && (
+          {visResultat && (
             <Resultatpanel data={skjemarespons} ref={resultatRef} />
           )}
         </div>
