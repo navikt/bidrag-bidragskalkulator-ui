@@ -31,6 +31,7 @@ export default defineConfig({
       UMAMI_WEBSITE_ID: "mock-umami-id",
       INGRESS: "http://localhost:5173",
       SESSION_SECRET: "e2e-secret",
+      TELEMETRY_URL: "http://localhost:5173/api/internal/telemetry",
     },
   },
 });
