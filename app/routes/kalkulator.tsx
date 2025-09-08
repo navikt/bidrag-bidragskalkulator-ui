@@ -72,14 +72,13 @@ export default function Barnebidragskalkulator() {
     method: "post",
     defaultValues: BARNEBIDRAG_SKJEMA_STANDARDVERDI,
     onSubmitSuccess: () => {
-      if (visResultat) {
+      setTimeout(() => {
         resultatRef.current?.focus({ preventScroll: true });
         resultatRef.current?.scrollIntoView({
           behavior: "smooth",
           block: "center",
         });
-      }
-
+      }, 1);
       settErEndretSidenUtregning(false);
     },
     onInvalidSubmit: () => {
@@ -130,26 +129,6 @@ export default function Barnebidragskalkulator() {
       }
     }
   }, [skjemarespons]);
-
-  useEffect(() => {
-    if (visResultat) {
-      requestAnimationFrame(() => {
-        resultatRef.current?.focus({ preventScroll: true });
-        resultatRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      });
-    }
-  }, [visResultat]);
-
-  useEffect(() => {
-    if (erValideringsfeil) {
-      requestAnimationFrame(() => {
-        resultatRef.current?.focus();
-      });
-    }
-  }, [erValideringsfeil]);
 
   return (
     <>
