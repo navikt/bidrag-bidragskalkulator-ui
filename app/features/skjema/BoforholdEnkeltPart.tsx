@@ -143,7 +143,7 @@ const tekster = definerTekster({
       label: {
         nb: "Antall egne barn under 18 år som bor fast hos deg",
         nn: "Antal eigne barn under 18 år som bur fast hos deg",
-        en: "Number of own children under 18 years living with you",
+        en: "Number of children of your own under 18 years with permanent residency living with you",
       },
       beskrivelse: {
         nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
@@ -155,7 +155,7 @@ const tekster = definerTekster({
       label: {
         nb: "Antall egne barn under 18 år med delt bosted hos deg",
         nn: "Antal eigne barn under 18 år med delt bustad hos deg",
-        en: "Number of own children under 18 years with shared custody living with you",
+        en: "Number of children of your own under 18 years with shared permanent residence living with you",
       },
       beskrivelse: {
         nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
@@ -184,7 +184,7 @@ const tekster = definerTekster({
       label: {
         nb: "Bor du med andre egne barn enn de som er nevnt over?",
         nn: "Bur du med andre eigne barn enn dei som er nemnde over?",
-        en: "Do you live with other own children than those mentioned above?",
+        en: "Do you live with other children of your own than those previously mentioned in the calculator?",
       },
       true: {
         nb: "Ja",
@@ -208,7 +208,7 @@ const tekster = definerTekster({
       label: {
         nb: "Antall egne barn under 18 år som bor fast hos den andre forelderen",
         nn: "Antal eigne barn under 18 år som bur fast hos den andre forelderen",
-        en: "Number of own children under 18 years living with the other parent",
+        en: "Number of own children under 18 years, with permanent residence living with the other parent",
       },
       beskrivelse: {
         nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
@@ -220,7 +220,7 @@ const tekster = definerTekster({
       label: {
         nb: "Antall egne barn under 18 år med delt bosted hos den andre forelderen",
         nn: "Antal eigne barn under 18 år med delt bustad hos den andre forelderen",
-        en: "Number of own children under 18 years with shared custody living with the other parent",
+        en: "Number of own children under 18 years, with shared permanent residence living with the other parent",
       },
       beskrivelse: {
         nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
@@ -249,7 +249,7 @@ const tekster = definerTekster({
       label: {
         nb: "Bor den andre forelderen med andre egne barn enn de som er nevnt over?",
         nn: "Bur den andre forelderen med andre eigne barn enn dei som er nemnde over?",
-        en: "Does the other parent live with other own children than those mentioned above?",
+        en: "Does the other parent live with other children of their own, than those previously mentioned in the calculator?",
       },
       true: {
         nb: "Ja",
