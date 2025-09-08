@@ -178,7 +178,7 @@ const tekster = definerTekster({
   beskrivelse1: {
     nb: "Vi videreutvikler bidragskalkulatoren for å gjøre den enklere å bruke. Den gamle kalkulatoren er fortsatt tilgjengelig, men vi håper at du vil prøve den nye kalkulatoren og dele erfaringene dine.",
     en: "We are further developing the child support calculator to make it easier to use. The old calculator is still available, but we hope you will try the new calculator and share your experiences.",
-    nn: "Vi vidareutviklar fostringstilskotskalkulatoren for å gjere den enklare å bruke. Den gamle kalkulatoren er framleis tilgjengeleg, men vi håper at du vil prøve den nye kalkulatoren og dele erfaringane dine.",
+    nn: "Vi vidareutviklar fostringstilskotskalkulatoren for å gjere den enklare å bruke. Den gamle kalkulatoren er framleis tilgjengeleg, men vi håpar at du vil prøve den nye kalkulatoren og dele erfaringane dine.",
   },
   brukGammelKalkulator: {
     overskrift: {
@@ -189,12 +189,12 @@ const tekster = definerTekster({
     situasjon1: {
       nb: "hvis den som skal betale barnebidrag, også betaler barnebidrag for andre barn",
       en: "if the parent who is to pay child support also pays child support for other children",
-      nn: "hvis den som skal betale fostringstilskot, også betaler fostringstilskot for andre barn",
+      nn: "hvis den som skal betale fostringstilskot, også betalar fostringstilskot for andre barn",
     },
     situasjon2: {
       nb: "hvis du ønsker å sjekke om du bør søke endring på barnebidrag som allerede er bestemt (fastsatt) av Nav",
       en: "if you want to check whether you should apply for a change in child support that has already been determined by Nav",
-      nn: "dersom du ønsker å sjekke om du bør søkje endring på fostringstilskot som allereie er bestemt (fastsett) av Nav",
+      nn: "dersom du ønsker å sjekke om du bør søke endring på fostringstilskot som allereie er bestemt (fastsett) av Nav",
     },
   },
   lenketekstNyKalkulator: {
@@ -211,12 +211,12 @@ const tekster = definerTekster({
     overskrift: {
       nb: "Personopplysninger i den nye kalkulatoren",
       en: "Personal information in the new calculator",
-      nn: "Personopplysningar i den nye kalkulatoren",
+      nn: "Personopplysingar i den nye kalkulatoren",
     },
     beskrivelse: {
       nb: "I den nye kalkulatoren er det du som må legge inn opplysninger for å finne ut hva barnebidraget kan være. Vi lagrer ingen opplysninger om deg, og det du legger inn av informasjon, kan ikke spores tilbake til deg.",
       en: "In the new calculator, you must enter information to find out what the child support amount may be. We do not store any information about you, and the information you enter cannot be traced back to you.",
-      nn: "I den nye kalkulatoren er det du som må leggje inn opplysningar for å finne ut kva fostringstilskotet kan vere. Vi lagrar ingen opplysningar om deg, og det du legg inn av informasjon, kan ikkje sporast tilbake til deg.",
+      nn: "I den nye kalkulatoren er det du som må leggje inn opplysingar for å finne ut kva fostringstilskotet kan vere. Vi lagrar ingen opplysingar om deg, og det du legg inn av informasjon, kan ikkje sporast tilbake til deg.",
     },
     lesMer: {
       tittel: {
@@ -227,7 +227,7 @@ const tekster = definerTekster({
       beskrivelse: {
         nb: "For å komme frem til en bidragssum, må du legge inn denne informasjonen:",
         en: "To arrive at a child support amount, you must enter this information:",
-        nn: "For å kome fram til eit bidragssum, må du leggje inn denne informasjonen:",
+        nn: "For å kome fram til ein bidragssum, må du leggje inn denne informasjonen:",
       },
       listepunkter: {
         alder: {
@@ -238,7 +238,7 @@ const tekster = definerTekster({
         bosituasjon: {
           nb: "barnets bosituasjon",
           en: "the child's living situation",
-          nn: "barnets busituasjon",
+          nn: "busituasjonen til barnet",
         },
         samvær: {
           nb: "hvor mye samvær barnet har med dere som foreldre",
@@ -248,12 +248,12 @@ const tekster = definerTekster({
         andreVoksneOgBarn: {
           nb: "bosituasjon med andre voksne og barn for deg og den andre forelderen",
           en: "living situation with other adults and children for you and the other parent",
-          nn: "busituasjon med andre vaksne og barn for deg og den andre forelderen",
+          nn: "om du og den andre forelderen bur med andre vaksne og barn",
         },
         inntekt: {
           nb: "din og den andre forelderens inntekt",
           en: "your and the other parent's income",
-          nn: "din og den andre forelderen sin inntekt",
+          nn: "inntekta til deg og den andre forelderen",
         },
       },
     },

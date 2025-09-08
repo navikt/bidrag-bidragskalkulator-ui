@@ -104,12 +104,12 @@ const tekster = definerTekster({
   beskrivelse: {
     nb: "Når barnet bor fast hos én forelder og har samvær med den andre, kan den andre forelderen få fradrag i barnebidraget. Fradraget er avhengig av hvor gammelt barnet er, og hvor mye tid barnet tilbringer med hver forelder.",
     en: "When the child has a permanent residence with one parent and visitation with the other, the other parent can receive a deduction in child support. The deduction depends on the age of the child and how much time the child spends with each parent.",
-    nn: "Når barnet bur fast hos éin forelder og har samvær med den andre, kan den andre forelderen få fradrag i barnebidraget. Fradraget er avhengig av kor gammalt barnet er, og kor mykje tid barnet tilbringer med kvar forelder.",
+    nn: "Når barnet bur fast hos éin forelder og har samvær med den andre, kan den andre forelderen få fradrag i barnebidraget. Fradraget er avhengig av kor gammalt barnet er, og kor mykje tid barnet er saman med kvar forelder.",
   },
   manglerAlder: {
-    nb: "Fyll ut hvor gammelt barnet er for å se fradraget for samvær.",
+    nb: "Fyll inn alderen på barnet for å se fradraget for samvær.",
     en: "Fill in the child's age to see the deduction for visitation.",
-    nn: "Fyll ut kor gammalt barnet er for å sjå fradraget for samvær.",
+    nn: "Fyll inn kor gammalt barnet er for å sjå fradraget for samvær.",
   },
   fradragslistetittel: (alder) => ({
     nb: `Fradrag per måned for samvær med barn på ${alder} år:`,

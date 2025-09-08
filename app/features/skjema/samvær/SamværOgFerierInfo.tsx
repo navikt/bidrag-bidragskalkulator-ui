@@ -34,12 +34,12 @@ const tekster = definerTekster({
   beskrivelse1: {
     nb: "Hvis dere fordeler feriene på samme måte som dere fordeler samværet ellers i året, vil det vanligvis ikke påvirke barnebidraget.",
     en: "If you distribute the holidays in the same way as you distribute the visitation throughout the year, it will usually not affect the child support amount.",
-    nn: "Dersom de fordeler feriane på same måte som dei fordeler samværet elles i året, vil det vanlegvis ikkje påverke barnebidraget.",
+    nn: "Dersom de fordeler feriane på same måte som de fordeler samværet elles i året, vil det vanlegvis ikkje påverke barnebidraget.",
   },
   beskrivelse2: {
     nb: "Hvis det er stor forskjell mellom hvordan dere fordeler feriene, og hvordan dere fordeler samværet ellers i året, bør dere regne feriedagene med i det totale antallet samværsdager per måned.",
     en: "If there is a big difference between how you distribute the holidays and how you distribute the visitation throughout the year, you should include the holiday days in the total number of visitation days per month.",
-    nn: "Dersom det er stor forskjell mellom korleis de fordeler feriane, og korleis de fordeler samværet elles i året, bør de rekne feriedagane med i det totale antallet samværsdagar per månad.",
+    nn: "Dersom det er stor forskjell mellom korleis de fordeler feriane, og korleis de fordeler samværet elles i året, bør de rekne feriedagane med i det totale antalet samværsdagar per månad.",
   },
   beskrivelse3: {
     nb: "Eksempel: 12 dager samvær i ferien er i gjennomsnitt én ekstra samværsdag per måned.",

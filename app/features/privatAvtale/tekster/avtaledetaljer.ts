@@ -43,17 +43,17 @@ export const teksterAvtaledetaljer = definerTekster({
   medInnkreving: {
     label: {
       nb: "Hvilken oppgjørsform ønskes?",
-      nn: "Kva type oppgjer ønskjer de?",
+      nn: "Kva type oppgjer ønsker de?",
       en: "Which form of settlement do you want?",
     },
     true: {
       nb: "Vi ønsker at bidraget skal betales gjennom Skatteetaten v/Nav Innkreving",
-      nn: "Vi ønskjer at bidraget skal betalast gjennom Skatteetaten v/Nav Innkreving",
+      nn: "Vi ønsker at bidraget skal betalast gjennom Skatteetaten v/Nav Innkreving",
       en: "We want the support to be paid through the Tax Administration/Nav Collection",
     },
     false: {
       nb: "Vi ønsker å gjøre opp bidraget oss i mellom (privat)",
-      nn: "Vi ønskjer å gjere opp bidraget oss imellom (privat)",
+      nn: "Vi ønsker å gjere opp bidraget oss imellom (privat)",
       en: "We want to settle the support between us (private)",
     },
   },

@@ -205,23 +205,23 @@ const tekster = definerTekster({
     deg: {
       fornavn: {
         påkrevd: {
-          nb: "Fyll ut fornavn",
+          nb: "Fyll inn fornavn",
           en: "Fill in first name",
-          nn: "Fyll ut førenamn",
+          nn: "Fyll inn førenamn",
         },
       },
       etternavn: {
         påkrevd: {
-          nb: "Fyll ut etternavn",
+          nb: "Fyll inn etternavn",
           en: "Fill in last name",
-          nn: "Fyll ut etternamn",
+          nn: "Fyll inn etternamn",
         },
       },
       ident: {
         påkrevd: {
-          nb: "Fyll ut fødselsnummer eller D-nummer",
+          nb: "Fyll inn fødselsnummer eller D-nummer",
           en: "Fill in identity number or D number",
-          nn: "Fyll ut fødselsnummer eller D-nummer",
+          nn: "Fyll inn fødselsnummer eller D-nummer",
         },
         ugyldig: {
           nb: "Ugyldig fødselsnummer eller D-nummer",
@@ -233,9 +233,9 @@ const tekster = definerTekster({
     medforelder: {
       ident: {
         påkrevd: {
-          nb: "Fyll ut fødselsnummer eller D-nummer",
+          nb: "Fyll inn fødselsnummer eller D-nummer",
           en: "Fill in identity number or D number",
-          nn: "Fyll ut fødselsnummer eller D-nummer",
+          nn: "Fyll inn fødselsnummer eller D-nummer",
         },
         ugyldig: {
           nb: "Ugyldig fødselsnummer eller D-nummer",
@@ -245,111 +245,111 @@ const tekster = definerTekster({
       },
       fornavn: {
         påkrevd: {
-          nb: "Fyll ut fornavn",
+          nb: "Fyll inn fornavn",
           en: "Fill in first name",
-          nn: "Fyll ut førenamn",
+          nn: "Fyll inn førenamn",
         },
       },
       etternavn: {
         påkrevd: {
-          nb: "Fyll ut etternavn",
+          nb: "Fyll inn etternavn",
           en: "Fill in last name",
-          nn: "Fyll ut etternamn",
+          nn: "Fyll inn etternamn",
         },
       },
     },
     barn: {
       ident: {
-        nb: "Fyll ut fødselsnummer eller D-nummer",
+        nb: "Fyll inn fødselsnummer eller D-nummer",
         en: "Fill in identity number or D number",
-        nn: "Fyll ut fødselsnummer eller D-nummer",
+        nn: "Fyll inn fødselsnummer eller D-nummer",
       },
       fornavn: {
         påkrevd: {
-          nb: "Fyll ut fornavn",
+          nb: "Fyll inn fornavn",
           en: "Fill in first name",
-          nn: "Fyll ut førenamn",
+          nn: "Fyll inn førenamn",
         },
       },
       etternavn: {
         påkrevd: {
-          nb: "Fyll ut etternavn",
+          nb: "Fyll inn etternavn",
           en: "Fill in last name",
-          nn: "Fyll ut etternamn",
+          nn: "Fyll inn etternamn",
         },
       },
       sum: {
         påkrevd: {
-          nb: "Fyll ut barnebidrag per måned",
+          nb: "Fyll inn barnebidrag per måned",
           en: "Fill in child support per month",
-          nn: "Fyll ut fostringstilskot per månad",
+          nn: "Fyll inn fostringstilskot per månad",
         },
         ugyldig: {
-          nb: "Fyll ut et positivt antall",
+          nb: "Fyll inn et positivt antall",
           en: "Fill in a positive number",
-          nn: "Fyll ut eit positivt tal",
+          nn: "Fyll inn eit positivt tal",
         },
       },
       bidragstype: {
         ugyldig: {
-          nb: "Fyll ut bidragstype",
+          nb: "Fyll inn bidragstype",
           en: "Fill in contribution type",
-          nn: "Fyll ut bidragstype",
+          nn: "Fyll inn bidragstype",
         },
       },
       fraDato: {
         påkrevd: {
-          nb: "Fyll ut dato avtalen skal gjelde fra",
+          nb: "Fyll inn dato avtalen skal gjelde fra",
           en: "Fill in the date the agreement should apply from",
-          nn: "Fyll ut dato avtalen skal gjelde frå",
+          nn: "Fyll inn dato avtalen skal gjelde frå",
         },
         ugyldig: {
-          nb: "Fyll ut en gyldig dato",
+          nb: "Fyll inn en gyldig dato",
           en: "Fill in a valid date",
-          nn: "Fyll ut ein gyldig dato",
+          nn: "Fyll inn ein gyldig dato",
         },
       },
     },
     medInnkreving: {
       påkrevd: {
-        nb: "Fyll ut ønsket oppgjørsform",
+        nb: "Fyll inn ønsket oppgjørsform",
         en: "Fill in the type of settlement",
-        nn: "Fyll ut ynskja oppgjerstype",
+        nn: "Fyll inn ynskja oppgjerstype",
       },
     },
     oppgjørsformIdag: {
       påkrevd: {
-        nb: "Fyll ut hvilken oppgjørsform dere har i dag",
+        nb: "Fyll inn hvilken oppgjørsform dere har i dag",
         en: "Fill in which settlement type you have today",
-        nn: "Fyll ut hvilken oppgjerstype de har i dag",
+        nn: "Fyll inn hvilken oppgjerstype de har i dag",
       },
     },
     nyAvtale: {
       påkrevd: {
-        nb: "Fyll ut om dette er en ny avtale",
+        nb: "Fyll inn om dette er en ny avtale",
         en: "Fill in if this is a new agreement",
-        nn: "Fyll ut om dette er ein ny avtale",
+        nn: "Fyll inn om dette er ein ny avtale",
       },
     },
     erAndreBestemmelser: {
       påkrevd: {
-        nb: "Fyll ut om det er andre bestemmelser",
+        nb: "Fyll inn om det er andre bestemmelser",
         en: "Fill in if there are other conditions",
-        nn: "Fyll ut om det er andre bestemmingar",
+        nn: "Fyll inn om det er andre bestemmingar",
       },
     },
     andreBestemmelser: {
       påkrevd: {
-        nb: "Fyll ut andre bestemmelser",
+        nb: "Fyll inn andre bestemmelser",
         en: "Fill in other conditions",
-        nn: "Fyll ut andre bestemmingar",
+        nn: "Fyll inn andre bestemmingar",
       },
     },
     harVedlegg: {
       påkrevd: {
-        nb: "Fyll ut om det er vedlegg",
+        nb: "Fyll inn om det er vedlegg",
         en: "Fill in if there are attachments",
-        nn: "Fyll ut om det er vedlegg",
+        nn: "Fyll inn om det er vedlegg",
       },
     },
   },

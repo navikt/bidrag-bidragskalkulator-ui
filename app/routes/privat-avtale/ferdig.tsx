@@ -67,7 +67,7 @@ const tekster = definerTekster({
   },
   sendTilNav: {
     nb: "Siden dere ønsker at Skatteetaten skal innkreve avtalen, må dere sende en underskrevet kopi til Nav.",
-    nn: "Sidan de ønskjer at Skatteetaten skal krevje inn avtalen, må de sende ein underskriven kopi til Nav.",
+    nn: "Sidan de ønsker at Skatteetaten skal krevje inn avtalen, må de sende ein underskriven kopi til Nav.",
     en: "Since you want the Tax Administration to collect the agreement, you must send a signed copy to NAV.",
   },
   cta: {

@@ -13,6 +13,7 @@ export const Bofohold = () => {
           {t(tekster.beskrivelse)}
         </BodyShort>
         <BoforholdEnkeltPart part="deg" />
+        <hr className="my-4 border-gray-300" />
         <BoforholdEnkeltPart part="medforelder" />
       </fieldset>
     </div>
@@ -23,7 +24,7 @@ const tekster = definerTekster({
   overskrift: {
     nb: "Bosituasjon",
     en: "Living situation",
-    nn: "Bostadssituasjon",
+    nn: "Bustadssituasjon",
   },
   beskrivelse: {
     nb: "Det påvirker barnebidraget hvis forelderen som skal betale bidraget, bor sammen med flere, egne barn, i tillegg til barna du vil regne ut bidrag for i denne kalkulatoren.",

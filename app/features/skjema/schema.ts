@@ -276,9 +276,9 @@ const tekster = definerTekster({
     },
     samvær: {
       påkrevd: {
-        nb: "Fyll ut samværsgrad",
+        nb: "Fyll inn samværsgrad",
         en: "Fill in visitation degree",
-        nn: "Fyll ut samværsgrad",
+        nn: "Fyll inn samværsgrad",
       },
       minimum: {
         nb: "Samværsgrad må være minst 0",
@@ -303,9 +303,9 @@ const tekster = definerTekster({
     },
     barnetilsynsutgift: {
       påkrevd: {
-        nb: "Fyll ut kostnader til barnepass",
+        nb: "Fyll inn kostnader til barnepass",
         en: "Fill in costs for child care",
-        nn: "Fyll ut kostnader til barnepass",
+        nn: "Fyll inn kostnadar til barnepass",
       },
       minimum: {
         nb: "Kostnader til barnepass må være minst 0",
@@ -320,17 +320,17 @@ const tekster = definerTekster({
     },
     bostatus: {
       påkrevd: {
-        nb: "Fyll ut hvor barnet bor",
+        nb: "Fyll inn hvor barnet bor",
         en: "Fill in where the child lives",
-        nn: "Fyll ut kvar barnet bur",
+        nn: "Fyll inn kvar barnet bur",
       },
     },
     barn: {
       alder: {
         påkrevd: {
-          nb: "Fyll ut alder",
+          nb: "Fyll inn alder",
           en: "Fill in age",
-          nn: "Fyll ut alder",
+          nn: "Fyll inn alder",
         },
         minimum: {
           nb: "Barnet må være minst 0 år",
@@ -366,9 +366,9 @@ const tekster = definerTekster({
     },
     inntekt: {
       påkrevd: {
-        nb: "Fyll ut inntekt",
+        nb: "Fyll inn inntekt",
         en: "Fill in income",
-        nn: "Fyll ut inntekt",
+        nn: "Fyll inn inntekt",
       },
       positivt: {
         nb: "Inntekt må være et positivt tall",
@@ -376,44 +376,44 @@ const tekster = definerTekster({
         nn: "Inntekt må vere eit positivt tal",
       },
       heleKroner: {
-        nb: "Fyll ut inntekt i hele kroner",
+        nb: "Fyll inn inntekt i hele kroner",
         en: "Fill in income in whole kroner",
-        nn: "Fyll ut inntekt i heile kroner",
+        nn: "Fyll inn inntekt i heile kroner",
       },
     },
     husstandsmedlemmer: {
       antallBarnBorFast: {
         påkrevd: {
-          nb: "Fyll ut antall barn ",
-          en: "Fill in the number of children ",
-          nn: "Fyll ut talet på barn ",
+          nb: "Fyll inn antall barn",
+          en: "Fill in the number of children",
+          nn: "Fyll inn antal barn",
         },
         tall: {
           nb: "Antall barn må være et tall",
           en: "Number of children must be a number",
-          nn: "Antall barn må vere eit tal",
+          nn: "Antal barn må vere eit tal",
         },
         minimum: {
-          nb: "Fyll ut et positivt antall",
+          nb: "Fyll inn et positivt antall",
           en: "Fill in a positive number",
-          nn: "Fyll ut eit positivt tal",
+          nn: "Fyll inn eit positivt tal",
         },
       },
       antallBarnDeltBosted: {
         påkrevd: {
-          nb: "Fyll ut antall barn",
+          nb: "Fyll inn antall barn",
           en: "Fill in the number of children",
-          nn: "Fyll ut talet på barn",
+          nn: "Fyll inn antal barn",
         },
         tall: {
           nb: "Antall barn må være et tall",
           en: "Number of children must be a number",
-          nn: "Antall barn må vere eit tal",
+          nn: "Antal barn må vere eit tal",
         },
         minimum: {
-          nb: "Fyll ut et positivt antall",
+          nb: "Fyll inn et positivt antall",
           en: "Fill in a positive number",
-          nn: "Fyll ut eit positivt tal",
+          nn: "Fyll inn eit positivt tal",
         },
       },
       borMedAnnenVoksen: {
