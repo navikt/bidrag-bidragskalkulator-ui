@@ -28,10 +28,10 @@ test.describe("Beregningstest", () => {
     await dinHusstandBorMedAndreBarn.getByLabel("Ja").check();
 
     await dinHusstand
-      .getByLabel("Antall egne barn som bor fast hos deg")
+      .getByLabel("Antall egne barn under 18 år som bor fast hos deg")
       .fill("0");
     await dinHusstand
-      .getByLabel("Antall egne barn med delt bosted hos deg")
+      .getByLabel("Antall egne barn under 18 år med delt bosted hos deg")
       .fill("0");
 
     const medforelderensHusstand = page.getByRole("group", {
@@ -47,10 +47,14 @@ test.describe("Beregningstest", () => {
     });
     await medforelderensHusstandBorMedAndreBarn.getByLabel("Ja").check();
     await medforelderensHusstand
-      .getByLabel("Antall egne barn som bor fast hos den andre forelderen")
+      .getByLabel(
+        "Antall egne barn under 18 år som bor fast hos den andre forelderen",
+      )
       .fill("0");
     await medforelderensHusstand
-      .getByLabel("Antall egne barn med delt bosted hos den andre forelderen")
+      .getByLabel(
+        "Antall egne barn under 18 år med delt bosted hos den andre forelderen",
+      )
       .fill("0");
 
     await page

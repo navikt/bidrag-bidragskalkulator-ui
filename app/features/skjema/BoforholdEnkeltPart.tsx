@@ -141,26 +141,26 @@ const tekster = definerTekster({
     },
     antallBarnBorFast: {
       label: {
-        nb: "Antall egne barn som bor fast hos deg",
-        nn: "Antal egne barn som bur fast hjå deg",
-        en: "Number of own children living with you",
+        nb: "Antall egne barn under 18 år som bor fast hos deg",
+        nn: "Antal egne barn under 18 år som bur fast hjå deg",
+        en: "Number of own children under 18 years living with you",
       },
       beskrivelse: {
-        nb: "Oppgi antall egne barn under 18 som bor fast hos deg. Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
-        nn: "Oppgi antall egne barn under 18 som bur fast hjå deg. Barn du har lagt inn tidlegare i kalkulatoren, skal ikkje teljast med her.",
-        en: "Enter the number of own children under 18 who live with you. Children you have previously entered in the calculator should not be included here.",
+        nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
+        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal ikkje teljast med her.",
+        en: "Children you have previously entered in the calculator should not be included here.",
       },
     },
     antallBarnDeltBosted: {
       label: {
-        nb: "Antall egne barn med delt bosted hos deg",
-        nn: "Antal eigne barn med delt bustad hjå deg",
-        en: "Number of own children with shared custody living with you",
+        nb: "Antall egne barn under 18 år med delt bosted hos deg",
+        nn: "Antal eigne barn under 18 år med delt bustad hjå deg",
+        en: "Number of own children under 18 years with shared custody living with you",
       },
       beskrivelse: {
-        nb: "Oppgi antall egne barn under 18 som har delt bosted hos deg. Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
-        nn: "Oppgi antall eigne barn under 18 som har delt bustad hjå deg. Barn du har lagt inn tidlegare i kalkulatoren, skal ikkje teljast med her.",
-        en: "Enter the number of own children under 18 who have shared custody living with you. Children you have previously entered in the calculator should not be included here.",
+        nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
+        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal ikkje teljast med her.",
+        en: "Children you have previously entered in the calculator should not be included here.",
       },
     },
     borMedAnnenVoksen: {
@@ -206,26 +206,26 @@ const tekster = definerTekster({
     },
     antallBarnBorFast: {
       label: {
-        nb: "Antall egne barn som bor fast hos den andre forelderen",
-        nn: "Antal eigne barn som bur fast hjå den andre forelderen",
-        en: "Number of own children living with the other parent",
+        nb: "Antall egne barn under 18 år som bor fast hos den andre forelderen",
+        nn: "Antal eigne barn under 18 år som bur fast hjå den andre forelderen",
+        en: "Number of own children under 18 years living with the other parent",
       },
       beskrivelse: {
-        nb: "Oppgi antall egne barn under 18 som bor fast hos den andre forelderen. Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
-        nn: "Oppgi antall eigne barn under 18 som bur fast hjå den andre forelderen. Barn du har lagt inn tidlegare i kalkulatoren, skal ikkje teljast med her.",
-        en: "Enter the number of own children under 18 who live with the other parent. Children you have previously entered in the calculator should not be included here.",
+        nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
+        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal ikkje teljast med her.",
+        en: "Children you have previously entered in the calculator should not be included here.",
       },
     },
     antallBarnDeltBosted: {
       label: {
-        nb: "Antall egne barn med delt bosted hos den andre forelderen",
-        nn: "Antal eigne barn med delt bustad hjå den andre forelderen",
-        en: "Number of own children with shared custody living with the other parent",
+        nb: "Antall egne barn under 18 år med delt bosted hos den andre forelderen",
+        nn: "Antal eigne barn under 18 år med delt bustad hjå den andre forelderen",
+        en: "Number of own children under 18 years with shared custody living with the other parent",
       },
       beskrivelse: {
-        nb: "Oppgi antall egne barn under 18 som har delt bosted hos den andre forelderen. Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
-        nn: "Oppgi antall eigne barn under 18 som har delt bustad hjå den andre forelderen. Barn du har lagt inn tidlegare i kalkulatoren, skal ikkje teljast med her.",
-        en: "Enter the number of own children under 18 who have shared custody living with the other parent. Children you have previously entered in the calculator should not be included here.",
+        nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
+        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal ikkje teljast med her.",
+        en: "Children you have previously entered in the calculator should not be included here.",
       },
     },
     borMedAnnenVoksen: {
