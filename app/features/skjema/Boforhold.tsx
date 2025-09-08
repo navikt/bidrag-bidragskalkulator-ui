@@ -13,6 +13,7 @@ export const Bofohold = () => {
           {t(tekster.beskrivelse)}
         </BodyShort>
         <BoforholdEnkeltPart part="deg" />
+        <hr className="my-4 border-gray-300" />
         <BoforholdEnkeltPart part="medforelder" />
       </fieldset>
     </div>

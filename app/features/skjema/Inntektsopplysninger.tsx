@@ -26,6 +26,18 @@ export const Inntektsopplysninger = () => {
           )}
           htmlSize={18}
         />
+
+        <FormattertTallTextField
+          {...form.field("medforelder.inntekt").getControlProps()}
+          label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
+          error={form.field("medforelder.inntekt").error()}
+          onBlur={sporKalkulatorSpørsmålBesvart(
+            "medforelder-inntekt",
+            t(tekster.hvaErInntektenTilDenAndreForelderen),
+          )}
+          htmlSize={18}
+        />
+
         <ReadMore
           header={t(tekster.inntektsinformasjon.overskrift)}
           onOpenChange={(open) => {
@@ -46,17 +58,6 @@ export const Inntektsopplysninger = () => {
           </BodyLong>
           <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel3)}</BodyLong>
         </ReadMore>
-
-        <FormattertTallTextField
-          {...form.field("medforelder.inntekt").getControlProps()}
-          label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
-          error={form.field("medforelder.inntekt").error()}
-          onBlur={sporKalkulatorSpørsmålBesvart(
-            "medforelder-inntekt",
-            t(tekster.hvaErInntektenTilDenAndreForelderen),
-          )}
-          htmlSize={18}
-        />
       </fieldset>
     </div>
   );
@@ -77,7 +78,7 @@ const tekster = definerTekster({
   },
   inntektsinformasjon: {
     overskrift: {
-      nb: "Hva som skal tas med i inntektene",
+      nb: "Hva du skal ta med som inntekt",
       en: "What should be included in the income",
       nn: "Kva som skal takast med i inntektene",
     },
@@ -87,7 +88,7 @@ const tekster = definerTekster({
       nn: "Her oppgir du all skattepliktig inntekt dei siste 12 månadene. Det er til dømes lønnsinntekter, feriepengar, overtidsbetaling, utbetalingar frå Nav, renteinntekter, skattepliktige husleigeinntekter eller aksjeinntekter.",
     },
     beskrivelseDel2: {
-      nb: "Utvidet barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal regnes med for den som har barna mest. Dersom dere deler den utvidede barnetrygden, skal begge foreldrene legge det til sin inntekt.",
+      nb: "Utvidet barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal også regnes med for den av foreldrene som mottar dette. Dersom dere deler den utvidede barnetrygden, skal begge foreldrene legge det til sin inntekt.",
       en: "Increased child benefit, extra small child supplement, and cash benefit for the support child should be included for the parent who has the children most of the time. If you share the extended child benefit, both parents should include it in their income.",
       nn: "Utvida barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal takast med for den som har barna mest. Dersom de deler den utvida barnetrygda, skal begge foreldra leggje det til i inntekta si.",
     },

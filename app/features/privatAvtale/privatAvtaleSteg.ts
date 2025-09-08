@@ -104,9 +104,9 @@ export const privatAvtaleTekster = definerTekster({
         nn: "Avtaledetaljar - Barnebidrag privat avtale",
       },
       beskrivelse: {
-        nb: "Fyll ut avtalens detaljer og spesielle vilkår for barnebidragsavtalen.",
+        nb: "Fyll inn avtalens detaljer og spesielle vilkår for barnebidragsavtalen.",
         en: "Fill in the agreement details and special conditions for the child support agreement.",
-        nn: "Fyll ut avtalens detaljar og spesielle vilkår for barnebidragsavtala.",
+        nn: "Fyll inn avtalens detaljar og spesielle vilkår for barnebidragsavtala.",
       },
     },
     overskrift: {
