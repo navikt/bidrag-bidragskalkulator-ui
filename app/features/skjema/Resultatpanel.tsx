@@ -390,7 +390,7 @@ const tekster = definerTekster({
     },
     beskrivelse1: {
       nb: "Når dere inngår en privat avtale om barnebidrag, bestemmer dere selv hva barnebidraget skal dekke. Som et minimum må barnebidraget dekke kostnadene ved å forsørge barnet i hverdagen, også kalt underholdskostnadene.",
-      en: "When you enter into a private agreement on child support, you decide for yourselves what the support should cover. As a minimum, the support must cover the costs of caring for the child in everyday life, also known as maintenance costs.",
+      en: "If you settle on a private agreement on child support between the two of you, you decide for yourselves what the support should cover. As a minimum, the support must cover the costs of caring for the child in everyday life, also known as maintenance costs.",
       nn: "Når de inngår ein privat avtale om fostringstilskot, bestemmer de sjølve kva fostringstilskotet skal dekke. Som eit minimum må fostringstilskotet dekke kostnadane ved å forsørge barnet i kvardagen, også kalla underhaldskostnadar.",
     },
     listeIntro: {
