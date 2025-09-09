@@ -11,6 +11,7 @@ import {
   type LoaderFunctionArgs,
   type MetaArgs,
 } from "react-router";
+import { env } from "~/config/env.server";
 import { RouteConfig } from "~/config/routeConfig";
 import { medToken } from "~/features/autentisering/api.server";
 import { NotFound } from "~/features/feilhåndtering/404";
@@ -36,6 +37,9 @@ export function meta({ matches }: MetaArgs) {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  if (env.ENVIRONMENT === "prod") {
+    throw new Response("Not found", { status: 404 });
+  }
   return medToken(request, hentBidragsdokumenterFraApi);
 }
 
