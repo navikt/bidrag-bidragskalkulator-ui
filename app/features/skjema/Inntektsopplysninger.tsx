@@ -13,6 +13,7 @@ export const Inntektsopplysninger = () => {
 
   return (
     <div className="border p-4 rounded-md">
+      <h2 className="sr-only">{t(tekster.tittel)}</h2>
       <fieldset className="p-0 flex flex-col gap-4">
         <legend className="text-xl mb-5">{t(tekster.tittel)}</legend>
 
