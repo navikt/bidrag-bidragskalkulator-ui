@@ -90,7 +90,7 @@ const tekster = definerTekster({
     beskrivelseDel2: {
       nb: "Utvidet barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal også regnes med for den av foreldrene som mottar dette. Dersom dere deler den utvidede barnetrygden, skal begge foreldrene legge det til sin inntekt.",
       en: "Extended child benefit, infant supplement, and cash for care benefit for the support child should be included for the parent who receives this. If you share the extended child benefit, both parents should include it in their income.",
-      nn: "Utvida barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal takast med for den som har barna mest. Dersom de deler den utvida barnetrygda, skal begge foreldra leggje det til i inntekta si.",
+      nn: "Utvida barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal takast med for den som har barna mest. Dersom de deler den utvida barnetrygda, skal begge foreldra legge ho til i inntekta si.",
     },
     beskrivelseDel3: {
       nb: "Inntekter som du ikke oppgir i skattemeldingen, skal du ikke ta med her, for eksempel skattefrie husleieinntekter.",
