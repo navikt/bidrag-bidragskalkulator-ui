@@ -1,6 +1,14 @@
 import { Heading } from "@navikt/ds-react";
 import { Outlet } from "react-router";
+import { env } from "~/config/env.server";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
+
+export async function loader() {
+  if (env.ENVIRONMENT === "prod") {
+    throw new Response("Not found", { status: 404 });
+  }
+  return {};
+}
 
 export default function PrivatAvtaleLayout() {
   const { t } = useOversettelse();

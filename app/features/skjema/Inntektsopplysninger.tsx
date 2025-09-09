@@ -83,14 +83,14 @@ const tekster = definerTekster({
       nn: "Kva du skal ta med i inntektene",
     },
     beskrivelseDel1: {
-      nb: "Her oppgir du all skattepliktig inntekt de siste 12 månedene. Det er for eksempel lønnsinntekter, feriepenger, overtidsbetaling, utbetalinger fra Nav, renteinntekter, skattepliktige utleieinntekter eller aksjeinntekter.",
-      en: "Here you report all taxable income for the last 12 months. This includes, for example, salary income, holiday pay, overtime pay, payments from Nav, interest income, taxable rental income, or share income.",
+      nb: "Her oppgir du all skattepliktig inntekt de siste 12 månedene. Det er for eksempel lønn, feriepenger, overtidsbetaling, utbetalinger fra Nav, renteinntekter, skattepliktige utleieinntekter eller aksjeinntekter.",
+      en: "Income should include all taxable income for the last 12 months. This includes, for example, salary, holiday pay, overtime pay, payments from Nav, interest income, taxable rental income, or share income.",
       nn: "Her oppgir du all skattepliktig inntekt dei siste 12 månadane. Det er til dømes løn, feriepengar, overtidsbetaling, utbetalingar frå Nav, renteinntekter, skattepliktige husleigeinntekter eller aksjeinntekter.",
     },
     beskrivelseDel2: {
       nb: "Utvidet barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal også regnes med for den av foreldrene som mottar dette. Dersom dere deler den utvidede barnetrygden, skal begge foreldrene legge det til sin inntekt.",
       en: "Extended child benefit, infant supplement, and cash for care benefit for the support child should be included for the parent who receives this. If you share the extended child benefit, both parents should include it in their income.",
-      nn: "Utvida barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal takast med for den som har barna mest. Dersom de deler den utvida barnetrygda, skal begge foreldra leggje det til i inntekta si.",
+      nn: "Utvida barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal takast med for den som har barna mest. Dersom de deler den utvida barnetrygda, skal begge foreldra legge ho til i inntekta si.",
     },
     beskrivelseDel3: {
       nb: "Inntekter som du ikke oppgir i skattemeldingen, skal du ikke ta med her, for eksempel skattefrie husleieinntekter.",

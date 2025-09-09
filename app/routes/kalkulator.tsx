@@ -155,9 +155,9 @@ const tekster = definerTekster({
       nn: "Fostringstilskotskalkulator",
     },
     beskrivelse: {
-      nb: "Barnebidragskalkulatoren hjelper deg å regne ut hvor stort et barnebidrag er.",
-      en: "The child support calculator helps you calculate how much child support you are entitled to.",
-      nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut hvor stort eit fostringstilskot er.",
+      nb: "Barnebidragskalkulatoren hjelper deg å regne ut hva du skal betale eller motta i barnebidrag.",
+      en: "The child support calculator helps you calculate how much you should pay or receive in child support.",
+      nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut kva du skal betale eller motta i fostringstilskot.",
     },
   },
   brødsmuler: {

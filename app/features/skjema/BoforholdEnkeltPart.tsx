@@ -184,7 +184,7 @@ const tekster = definerTekster({
       label: {
         nb: "Bor du med andre egne barn enn de som er nevnt over?",
         nn: "Bur du med andre eigne barn enn dei som er nemnde over?",
-        en: "Do you live with other children of your own than those previously mentioned in the calculator?",
+        en: "Do you live with other children of your own, than those previously mentioned in the calculator?",
       },
       true: {
         nb: "Ja",

@@ -7,6 +7,7 @@ const baseSchema = z.object({
     .describe("ID for umami (sporingsverktøyet vårt)"),
   INGRESS: z.url().describe("Hvilken URL tjenesten kjører på"),
   SESSION_SECRET: z.string().describe("Hemmelighet for sesjonscookie"),
+  TELEMETRY_URL: z.url().describe("URL for telemetri"),
 });
 
 const localEnvSchema = baseSchema.extend({

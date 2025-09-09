@@ -25,6 +25,8 @@ spec:
       value: {{UMAMI_WEBSITE_ID}}
     - name: INGRESS
       value: {{INGRESS}}
+    - name: TELEMETRY_URL
+      value: {{TELEMETRY_URL}}
   envFrom: 
     - secret: bidragskalkulator-secrets
   accessPolicy:
