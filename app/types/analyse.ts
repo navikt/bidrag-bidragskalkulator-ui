@@ -122,6 +122,14 @@ type SøkOmFastsettingAvBarnebidragKlikket = {
   skjemaId: SkjemaIdKalkulator;
 };
 
+export type Seksjon = "BARN" | "BOSITUASJON" | "INNTEKT";
+
+export type SkjemaseksjonFullført = {
+  hendelsetype: "skjemaseksjon fullført";
+  skjemaId: SkjemaId;
+  seksjon: Seksjon;
+};
+
 export type Sporingshendelse =
   | SkjemaValideringFeilet
   | SkjemaInnsendingFeilet
@@ -133,4 +141,5 @@ export type Sporingshendelse =
   | GåTilKalkulatorKlikket
   | SøkOmFastsettingAvBarnebidragKlikket
   | GåTilGammelKalkulatorKlikketFraNyKalkulator
+  | SkjemaseksjonFullført
   | LagPrivatAvtaleKlikket;
