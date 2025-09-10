@@ -9,6 +9,7 @@ test.describe("Beregningstest", () => {
     await sjekkTilgjengelighet(page);
 
     await page.getByLabel("Hvor gammelt er barnet?").fill("4");
+    await page.getByLabel("Hvor gammelt er barnet?").blur();
     await page
       .getByLabel("Vi har avtale om fast bosted hos begge (delt fast bosted)")
       .check();
