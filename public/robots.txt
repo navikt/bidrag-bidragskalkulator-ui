@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /tjenester
 Allow: /tjenester/kalkulator
+Disallow: /
