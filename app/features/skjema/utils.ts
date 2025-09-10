@@ -1,8 +1,18 @@
 import type z from "zod";
 import type { KalkulatorSpørsmålId } from "~/types/analyse";
-import { sporHendelse } from "~/utils/analytics";
+import {
+  sporHendelse,
+  sporSkjemaseksjonFullførtEnGang,
+} from "~/utils/analytics";
+import { Språk } from "~/utils/i18n";
 import type { Samværsklasse } from "./beregning/schema";
-import type { BarnebidragSkjema, FastBostedSchema } from "./schema";
+import {
+  lagBarnSkjema,
+  lagBoforholdSkjema,
+  lagInntektSkjema,
+  type BarnebidragSkjema,
+  type FastBostedSchema,
+} from "./schema";
 
 export const SAMVÆR_STANDARDVERDI = "15";
 
@@ -192,3 +202,48 @@ export const sporKalkulatorSpørsmålBesvart =
       });
     }
   };
+
+const barnSkjemaSchema = lagBarnSkjema(Språk.NorwegianBokmål);
+const boforholdSkjema = lagBoforholdSkjema(Språk.NorwegianBokmål);
+const inntektSchema = lagInntektSkjema(Språk.NorwegianBokmål);
+
+export const sporSkjemaseksjonFullført = (verdier: BarnebidragSkjema) => {
+  const barnParseResult = barnSkjemaSchema.safeParse(verdier.barn?.[0]);
+  const dittBoforholdParseResult = boforholdSkjema.safeParse(
+    verdier.dittBoforhold,
+  );
+  const medforelderBoforholdParseResult = boforholdSkjema.safeParse(
+    verdier.medforelderBoforhold,
+  );
+  const inntektDegParseResult = inntektSchema.safeParse(verdier.deg);
+  const inntektMedforelderParseResult = inntektSchema.safeParse(
+    verdier.medforelder,
+  );
+
+  if (barnParseResult.success) {
+    sporSkjemaseksjonFullførtEnGang({
+      hendelsetype: "skjemaseksjon fullført",
+      skjemaId: "barnebidragskalkulator-under-18",
+      seksjon: "BARN",
+    });
+  }
+
+  if (
+    dittBoforholdParseResult.success &&
+    medforelderBoforholdParseResult.success
+  ) {
+    sporSkjemaseksjonFullførtEnGang({
+      hendelsetype: "skjemaseksjon fullført",
+      skjemaId: "barnebidragskalkulator-under-18",
+      seksjon: "BOSITUASJON",
+    });
+  }
+
+  if (inntektDegParseResult.success && inntektMedforelderParseResult.success) {
+    sporSkjemaseksjonFullførtEnGang({
+      hendelsetype: "skjemaseksjon fullført",
+      skjemaId: "barnebidragskalkulator-under-18",
+      seksjon: "INNTEKT",
+    });
+  }
+};

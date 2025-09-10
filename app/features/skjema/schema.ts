@@ -136,7 +136,7 @@ export const lagBoforholdSkjema = (språk: Språk) => {
     });
 };
 
-export const lagForelderSkjema = (språk: Språk) => {
+export const lagInntektSkjema = (språk: Språk) => {
   return z.object({
     inntekt: z
       .string()
@@ -153,7 +153,7 @@ export const lagForelderSkjema = (språk: Språk) => {
   });
 };
 
-const lagBarnSkjema = (språk: Språk) => {
+export const lagBarnSkjema = (språk: Språk) => {
   return z
     .object({
       alder: z
@@ -241,8 +241,8 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
       .array(lagBarnSkjema(språk))
       .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
       .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
-    deg: lagForelderSkjema(språk),
-    medforelder: lagForelderSkjema(språk),
+    deg: lagInntektSkjema(språk),
+    medforelder: lagInntektSkjema(språk),
     dittBoforhold: lagBoforholdSkjema(språk),
     medforelderBoforhold: lagBoforholdSkjema(språk),
   });

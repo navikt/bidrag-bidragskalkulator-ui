@@ -241,9 +241,9 @@ const tekster = definerTekster({
     nn: "Det kan vere fordi de har delt nettene med barnet likt mellom dykk, og fordi det er liten forskjell mellom inntektene dykkar.",
   },
   hvordanAvtale: {
-    nb: "Den endelige summen på barnebidraget avtaler du med den andre forelderen. Da står dere fritt til å endre avtalen på et senere tidspunkt, om ting som inntekt eller samvær skulle endre seg. Om du vil, kan du opprette en slik avtale her:",
+    nb: "Den endelige summen på barnebidraget avtaler du med den andre forelderen. Da står dere fritt til å endre avtalen på et senere tidspunkt om ting som inntekt eller samvær skulle endre seg. Om du vil, kan du opprette en slik avtale her:",
     en: "The final amount of child support is agreed upon with the other parent. You are free to change the agreement at a later time if things like income or custody change. If you want, you can create such an agreement here:",
-    nn: "Den endelege summen på fostringstilskotet er noko du avtalar med den andre forelderen. Du står fritt til å endre avtalen på eit seinare tidspunkt, viss ting som inntekt eller samvær endrar seg. Om du vil, kan du opprette ein slik avtale her:",
+    nn: "Den endelege summen på fostringstilskotet er noko du avtalar med den andre forelderen. Du står fritt til å endre avtalen på eit seinare tidspunkt viss ting som inntekt eller samvær endrar seg. Om du vil, kan du opprette ein slik avtale her:",
   },
   hvisManIkkeKommerTilEnighet: {
     nb: (

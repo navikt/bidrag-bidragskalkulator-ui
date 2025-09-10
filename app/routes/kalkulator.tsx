@@ -18,7 +18,10 @@ import {
   type BarnebidragSkjema,
   type BarnebidragSkjemaValidert,
 } from "~/features/skjema/schema";
-import { BARNEBIDRAG_SKJEMA_STANDARDVERDI } from "~/features/skjema/utils";
+import {
+  BARNEBIDRAG_SKJEMA_STANDARDVERDI,
+  sporSkjemaseksjonFullført,
+} from "~/features/skjema/utils";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
@@ -89,8 +92,9 @@ export default function Barnebidragskalkulator() {
   });
 
   useEffect(() => {
-    const unsubscribe = form.subscribe.value(() => {
+    const unsubscribe = form.subscribe.value((values) => {
       settErEndretSidenUtregning(true);
+      sporSkjemaseksjonFullført(values);
     });
     return () => unsubscribe();
   }, [form]);
