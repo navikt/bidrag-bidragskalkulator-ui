@@ -80,7 +80,7 @@ test.describe("Beregningstest", () => {
       .getByRole("button", { name: "Vis mer" })
       .all();
 
-    lesMerKnapper.forEach((value) => value.click());
+    lesMerKnapper.forEach((knapp) => knapp.click());
 
     await sjekkTilgjengelighet(page);
   });
