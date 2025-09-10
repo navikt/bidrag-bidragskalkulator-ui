@@ -7,6 +7,7 @@ export const Bofohold = () => {
 
   return (
     <div className="border p-4 rounded-md">
+      <h2 className="sr-only">{t(tekster.overskrift)}</h2>
       <fieldset className="p-0 flex flex-col gap-4">
         <legend className="text-xl mb-2">{t(tekster.overskrift)}</legend>
         <BodyShort size="medium" textColor="subtle">

@@ -54,6 +54,7 @@ export const FellesBarnSkjema = () => {
 
   return (
     <div className="border p-4 rounded-md space-y-4">
+      <h2 className="sr-only">{t(tekster.overskrift)}</h2>
       <fieldset className="p-0">
         <legend className="text-xl mb-5">{t(tekster.overskrift)}</legend>
         {barnArray.map((key, _, index) => {
