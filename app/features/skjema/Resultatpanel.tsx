@@ -253,6 +253,7 @@ const tekster = definerTekster({
         <Link
           href="https://www.nav.no/fyllut/nav540005"
           target="_blank"
+          className="underline hover:no-underline"
           onClick={sporSøkOmFastsettingAvBarnebidragKlikket}
         >
           fastsetting av barnebidrag
@@ -269,6 +270,7 @@ const tekster = definerTekster({
         <Link
           href="https://www.nav.no/fyllut/nav540005?lang=en"
           target="_blank"
+          className="underline hover:no-underline"
           onClick={sporSøkOmFastsettingAvBarnebidragKlikket}
         >
           determination of child support
@@ -284,6 +286,7 @@ const tekster = definerTekster({
         <Link
           href="https://www.nav.no/fyllut/nav540005"
           target="_blank"
+          className="underline hover:no-underline"
           onClick={sporSøkOmFastsettingAvBarnebidragKlikket}
         >
           fastsetting av fostringstilskot
