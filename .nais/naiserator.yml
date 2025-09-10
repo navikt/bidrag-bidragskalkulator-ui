@@ -6,10 +6,14 @@ metadata:
     team: bidrag  
   name: bidrag-bidragskalkulator-v2
   namespace: bidrag
-
+  annotations:
+    nginx.ingress.kubernetes.io/limit-rpm: "25" # 25 requester per minutt per nginx instance
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1" # optional, defaults to 1
+    
 spec:
   ingresses:
     - {{ INGRESS }}
+      
   image: {{ image }}
   port: 3000
   env:
