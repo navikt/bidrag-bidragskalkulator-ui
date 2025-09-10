@@ -1,6 +1,3 @@
-# Midlertidig blokker all indeksering
 User-agent: *
-Disallow: /
-
-# Dette forhindrer alle søkemotorer fra å indeksere nettstedet
-# Fjern eller modifiser når nettstedet er klart for offentlig indeksering
+Allow: /tjenester
+Allow: /tjenester/kalkulator
