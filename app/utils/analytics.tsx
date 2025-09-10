@@ -1,6 +1,8 @@
 import {
   skjemanavnMapping,
+  type Seksjon,
   type SkjemaId,
+  type SkjemaseksjonFullført,
   type Sporingshendelse,
 } from "~/types/analyse";
 
@@ -66,6 +68,21 @@ export function sporHendelseEnGang(event: Sporingshendelse) {
   }
 
   sporingsregister.add(event.hendelsetype);
+
+  return sporHendelse(event);
+}
+
+const skjemaseksjonFullførtRegister: Set<Seksjon> = new Set();
+
+/**
+ * Sporer skjemaseksjon fullført, men maks en gang per seksjon per sidelast.
+ */
+export function sporSkjemaseksjonFullførtEnGang(event: SkjemaseksjonFullført) {
+  if (skjemaseksjonFullførtRegister.has(event.seksjon)) {
+    return;
+  }
+
+  skjemaseksjonFullførtRegister.add(event.seksjon);
 
   return sporHendelse(event);
 }
