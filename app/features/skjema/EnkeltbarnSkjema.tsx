@@ -147,8 +147,8 @@ const tekster = definerTekster({
         nn: "Kvifor vi spør om alder",
       },
       beskrivelse: {
-        nb: "Når vi beregner barnebidraget, er det viktig å vite hvor mye det koster å forsørge et barn (underholdskostnaden). Underholdskostnaden endrer seg med barnets alder, og den hentes fra SIFOs referansebudsjetter, som oppdateres hvert år. Underholdskostnaden per måned for barn i ulike aldre er i dag:",
-        nn: "Når vi reknar ut fostringstilskotet, er det viktig å vite kor mykje det kostar å forsørge eit barn (underhaldskostnaden). Underhaldskostnaden endrar seg med alderen til barnet, og han blir henta frå referansebudsjettet til SIFO, som blir oppdatert kvart år. Underhaldskostnaden per månad for barn i ulike aldrar er i dag:",
+        nb: "Når vi beregner barnebidraget, er det viktig å vite hvor mye det koster å forsørge et barn (underholdskostnaden). Underholdskostnaden endrer seg med barnets alder, og den hentes fra SIFOs referansebudsjetter som oppdateres hvert år. Underholdskostnaden per måned for barn i ulike aldre er i dag:",
+        nn: "Når vi reknar ut fostringstilskotet, er det viktig å vite kor mykje det kostar å forsørge eit barn (underhaldskostnaden). Underhaldskostnaden endrar seg med alderen til barnet, og han blir henta frå referansebudsjettet til SIFO som blir oppdatert kvart år. Underhaldskostnaden per månad for barn i ulike aldrar er i dag:",
         en: "When we calculate child support, it is important to know how much it costs to support a child (the maintenance cost). The maintenance cost changes with the child's age, and it is taken from SIFO's reference budgets, which are updated every year. The current maintenance cost per month for children in different ages is:",
       },
     },
