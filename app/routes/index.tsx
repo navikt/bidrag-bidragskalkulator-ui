@@ -48,6 +48,7 @@ const Landingsside = () => {
           <Button
             as={ReactRouterLink}
             to="/kalkulator"
+            role="link"
             className="self-start"
             onClick={() => {
               sporHendelse({
