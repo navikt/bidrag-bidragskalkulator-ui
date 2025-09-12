@@ -45,7 +45,7 @@ export default function BarnOgBidragSteg() {
     method: "post",
     id: "steg",
     defaultValues: {
-      barn: loaderData?.steg2?.barn ?? [
+      barn: loaderData?.steg3?.barn ?? [
         {
           ident: "",
           fornavn: "",
@@ -150,8 +150,8 @@ const tekster = definerTekster({
   },
 });
 
-const Steg2SessionSchema = z.object({
-  steg2: z
+const Steg3SessionSchema = z.object({
+  steg3: z
     .object({
       barn: z.array(
         z.object({
@@ -173,7 +173,7 @@ const Steg2SessionSchema = z.object({
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return hentSesjonsdata(request, Steg2SessionSchema);
+  return hentSesjonsdata(request, Steg3SessionSchema);
 }
 
 export async function action({ request }: ActionFunctionArgs) {
