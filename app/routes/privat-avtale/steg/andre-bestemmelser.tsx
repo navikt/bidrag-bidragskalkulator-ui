@@ -10,7 +10,7 @@ import {
 import z from "zod";
 import { RouteConfig } from "~/config/routeConfig";
 import { hentSesjonsdata, oppdaterSesjonsdata } from "~/config/session.server";
-import { lagSteg4Schema } from "~/features/privatAvtale/skjemaSchema";
+import { lagSteg5Schema } from "~/features/privatAvtale/skjemaSchema";
 import { sporPrivatAvtaleSpørsmålBesvart } from "~/features/privatAvtale/utils";
 import {
   definerTekster,
@@ -25,13 +25,13 @@ export default function AndreBestemmelserSteg() {
   const loaderData = useLoaderData<typeof loader>();
 
   const form = useForm({
-    schema: lagSteg4Schema(språk),
+    schema: lagSteg5Schema(språk),
     submitSource: "state",
     method: "post",
     id: "steg",
     defaultValues: {
-      erAndreBestemmelser: loaderData?.steg4?.erAndreBestemmelser ?? "",
-      andreBestemmelser: loaderData?.steg4?.andreBestemmelser ?? "",
+      erAndreBestemmelser: loaderData?.steg5?.erAndreBestemmelser ?? "",
+      andreBestemmelser: loaderData?.steg5?.andreBestemmelser ?? "",
     },
   });
 
@@ -82,16 +82,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
-  const resultat = await parseFormData(request, lagSteg4Schema(språk));
+  const resultat = await parseFormData(request, lagSteg5Schema(språk));
 
   if (resultat.error) {
     return validationError(resultat.error, resultat.submittedData);
   }
 
   return redirect(
-    RouteConfig.PRIVAT_AVTALE.STEG_5_VEDLEGG,
+    RouteConfig.PRIVAT_AVTALE.STEG_6_VEDLEGG,
     await oppdaterSesjonsdata(request, {
-      steg4: {
+      steg5: {
         erAndreBestemmelser: resultat.data.erAndreBestemmelser.toString(),
         andreBestemmelser: resultat.data.erAndreBestemmelser
           ? resultat.data.andreBestemmelser
@@ -102,7 +102,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 const Steg4SessionSchema = z.object({
-  steg4: z.object({
+  steg5: z.object({
     erAndreBestemmelser: z.enum(["true", "false"]),
     andreBestemmelser: z.string().max(1000),
   }),

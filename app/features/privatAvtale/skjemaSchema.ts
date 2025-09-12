@@ -45,19 +45,21 @@ const AvtaledetaljerSchema = z.object({
 export const PrivatAvtaleFlerstegsSkjemaSchema = z.object({
   steg1: z.object({
     deg: Person,
-    medforelder: Person,
   }),
   steg2: z.object({
-    barn: z.array(Bidragsbarn),
+    medforelder: Person,
   }),
   steg3: z.object({
-    avtaledetaljer: AvtaledetaljerSchema,
+    barn: z.array(Bidragsbarn),
   }),
   steg4: z.object({
+    avtaledetaljer: AvtaledetaljerSchema,
+  }),
+  steg5: z.object({
     erAndreBestemmelser: z.enum(["true", "false", ""]),
     andreBestemmelser: z.string(),
   }),
-  steg5: z.object({
+  steg6: z.object({
     harVedlegg: z.enum(["true", "false", ""]),
   }),
 });
@@ -65,10 +67,14 @@ export const PrivatAvtaleFlerstegsSkjemaSchema = z.object({
 export const lagSteg1Schema = (språk: Språk) =>
   z.object({
     deg: lagValidertPersonSkjemaSchema(språk, "deg"),
-    medforelder: lagValidertPersonSkjemaSchema(språk, "medforelder"),
   });
 
 export const lagSteg2Schema = (språk: Språk) =>
+  z.object({
+    medforelder: lagValidertPersonSkjemaSchema(språk, "medforelder"),
+  });
+
+export const lagSteg3Schema = (språk: Språk) =>
   z.object({
     barn: z.array(
       z.object({
@@ -112,7 +118,7 @@ export const lagSteg2Schema = (språk: Språk) =>
     ),
   });
 
-export const lagSteg3Schema = (språk: Språk) => {
+export const lagSteg4Schema = (språk: Språk) => {
   return z.object({
     avtaledetaljer: AvtaledetaljerSchema.superRefine((avtaledetaljer, ctx) => {
       // Validererer alle felter i superRefine for å muliggjøre validering av
@@ -150,7 +156,7 @@ export const lagSteg3Schema = (språk: Språk) => {
   });
 };
 
-export const lagSteg4Schema = (språk: Språk) =>
+export const lagSteg5Schema = (språk: Språk) =>
   z
     .object({
       erAndreBestemmelser: z
@@ -175,7 +181,7 @@ export const lagSteg4Schema = (språk: Språk) =>
       },
     );
 
-export const lagSteg5Schema = (språk: Språk) =>
+export const lagSteg6Schema = (språk: Språk) =>
   z.object({
     harVedlegg: z
       .enum(["true", "false"], {
@@ -191,6 +197,7 @@ export const lagPrivatAvtaleFlerstegsSchema = (språk: Språk) =>
     steg3: lagSteg3Schema(språk),
     steg4: lagSteg4Schema(språk),
     steg5: lagSteg5Schema(språk),
+    steg6: lagSteg6Schema(språk),
   });
 
 export type PrivatAvtaleFlerstegsSkjema = z.infer<

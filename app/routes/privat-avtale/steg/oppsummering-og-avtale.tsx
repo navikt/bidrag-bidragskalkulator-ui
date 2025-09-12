@@ -43,7 +43,7 @@ export default function OppsummeringOgAvtale() {
 
       <Form
         method="post"
-        action={RouteConfig.PRIVAT_AVTALE.STEG_6_LAST_NED}
+        action={RouteConfig.PRIVAT_AVTALE.STEG_7_LAST_NED}
         reloadDocument
         onSubmit={() => {
           navigate(RouteConfig.PRIVAT_AVTALE.FERDIG);

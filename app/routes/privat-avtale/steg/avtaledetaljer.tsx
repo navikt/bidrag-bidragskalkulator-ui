@@ -11,7 +11,7 @@ import { z } from "zod";
 import { RouteConfig } from "~/config/routeConfig";
 import { hentSesjonsdata, oppdaterSesjonsdata } from "~/config/session.server";
 import { OppgjørsformSchema } from "~/features/privatAvtale/apiSchema";
-import { lagSteg3Schema } from "~/features/privatAvtale/skjemaSchema";
+import { lagSteg4Schema } from "~/features/privatAvtale/skjemaSchema";
 import { teksterAvtaledetaljer } from "~/features/privatAvtale/tekster/avtaledetaljer";
 import { sporPrivatAvtaleSpørsmålBesvart } from "~/features/privatAvtale/utils";
 import {
@@ -28,16 +28,16 @@ export default function AvtaledetaljerSteg() {
   const loaderData = useLoaderData<typeof loader>();
 
   const form = useForm({
-    schema: lagSteg3Schema(språk),
+    schema: lagSteg4Schema(språk),
     submitSource: "state",
     method: "post",
     id: "steg",
     defaultValues: {
       avtaledetaljer: {
-        nyAvtale: loaderData?.steg3?.avtaledetaljer?.nyAvtale ?? "",
+        nyAvtale: loaderData?.steg4?.avtaledetaljer?.nyAvtale ?? "",
         oppgjørsformIdag:
-          loaderData?.steg3?.avtaledetaljer?.oppgjørsformIdag ?? "",
-        medInnkreving: loaderData?.steg3?.avtaledetaljer?.medInnkreving ?? "",
+          loaderData?.steg4?.avtaledetaljer?.oppgjørsformIdag ?? "",
+        medInnkreving: loaderData?.steg4?.avtaledetaljer?.medInnkreving ?? "",
       },
     },
   });
@@ -154,7 +154,7 @@ const tekster = definerTekster({
 });
 
 const Steg3SessionSchema = z.object({
-  steg3: z
+  steg4: z
     .object({
       avtaledetaljer: z.object({
         nyAvtale: z.enum(["true", "false"]),
@@ -173,16 +173,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
-  const formData = await parseFormData(request, lagSteg3Schema(språk));
+  const formData = await parseFormData(request, lagSteg4Schema(språk));
 
   if (formData.error) {
     return validationError(formData.error, formData.submittedData);
   }
 
   return redirect(
-    RouteConfig.PRIVAT_AVTALE.STEG_4_ANDRE_BESTEMMELSER,
+    RouteConfig.PRIVAT_AVTALE.STEG_5_ANDRE_BESTEMMELSER,
     await oppdaterSesjonsdata(request, {
-      steg3: {
+      steg4: {
         avtaledetaljer: formData.data.avtaledetaljer,
       },
     }),

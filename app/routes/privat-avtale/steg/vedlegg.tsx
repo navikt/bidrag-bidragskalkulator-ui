@@ -16,7 +16,7 @@ import {
 import z from "zod";
 import { RouteConfig } from "~/config/routeConfig";
 import { hentSesjonsdata, oppdaterSesjonsdata } from "~/config/session.server";
-import { lagSteg5Schema } from "~/features/privatAvtale/skjemaSchema";
+import { lagSteg6Schema } from "~/features/privatAvtale/skjemaSchema";
 import { sporPrivatAvtaleSpørsmålBesvart } from "~/features/privatAvtale/utils";
 
 const AVTALEN_HAR_VEDLEGG_ALTERNATIVER = ["true", "false"] as const;
@@ -26,9 +26,9 @@ export default function VedleggStep() {
   const loaderData = useLoaderData<typeof loader>();
   const form = useForm<
     { harVedlegg: "true" | "false" | "" },
-    z.infer<typeof lagSteg5Schema>
+    z.infer<typeof lagSteg6Schema>
   >({
-    schema: lagSteg5Schema(språk),
+    schema: lagSteg6Schema(språk),
     submitSource: "state",
     method: "post",
     id: "steg",
@@ -76,14 +76,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
-  const resultat = await parseFormData(request, lagSteg5Schema(språk));
+  const resultat = await parseFormData(request, lagSteg6Schema(språk));
 
   if (resultat.error) {
     return validationError(resultat.error, resultat.submittedData);
   }
 
   return redirectDocument(
-    RouteConfig.PRIVAT_AVTALE.STEG_6_OPPSUMMERING_OG_AVTALE,
+    RouteConfig.PRIVAT_AVTALE.STEG_7_OPPSUMMERING_OG_AVTALE,
     await oppdaterSesjonsdata(request, {
       steg5: { harVedlegg: resultat.data.harVedlegg.toString() },
     }),

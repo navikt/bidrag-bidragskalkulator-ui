@@ -17,31 +17,24 @@ import {
 import { TextField } from "@navikt/ds-react";
 import { parseFormData, useForm, validationError } from "@rvf/react-router";
 import { z } from "zod";
-import { lagSteg1Schema } from "~/features/privatAvtale/skjemaSchema";
+import { lagSteg2Schema } from "~/features/privatAvtale/skjemaSchema";
 import { sporPrivatAvtaleSpørsmålBesvart } from "~/features/privatAvtale/utils";
 import { FødselsnummerTextField } from "~/features/skjema/FødselsnummerTextField";
 import { NAVN_TEXT_FIELD_HTML_SIZE } from "~/utils/ui";
-import { usePrivatAvtaleLayoutLoaderData } from "./layout";
 
 export default function Steg1Foreldre() {
   const { t, språk } = useOversettelse();
-  const layoutData = usePrivatAvtaleLayoutLoaderData();
   const loaderData = useLoaderData<typeof loader>();
   const form = useForm({
-    schema: lagSteg1Schema(språk),
+    schema: lagSteg2Schema(språk),
     submitSource: "state",
     method: "post",
     id: "steg",
     defaultValues: {
-      deg: {
-        fornavn: layoutData?.personinformasjon.fornavn ?? "",
-        etternavn: layoutData?.personinformasjon.etternavn ?? "",
-        ident: layoutData?.personinformasjon.ident ?? "",
-      },
       medforelder: {
-        fornavn: loaderData?.steg1?.medforelder?.fornavn ?? "",
-        etternavn: loaderData?.steg1?.medforelder?.etternavn ?? "",
-        ident: loaderData?.steg1?.medforelder?.ident ?? "",
+        fornavn: loaderData?.steg2?.medforelder?.fornavn ?? "",
+        etternavn: loaderData?.steg2?.medforelder?.etternavn ?? "",
+        ident: loaderData?.steg2?.medforelder?.ident ?? "",
       },
     },
   });
@@ -134,23 +127,23 @@ const tekster = definerTekster({
 export async function action({ request }: ActionFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
-  const resultat = await parseFormData(request, lagSteg1Schema(språk));
+  const resultat = await parseFormData(request, lagSteg2Schema(språk));
 
   if (!resultat) {
     return validationError(resultat);
   }
 
   return redirect(
-    RouteConfig.PRIVAT_AVTALE.STEG_2_BARN_OG_BIDRAG,
+    RouteConfig.PRIVAT_AVTALE.STEG_3_BARN_OG_BIDRAG,
     await oppdaterSesjonsdata(request, {
-      steg1: resultat.data,
+      steg2: resultat.data,
     }),
   );
 }
 
 // Skjema for å validere innholdet i sesjonscookien
-const Steg1SessionSchema = z.object({
-  steg1: z.object({
+const Steg2SessionSchema = z.object({
+  steg2: z.object({
     medforelder: z.object({
       fornavn: z.string().optional().default(""),
       etternavn: z.string().optional().default(""),
@@ -160,5 +153,5 @@ const Steg1SessionSchema = z.object({
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return hentSesjonsdata(request, Steg1SessionSchema);
+  return hentSesjonsdata(request, Steg2SessionSchema);
 }
