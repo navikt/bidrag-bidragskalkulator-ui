@@ -29,7 +29,7 @@ const tekster = definerTekster({
         >
           Den gamle kalkulatoren
         </Link>{" "}
-        er fortsatt mulig å bruke, dersom du ønsker det.
+        er fortsatt mulig å bruke dersom du ønsker det.
       </>
     ),
     en: (
@@ -53,7 +53,7 @@ const tekster = definerTekster({
         >
           Den gamle kalkulatoren
         </Link>{" "}
-        er framleis mogleg å bruke, dersom du ønsker det.
+        er framleis mogleg å bruke dersom du ønsker det.
       </>
     ),
   },

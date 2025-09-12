@@ -34,9 +34,9 @@ const tekster = definerTekster({
     nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut kva du skal betale eller motta i fostringstilskot.",
   },
   innhold2: {
-    nb: "Summen bruker du til å avtale barnebidrag med den andre forelderen. Hvis du har barn med flere, velger du kun de barna du har, med den forelderen som du ønsker å avtale barnebidrag med.",
+    nb: "Summen bruker du til å avtale barnebidrag med den andre forelderen. Hvis du har barn med flere, velger du kun de barna du har med den forelderen som du ønsker å avtale barnebidrag med.",
     en: "The amount can be used to make an agreement with the other parent. If you have children with more than one parent, you only select the children you have with the parent you want to agree on child support with.",
-    nn: "Summen bruker du til å avtale fostringstilskot med den andre forelderen. Dersom du har barn med fleire, vel du berre dei barna du har, med den forelderen som du ønsker å avtale fostringstilskot med.",
+    nn: "Summen bruker du til å avtale fostringstilskot med den andre forelderen. Dersom du har barn med fleire, vel du berre dei barna du har med den forelderen som du ønsker å avtale fostringstilskot med.",
   },
   brukGammelKalkulator: {
     overskrift: {
