@@ -129,8 +129,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const språk = hentSpråkFraCookie(cookieHeader);
   const resultat = await parseFormData(request, lagSteg2Schema(språk));
 
-  if (!resultat) {
-    return validationError(resultat);
+  if (resultat.error) {
+    return validationError(resultat.error, resultat.submittedData);
   }
 
   return redirect(

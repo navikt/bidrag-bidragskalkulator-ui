@@ -107,16 +107,13 @@ export async function action({ request }: ActionFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
   const resultat = await parseFormData(request, lagSteg1Schema(språk));
-
-  if (!resultat) {
-    return validationError(resultat);
+  if (resultat.error) {
+    return validationError(resultat.error, resultat.submittedData);
   }
 
   return redirect(
     RouteConfig.PRIVAT_AVTALE.STEG_2_OM_DEN_ANDRE_FORELDEREN,
-    await oppdaterSesjonsdata(request, {
-      steg1: resultat.data,
-    }),
+    await oppdaterSesjonsdata(request, { steg1: resultat.data }),
   );
 }
 
