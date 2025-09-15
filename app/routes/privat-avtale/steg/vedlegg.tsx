@@ -33,7 +33,7 @@ export default function VedleggStep() {
     method: "post",
     id: "steg",
     defaultValues: {
-      harVedlegg: loaderData?.steg5?.harVedlegg ?? "",
+      harVedlegg: loaderData?.steg6?.harVedlegg ?? "",
     },
   });
 
@@ -63,14 +63,14 @@ export default function VedleggStep() {
   );
 }
 
-const Steg5SessionSchema = z.object({
-  steg5: z.object({
+const Steg6SessionSchema = z.object({
+  steg6: z.object({
     harVedlegg: z.enum(["true", "false"]),
   }),
 });
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return hentSesjonsdata(request, Steg5SessionSchema);
+  return hentSesjonsdata(request, Steg6SessionSchema);
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -85,7 +85,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirectDocument(
     RouteConfig.PRIVAT_AVTALE.STEG_7_OPPSUMMERING_OG_AVTALE,
     await oppdaterSesjonsdata(request, {
-      steg5: { harVedlegg: resultat.data.harVedlegg.toString() },
+      steg6: { harVedlegg: resultat.data.harVedlegg.toString() },
     }),
   );
 };

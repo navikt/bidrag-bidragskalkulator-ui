@@ -19,7 +19,7 @@ import type { PrivatAvtaleFlerstegsSkjema } from "../skjemaSchema";
 export function OppsummeringBarn() {
   const { t } = useOversettelse();
   const skjemaverdier = useOppsummeringsdata();
-  const navnMedforelder = `${skjemaverdier.steg1?.medforelder?.fornavn} ${skjemaverdier.steg1?.medforelder?.etternavn}`;
+  const navnMedforelder = `${skjemaverdier.steg2?.medforelder?.fornavn} ${skjemaverdier.steg2?.medforelder?.etternavn}`;
 
   return (
     <FormSummary>
@@ -29,19 +29,19 @@ export function OppsummeringBarn() {
         </FormSummaryHeading>
         <FormSummaryEditLink
           as={Link}
-          to={RouteConfig.PRIVAT_AVTALE.STEG_2_BARN_OG_BIDRAG}
+          to={RouteConfig.PRIVAT_AVTALE.STEG_3_BARN_OG_BIDRAG}
         >
           {t(tekster.endreSvar)}
         </FormSummaryEditLink>
       </FormSummaryHeader>
       <FormSummaryAnswers>
-        {skjemaverdier.steg2?.barn?.length === 1 ? (
+        {skjemaverdier.steg3?.barn?.length === 1 ? (
           <Barnesvar
-            barn={skjemaverdier.steg2.barn[0]}
+            barn={skjemaverdier.steg3.barn[0]}
             navnMedforelder={navnMedforelder}
           />
         ) : (
-          skjemaverdier.steg2?.barn?.map((barn, i) => (
+          skjemaverdier.steg3?.barn?.map((barn, i) => (
             <FormSummaryAnswer key={i}>
               <FormSummaryLabel>
                 {t(tekster.barnLabel)} {i + 1}
@@ -60,7 +60,7 @@ export function OppsummeringBarn() {
 }
 
 type BarnesvarProps = {
-  barn: PrivatAvtaleFlerstegsSkjema["steg2"]["barn"][number];
+  barn: PrivatAvtaleFlerstegsSkjema["steg3"]["barn"][number];
   navnMedforelder?: string;
 };
 

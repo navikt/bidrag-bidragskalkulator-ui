@@ -25,7 +25,7 @@ export const OppsummeringAndreBestemmelser = () => {
         </FormSummaryHeading>
         <FormSummaryEditLink
           as={Link}
-          to={RouteConfig.PRIVAT_AVTALE.STEG_4_ANDRE_BESTEMMELSER}
+          to={RouteConfig.PRIVAT_AVTALE.STEG_5_ANDRE_BESTEMMELSER}
         >
           {t(tekster.endreSvar)}
         </FormSummaryEditLink>
@@ -37,21 +37,21 @@ export const OppsummeringAndreBestemmelser = () => {
             {t(tekster.erAndreBestemmelser.label)}
           </FormSummaryLabel>
           <FormSummaryValue>
-            {skjemaverdier.steg4?.erAndreBestemmelser === "true"
+            {skjemaverdier.steg5?.erAndreBestemmelser === "true"
               ? t(tekster.erAndreBestemmelser.true)
-              : skjemaverdier.steg4?.erAndreBestemmelser === "false"
+              : skjemaverdier.steg5?.erAndreBestemmelser === "false"
                 ? t(tekster.erAndreBestemmelser.false)
                 : t(tekster.ikkeUtfylt)}
           </FormSummaryValue>
         </FormSummaryAnswer>
 
-        {skjemaverdier.steg4?.erAndreBestemmelser === "true" && (
+        {skjemaverdier.steg5?.erAndreBestemmelser === "true" && (
           <FormSummaryAnswer>
             <FormSummaryLabel>
               {t(tekster.andreBestemmelser.label)}
             </FormSummaryLabel>
             <FormSummaryValue>
-              {skjemaverdier.steg4?.andreBestemmelser || t(tekster.ikkeUtfylt)}
+              {skjemaverdier.steg5?.andreBestemmelser || t(tekster.ikkeUtfylt)}
             </FormSummaryValue>
           </FormSummaryAnswer>
         )}

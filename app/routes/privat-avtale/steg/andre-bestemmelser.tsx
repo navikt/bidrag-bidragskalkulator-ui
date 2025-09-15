@@ -76,7 +76,7 @@ export default function AndreBestemmelserSteg() {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return hentSesjonsdata(request, Steg4SessionSchema);
+  return hentSesjonsdata(request, Steg5SessionSchema);
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -101,7 +101,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   );
 };
 
-const Steg4SessionSchema = z.object({
+const Steg5SessionSchema = z.object({
   steg5: z.object({
     erAndreBestemmelser: z.enum(["true", "false"]),
     andreBestemmelser: z.string().max(1000),
