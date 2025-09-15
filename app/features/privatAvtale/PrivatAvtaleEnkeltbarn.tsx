@@ -27,7 +27,7 @@ export const PrivatAvtaleEnkeltbarnSkjema = ({
   onFjernBarn,
 }: Props) => {
   const { t } = useOversettelse();
-  const form = useFormContext<PrivatAvtaleFlerstegsSkjema["steg2"]>();
+  const form = useFormContext<PrivatAvtaleFlerstegsSkjema["steg3"]>();
 
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
 

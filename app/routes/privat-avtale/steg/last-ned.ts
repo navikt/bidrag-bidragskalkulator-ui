@@ -2,7 +2,6 @@ import archiver from "archiver";
 import { PassThrough, Readable } from "node:stream";
 import type { ActionFunctionArgs } from "react-router";
 import { hentSesjonsdata } from "~/config/session.server";
-import { medToken } from "~/features/autentisering/api.server";
 import { hentPrivatAvtaledokument } from "~/features/privatAvtale/api.server";
 import {
   lagPrivatAvtaleFlerstegsSchema,
@@ -91,9 +90,7 @@ const hentPrivatAvtalePdf = async (
   request: Request,
   skjemadata: PrivatAvtaleFlerstegsSkjemaValidert,
 ) => {
-  const response = await medToken(request, (token) =>
-    hentPrivatAvtaledokument(token, request, skjemadata),
-  );
+  const response = await hentPrivatAvtaledokument(request, skjemadata);
 
   if (!response.ok) {
     const feilmelding = await response.text();

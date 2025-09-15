@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { BidragstypeSchema } from "../skjema/beregning/schema";
 
 export const ApiSpråkSchema = z.enum(["NB", "NN", "EN"]);
 
@@ -23,6 +24,7 @@ const Bidragsbarn = Person.extend({
 
 export const LagPrivatAvtaleRequestSchema = z.object({
   språk: ApiSpråkSchema,
+  bidragstype: BidragstypeSchema,
   bidragsmottaker: Person,
   bidragspliktig: Person,
   barn: z.array(Bidragsbarn),

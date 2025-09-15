@@ -1,5 +1,6 @@
 import { env } from "~/config/env.server";
 import { summerBidrag } from "~/utils/bidrag";
+import { tilNorskDatoFormat } from "~/utils/dato";
 import {
   definerTekster,
   hentSpråkFraCookie,
@@ -17,11 +18,9 @@ import { type PrivatAvtaleFlerstegsSkjemaValidert } from "./skjemaSchema";
 export const hentPrivatAvtaleFraApi = async ({
   requestData,
   språk,
-  token,
 }: {
   requestData: LagPrivatAvtaleRequest;
   språk: Språk;
-  token: string;
 }): Promise<Response> => {
   const response = await fetch(
     `${env.SERVER_URL}/api/v1/privat-avtale/under-18`,
@@ -30,7 +29,6 @@ export const hentPrivatAvtaleFraApi = async ({
       headers: {
         "Content-Type": "application/json",
         Accept: "application/pdf",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(requestData),
     },
@@ -66,14 +64,13 @@ export const hentPrivatAvtaleFraApi = async ({
 };
 
 export const hentPrivatAvtaledokument = async (
-  token: string,
   request: Request,
   skjemadata: PrivatAvtaleFlerstegsSkjemaValidert,
 ) => {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
 
-  const bidragstyper = skjemadata.steg2.barn.map((barn) => barn.bidragstype);
+  const bidragstyper = skjemadata.steg3.barn.map((barn) => barn.bidragstype);
   const isMottaker = bidragstyper.includes("MOTTAKER");
   const isPliktig = bidragstyper.includes("PLIKTIG");
 
@@ -82,7 +79,7 @@ export const hentPrivatAvtaledokument = async (
     return Promise.reject(oversett(språk, tekster.feil.mottakerOgPliktig));
   }
 
-  const { bidragstype } = summerBidrag(skjemadata.steg2.barn);
+  const { bidragstype } = summerBidrag(skjemadata.steg3.barn);
   const erBidragsmottaker = bidragstype === "MOTTAKER";
 
   const deg = {
@@ -92,36 +89,37 @@ export const hentPrivatAvtaledokument = async (
   };
 
   const medforelder = {
-    ident: skjemadata.steg1.medforelder.ident,
-    etternavn: skjemadata.steg1.medforelder.etternavn,
-    fornavn: skjemadata.steg1.medforelder.fornavn,
+    ident: skjemadata.steg2.medforelder.ident,
+    etternavn: skjemadata.steg2.medforelder.etternavn,
+    fornavn: skjemadata.steg2.medforelder.fornavn,
   };
 
   const requestData: LagPrivatAvtaleRequest = {
     språk: språkTilApiSpråk[språk],
+    bidragstype: erBidragsmottaker ? "MOTTAKER" : "PLIKTIG",
     bidragsmottaker: erBidragsmottaker ? deg : medforelder,
     bidragspliktig: erBidragsmottaker ? medforelder : deg,
     oppgjør: {
-      nyAvtale: skjemadata.steg3.avtaledetaljer.nyAvtale === "true",
-      oppgjørsformØnsket: skjemadata.steg3.avtaledetaljer.medInnkreving
+      nyAvtale: skjemadata.steg4.avtaledetaljer.nyAvtale === "true",
+      oppgjørsformØnsket: skjemadata.steg4.avtaledetaljer.medInnkreving
         ? "INNKREVING"
         : "PRIVAT",
       oppgjørsformIdag:
-        skjemadata.steg3.avtaledetaljer.oppgjørsformIdag || undefined,
+        skjemadata.steg4.avtaledetaljer.oppgjørsformIdag || undefined,
     },
-    tilInnsending: skjemadata.steg3.avtaledetaljer.medInnkreving === "true",
-    barn: skjemadata.steg2.barn.map((barn) => ({
+    tilInnsending: skjemadata.steg4.avtaledetaljer.medInnkreving === "true",
+    barn: skjemadata.steg3.barn.map((barn) => ({
       ident: barn.ident,
       fornavn: barn.fornavn,
       etternavn: barn.etternavn,
       sumBidrag: barn.sum,
-      fraDato: barn.fraDato,
+      fraDato: tilNorskDatoFormat(barn.fraDato),
     })),
     andreBestemmelser: {
-      harAndreBestemmelser: skjemadata.steg4.erAndreBestemmelser,
-      beskrivelse: skjemadata.steg4.andreBestemmelser,
+      harAndreBestemmelser: skjemadata.steg5.erAndreBestemmelser,
+      beskrivelse: skjemadata.steg5.andreBestemmelser,
     },
-    vedlegg: skjemadata.steg5.harVedlegg
+    vedlegg: skjemadata.steg6.harVedlegg
       ? "SENDES_MED_SKJEMA"
       : "INGEN_EKSTRA_DOKUMENTASJON",
   };
@@ -129,7 +127,6 @@ export const hentPrivatAvtaledokument = async (
   return hentPrivatAvtaleFraApi({
     requestData,
     språk,
-    token,
   });
 };
 
