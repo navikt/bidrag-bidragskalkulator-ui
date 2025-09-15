@@ -3,7 +3,8 @@ export const RouteConfig = {
   PRIVAT_AVTALE: {
     INDEX: "/privat-avtale",
     STEG_1_OM_DEG: "/privat-avtale/steg/om-deg",
-    STEG_2_OM_DEN_ANDRE_FORELDEREN: "/privat-avtale/steg/foreldre",
+    STEG_2_OM_DEN_ANDRE_FORELDEREN:
+      "/privat-avtale/steg/om-den-andre-forelderen",
     STEG_3_BARN_OG_BIDRAG: "/privat-avtale/steg/barn-og-bidrag",
     STEG_4_AVTALEDETALJER: "/privat-avtale/steg/avtaledetaljer",
     STEG_5_ANDRE_BESTEMMELSER: "/privat-avtale/steg/andre-bestemmelser",

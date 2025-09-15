@@ -24,7 +24,7 @@ export default [
         ),
         route(
           RouteConfig.PRIVAT_AVTALE.STEG_2_OM_DEN_ANDRE_FORELDEREN,
-          "routes/privat-avtale/steg/foreldre.tsx",
+          "routes/privat-avtale/steg/om-den-andre-forelderen.tsx",
         ),
         route(
           RouteConfig.PRIVAT_AVTALE.STEG_3_BARN_OG_BIDRAG,
@@ -47,7 +47,7 @@ export default [
           "routes/privat-avtale/steg/oppsummering-og-avtale.tsx",
         ),
         route(
-          RouteConfig.PRIVAT_AVTALE.STEG_8_LAST_NED,
+          RouteConfig.PRIVAT_AVTALE.STEG_7_LAST_NED,
           "routes/privat-avtale/steg/last-ned.ts",
         ),
       ]),
