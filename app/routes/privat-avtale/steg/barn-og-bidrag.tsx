@@ -20,7 +20,7 @@ import { RouteConfig } from "~/config/routeConfig";
 import { hentSesjonsdata, oppdaterSesjonsdata } from "~/config/session.server";
 import { PrivatAvtaleEnkeltbarnSkjema } from "~/features/privatAvtale/PrivatAvtaleEnkeltbarn";
 import {
-  lagSteg2Schema,
+  lagSteg3Schema,
   type PrivatAvtaleFlerstegsSkjema,
   type PrivatAvtaleFlerstegsSkjemaValidert,
 } from "~/features/privatAvtale/skjemaSchema";
@@ -37,15 +37,15 @@ export default function BarnOgBidragSteg() {
   const loaderData = useLoaderData<typeof loader>();
 
   const form = useForm<
-    PrivatAvtaleFlerstegsSkjema["steg2"],
-    PrivatAvtaleFlerstegsSkjemaValidert["steg2"]
+    PrivatAvtaleFlerstegsSkjema["steg3"],
+    PrivatAvtaleFlerstegsSkjemaValidert["steg3"]
   >({
-    schema: lagSteg2Schema(språk),
+    schema: lagSteg3Schema(språk),
     submitSource: "state",
     method: "post",
     id: "steg",
     defaultValues: {
-      barn: loaderData?.steg2?.barn ?? [
+      barn: loaderData?.steg3?.barn ?? [
         {
           ident: "",
           fornavn: "",
@@ -150,8 +150,8 @@ const tekster = definerTekster({
   },
 });
 
-const Steg2SessionSchema = z.object({
-  steg2: z
+const Steg3SessionSchema = z.object({
+  steg3: z
     .object({
       barn: z.array(
         z.object({
@@ -173,22 +173,22 @@ const Steg2SessionSchema = z.object({
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return hentSesjonsdata(request, Steg2SessionSchema);
+  return hentSesjonsdata(request, Steg3SessionSchema);
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
-  const resultat = await parseFormData(request, lagSteg2Schema(språk));
+  const resultat = await parseFormData(request, lagSteg3Schema(språk));
 
   if (resultat.error) {
     return validationError(resultat.error, resultat.submittedData);
   }
 
   return redirect(
-    RouteConfig.PRIVAT_AVTALE.STEG_3_AVTALEDETALJER,
+    RouteConfig.PRIVAT_AVTALE.STEG_4_AVTALEDETALJER,
     await oppdaterSesjonsdata(request, {
-      steg2: {
+      steg3: {
         barn: resultat.data.barn.map((barn) => ({
           ident: barn.ident,
           fornavn: barn.fornavn,

@@ -26,7 +26,7 @@ export function OppsummeringAvtaledetaljer() {
         </FormSummaryHeading>
         <FormSummaryEditLink
           as={Link}
-          to={RouteConfig.PRIVAT_AVTALE.STEG_3_AVTALEDETALJER}
+          to={RouteConfig.PRIVAT_AVTALE.STEG_4_AVTALEDETALJER}
         >
           {t(tekster.endreSvar)}
         </FormSummaryEditLink>
@@ -37,25 +37,25 @@ export function OppsummeringAvtaledetaljer() {
             {t(teksterAvtaledetaljer.nyAvtale.label)}
           </FormSummaryLabel>
           <FormSummaryValue>
-            {skjemaverdier.steg3?.avtaledetaljer?.nyAvtale === "true"
+            {skjemaverdier.steg4?.avtaledetaljer?.nyAvtale === "true"
               ? t(teksterAvtaledetaljer.nyAvtale.true)
-              : skjemaverdier.steg3?.avtaledetaljer?.nyAvtale === "false"
+              : skjemaverdier.steg4?.avtaledetaljer?.nyAvtale === "false"
                 ? t(teksterAvtaledetaljer.nyAvtale.false)
                 : t(tekster.ikkeUtfylt)}
           </FormSummaryValue>
         </FormSummaryAnswer>
 
-        {skjemaverdier.steg3?.avtaledetaljer?.nyAvtale === "false" && (
+        {skjemaverdier.steg4?.avtaledetaljer?.nyAvtale === "false" && (
           <FormSummaryAnswer>
             <FormSummaryLabel>
               {t(teksterAvtaledetaljer.oppgjørsformIdag.label)}
             </FormSummaryLabel>
             <FormSummaryValue>
-              {skjemaverdier.steg3?.avtaledetaljer?.oppgjørsformIdag === ""
+              {skjemaverdier.steg4?.avtaledetaljer?.oppgjørsformIdag === ""
                 ? t(tekster.ikkeUtfylt)
                 : t(
                     teksterAvtaledetaljer.oppgjørsformIdag[
-                      skjemaverdier.steg3?.avtaledetaljer?.oppgjørsformIdag
+                      skjemaverdier.steg4?.avtaledetaljer?.oppgjørsformIdag
                     ],
                   )}
             </FormSummaryValue>
@@ -67,9 +67,9 @@ export function OppsummeringAvtaledetaljer() {
             {t(teksterAvtaledetaljer.medInnkreving.label)}
           </FormSummaryLabel>
           <FormSummaryValue>
-            {skjemaverdier.steg3?.avtaledetaljer?.medInnkreving === "true"
+            {skjemaverdier.steg4?.avtaledetaljer?.medInnkreving === "true"
               ? t(teksterAvtaledetaljer.medInnkreving.true)
-              : skjemaverdier.steg3?.avtaledetaljer?.medInnkreving === "false"
+              : skjemaverdier.steg4?.avtaledetaljer?.medInnkreving === "false"
                 ? t(teksterAvtaledetaljer.medInnkreving.false)
                 : t(tekster.ikkeUtfylt)}
           </FormSummaryValue>

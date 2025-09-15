@@ -2,7 +2,6 @@ import archiver from "archiver";
 import { PassThrough, Readable } from "node:stream";
 import type { ActionFunctionArgs } from "react-router";
 import { hentSesjonsdata } from "~/config/session.server";
-import { medToken } from "~/features/autentisering/api.server";
 import { hentPrivatAvtaledokument } from "~/features/privatAvtale/api.server";
 import {
   lagPrivatAvtaleFlerstegsSchema,
@@ -29,7 +28,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const barnPerBidragstype = BidragstypeSchema.options
     .map((type) => ({
       type,
-      barn: sesjonsdata.steg2.barn
+      barn: sesjonsdata.steg3.barn
         .filter((b) => b.bidragstype === type)
         .map((barn) => ({ ...barn, sum: Number(barn.sum) })),
     }))
@@ -38,8 +37,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (barnPerBidragstype.length === 1) {
     const pdfBuffer = await hentPrivatAvtalePdf(request, {
       ...sesjonsdata,
-      steg2: {
-        barn: sesjonsdata.steg2.barn,
+      steg3: {
+        barn: sesjonsdata.steg3.barn,
       },
     });
 
@@ -61,7 +60,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     barnPerBidragstype.map(async ({ type, barn }) => {
       const buffer = await hentPrivatAvtalePdf(request, {
         ...sesjonsdata,
-        steg2: { barn },
+        steg3: { barn },
       });
 
       if (!buffer) {
@@ -91,9 +90,7 @@ const hentPrivatAvtalePdf = async (
   request: Request,
   skjemadata: PrivatAvtaleFlerstegsSkjemaValidert,
 ) => {
-  const response = await medToken(request, (token) =>
-    hentPrivatAvtaledokument(token, request, skjemadata),
-  );
+  const response = await hentPrivatAvtaledokument(request, skjemadata);
 
   if (!response.ok) {
     const feilmelding = await response.text();

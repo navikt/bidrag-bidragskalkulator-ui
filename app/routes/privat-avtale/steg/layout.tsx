@@ -5,14 +5,10 @@ import {
   Outlet,
   Link as ReactRouterLink,
   useLocation,
-  useRouteLoaderData,
   type LoaderFunctionArgs,
   type MetaFunction,
 } from "react-router";
 import { RouteConfig } from "~/config/routeConfig";
-import { medToken } from "~/features/autentisering/api.server";
-import { hentPersoninformasjonForPrivatAvtale } from "~/features/privatAvtale/api.server";
-import type { HentPersoninformasjonForPrivatAvtaleRespons } from "~/features/privatAvtale/apiSchema";
 import { hentSideMetadata } from "~/features/privatAvtale/pageMeta";
 import { stegdata } from "~/features/privatAvtale/privatAvtaleSteg";
 import { UtregningNavigasjonsdataSchema } from "~/features/skjema/beregning/schema";
@@ -34,23 +30,15 @@ export async function loader({
   request,
   context,
 }: LoaderFunctionArgs): Promise<{
-  personinformasjon: HentPersoninformasjonForPrivatAvtaleRespons;
   metadata: Awaited<ReturnType<typeof hentSideMetadata>>;
 }> {
   const språk = context.språk ?? Språk.NorwegianBokmål;
   const url = new URL(request.url);
 
   return {
-    personinformasjon: await medToken(request, (token) =>
-      hentPersoninformasjonForPrivatAvtale(token),
-    ),
     metadata: hentSideMetadata(url.pathname, språk),
   };
 }
-
-export const usePrivatAvtaleLayoutLoaderData = () => {
-  return useRouteLoaderData<typeof loader>("routes/privat-avtale/steg/layout");
-};
 
 export default function PrivatAvtaleStegLayout() {
   const { state: navigationState, pathname } = useLocation();

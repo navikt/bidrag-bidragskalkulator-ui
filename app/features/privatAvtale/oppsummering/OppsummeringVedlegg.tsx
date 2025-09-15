@@ -17,7 +17,7 @@ export const OppsummeringVedlegg = () => {
   const skjemaverdier = useOppsummeringsdata();
   const { t } = useOversettelse();
 
-  const { harVedlegg } = skjemaverdier.steg5 ?? {};
+  const { harVedlegg } = skjemaverdier.steg6 ?? {};
 
   return (
     <FormSummary>
@@ -27,7 +27,7 @@ export const OppsummeringVedlegg = () => {
         </FormSummaryHeading>
         <FormSummaryEditLink
           as={Link}
-          to={RouteConfig.PRIVAT_AVTALE.STEG_5_VEDLEGG}
+          to={RouteConfig.PRIVAT_AVTALE.STEG_6_VEDLEGG}
         >
           {t(tekster.endreSvar)}
         </FormSummaryEditLink>

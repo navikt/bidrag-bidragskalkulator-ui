@@ -33,3 +33,11 @@ export const erDatostrengÅrMånedDag = (dato: string): boolean => {
 export const datoTilTekst = (dato: Date): string => {
   return norskDatoformaterer.format(dato);
 };
+
+/**
+ * @param dato som tekststreng
+ * @returns dato som tekststreng i formatet `DD.MM.YYYY`
+ */
+export const tilNorskDatoFormat = (dato: string): string => {
+  return norskDatoformaterer.format(new Date(dato));
+};

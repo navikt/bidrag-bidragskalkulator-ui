@@ -27,6 +27,9 @@ export type PrivatAvtaleSpørsmålId =
   | "medforelder-fornavn"
   | "medforelder-etternavn"
   | "medforelder-ident"
+  | "deg-fornavn"
+  | "deg-etternavn"
+  | "deg-ident"
   | "har-vedlegg";
 export type KalkulatorSpørsmålId =
   | "barn-alder"

@@ -23,6 +23,12 @@ export function OppsummeringForeldre() {
       <FormSummary>
         <FormSummaryHeader>
           <FormSummaryHeading level="3">{t(tekster.omDeg)}</FormSummaryHeading>
+          <FormSummaryEditLink
+            as={Link}
+            to={`${RouteConfig.PRIVAT_AVTALE.STEG_1_OM_DEG}`}
+          >
+            {t(tekster.endreSvar)}
+          </FormSummaryEditLink>
         </FormSummaryHeader>
         <FormSummaryAnswers>
           <FormSummaryAnswer>
@@ -53,7 +59,7 @@ export function OppsummeringForeldre() {
           </FormSummaryHeading>
           <FormSummaryEditLink
             as={Link}
-            to={`${RouteConfig.PRIVAT_AVTALE.STEG_1_FORELDRE}#avtalepart-medforelder`}
+            to={`${RouteConfig.PRIVAT_AVTALE.STEG_2_OM_DEN_ANDRE_FORELDEREN}`}
           >
             {t(tekster.endreSvar)}
           </FormSummaryEditLink>
@@ -62,14 +68,14 @@ export function OppsummeringForeldre() {
           <FormSummaryAnswer>
             <FormSummaryLabel>{t(tekster.fornavn)}</FormSummaryLabel>
             <FormSummaryValue>
-              {skjemaverdier.steg1?.medforelder?.fornavn ||
+              {skjemaverdier.steg2?.medforelder?.fornavn ||
                 t(tekster.ikkeUtfylt)}
             </FormSummaryValue>
           </FormSummaryAnswer>
           <FormSummaryAnswer>
             <FormSummaryLabel>{t(tekster.etternavn)}</FormSummaryLabel>
             <FormSummaryValue>
-              {skjemaverdier.steg1?.medforelder?.etternavn ||
+              {skjemaverdier.steg2?.medforelder?.etternavn ||
                 t(tekster.ikkeUtfylt)}
             </FormSummaryValue>
           </FormSummaryAnswer>
@@ -77,7 +83,7 @@ export function OppsummeringForeldre() {
             <FormSummaryLabel>{t(tekster.ident)}</FormSummaryLabel>
             <FormSummaryValue>
               {formatterFødselsnummer(
-                skjemaverdier.steg1?.medforelder?.ident,
+                skjemaverdier.steg2?.medforelder?.ident,
               ) || t(tekster.ikkeUtfylt)}
             </FormSummaryValue>
           </FormSummaryAnswer>

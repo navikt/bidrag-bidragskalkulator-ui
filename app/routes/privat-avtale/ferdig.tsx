@@ -11,7 +11,7 @@ export default function FerdigSteg() {
   const loaderData = useLoaderData<typeof loader>();
 
   const harInnkreving =
-    loaderData.steg3?.avtaledetaljer?.medInnkreving === "true";
+    loaderData.steg4?.avtaledetaljer?.medInnkreving === "true";
   return (
     <PageBlock className="flex flex-col gap-3 mb-8" width="text">
       <Heading level="1" size="large">

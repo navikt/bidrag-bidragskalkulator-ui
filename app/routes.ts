@@ -19,31 +19,35 @@ export default [
       route(RouteConfig.PRIVAT_AVTALE.INDEX, "routes/privat-avtale/index.tsx"),
       layout("routes/privat-avtale/steg/layout.tsx", [
         route(
-          RouteConfig.PRIVAT_AVTALE.STEG_1_FORELDRE,
-          "routes/privat-avtale/steg/foreldre.tsx",
+          RouteConfig.PRIVAT_AVTALE.STEG_1_OM_DEG,
+          "routes/privat-avtale/steg/om-deg.tsx",
         ),
         route(
-          RouteConfig.PRIVAT_AVTALE.STEG_2_BARN_OG_BIDRAG,
+          RouteConfig.PRIVAT_AVTALE.STEG_2_OM_DEN_ANDRE_FORELDEREN,
+          "routes/privat-avtale/steg/om-den-andre-forelderen.tsx",
+        ),
+        route(
+          RouteConfig.PRIVAT_AVTALE.STEG_3_BARN_OG_BIDRAG,
           "routes/privat-avtale/steg/barn-og-bidrag.tsx",
         ),
         route(
-          RouteConfig.PRIVAT_AVTALE.STEG_3_AVTALEDETALJER,
+          RouteConfig.PRIVAT_AVTALE.STEG_4_AVTALEDETALJER,
           "routes/privat-avtale/steg/avtaledetaljer.tsx",
         ),
         route(
-          RouteConfig.PRIVAT_AVTALE.STEG_4_ANDRE_BESTEMMELSER,
+          RouteConfig.PRIVAT_AVTALE.STEG_5_ANDRE_BESTEMMELSER,
           "routes/privat-avtale/steg/andre-bestemmelser.tsx",
         ),
         route(
-          RouteConfig.PRIVAT_AVTALE.STEG_5_VEDLEGG,
+          RouteConfig.PRIVAT_AVTALE.STEG_6_VEDLEGG,
           "routes/privat-avtale/steg/vedlegg.tsx",
         ),
         route(
-          RouteConfig.PRIVAT_AVTALE.STEG_6_OPPSUMMERING_OG_AVTALE,
+          RouteConfig.PRIVAT_AVTALE.STEG_7_OPPSUMMERING_OG_AVTALE,
           "routes/privat-avtale/steg/oppsummering-og-avtale.tsx",
         ),
         route(
-          RouteConfig.PRIVAT_AVTALE.STEG_6_LAST_NED,
+          RouteConfig.PRIVAT_AVTALE.STEG_7_LAST_NED,
           "routes/privat-avtale/steg/last-ned.ts",
         ),
       ]),

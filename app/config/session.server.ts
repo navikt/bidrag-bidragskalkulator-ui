@@ -1,7 +1,13 @@
 import { createCookieSessionStorage } from "react-router";
 import type z from "zod";
 import { env } from "~/config/env.server";
-import { PrivatAvtaleFlerstegsSkjemaSchema } from "~/features/privatAvtale/skjemaSchema";
+
+const COOKIE_DOMAIN =
+  env.ENVIRONMENT === "prod"
+    ? ".nav.no"
+    : env.ENVIRONMENT === "dev"
+      ? ".dev.nav.no"
+      : undefined; // local: ingen domain
 
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
@@ -12,6 +18,7 @@ export const sessionStorage = createCookieSessionStorage({
     secure: env.ENVIRONMENT !== "local",
     secrets: [env.SESSION_SECRET],
     maxAge: 60 * 60, // 1 hour
+    domain: COOKIE_DOMAIN,
   },
 });
 
@@ -38,11 +45,10 @@ export async function oppdaterSesjonsdata(
   data: Record<string, unknown>,
 ) {
   const session = await getSession(request.headers.get("Cookie"));
-  const eksisterende = await hentSesjonsdata(
-    request,
-    PrivatAvtaleFlerstegsSkjemaSchema,
-  );
+  const eksisterende = session.get(PRIVAT_AVTALE_SESSION_KEY) ?? {};
+
   session.set(PRIVAT_AVTALE_SESSION_KEY, { ...eksisterende, ...data });
+
   return { headers: { "Set-Cookie": await commitSession(session) } };
 }
 
@@ -66,6 +72,7 @@ export async function hentSesjonsdata<T>(
 ) {
   const session = await getSession(request.headers.get("Cookie"));
   const data = session.get(PRIVAT_AVTALE_SESSION_KEY);
+
   const result = schema.safeParse(data);
   if (!result.success) {
     return null;

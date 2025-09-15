@@ -19,32 +19,37 @@ export type StegdataType = {
 export const stegKonfigurasjon: StegKonfigurasjon[] = [
   {
     step: 1,
-    path: RouteConfig.PRIVAT_AVTALE.STEG_1_FORELDRE,
-    key: "omDegOgDenAndreForelderen",
+    path: RouteConfig.PRIVAT_AVTALE.STEG_1_OM_DEG,
+    key: "omDeg",
   },
   {
     step: 2,
-    path: RouteConfig.PRIVAT_AVTALE.STEG_2_BARN_OG_BIDRAG,
-    key: "barnOgBidrag",
+    path: RouteConfig.PRIVAT_AVTALE.STEG_2_OM_DEN_ANDRE_FORELDEREN,
+    key: "omDenAndreForelderen",
   },
   {
     step: 3,
-    path: RouteConfig.PRIVAT_AVTALE.STEG_3_AVTALEDETALJER,
-    key: "avtaledetaljer",
+    path: RouteConfig.PRIVAT_AVTALE.STEG_3_BARN_OG_BIDRAG,
+    key: "barnOgBidrag",
   },
   {
     step: 4,
-    path: RouteConfig.PRIVAT_AVTALE.STEG_4_ANDRE_BESTEMMELSER,
-    key: "andreBestemmelser",
+    path: RouteConfig.PRIVAT_AVTALE.STEG_4_AVTALEDETALJER,
+    key: "avtaledetaljer",
   },
   {
     step: 5,
-    path: RouteConfig.PRIVAT_AVTALE.STEG_5_VEDLEGG,
-    key: "vedlegg",
+    path: RouteConfig.PRIVAT_AVTALE.STEG_5_ANDRE_BESTEMMELSER,
+    key: "andreBestemmelser",
   },
   {
     step: 6,
-    path: RouteConfig.PRIVAT_AVTALE.STEG_6_OPPSUMMERING_OG_AVTALE,
+    path: RouteConfig.PRIVAT_AVTALE.STEG_6_VEDLEGG,
+    key: "vedlegg",
+  },
+  {
+    step: 7,
+    path: RouteConfig.PRIVAT_AVTALE.STEG_7_OPPSUMMERING_OG_AVTALE,
     key: "oppsummering",
   },
 ];
@@ -58,7 +63,26 @@ export function stegdata(språk: Språk): StegdataType[] {
 }
 
 export const privatAvtaleTekster = definerTekster({
-  omDegOgDenAndreForelderen: {
+  omDeg: {
+    meta: {
+      tittel: {
+        nb: "Om deg – Privat avtale om barnebidrag",
+        en: "About you – Private child support agreement",
+        nn: "Om deg – Privat avtale om barnebidrag",
+      },
+      beskrivelse: {
+        nb: "Fyll inn informasjon om deg for å opprette en privat avtale om barnebidrag.",
+        en: "Enter your information to create a private child support agreement.",
+        nn: "Fyll inn informasjon om deg for å opprette ei privat avtale om barnebidrag.",
+      },
+    },
+    overskrift: {
+      nb: "Om deg",
+      en: "About you",
+      nn: "Om deg",
+    },
+  },
+  omDenAndreForelderen: {
     meta: {
       tittel: {
         nb: "Om den andre forelderen - Barnebidrag privat avtale",
