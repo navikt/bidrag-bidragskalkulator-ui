@@ -211,7 +211,7 @@ const tekster = definerTekster({
   personopplysninger: {
     overskrift: {
       nb: "Personopplysninger i ny og gammel bidragskalkulator",
-      en: "Personal information in the new and old calculator",
+      en: "Personal data in the new and old calculator",
       nn: "Personopplysingar i ny og gammel kalkulatoren",
     },
     beskrivelse: {
