@@ -210,14 +210,14 @@ const tekster = definerTekster({
   },
   personopplysninger: {
     overskrift: {
-      nb: "Personopplysninger i den nye kalkulatoren",
-      en: "Personal information in the new calculator",
-      nn: "Personopplysingar i den nye kalkulatoren",
+      nb: "Personopplysninger i ny og gammel bidragskalkulator",
+      en: "Personal information in the new and old calculator",
+      nn: "Personopplysingar i ny og gammel kalkulatoren",
     },
     beskrivelse: {
-      nb: "I den nye kalkulatoren er det du som må legge inn opplysninger for å finne ut hva barnebidraget kan være. Vi lagrer ingen opplysninger om deg, og det du legger inn av informasjon, kan ikke spores tilbake til deg.",
-      en: "In the new calculator, you must enter information to find out what the child support amount may be. We do not store any information about you, and the information you enter cannot be traced back to you.",
-      nn: "I den nye kalkulatoren er det du som må legge inn opplysingar for å finne ut kva fostringstilskotet kan vere. Vi lagrar ingen opplysingar om deg, og det du legg inn av informasjon, kan ikkje sporast tilbake til deg.",
+      nb: "I ny og gammel bidragskalkulator er det du som må legge inn opplysninger for å finne ut hva barnebidraget kan være. Vi lagrer ingen opplysninger om deg, og det du legger inn av informasjon, kan ikke spores tilbake til deg.",
+      en: "In both the new and old child support calculator, you must enter information to find out what the child support amount may be. We do not store any information about you, and the information you enter cannot be traced back to you.",
+      nn: "I ny og gammel bidragskalkulator er det du som må legge inn opplysingar for å finne ut kva fostringstilskotet kan vere. Vi lagrar ingen opplysingar om deg, og det du legg inn av informasjon, kan ikkje sporast tilbake til deg.",
     },
     lesMer: {
       tittel: {
