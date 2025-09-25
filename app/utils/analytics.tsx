@@ -1,3 +1,4 @@
+import { getAnalyticsInstance } from "@navikt/nav-dekoratoren-moduler";
 import {
   skjemanavnMapping,
   type Seksjon,
@@ -5,6 +6,8 @@ import {
   type SkjemaseksjonFullført,
   type Sporingshendelse,
 } from "~/types/analyse";
+
+const logger = getAnalyticsInstance("bidragskalkulator-dekorator");
 
 type Sporingsdata = Record<string, unknown> & {
   /**
@@ -42,13 +45,14 @@ export const sporHendelse = async (hendelse: Sporingshendelse) => {
   }
 
   if (process.env.NODE_ENV === "development") {
+    logger(hendelsetype, sporingsdata);
     console.info(`[DEV] hendelse sporet:`, hendelsetype, sporingsdata);
     return;
   }
 
-  return window.umami
-    ? window.umami.track(hendelsetype, sporingsdata)
-    : Promise.resolve();
+  // return window.umami
+  //   ? window.umami.track(hendelsetype, sporingsdata)
+  //   : Promise.resolve();
 };
 
 const erSkjemahendelse = (
