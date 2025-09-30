@@ -27,6 +27,10 @@ spec:
       value: {{INGRESS}}
     - name: TELEMETRY_URL
       value: {{TELEMETRY_URL}}
+    - name: UXSIGNALS_ENABLED
+      value: "{{ UXSIGNALS_ENABLED }}"
+    - name: UXSIGNALS_MODE
+      value: "{{ UXSIGNALS_MODE }}"
   envFrom: 
     - secret: bidragskalkulator-secrets
   accessPolicy:

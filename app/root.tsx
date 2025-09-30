@@ -11,6 +11,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useRouteLoaderData,
   type HeadersArgs,
   type LoaderFunctionArgs,
 } from "react-router";
@@ -42,12 +43,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
       umamiWebsiteId: env.UMAMI_WEBSITE_ID,
       applikasjonsside,
       telemetriUrl: env.TELEMETRY_URL,
+      uxSignalsEnabled: env.UXSIGNALS_ENABLED,
+      uxSignalsMode: env.UXSIGNALS_MODE,
     },
     {
       headers,
     },
   );
 }
+
+export const useKalkulatorRootdata = () => {
+  const loaderData = useRouteLoaderData<typeof loader>("root");
+  if (!loaderData) {
+    throw new Error("Kunne ikke finne root.");
+  }
+  return loaderData;
+};
 
 export const headers = ({ loaderHeaders }: HeadersArgs) => {
   return loaderHeaders;

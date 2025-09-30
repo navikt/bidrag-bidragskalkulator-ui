@@ -22,6 +22,7 @@ import {
   BARNEBIDRAG_SKJEMA_STANDARDVERDI,
   sporSkjemaseksjonFullført,
 } from "~/features/skjema/utils";
+import { UxsignalsWidget } from "~/features/UxsignalsWidget";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
@@ -61,6 +62,7 @@ export const useKalkulatorgrunnlagsdata = () => {
 export default function Barnebidragskalkulator() {
   const actionData = useActionData<typeof action>();
   const resultatRef = useRef<HTMLDivElement>(null);
+  const resultatOgUXSignalWidgetRef = useRef<HTMLDivElement>(null);
   const { t } = useOversettelse();
   const [erEndretSidenUtregning, settErEndretSidenUtregning] = useState(false);
 
@@ -73,11 +75,12 @@ export default function Barnebidragskalkulator() {
     defaultValues: BARNEBIDRAG_SKJEMA_STANDARDVERDI,
     onSubmitSuccess: () => {
       setTimeout(() => {
-        resultatRef.current?.focus({ preventScroll: true });
-        resultatRef.current?.scrollIntoView({
+        resultatOgUXSignalWidgetRef.current?.focus({ preventScroll: true });
+        resultatOgUXSignalWidgetRef.current?.scrollIntoView({
           behavior: "smooth",
-          block: "center",
+          block: "start",
         });
+        resultatRef.current?.focus();
       }, 1);
       settErEndretSidenUtregning(false);
     },
@@ -152,7 +155,10 @@ export default function Barnebidragskalkulator() {
             </div>
           )}
           {visResultat && (
-            <Resultatpanel data={skjemarespons} ref={resultatRef} />
+            <div className="space-y-4" ref={resultatOgUXSignalWidgetRef}>
+              <Resultatpanel data={skjemarespons} ref={resultatRef} />
+              <UxsignalsWidget />
+            </div>
           )}
         </div>
       </FormProvider>
