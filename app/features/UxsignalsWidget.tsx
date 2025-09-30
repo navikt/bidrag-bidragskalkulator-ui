@@ -2,12 +2,10 @@ import { useEffect } from "react";
 import { useKalkulatorRootdata } from "~/root";
 
 export function UxsignalsWidget() {
-  const uxsignalId = "uxsignals-bidrag-barnebidragskalkulator";
+  const uxsignalId = "panel-nx67sbqrs1";
   const { uxSignalsEnabled, uxSignalsMode } = useKalkulatorRootdata();
   const erAktivert = uxSignalsEnabled === "true";
-  console.log("🚀 ~ UxsignalsWidget ~ erAktivert:", erAktivert);
   const mode = uxSignalsMode;
-  console.log("🚀 ~ UxsignalsWidget ~ mode:", mode);
 
   useEffect(() => {
     if (erAktivert) {
