@@ -22,6 +22,7 @@ import {
   BARNEBIDRAG_SKJEMA_STANDARDVERDI,
   sporSkjemaseksjonFullført,
 } from "~/features/skjema/utils";
+import { UxsignalsWidget } from "~/features/UxsignalsWidget";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
@@ -154,6 +155,7 @@ export default function Barnebidragskalkulator() {
           {visResultat && (
             <Resultatpanel data={skjemarespons} ref={resultatRef} />
           )}
+          <UxsignalsWidget />
         </div>
       </FormProvider>
     </>

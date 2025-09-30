@@ -3,5 +3,7 @@
   "ENVIRONMENT": "prod",
   "UMAMI_WEBSITE_ID": "55af67ac-c5df-440e-80d6-518577e6de70",
   "INGRESS": "https://www.nav.no/barnebidrag/tjenester",
-  "TELEMETRY_URL": "https://telemetry.nav.no/collect"
+  "TELEMETRY_URL": "https://telemetry.nav.no/collect",
+  "UXSIGNALS_ENABLED": "false",
+  "UXSIGNALS_MODE": "production"
 }
