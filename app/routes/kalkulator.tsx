@@ -85,6 +85,17 @@ export default function Barnebidragskalkulator() {
       settErEndretSidenUtregning(false);
     },
     onInvalidSubmit: () => {
+      const errors = form.formState.fieldErrors;
+      const feltMedFeil = Object.keys(errors);
+
+      feltMedFeil.forEach((feil) => {
+        sporHendelse({
+          hendelsetype: "skjema validering feilet",
+          skjemaId: "barnebidragskalkulator-under-18",
+          feltMedFeil: feil,
+        });
+      });
+
       sporHendelse({
         hendelsetype: "skjema validering feilet",
         skjemaId: "barnebidragskalkulator-under-18",
