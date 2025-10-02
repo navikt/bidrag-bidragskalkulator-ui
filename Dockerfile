@@ -14,13 +14,14 @@ COPY . .
 COPY --from=dependencies /app/node_modules ./node_modules
 RUN npm run build
 
-FROM node:24-alpine
+FROM node:24-alpine AS runner
 WORKDIR /app
+ENV NODE_ENV=production
 COPY package*.json ./
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=builder /app/build ./build
 
-ENV NODE_ENV=production
+RUN npm prune --omit=dev
+
 EXPOSE 3000
 CMD ["npm", "run", "start"]
-
