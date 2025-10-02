@@ -94,7 +94,7 @@ export const defaultBidragsutregning: Barnebidragsutregning = {
   resultater: [
     {
       alder: 8,
-      sum: 800,
+      sum: 760,
       bidragstype: "MOTTAKER",
     },
   ],
