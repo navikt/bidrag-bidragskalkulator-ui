@@ -57,7 +57,7 @@
     "@react-router/dev": "^7.9.2",
     "@tailwindcss/vite": "^4.1.13",
     "@types/archiver": "^6.0.3",
-    "@types/node": "^24.5.2",
+    "@types/node": "^24.6.2",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
