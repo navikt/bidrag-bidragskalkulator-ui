@@ -1,4 +1,11 @@
-import { BodyLong, Button, Heading, List, ReadMore } from "@navikt/ds-react";
+import {
+  BodyLong,
+  Button,
+  Heading,
+  Link,
+  List,
+  ReadMore,
+} from "@navikt/ds-react";
 import { ListItem } from "@navikt/ds-react/List";
 import type { MetaArgs } from "react-router";
 import { Link as ReactRouterLink } from "react-router";
@@ -32,6 +39,7 @@ const Landingsside = () => {
       </Heading>
 
       <BodyLong spacing>{t(tekster.beskrivelse)}</BodyLong>
+      <BodyLong spacing>{t(tekster.beskrivelse2)}</BodyLong>
 
       <section className="mb-7">
         <Heading size="large" level="2" spacing>
@@ -167,9 +175,15 @@ const tekster = definerTekster({
     nn: <>Fostringstilskots&shy;kalkulator</>,
   },
   beskrivelse: {
-    nb: "Barnebidragskalkulatoren hjelper deg å regne ut hva du skal betale eller motta i barnebidrag.",
+    nb: "Barnebidragskalkulatoren er et verktøy for deg som ønsker å lage en privat avtale om barnebidrag – uten at Nav er involvert. Kalkulatoren gir et forslag til bidragsbeløp basert på informasjonen du legger inn, og kan være et nyttig utgangspunkt i dialogen dere foreldre imellom.",
     en: "The child support calculator helps you calculate how much you should pay or receive in child support.",
     nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut kva du skal betale eller motta i fostringstilskot.",
+  },
+  beskrivelse2: {
+    nb: "Beløpet kalkulatoren foreslår er kun veiledende og er ikke det samme som at Nav fatter et vedtak.",
+    // TODO
+    en: "",
+    nn: "",
   },
   undertittel: {
     nb: "Prøv vår nye kalkulator",
@@ -182,10 +196,63 @@ const tekster = definerTekster({
     nn: "Vi vidareutviklar fostringstilskotskalkulatoren for å gjere den enklare å bruke. Den gamle kalkulatoren er framleis tilgjengeleg, men vi håpar at du vil prøve den nye kalkulatoren og dele erfaringane dine.",
   },
   brukGammelKalkulator: {
+    // overskrift: {
+    //   nb: "I noen tilfeller bør du likevel bruke den gamle kalkulatoren:",
+    //   en: "In some situations, you should still use the old calculator:",
+    //   nn: "I nokre tilfelle bør du likevel bruke den gamle kalkulatoren:",
+    // },
     overskrift: {
-      nb: "I noen tilfeller bør du likevel bruke den gamle kalkulatoren:",
-      en: "In some situations, you should still use the old calculator:",
-      nn: "I nokre tilfelle bør du likevel bruke den gamle kalkulatoren:",
+      nb: (
+        <>
+          I noen tilfeller bør du likevel bruke{" "}
+          <Link
+            href="https://tjenester.nav.no/bidragskalkulator/innledning?0"
+            onClick={() => {
+              sporHendelse({
+                hendelsetype: "gå til kalkulator klikket",
+                kalkulatorversjon: "gammel",
+              });
+            }}
+          >
+            den gamle kalkulatoren
+          </Link>
+          :
+        </>
+      ),
+      en: (
+        <>
+          In some situations, you should still use{" "}
+          <Link
+            href="https://tjenester.nav.no/bidragskalkulator/innledning?0"
+            onClick={() => {
+              sporHendelse({
+                hendelsetype: "gå til kalkulator klikket",
+                kalkulatorversjon: "gammel",
+              });
+            }}
+          >
+            the old calculator
+          </Link>
+          :
+        </>
+      ),
+      nn: (
+        <>
+          I nokre tilfelle bør du likevel bruke{" "}
+          <Link
+            href="https://tjenester.nav.no/bidragskalkulator/innledning?0"
+            onClick={() => {
+              sporHendelse({
+                hendelsetype: "gå til kalkulator klikket",
+                kalkulatorversjon: "gammel",
+              });
+            }}
+          >
+            en gamle kalkulatoren
+          </Link>
+          :
+        </>
+      ),
     },
     situasjon1: {
       nb: "hvis den som skal betale barnebidrag, også betaler barnebidrag for andre barn",
