@@ -296,7 +296,7 @@ const tekster = definerTekster({
   },
   detaljer: {
     overskrift: {
-      nb: "Hvordan barnebidraget er beregnet",
+      nb: "vebidraget er beregnet",
       en: "How the child support is calculated",
       nn: "Korleis fostringstilskotet er rekna ut",
     },
@@ -326,7 +326,8 @@ const tekster = definerTekster({
       nn: "Desse summane skal du og den andre forelderen dele mellom dykk. Korleis fordelinga mellom dykk blir, er avhengig av inntekt og samver, i tillegg til ei rekkje andre forhold. ",
     },
     utregningPerBarn: {
-      nb: "Beløpet over er en beregning av hvor mye du til sammen skal betale eller motta per måned. For hvert barn ser beregningen slik ut:",
+      nb: "Beløpet over er et forslag fra kalkulatoren for hvor mye du til sammen kan betale eller motta per måned. For hvert barn ser beregningen slik ut:",
+      // TODO: engelsk og nynorsk er ikke oppdatert
       en: "The amount above is a calculation of how much you should pay or receive in total per month. For each child, the calculation looks like this:",
       nn: "Beløpet over er ei berekning av kor mykje du til saman skal betale eller motta per månad. For kvart barn ser berekninga slik ut:",
     },
