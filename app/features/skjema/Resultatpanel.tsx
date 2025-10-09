@@ -178,10 +178,6 @@ export const Resultatpanel = ({ data, ref }: Props) => {
               <ListItem>{t(tekster.bidragetSkalDekke.liste3)}</ListItem>
             </List>
 
-            <BodyLong spacing>
-              {t(tekster.bidragetSkalDekke.beskrivelse2)}
-            </BodyLong>
-
             <BodyLong>
               <Link
                 href={t(tekster.bidragetSkalDekke.lesMerLenke)}
@@ -213,7 +209,7 @@ const tekster = definerTekster({
   },
   overskrift: {
     betale: (sum) => ({
-      nb: `Du skal betale ${formatterSum(
+      nb: `Kalkulatoren foreslår at du betaler ${formatterSum(
         sum as number,
       )} i barnebidrag per måned`,
       en: `You should pay ${formatterSum(
@@ -224,7 +220,7 @@ const tekster = definerTekster({
       )} i fostringstilskot per månad`,
     }),
     motta: (sum) => ({
-      nb: `Du skal motta ${formatterSum(
+      nb: `Kalkulatoren foreslår at du mottar ${formatterSum(
         sum as number,
       )} i barnebidrag per måned`,
       en: `You should receive ${formatterSum(
@@ -241,7 +237,8 @@ const tekster = definerTekster({
     nn: "Det kan vere fordi de har delt nettene med barnet likt mellom dykk, og fordi det er liten forskjell mellom inntektene dykkar.",
   },
   hvordanAvtale: {
-    nb: "Den endelige summen på barnebidraget avtaler du med den andre forelderen. Da står dere fritt til å endre avtalen på et senere tidspunkt om ting som inntekt eller samvær skulle endre seg. Om du vil, kan du opprette en slik avtale her:",
+    nb: "Det endelige beløpet for barnebidraget avtaler dere sammen. Da står dere fritt til å endre avtalen på et senere tidspunkt om ting som inntekt eller samvær skulle endre seg. Om dere vil, kan dere opprette en slik avtale her:",
+    // TODO: engelsk og nynorsk er ikke oppdatert
     en: "The final amount of child support is agreed upon with the other parent. You are free to change the agreement at a later time if things like income or custody change. If you want, you can create such an agreement here:",
     nn: "Den endelege summen på fostringstilskotet er noko du avtalar med den andre forelderen. Du står fritt til å endre avtalen på eit seinare tidspunkt viss ting som inntekt eller samvær endrar seg. Om du vil, kan du opprette ein slik avtale her:",
   },
@@ -336,11 +333,12 @@ const tekster = definerTekster({
     motta: (alder, kostnad) => ({
       nb: (
         <>
-          For {alder}-åringen skal du motta{" "}
+          For {alder}-åringen foreslår kalkulatoren at du mottar{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
+      // TODO: engelsk og nynorsk er ikke oppdatert
       en: (
         <>
           For the {alder} year old, you should receive{" "}
@@ -427,11 +425,6 @@ const tekster = definerTekster({
       nb: "tilsynsutgifter (barnehage, skolefritidsordning, dagmamma)",
       en: "child-care costs (kindergarten, after-school programme (SFO), nanny)",
       nn: "tilsynsutgifter (barnehage, skulefritidsordning, dagmamma)",
-    },
-    beskrivelse2: {
-      nb: "Det er underholdskostnadene Nav tar utgangspunkt i når vi fastsetter barnebidraget.",
-      en: "It is the maintenance costs that Nav uses as a basis when determining the support.",
-      nn: "Det er underhaldskostnadane Nav tar utgangspunkt i når vi fastset fostringstilskotet.",
     },
     lesMer: {
       nb: "Les mer om hva barnebidraget skal dekke",

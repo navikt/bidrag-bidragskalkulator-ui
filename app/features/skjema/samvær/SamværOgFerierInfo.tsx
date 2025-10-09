@@ -27,7 +27,8 @@ export const SamværOgFerierInfo = () => {
 
 const tekster = definerTekster({
   overskrift: {
-    nb: "Hvordan ferie påvirker barnebidraget",
+    nb: "Du må regne ut og legge til ferie i månedlig samvær selv",
+    // TODO: engelsk og nynorsk er ikke oppdatert
     en: "How holidays affect child support",
     nn: "Korleis ferie påverkar barnebidraget",
   },
