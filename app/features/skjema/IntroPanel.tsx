@@ -44,7 +44,7 @@ const tekster = definerTekster({
     overskrift: {
       nb: (
         <>
-          I noen tilfeller bør du bruke{" "}
+          I noen tilfeller bør du likevel bruke{" "}
           <Link
             href="https://tjenester.nav.no/bidragskalkulator/innledning"
             onClick={sporGåTilGammelKalkulatorKlikket}
