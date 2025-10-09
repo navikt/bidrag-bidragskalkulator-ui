@@ -358,11 +358,12 @@ const tekster = definerTekster({
     betale: (alder, kostnad) => ({
       nb: (
         <>
-          For {alder}-åringen skal du betale{" "}
+          For {alder}-åringen foreslår kalkulatoren at du betaler{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
+      // TODO: engelsk og nynorsk er ikke oppdatert
       en: (
         <>
           For the {alder} year old, you should pay{" "}
