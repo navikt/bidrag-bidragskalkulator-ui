@@ -1,11 +1,4 @@
-import {
-  BodyLong,
-  Button,
-  Heading,
-  Link,
-  List,
-  ReadMore,
-} from "@navikt/ds-react";
+import { BodyLong, Button, Heading, List, ReadMore } from "@navikt/ds-react";
 import { ListItem } from "@navikt/ds-react/List";
 import type { MetaArgs } from "react-router";
 import { Link as ReactRouterLink } from "react-router";
@@ -175,13 +168,14 @@ const tekster = definerTekster({
     nn: <>Fostringstilskots&shy;kalkulator</>,
   },
   beskrivelse: {
-    nb: "Barnebidragskalkulatoren er et verktøy for deg som ønsker å lage en privat avtale om barnebidrag – uten at Nav er involvert. Kalkulatoren gir et forslag til bidragsbeløp basert på informasjonen du legger inn, og kan være et nyttig utgangspunkt i dialogen dere foreldre imellom.",
+    nb: "Barnebidragskalkulatoren er et verktøy for deg som ønsker å lage en privat avtale om barnebidrag for barn under 18 år – uten at Nav er involvert. Kalkulatoren gir et forslag til bidragsbeløp basert på informasjonen du legger inn, og kan være et nyttig utgangspunkt for at dere kommer frem til et beløp som passer dere.",
+    // TODO: engelsk og nynorsk er ikke oppdatert
     en: "The child support calculator helps you calculate how much you should pay or receive in child support.",
     nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut kva du skal betale eller motta i fostringstilskot.",
   },
   beskrivelse2: {
-    nb: "Beløpet kalkulatoren foreslår er kun veiledende og er ikke det samme som at Nav fatter et vedtak.",
-    // TODO
+    nb: "Beløpet som kalkulatoren foreslår er kun veiledende, og er ikke det samme som at Nav har fattet et vedtak.",
+    // TODO: engelsk og nynorsk er ikke oppdatert
     en: "",
     nn: "",
   },
@@ -196,66 +190,14 @@ const tekster = definerTekster({
     nn: "Vi vidareutviklar fostringstilskotskalkulatoren for å gjere den enklare å bruke. Den gamle kalkulatoren er framleis tilgjengeleg, men vi håpar at du vil prøve den nye kalkulatoren og dele erfaringane dine.",
   },
   brukGammelKalkulator: {
-    // overskrift: {
-    //   nb: "I noen tilfeller bør du likevel bruke den gamle kalkulatoren:",
-    //   en: "In some situations, you should still use the old calculator:",
-    //   nn: "I nokre tilfelle bør du likevel bruke den gamle kalkulatoren:",
-    // },
     overskrift: {
-      nb: (
-        <>
-          I noen tilfeller bør du likevel bruke{" "}
-          <Link
-            href="https://tjenester.nav.no/bidragskalkulator/innledning?0"
-            onClick={() => {
-              sporHendelse({
-                hendelsetype: "gå til kalkulator klikket",
-                kalkulatorversjon: "gammel",
-              });
-            }}
-          >
-            den gamle kalkulatoren
-          </Link>
-          :
-        </>
-      ),
-      en: (
-        <>
-          In some situations, you should still use{" "}
-          <Link
-            href="https://tjenester.nav.no/bidragskalkulator/innledning?0"
-            onClick={() => {
-              sporHendelse({
-                hendelsetype: "gå til kalkulator klikket",
-                kalkulatorversjon: "gammel",
-              });
-            }}
-          >
-            the old calculator
-          </Link>
-          :
-        </>
-      ),
-      nn: (
-        <>
-          I nokre tilfelle bør du likevel bruke{" "}
-          <Link
-            href="https://tjenester.nav.no/bidragskalkulator/innledning?0"
-            onClick={() => {
-              sporHendelse({
-                hendelsetype: "gå til kalkulator klikket",
-                kalkulatorversjon: "gammel",
-              });
-            }}
-          >
-            en gamle kalkulatoren
-          </Link>
-          :
-        </>
-      ),
+      nb: "I noen tilfeller bør du likevel bruke den gamle kalkulatoren:",
+      en: "In some situations, you should still use the old calculator:",
+      nn: "I nokre tilfelle bør du likevel bruke den gamle kalkulatoren:",
     },
     situasjon1: {
-      nb: "hvis den som skal betale barnebidrag, også betaler barnebidrag for andre barn",
+      nb: "hvis den som skal betale barnebidrag, også betaler barnebidrag for barn med en annen forelder",
+      // TODO: engelsk og nynorsk er ikke oppdatert
       en: "if the parent who is to pay child support also pays child support for other children",
       nn: "viss den som skal betale fostringstilskot, også betalar fostringstilskot for andre barn",
     },
