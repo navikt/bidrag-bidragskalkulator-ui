@@ -75,8 +75,11 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
           }
         }}
       >
-        <BodyLong className="mb-2">
+        <BodyLong className="mb-6">
           {t(tekster.alder.lesMer.beskrivelse)}
+        </BodyLong>
+        <BodyLong className="mb-6" spacing>
+          {t(tekster.alder.lesMer.beskrivelse2)}
         </BodyLong>
         <List>
           {underholdskostnadsgrupper.map(
@@ -147,9 +150,16 @@ const tekster = definerTekster({
         nn: "Kvifor vi spør om alder",
       },
       beskrivelse: {
-        nb: "Når vi beregner barnebidraget, er det viktig å vite hvor mye det koster å forsørge et barn (underholdskostnaden). Underholdskostnaden endrer seg med barnets alder, og den hentes fra SIFOs referansebudsjetter som oppdateres hvert år. Underholdskostnaden per måned for barn i ulike aldre er i dag:",
+        nb: "Vi spør om alderen til barnet for å vise hvor mye det gjennomsnittlig koster å forsørge et barn. Kalkulatoren bruker faste satser basert på SIFOs referansebudsjett for bo- og forbruksutgifter. Den ordinære barnetrygden trekkes fra, fordi dette er penger som skal bidra til å forsørge barnet. Bo- og forbruksutgiftene oppdateres den 1. juli hvert år, og øker med barnets alder. Satsen for den ordinære barnetrygden oppdateres regelmessig.",
+        // TODO: engelsk og nynorsk er ikke oppdatert
         nn: "Når vi reknar ut fostringstilskotet, er det viktig å vite kor mykje det kostar å forsørge eit barn (underhaldskostnaden). Underhaldskostnaden endrar seg med alderen til barnet, og han blir henta frå referansebudsjettet til SIFO som blir oppdatert kvart år. Underhaldskostnaden per månad for barn i ulike aldrar er i dag:",
         en: "When we calculate child support, it is important to know how much it costs to support a child (the maintenance cost). The maintenance cost changes with the child's age, and it is taken from SIFO's reference budgets, which are updated every year. The current maintenance cost per month for children in different ages is:",
+      },
+      beskrivelse2: {
+        nb: "Satsen for bo- og forbruksutgifter, minus ordinær barnetrygd er per i dag:",
+        // TODO: engelsk og nynorsk er ikke oppdatert
+        en: "",
+        nn: "",
       },
     },
   },
