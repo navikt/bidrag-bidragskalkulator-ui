@@ -15,7 +15,7 @@ import {
 } from "./schema";
 import {
   sporKalkulatorSpørsmålBesvart,
-  tilUnderholdskostnadsgruppeMedLabel,
+  tilBoOgForbruksutgiftsgrupperMedLabel,
 } from "./utils";
 
 type Props = {
@@ -24,7 +24,7 @@ type Props = {
 };
 
 export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
-  const { underholdskostnader } = useKalkulatorgrunnlagsdata();
+  const { boOgForbruksutgifter } = useKalkulatorgrunnlagsdata();
   const { t } = useOversettelse();
   const form = useFormContext<BarnebidragSkjema>();
 
@@ -37,13 +37,13 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
-  const underholdskostnadsgrupper = useMemo(
+  const boOgForbruksutgiftsgrupper = useMemo(
     () =>
-      tilUnderholdskostnadsgruppeMedLabel(underholdskostnader, {
+      tilBoOgForbruksutgiftsgrupperMedLabel(boOgForbruksutgifter, {
         årEntall: t(tekster.år.entall),
         årFlertall: t(tekster.år.flertall),
       }),
-    [underholdskostnader, t],
+    [boOgForbruksutgifter, t],
   );
 
   return (
@@ -82,8 +82,8 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
           {t(tekster.alder.lesMer.beskrivelse2)}
         </BodyLong>
         <List>
-          {underholdskostnadsgrupper.map(
-            ({ label, underholdskostnad, aldre }) => {
+          {boOgForbruksutgiftsgrupper.map(
+            ({ label, boOgForbruksutgift, aldre }) => {
               const fremhevGruppe =
                 barnField.field("alder").touched() &&
                 aldre.includes(Number(alder));
@@ -91,7 +91,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
                 <ListItem key={label}>
                   <span
                     className={fremhevGruppe ? "font-bold" : undefined}
-                  >{`${label}: ${formatterSum(underholdskostnad)}`}</span>
+                  >{`${label}: ${formatterSum(boOgForbruksutgift)}`}</span>
                 </ListItem>
               );
             },

@@ -296,7 +296,7 @@ const tekster = definerTekster({
   },
   detaljer: {
     overskrift: {
-      nb: "vebidraget er beregnet",
+      nb: "Hvordan barnebidraget er beregnet",
       en: "How the child support is calculated",
       nn: "Korleis fostringstilskotet er rekna ut",
     },

@@ -16,75 +16,74 @@ import {
 
 export const SAMVÆR_STANDARDVERDI = "15";
 
-type Underholdskostnadsgrupper = {
-  underholdskostnad: number;
+type BoOgForbruksutgiftsgrupper = {
+  boOgForbruksutgift: number;
   aldre: number[];
 }[];
 
-const tilUnderholdskostnadsgrupper = (
-  underholdskostnader: Record<string, number>,
-): Underholdskostnadsgrupper => {
-  const underholdskostnadAldreListe = Object.entries(underholdskostnader)
-    .map(([alder, underholdskostnad]) => [Number(alder), underholdskostnad])
+const tilBoOgForbruksutgiftsgrupper = (
+  boOgForbruksutgifter: Record<string, number>,
+): BoOgForbruksutgiftsgrupper => {
+  const boOgForbruksutgifterAldreListe = Object.entries(boOgForbruksutgifter)
+    .map(([alder, boOgForbruksutgift]) => [Number(alder), boOgForbruksutgift])
     .sort(([a], [b]) => a - b);
 
-  const initiellListe: Underholdskostnadsgrupper = [];
+  const initiellListe: BoOgForbruksutgiftsgrupper = [];
 
-  const aldersgrupperOgUnderholdskostnad = underholdskostnadAldreListe.reduce(
-    (underholdskostnadsgrupper, [alder, underholdskostnad]) => {
-      const forrigeGruppe =
-        underholdskostnadsgrupper[underholdskostnadsgrupper.length - 1];
+  const aldersgrupperOgBoOgForbruksutgift =
+    boOgForbruksutgifterAldreListe.reduce(
+      (boOgForbruksutgiftsgrupper, [alder, boOgForbruksutgift]) => {
+        const forrigeGruppe =
+          boOgForbruksutgiftsgrupper[boOgForbruksutgiftsgrupper.length - 1];
 
-      const harSammeKostnadSomForrige =
-        forrigeGruppe?.underholdskostnad === underholdskostnad;
+        const harSammeKostnadSomForrige =
+          forrigeGruppe?.boOgForbruksutgift === boOgForbruksutgift;
 
-      if (harSammeKostnadSomForrige) {
+        if (harSammeKostnadSomForrige) {
+          return [
+            ...boOgForbruksutgiftsgrupper.slice(0, -1),
+            {
+              boOgForbruksutgift: boOgForbruksutgift,
+              aldre: [...forrigeGruppe.aldre, alder],
+            },
+          ];
+        }
+
         return [
-          ...underholdskostnadsgrupper.slice(0, -1),
+          ...boOgForbruksutgiftsgrupper,
           {
-            underholdskostnad: underholdskostnad,
-            aldre: [...forrigeGruppe.aldre, alder],
+            boOgForbruksutgift: boOgForbruksutgift,
+            aldre: [alder],
           },
         ];
-      }
+      },
+      initiellListe,
+    );
 
-      return [
-        ...underholdskostnadsgrupper,
-        {
-          underholdskostnad: underholdskostnad,
-          aldre: [alder],
-        },
-      ];
-    },
-    initiellListe,
-  );
-
-  return aldersgrupperOgUnderholdskostnad;
+  return aldersgrupperOgBoOgForbruksutgift;
 };
 
-export const tilUnderholdskostnadsgruppeMedLabel = (
-  underholdskostnader: Record<string, number>,
+export const tilBoOgForbruksutgiftsgrupperMedLabel = (
+  boOgForbruksutgifter: Record<string, number>,
   tekster: {
     årEntall: string;
     årFlertall: string;
   },
-): { label: string; underholdskostnad: number; aldre: number[] }[] => {
-  const grupper = tilUnderholdskostnadsgrupper(underholdskostnader);
+): { label: string; boOgForbruksutgift: number; aldre: number[] }[] => {
+  const grupper = tilBoOgForbruksutgiftsgrupper(boOgForbruksutgifter);
 
-  return grupper.map(({ aldre, underholdskostnad }) => {
+  return grupper.map(({ aldre, boOgForbruksutgift }) => {
     const lavesteAlder = Math.min(...aldre);
     const høyesteAlder = Math.max(...aldre);
 
-    const labelLaveste = lavesteAlder === 1 ? 0 : lavesteAlder;
-
     const label =
-      labelLaveste === høyesteAlder
-        ? `${labelLaveste} ${labelLaveste === 1 ? tekster.årEntall : tekster.årFlertall}`
-        : `${labelLaveste}–${høyesteAlder} ${tekster.årFlertall}`;
+      lavesteAlder === høyesteAlder
+        ? `${lavesteAlder} ${lavesteAlder === 1 ? tekster.årEntall : tekster.årFlertall}`
+        : `${lavesteAlder}–${høyesteAlder} ${tekster.årFlertall}`;
 
     return {
       label,
-      underholdskostnad,
+      boOgForbruksutgift,
       aldre,
     };
   });
