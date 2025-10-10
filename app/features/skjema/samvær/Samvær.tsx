@@ -137,8 +137,8 @@ const tekster = definerTekster({
   bosted: {
     label: {
       nb: "Hvor bor barnet?",
-      // TODO: engelsk og nynorsk er ikke oppdatert
-      en: "Where will the child have a permanent residence?",
+      en: "Where is the child living?",
+      // TODO: nynorsk er ikke oppdatert
       nn: "Kvar skal barnet bu fast?",
     },
     valg: {
@@ -149,8 +149,8 @@ const tekster = definerTekster({
       },
       DELT_FAST_BOSTED: {
         nb: "Vi har en juridisk bindende avtale om delt fast bosted",
-        // TODO: engelsk og nynorsk er ikke oppdatert
-        en: "We have an agreement on permanent residence with both of us (shared permanent residence)",
+        en: "We have a legally binding agreement on shared permanent residence",
+        // TODO: nynorsk er ikke oppdatert
         nn: "Vi har avtale om fast bustad hos begge (delt fast bustad)",
       },
       HOS_MEG: {
@@ -168,13 +168,12 @@ const tekster = definerTekster({
   samvær: {
     label: {
       nb: "Hvor mye bor barnet hos deg?",
-      // TODO: engelsk og nynorsk er ikke oppdatert
-      en: "How much time is the child going to spend with you?",
+      en: "How much time is the child living with you?",
+      // TODO: nynorsk er ikke oppdatert
       nn: "Kor mykje skal barnet vere saman med deg?",
     },
     beskrivelse: {
       nb: "Estimer hvor mange netter barnet bor hos deg i snitt per måned.",
-      // TODO: engelsk og nynorsk er ikke oppdatert
       en: "Estimate how many nights the child will stay with you on average per month",
       nn: "Estimer kor mange netter barnet vil vere hos deg i snitt per månad",
     },
