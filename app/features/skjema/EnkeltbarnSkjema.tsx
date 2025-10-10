@@ -151,14 +151,14 @@ const tekster = definerTekster({
       },
       beskrivelse: {
         nb: "Vi spør om alderen til barnet for å vise hvor mye det gjennomsnittlig koster å forsørge et barn. Kalkulatoren bruker faste satser basert på SIFOs referansebudsjett for bo- og forbruksutgifter. Den ordinære barnetrygden trekkes fra, fordi dette er penger som skal bidra til å forsørge barnet. Bo- og forbruksutgiftene oppdateres den 1. juli hvert år, og øker med barnets alder. Satsen for den ordinære barnetrygden oppdateres regelmessig.",
-        // TODO: engelsk og nynorsk er ikke oppdatert
+        // TODO: nynorsk er ikke oppdatert
         nn: "Når vi reknar ut fostringstilskotet, er det viktig å vite kor mykje det kostar å forsørge eit barn (underhaldskostnaden). Underhaldskostnaden endrar seg med alderen til barnet, og han blir henta frå referansebudsjettet til SIFO som blir oppdatert kvart år. Underhaldskostnaden per månad for barn i ulike aldrar er i dag:",
-        en: "When we calculate child support, it is important to know how much it costs to support a child (the maintenance cost). The maintenance cost changes with the child's age, and it is taken from SIFO's reference budgets, which are updated every year. The current maintenance cost per month for children in different ages is:",
+        en: "We ask about the childs age to show how much it costs on average to support a child. The calculator uses fixed rates based on SIFO's reference budget for living and consumption expenses. The ordinary child benefit is deducted, because this is money that is ment to contribute to supporting the child. The living and consumption expenses are updated on July 1st of each year, and increase with the child's age. The rate for the ordinary child benefit is updated regularly.",
       },
       beskrivelse2: {
         nb: "Satsen for bo- og forbruksutgifter, minus ordinær barnetrygd er per i dag:",
-        // TODO: engelsk og nynorsk er ikke oppdatert
-        en: "",
+        en: "The rate for living and consumption expenses, minus the ordinary child benefit, is currently:",
+        // TODO: nynorsk er ikke oppdatert
         nn: "",
       },
     },

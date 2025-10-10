@@ -212,9 +212,10 @@ const tekster = definerTekster({
       nb: `Kalkulatoren foreslår at du betaler ${formatterSum(
         sum as number,
       )} i barnebidrag per måned`,
-      en: `You should pay ${formatterSum(
+      en: `The calculator suggests that you pay ${formatterSum(
         sum as number,
       )} in child support per month`,
+      // TODO: nynorsk er ikke oppdatert
       nn: `Du skal betale ${formatterSum(
         sum as number,
       )} i fostringstilskot per månad`,
@@ -223,9 +224,10 @@ const tekster = definerTekster({
       nb: `Kalkulatoren foreslår at du mottar ${formatterSum(
         sum as number,
       )} i barnebidrag per måned`,
-      en: `You should receive ${formatterSum(
+      en: `The calculator suggests that you receive ${formatterSum(
         sum as number,
       )} in child support per month`,
+      // TODO: nynorsk er ikke oppdatert
       nn: `Du skal motta ${formatterSum(
         sum as number,
       )} i fostringstilskot per månad`,
@@ -238,8 +240,8 @@ const tekster = definerTekster({
   },
   hvordanAvtale: {
     nb: "Det endelige beløpet for barnebidraget avtaler dere sammen. Da står dere fritt til å endre avtalen på et senere tidspunkt om ting som inntekt eller samvær skulle endre seg. Om dere vil, kan dere opprette en slik avtale her:",
-    // TODO: engelsk og nynorsk er ikke oppdatert
-    en: "The final amount of child support is agreed upon with the other parent. You are free to change the agreement at a later time if things like income or custody change. If you want, you can create such an agreement here:",
+    en: "The final amount of child support is agreed upon together. You are then free to change the agreement at a later date if things like income or access change. If you wish, you can create such an agreement here:",
+    // TODO: nynorsk er ikke oppdatert
     nn: "Den endelege summen på fostringstilskotet er noko du avtalar med den andre forelderen. Du står fritt til å endre avtalen på eit seinare tidspunkt viss ting som inntekt eller samvær endrar seg. Om du vil, kan du opprette ein slik avtale her:",
   },
   hvisManIkkeKommerTilEnighet: {
@@ -327,8 +329,8 @@ const tekster = definerTekster({
     },
     utregningPerBarn: {
       nb: "Beløpet over er et forslag fra kalkulatoren for hvor mye du til sammen kan betale eller motta per måned. For hvert barn ser beregningen slik ut:",
-      // TODO: engelsk og nynorsk er ikke oppdatert
-      en: "The amount above is a calculation of how much you should pay or receive in total per month. For each child, the calculation looks like this:",
+      en: "The amount above is the calculator’s suggested estimate of how much you can pay or receive in total per month. For each child, the calculation looks like this:",
+      // TODO: nynorsk er ikke oppdatert
       nn: "Beløpet over er ei berekning av kor mykje du til saman skal betale eller motta per månad. For kvart barn ser berekninga slik ut:",
     },
     motta: (alder, kostnad) => ({
@@ -339,14 +341,14 @@ const tekster = definerTekster({
           måned.
         </>
       ),
-      // TODO: engelsk og nynorsk er ikke oppdatert
       en: (
         <>
-          For the {alder} year old, you should receive{" "}
+          For the {alder} year old, the calculator suggests that you receive{" "}
           <strong>{formatterSum(kostnad as number)}</strong> in child support
           per month.
         </>
       ),
+      // TODO: nynorsk er ikke oppdatert
       nn: (
         <>
           For {alder}-åringen skal du motta{" "}
@@ -363,14 +365,14 @@ const tekster = definerTekster({
           måned.
         </>
       ),
-      // TODO: engelsk og nynorsk er ikke oppdatert
       en: (
         <>
-          For the {alder} year old, you should pay{" "}
+          For the {alder} year old, the calculator suggests that you pay{" "}
           <strong>{formatterSum(kostnad as number)}</strong> in child support
           per month.
         </>
       ),
+      // TODO: nynorsk er ikke oppdatert
       nn: (
         <>
           For {alder}-åringen skal du betale{" "}
