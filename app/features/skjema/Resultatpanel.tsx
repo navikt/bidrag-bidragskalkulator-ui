@@ -240,7 +240,7 @@ const tekster = definerTekster({
   },
   hvordanAvtale: {
     nb: "Det endelige beløpet for barnebidraget avtaler dere sammen. Da står dere fritt til å endre avtalen på et senere tidspunkt om ting som inntekt eller samvær skulle endre seg. Om dere vil, kan dere opprette en slik avtale her:",
-    en: "The final amount of child support is agreed upon together. You are then free to change the agreement at a later date if things like income or access change. If you wish, you can create such an agreement here:",
+    en: "The final amount of child support is agreed upon together. You are then free to change the agreement at a later date if things like your income or the visitation is changed. If you wish, you can create such an agreement here:",
     // TODO: nynorsk er ikke oppdatert
     nn: "Den endelege summen på fostringstilskotet er noko du avtalar med den andre forelderen. Du står fritt til å endre avtalen på eit seinare tidspunkt viss ting som inntekt eller samvær endrar seg. Om du vil, kan du opprette ein slik avtale her:",
   },

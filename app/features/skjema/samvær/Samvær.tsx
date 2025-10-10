@@ -168,7 +168,7 @@ const tekster = definerTekster({
   samvær: {
     label: {
       nb: "Hvor mye bor barnet hos deg?",
-      en: "How much time is the child living with you?",
+      en: "How many nights is the child spending with you?",
       // TODO: nynorsk er ikke oppdatert
       nn: "Kor mykje skal barnet vere saman med deg?",
     },
