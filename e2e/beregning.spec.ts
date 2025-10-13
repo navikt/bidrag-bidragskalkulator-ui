@@ -10,7 +10,7 @@ test.describe("Beregningstest", () => {
 
     await page.getByLabel("Hvor gammelt er barnet?").fill("4");
     await page
-      .getByLabel("Vi har avtale om fast bosted hos begge (delt fast bosted)")
+      .getByLabel("Vi har en juridisk bindende avtale om delt fast bosted")
       .check();
     await page
       .getByLabel("Hva koster barnepass for barnet per måned?")
@@ -71,7 +71,9 @@ test.describe("Beregningstest", () => {
     await page.getByRole("button", { name: "Beregn barnebidraget" }).click();
 
     await expect(
-      page.getByText("Du skal motta 800 kr i barnebidrag per måned"),
+      page.getByText(
+        "Kalkulatoren foreslår at du mottar 800 kr i barnebidrag per måned",
+      ),
     ).toBeVisible();
 
     await sjekkTilgjengelighet(page);

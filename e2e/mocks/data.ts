@@ -1,7 +1,7 @@
 import type { Barnebidragsutregning } from "~/features/skjema/beregning/schema";
 
-const underholdskostnader = {
-  "0": 8313,
+const boOgForbruksutgifter = {
+  "0": 6547,
   "1": 6547,
   "2": 6547,
   "3": 6547,
@@ -83,7 +83,7 @@ const samværsfradrag = [
 ];
 
 export const kalkulatorGrunnlagsdata = {
-  underholdskostnader,
+  boOgForbruksutgifter,
   samværsfradrag,
 };
 

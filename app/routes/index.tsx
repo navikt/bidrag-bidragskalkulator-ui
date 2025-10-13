@@ -32,6 +32,7 @@ const Landingsside = () => {
       </Heading>
 
       <BodyLong spacing>{t(tekster.beskrivelse)}</BodyLong>
+      <BodyLong spacing>{t(tekster.beskrivelse2)}</BodyLong>
 
       <section className="mb-7">
         <Heading size="large" level="2" spacing>
@@ -167,9 +168,16 @@ const tekster = definerTekster({
     nn: <>Fostringstilskots&shy;kalkulator</>,
   },
   beskrivelse: {
-    nb: "Barnebidragskalkulatoren hjelper deg å regne ut hva du skal betale eller motta i barnebidrag.",
-    en: "The child support calculator helps you calculate how much you should pay or receive in child support.",
+    nb: "Barnebidragskalkulatoren er et verktøy for deg som ønsker å lage en privat avtale om barnebidrag for barn under 18 år – uten at Nav er involvert. Kalkulatoren gir et forslag til bidragsbeløp basert på informasjonen du legger inn, og kan være et nyttig utgangspunkt for at dere kommer frem til et beløp som passer dere.",
+    en: "The child support calculator is a tool for parents who want to make a private agreement on child support for children under 18 years of age – without Nav being involved. The calculator provides a suggested amount of child support based on the information you enter, and can be a useful starting point for you to decide on an amount that suits you.",
+    // TODO: nynorsk er ikke oppdatert
     nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut kva du skal betale eller motta i fostringstilskot.",
+  },
+  beskrivelse2: {
+    nb: "Beløpet som kalkulatoren foreslår er kun veiledende, og er ikke det samme som at Nav har fattet et vedtak.",
+    en: "The amount that the calculator suggests is only a guide, and is not the same as Nav deciding it for you.",
+    // TODO: nynorsk er ikke oppdatert
+    nn: "",
   },
   undertittel: {
     nb: "Prøv vår nye kalkulator",
@@ -188,8 +196,9 @@ const tekster = definerTekster({
       nn: "I nokre tilfelle bør du likevel bruke den gamle kalkulatoren:",
     },
     situasjon1: {
-      nb: "hvis den som skal betale barnebidrag, også betaler barnebidrag for andre barn",
+      nb: "hvis den som skal betale barnebidrag, også betaler barnebidrag for barn med en annen forelder",
       en: "if the parent who is to pay child support also pays child support for other children",
+      // TODO: nynorsk er ikke oppdatert
       nn: "viss den som skal betale fostringstilskot, også betalar fostringstilskot for andre barn",
     },
     situasjon2: {
