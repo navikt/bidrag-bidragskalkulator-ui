@@ -14,7 +14,7 @@ const SamværsfradragSchema = z.array(
 );
 
 export const KalkulatorgrunnlagsdataSchema = z.object({
-  underholdskostnader: z.record(z.string(), z.number().int().nonnegative()),
+  boOgForbruksutgifter: z.record(z.string(), z.number().int().nonnegative()),
   samværsfradrag: SamværsfradragSchema,
 });
 
