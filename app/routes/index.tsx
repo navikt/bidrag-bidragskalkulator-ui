@@ -128,19 +128,19 @@ const tekster = definerTekster({
     tittel: {
       nb: "Barnebidragskalkulator",
       en: "Child support calculator",
-      nn: "Fostringstilskotskalkulator",
+      nn: "Barnebidragskalkulator",
     },
     beskrivelse: {
       nb: "Barnebidragskalkulatoren hjelper deg å regne ut hva du skal betale eller motta i barnebidrag.",
       en: "The child support calculator helps you calculate how much you should pay or receive in child support.",
-      nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut kva du skal betale eller motta i fostringstilskot.",
+      nn: "Barnebidragskalkulatoren hjelper deg å rekne ut kva du skal betale eller motta i barnebidrag.",
     },
   },
   brødsmuler: {
     steg1: {
       label: {
         nb: "Barnebidrag",
-        nn: "Fostringstilskot",
+        nn: "Barnebidrag",
         en: "Child support",
       },
       url: {
@@ -165,19 +165,17 @@ const tekster = definerTekster({
   overskrift: {
     nb: <>Barnebidrags&shy;kalkulator</>,
     en: "Child support calculator",
-    nn: <>Fostringstilskots&shy;kalkulator</>,
+    nn: <>Barnebidrags&shy;kalkulator</>,
   },
   beskrivelse: {
     nb: "Barnebidragskalkulatoren er et verktøy for deg som ønsker å lage en privat avtale om barnebidrag for barn under 18 år – uten at Nav er involvert. Kalkulatoren gir et forslag til bidragsbeløp basert på informasjonen du legger inn, og kan være et nyttig utgangspunkt for at dere kommer frem til et beløp som passer dere.",
     en: "The child support calculator is a tool for parents who want to make a private agreement on child support for children under 18 years of age – without Nav being involved. The calculator provides a suggested amount of child support based on the information you enter, and can be a useful starting point for you to decide on an amount that suits you.",
-    // TODO: nynorsk er ikke oppdatert
-    nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut kva du skal betale eller motta i fostringstilskot.",
+    nn: "Barnebidragskalkulatoren er eit verktøy for deg som ønsker å lage ein privat avtale om barnebidrag for barn under 18 år – utan at Nav er involvert. Kalkulatoren gir deg eit forslag til eit beløp basert på informasjonen du legg inn, som kan vere eit nyttig utgangspunkt når de skal komme fram til eit beløp som passar for dykk.",
   },
   beskrivelse2: {
     nb: "Beløpet som kalkulatoren foreslår er kun veiledende, og er ikke det samme som at Nav har fattet et vedtak.",
     en: "The amount that the calculator suggests is only a guide, and is not the same as Nav deciding it for you.",
-    // TODO: nynorsk er ikke oppdatert
-    nn: "",
+    nn: "Beløpet som kalkulatoren foreslår, er kun rettleiande, og det er ikkje det same som at Nav har fatta eit vedtak.",
   },
   undertittel: {
     nb: "Prøv vår nye kalkulator",
@@ -187,7 +185,7 @@ const tekster = definerTekster({
   beskrivelse1: {
     nb: "Vi videreutvikler bidragskalkulatoren for å gjøre den enklere å bruke. Den gamle kalkulatoren er fortsatt tilgjengelig, men vi håper at du vil prøve den nye kalkulatoren og dele erfaringene dine.",
     en: "We are further developing the child support calculator to make it easier to use. The old calculator is still available, but we hope you will try the new calculator and share your experiences.",
-    nn: "Vi vidareutviklar fostringstilskotskalkulatoren for å gjere den enklare å bruke. Den gamle kalkulatoren er framleis tilgjengeleg, men vi håpar at du vil prøve den nye kalkulatoren og dele erfaringane dine.",
+    nn: "Vi vidareutviklar bidragskalkulatoren for å gjere den enklare å bruke. Den gamle kalkulatoren er framleis tilgjengeleg, men vi håpar at du vil prøve den nye kalkulatoren og dele erfaringane dine.",
   },
   brukGammelKalkulator: {
     overskrift: {
@@ -198,13 +196,12 @@ const tekster = definerTekster({
     situasjon1: {
       nb: "hvis den som skal betale barnebidrag, også betaler barnebidrag for barn med en annen forelder",
       en: "if the parent who is to pay child support also pays child support for other children",
-      // TODO: nynorsk er ikke oppdatert
-      nn: "viss den som skal betale fostringstilskot, også betalar fostringstilskot for andre barn",
+      nn: "dersom den som skal betale barnebidrag, òg betaler barnebidrag for barn med ein annan forelder",
     },
     situasjon2: {
       nb: "hvis du ønsker å sjekke om du bør søke endring på barnebidrag som allerede er bestemt (fastsatt) av Nav",
       en: "if you want to check whether you should apply for a change in child support that has already been determined by Nav",
-      nn: "dersom du ønsker å sjekke om du bør søke endring på fostringstilskot som allereie er bestemt (fastsett) av Nav",
+      nn: "hvis du ønsker å sjekke om du bør søke om å endre barnebidraget som allereie er bestemt (fastsett) av Nav",
     },
   },
   lenketekstNyKalkulator: {
@@ -226,7 +223,7 @@ const tekster = definerTekster({
     beskrivelse: {
       nb: "I ny og gammel bidragskalkulator er det du som må legge inn opplysninger for å finne ut hva barnebidraget kan være. Vi lagrer ingen opplysninger om deg, og det du legger inn av informasjon, kan ikke spores tilbake til deg.",
       en: "In both the new and old child support calculator, you must enter information to find out what the child support amount may be. We do not store any information about you, and the information you enter cannot be traced back to you.",
-      nn: "I ny og gamal bidragskalkulator er det du som må legge inn opplysingar for å finne ut kva fostringstilskotet kan vere. Vi lagrar ingen opplysingar om deg, og det du legg inn av informasjon, kan ikkje sporast tilbake til deg.",
+      nn: "I ny og gamal bidragskalkulator er det du som må legge inn opplysingar for å finne ut kva barnebidraget kan vere. Vi lagrar ingen opplysingar om deg, og det du legg inn av informasjon, kan ikkje sporast tilbake til deg.",
     },
     lesMer: {
       tittel: {

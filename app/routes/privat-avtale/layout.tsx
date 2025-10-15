@@ -28,7 +28,7 @@ const tekster = definerTekster({
     steg1: {
       label: {
         nb: "Barnebidrag",
-        nn: "Fostringstilskot",
+        nn: "Barnebidrag",
         en: "Child support",
       },
       url: {
@@ -53,7 +53,7 @@ const tekster = definerTekster({
   overskrift: {
     nb: "Barnebidrag - lag privat avtale",
     en: "Child support - create private agreement",
-    nn: "Fostringstilskot - lag privat avtale",
+    nn: "Barnebidrag - lag privat avtale",
   },
 });
 

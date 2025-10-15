@@ -147,19 +147,17 @@ const tekster = definerTekster({
       tittel: {
         nb: "Hvorfor vi spør om alder",
         en: "Why we ask about age",
-        nn: "Kvifor vi spør om alder",
+        nn: "Kvifor spør vi om alder",
       },
       beskrivelse: {
         nb: "Vi spør om alderen til barnet for å vise hvor mye det gjennomsnittlig koster å forsørge et barn. Kalkulatoren bruker faste satser basert på SIFOs referansebudsjett for bo- og forbruksutgifter. Den ordinære barnetrygden trekkes fra, fordi dette er penger som skal bidra til å forsørge barnet. Bo- og forbruksutgiftene oppdateres den 1. juli hvert år, og øker med barnets alder. Satsen for den ordinære barnetrygden oppdateres regelmessig.",
-        // TODO: nynorsk er ikke oppdatert
-        nn: "Når vi reknar ut fostringstilskotet, er det viktig å vite kor mykje det kostar å forsørge eit barn (underhaldskostnaden). Underhaldskostnaden endrar seg med alderen til barnet, og han blir henta frå referansebudsjettet til SIFO som blir oppdatert kvart år. Underhaldskostnaden per månad for barn i ulike aldrar er i dag:",
+        nn: "Vi spør om alderen til barnet for å vise kor mykje det i gjennomsnitt kostar å forsørge eit barn. Kalkulatoren bruker faste satsar basert på referansebudsjettet til SIFO for bu- og forbrukstutgifter. Den ordinære barnetrygda blir trekt frå, fordi dette er pengar som bidrar til å forsørge barnet. Bu- og forbruksutgiftene blir oppdaterte 1. juli kvart år, og dei aukar med alderen til barnet. Satsen for den ordinære barnetrygda blir oppdatert jamnleg.",
         en: "We ask about the childs age to show how much it costs on average to support a child. The calculator uses fixed rates based on SIFO's reference budget for living and consumption expenses. The ordinary child benefit is deducted, because this is money that is ment to contribute to supporting the child. The living and consumption expenses are updated on July 1st of each year, and increase with the child's age. The rate for the ordinary child benefit is updated regularly.",
       },
       beskrivelse2: {
         nb: "Satsen for bo- og forbruksutgifter, minus ordinær barnetrygd er per i dag:",
         en: "The rate for living and consumption expenses, minus the ordinary child benefit, is currently:",
-        // TODO: nynorsk er ikke oppdatert
-        nn: "",
+        nn: "Satsen for bu- og forbruksutgifter, utanom ordinær barnetrygd, er per i dag:",
       },
     },
   },

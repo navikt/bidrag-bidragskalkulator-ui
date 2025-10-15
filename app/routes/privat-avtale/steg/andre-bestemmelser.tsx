@@ -117,7 +117,7 @@ const tekster = definerTekster({
     },
     beskrivelse: {
       nb: "Her kan det blant annet gis opplysninger om hvordan barnebidraget skal betales, dersom det ikke skal betales igjennom Skatteetaten v/Nav Innkreving.",
-      nn: "Her kan det leggjast inn opplysningar om til dømes korleis fostringstilskotet skal betalast, dersom det ikkje skal betalast gjennom Skatteetaten v/Nav Innkrevjing.",
+      nn: "Her kan det leggjast inn opplysningar om til dømes korleis barnebidraget skal betalast, dersom det ikkje skal betalast gjennom Skatteetaten v/Nav Innkrevjing.",
       en: "Here you can include information about how the child support is to be paid, if not through the Tax Administration/Nav Collection.",
     },
     true: {

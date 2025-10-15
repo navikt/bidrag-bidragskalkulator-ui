@@ -138,8 +138,7 @@ const tekster = definerTekster({
     label: {
       nb: "Hvor bor barnet?",
       en: "Where is the child living?",
-      // TODO: nynorsk er ikke oppdatert
-      nn: "Kvar skal barnet bu fast?",
+      nn: "Kor bur barnet?",
     },
     valg: {
       velg: {
@@ -150,8 +149,7 @@ const tekster = definerTekster({
       DELT_FAST_BOSTED: {
         nb: "Vi har en juridisk bindende avtale om delt fast bosted",
         en: "We have a legally binding agreement on shared permanent residence",
-        // TODO: nynorsk er ikke oppdatert
-        nn: "Vi har avtale om fast bustad hos begge (delt fast bustad)",
+        nn: "Vi har ein juridisk bindande avtale om delt fast bustad",
       },
       HOS_MEG: {
         nb: "Barnet bor fast hos meg, og har samvær med den andre forelderen",

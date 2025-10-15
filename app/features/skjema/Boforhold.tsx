@@ -25,11 +25,11 @@ const tekster = definerTekster({
   overskrift: {
     nb: "Bosituasjon",
     en: "Living situation",
-    nn: "Bustadssituasjon",
+    nn: "Busituasjon",
   },
   beskrivelse: {
     nb: "Det påvirker barnebidraget hvis forelderen som skal betale bidraget, bor sammen med flere egne barn, i tillegg til barna du vil regne ut bidrag for i denne kalkulatoren.",
     en: "It affects the child support if the parent who is to pay the support lives with several of their own children, in addition to the children you want to calculate support for in this calculator.",
-    nn: "Det påverkar fostringstilskotet viss forelderen som skal betale tilskotet, bur saman med fleire eigne barn, i tillegg til barna du vil rekne ut tilskot for i denne kalkulatoren.",
+    nn: "Det påverkar barnebidraget viss forelderen som skal betale tilskotet, bur saman med fleire eigne barn, i tillegg til barna du vil rekne ut tilskot for i denne kalkulatoren.",
   },
 });
