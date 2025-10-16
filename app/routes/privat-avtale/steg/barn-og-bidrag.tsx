@@ -141,7 +141,7 @@ const tekster = definerTekster({
   overskrift: {
     nb: "Felles barn med den du ønsker å avtale barnebidrag med",
     en: "Shared children with the parent you want to agree on child support with",
-    nn: "Felles barn med den du ønsker å avtale fostringstilskot med",
+    nn: "Felles barn med den du ønsker å avtale barnebidrag med",
   },
   leggTilBarn: {
     nb: "Legg til barn",

@@ -1,32 +1,32 @@
 import type { Barnebidragsutregning } from "~/features/skjema/beregning/schema";
 
-const underholdskostnader = {
-  "0": 8313,
-  "1": 6547,
-  "2": 6547,
-  "3": 6547,
-  "4": 6547,
-  "5": 6547,
-  "6": 6547,
-  "7": 8471,
-  "8": 8471,
-  "9": 8471,
-  "10": 8471,
-  "11": 8471,
-  "12": 9673,
-  "13": 9673,
-  "14": 9673,
-  "15": 9673,
-  "16": 10778,
-  "17": 10778,
-  "18": 12288,
-  "19": 12288,
-  "20": 12288,
-  "21": 12288,
-  "22": 12288,
-  "23": 12288,
-  "24": 12288,
-  "25": 12288,
+const boOgForbruksutgifter = {
+  "0": 6892.0,
+  "1": 6892.0,
+  "2": 6892.0,
+  "3": 6892.0,
+  "4": 6892.0,
+  "5": 6892.0,
+  "6": 8659.0,
+  "7": 8659.0,
+  "8": 8659.0,
+  "9": 8659.0,
+  "10": 8659.0,
+  "11": 9833.0,
+  "12": 9833.0,
+  "13": 9833.0,
+  "14": 9833.0,
+  "15": 10913.0,
+  "16": 10913.0,
+  "17": 10913.0,
+  "18": 12881.0,
+  "19": 12881.0,
+  "20": 12881.0,
+  "21": 12881.0,
+  "22": 12881.0,
+  "23": 12881.0,
+  "24": 12881.0,
+  "25": 12881.0,
 };
 
 const samværsfradrag = [
@@ -83,7 +83,7 @@ const samværsfradrag = [
 ];
 
 export const kalkulatorGrunnlagsdata = {
-  underholdskostnader,
+  boOgForbruksutgifter,
   samværsfradrag,
 };
 
@@ -94,7 +94,7 @@ export const defaultBidragsutregning: Barnebidragsutregning = {
   resultater: [
     {
       alder: 8,
-      sum: 800,
+      sum: 760,
       bidragstype: "MOTTAKER",
     },
   ],

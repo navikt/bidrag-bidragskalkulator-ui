@@ -46,7 +46,7 @@ const tekster = definerTekster({
     ),
     nn: (
       <>
-        Dette er den nye kalkulatoren vår for å rekne ut fostringstilskot.{" "}
+        Dette er den nye kalkulatoren vår for å rekne ut barnebidrag.{" "}
         <Link
           href="https://tjenester.nav.no/bidragskalkulator/innledning?0"
           onClick={sporGåTilGammelKalkulatorKlikket}

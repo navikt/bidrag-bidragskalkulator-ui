@@ -50,7 +50,8 @@ export type KalkulatorSpørsmålId =
 type SkjemaValideringFeilet = {
   hendelsetype: "skjema validering feilet";
   skjemaId: SkjemaId;
-  førsteFeil: string | null;
+  førsteFeil?: string | null;
+  feltMedFeil?: string | null;
 };
 
 type SkjemaInnsendingFeilet = {

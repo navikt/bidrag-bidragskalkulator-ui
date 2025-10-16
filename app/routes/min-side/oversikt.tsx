@@ -49,12 +49,12 @@ const tekster = definerTekster({
     tittel: {
       nb: "Barnebidrag - oversikt",
       en: "Child support - overview",
-      nn: "Fostringstilskot - oversikt",
+      nn: "Barnebidrag - oversikt",
     },
     beskrivelse: {
       nb: "Denne siden viser dokumenter knyttet til barnebidrag",
       en: "This page shows documents related to child support",
-      nn: "Denne sida viser dokument knytt til fostringstilskot",
+      nn: "Denne sida viser dokument knytt til barnebidrag",
     },
   },
   brødsmuler: {
@@ -73,7 +73,7 @@ const tekster = definerTekster({
     steg2: {
       label: {
         nb: "Barnebidrag",
-        nn: "Fostringstilskot",
+        nn: "Barnebidrag",
         en: "Child support",
       },
       url: {
@@ -86,7 +86,7 @@ const tekster = definerTekster({
   overskrift: {
     nb: "Barnebidrag - oversikt",
     en: "Child support - overview",
-    nn: "Fostringstilskot - oversikt",
+    nn: "Barnebidrag - oversikt",
   },
 });
 

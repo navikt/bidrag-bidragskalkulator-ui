@@ -8,6 +8,12 @@ const baseSchema = z.object({
   INGRESS: z.url().describe("Hvilken URL tjenesten kjører på"),
   SESSION_SECRET: z.string().describe("Hemmelighet for sesjonscookie"),
   TELEMETRY_URL: z.url().describe("URL for telemetri"),
+  UXSIGNALS_ENABLED: z
+    .enum(["true", "false"])
+    .describe("Er uxsignals widget aktivert?"),
+  UXSIGNALS_MODE: z
+    .enum(["demo", "production"])
+    .describe("Hvilken modus uxsignals widgeten skal bruke"),
 });
 
 const localEnvSchema = baseSchema.extend({

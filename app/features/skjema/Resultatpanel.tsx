@@ -178,10 +178,6 @@ export const Resultatpanel = ({ data, ref }: Props) => {
               <ListItem>{t(tekster.bidragetSkalDekke.liste3)}</ListItem>
             </List>
 
-            <BodyLong spacing>
-              {t(tekster.bidragetSkalDekke.beskrivelse2)}
-            </BodyLong>
-
             <BodyLong>
               <Link
                 href={t(tekster.bidragetSkalDekke.lesMerLenke)}
@@ -213,26 +209,26 @@ const tekster = definerTekster({
   },
   overskrift: {
     betale: (sum) => ({
-      nb: `Du skal betale ${formatterSum(
+      nb: `Kalkulatoren foreslår at du betaler ${formatterSum(
         sum as number,
       )} i barnebidrag per måned`,
-      en: `You should pay ${formatterSum(
+      en: `The calculator suggests that you pay ${formatterSum(
         sum as number,
       )} in child support per month`,
-      nn: `Du skal betale ${formatterSum(
+      nn: `Kalkulatoren foreslår at du betaler ${formatterSum(
         sum as number,
-      )} i fostringstilskot per månad`,
+      )} i barnebidrag per månad`,
     }),
     motta: (sum) => ({
-      nb: `Du skal motta ${formatterSum(
+      nb: `Kalkulatoren foreslår at du mottar ${formatterSum(
         sum as number,
       )} i barnebidrag per måned`,
-      en: `You should receive ${formatterSum(
+      en: `The calculator suggests that you receive ${formatterSum(
         sum as number,
       )} in child support per month`,
-      nn: `Du skal motta ${formatterSum(
+      nn: `Kalkulatoren foreslår at du mottar ${formatterSum(
         sum as number,
-      )} i fostringstilskot per månad`,
+      )} i barnebidrag per månad`,
     }),
   },
   nullBidrag: {
@@ -241,9 +237,9 @@ const tekster = definerTekster({
     nn: "Det kan vere fordi de har delt nettene med barnet likt mellom dykk, og fordi det er liten forskjell mellom inntektene dykkar.",
   },
   hvordanAvtale: {
-    nb: "Den endelige summen på barnebidraget avtaler du med den andre forelderen. Da står dere fritt til å endre avtalen på et senere tidspunkt om ting som inntekt eller samvær skulle endre seg. Om du vil, kan du opprette en slik avtale her:",
-    en: "The final amount of child support is agreed upon with the other parent. You are free to change the agreement at a later time if things like income or custody change. If you want, you can create such an agreement here:",
-    nn: "Den endelege summen på fostringstilskotet er noko du avtalar med den andre forelderen. Du står fritt til å endre avtalen på eit seinare tidspunkt viss ting som inntekt eller samvær endrar seg. Om du vil, kan du opprette ein slik avtale her:",
+    nb: "Det endelige beløpet for barnebidraget avtaler dere sammen. Da står dere fritt til å endre avtalen på et senere tidspunkt om ting som inntekt eller samvær skulle endre seg. Om dere vil, kan dere opprette en slik avtale her:",
+    en: "The final amount of child support is agreed upon together. You are then free to change the agreement at a later date if things like your income or the visitation is changed. If you wish, you can create such an agreement here:",
+    nn: "Det endelege beløpet på barnebidraget avtalar de saman. Då står de fritt til å endre avtalen på eit seinare tidspunkt om ting som inntekt eller samvær endrar seg. Om de vil, kan de opprette ein slik avtale her:",
   },
   hvisManIkkeKommerTilEnighet: {
     nb: (
@@ -289,7 +285,7 @@ const tekster = definerTekster({
           className="underline hover:no-underline"
           onClick={sporSøkOmFastsettingAvBarnebidragKlikket}
         >
-          fastsetting av fostringstilskot
+          fastsetting av barnebidrag
         </Link>
         . Ver merksam på at det kostar{" "}
         <span className="whitespace-nowrap">1 314</span> kroner for kvar
@@ -301,7 +297,7 @@ const tekster = definerTekster({
     overskrift: {
       nb: "Hvordan barnebidraget er beregnet",
       en: "How the child support is calculated",
-      nn: "Korleis fostringstilskotet er rekna ut",
+      nn: "Korleis barnebidraget er rekna ut",
     },
     underholdskostnadPerBarn: (alder, kostnad) => ({
       nb: (
@@ -329,53 +325,53 @@ const tekster = definerTekster({
       nn: "Desse summane skal du og den andre forelderen dele mellom dykk. Korleis fordelinga mellom dykk blir, er avhengig av inntekt og samver, i tillegg til ei rekkje andre forhold. ",
     },
     utregningPerBarn: {
-      nb: "Beløpet over er en beregning av hvor mye du til sammen skal betale eller motta per måned. For hvert barn ser beregningen slik ut:",
-      en: "The amount above is a calculation of how much you should pay or receive in total per month. For each child, the calculation looks like this:",
-      nn: "Beløpet over er ei berekning av kor mykje du til saman skal betale eller motta per månad. For kvart barn ser berekninga slik ut:",
+      nb: "Beløpet over er et forslag fra kalkulatoren for hvor mye du til sammen kan betale eller motta per måned. For hvert barn ser beregningen slik ut:",
+      en: "The amount above is the calculator’s suggested estimate of how much you can pay or receive in total per month. For each child, the calculation looks like this:",
+      nn: "Beløpet over er eit forslag frå kalkulatoren om kor mykje du til saman skal betale eller motta per månad. For kvart barn ser berekninga slik ut:",
     },
     motta: (alder, kostnad) => ({
       nb: (
         <>
-          For {alder}-åringen skal du motta{" "}
+          For {alder}-åringen foreslår kalkulatoren at du mottar{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
       en: (
         <>
-          For the {alder} year old, you should receive{" "}
+          For the {alder} year old, the calculator suggests that you receive{" "}
           <strong>{formatterSum(kostnad as number)}</strong> in child support
           per month.
         </>
       ),
       nn: (
         <>
-          For {alder}-åringen skal du motta{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> i fostringstilskot
-          per månad.
+          For {alder}-åringen foreslår kalkulatoren at du mottar{" "}
+          <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
+          månad.
         </>
       ),
     }),
     betale: (alder, kostnad) => ({
       nb: (
         <>
-          For {alder}-åringen skal du betale{" "}
+          For {alder}-åringen foreslår kalkulatoren at du betaler{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
       en: (
         <>
-          For the {alder} year old, you should pay{" "}
+          For the {alder} year old, the calculator suggests that you pay{" "}
           <strong>{formatterSum(kostnad as number)}</strong> in child support
           per month.
         </>
       ),
       nn: (
         <>
-          For {alder}-åringen skal du betale{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> i fostringstilskot
-          per månad.
+          For {alder}-åringen foreslår kalkulatoren at du betaler{" "}
+          <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
+          månad.
         </>
       ),
     }),
@@ -401,12 +397,12 @@ const tekster = definerTekster({
     tittel: {
       nb: "Hva barnebidraget skal dekke",
       en: "What the child support should cover",
-      nn: "Kva fostringstilskotet skal dekke",
+      nn: "Kva barnebidraget skal dekke",
     },
     beskrivelse1: {
       nb: "Når dere inngår en privat avtale om barnebidrag, bestemmer dere selv hva barnebidraget skal dekke. Som et minimum må barnebidraget dekke kostnadene ved å forsørge barnet i hverdagen, også kalt underholdskostnadene.",
       en: "If you settle on a private agreement on child support between the two of you, you decide for yourselves what the support should cover. As a minimum, the support must cover the costs of caring for the child in everyday life, also known as maintenance costs.",
-      nn: "Når de inngår ein privat avtale om fostringstilskot, bestemmer de sjølve kva fostringstilskotet skal dekke. Som eit minimum må fostringstilskotet dekke kostnadane ved å forsørge barnet i kvardagen, også kalla underhaldskostnadar.",
+      nn: "Når de inngår ein privat avtale om barnebidrag, bestemmer de sjølve kva barnebidraget skal dekke. Som eit minimum må barnebidraget dekke kostnadane ved å forsørge barnet i kvardagen, også kalla underhaldskostnadar.",
     },
     listeIntro: {
       nb: "Dette inkluderer:",
@@ -428,15 +424,10 @@ const tekster = definerTekster({
       en: "child-care costs (kindergarten, after-school programme (SFO), nanny)",
       nn: "tilsynsutgifter (barnehage, skulefritidsordning, dagmamma)",
     },
-    beskrivelse2: {
-      nb: "Det er underholdskostnadene Nav tar utgangspunkt i når vi fastsetter barnebidraget.",
-      en: "It is the maintenance costs that Nav uses as a basis when determining the support.",
-      nn: "Det er underhaldskostnadane Nav tar utgangspunkt i når vi fastset fostringstilskotet.",
-    },
     lesMer: {
       nb: "Les mer om hva barnebidraget skal dekke",
       en: "Read more about what child support should cover",
-      nn: "Les meir om kva fostringstilskotet skal dekke",
+      nn: "Les meir om kva barnebidraget skal dekke",
     },
     lesMerLenke: {
       nb: "https://www.nav.no/barnebidrag#hva",

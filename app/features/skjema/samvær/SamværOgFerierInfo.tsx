@@ -27,9 +27,9 @@ export const SamværOgFerierInfo = () => {
 
 const tekster = definerTekster({
   overskrift: {
-    nb: "Hvordan ferie påvirker barnebidraget",
-    en: "How holidays affect child support",
-    nn: "Korleis ferie påverkar barnebidraget",
+    nb: "Du må regne ut og legge til ferie i månedlig samvær selv",
+    en: "You need to calculate and add vacation time to the monthly visitation yourself",
+    nn: "Du må rekne ut og legge til ferie i månadleg samvær sjølv",
   },
   beskrivelse1: {
     nb: "Hvis dere fordeler feriene på samme måte som dere fordeler samværet ellers i året, vil det vanligvis ikke påvirke barnebidraget.",
@@ -39,11 +39,11 @@ const tekster = definerTekster({
   beskrivelse2: {
     nb: "Hvis det er stor forskjell mellom hvordan dere fordeler feriene, og hvordan dere fordeler samværet ellers i året, bør dere regne feriedagene med i det totale antallet samværsdager per måned.",
     en: "If there is a big difference between how you distribute the holidays and how you distribute the visitation throughout the year, you should include the holiday days in the total number of visitation days per month.",
-    nn: "Dersom det er stor forskjell mellom korleis de fordeler feriane, og korleis de fordeler samværet elles i året, bør de rekne feriedagane med i det totale antalet samværsdagar per månad.",
+    nn: "Dersom det er stor skilnad mellom korleis de fordeler feriane, og korleis de fordeler samværet elles i året, bør de rekne feriedagane med i det totale antalet samværsdagar per månad.",
   },
   beskrivelse3: {
     nb: "Eksempel: 12 dager samvær i ferien er i gjennomsnitt én ekstra samværsdag per måned.",
     en: "Example: 12 days of visitation during the holidays is on average one extra visitation day per month.",
-    nn: "Døme: 12 dagar samvær i ferien er i gjennomsnitt éin ekstra samværsdag per månad.",
+    nn: "Døme: 12 dagar samvær i ferien tilsvarer i gjennomsnitt éin ekstra samværsdag per månad.",
   },
 });
