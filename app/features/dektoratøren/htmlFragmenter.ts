@@ -13,13 +13,10 @@ export function lagDekoratørHtmlFragmenter(
     params: {
       language: språk,
       context: "privatperson",
-      availableLanguages: Object.values(Språk)
-        // TODO: deaktiver nynorsk midlertidig
-        .filter((item) => item !== "nn")
-        .map((språk) => ({
-          locale: språk,
-          handleInApp: true,
-        })),
+      availableLanguages: Object.values(Språk).map((språk) => ({
+        locale: språk,
+        handleInApp: true,
+      })),
       breadcrumbs: lagBrødsmulesti(språk, side),
     },
   });

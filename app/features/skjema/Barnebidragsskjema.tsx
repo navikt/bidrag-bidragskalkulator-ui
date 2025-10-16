@@ -34,6 +34,6 @@ const tekster = definerTekster({
   beregnBarnebidraget: {
     nb: "Beregn barnebidraget",
     en: "Calculate child support",
-    nn: "Beregn fostringstilskotet",
+    nn: "Beregn barnebidraget",
   },
 });

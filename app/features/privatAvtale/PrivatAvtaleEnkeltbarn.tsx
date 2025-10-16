@@ -179,7 +179,7 @@ const tekster = definerTekster({
     label: {
       nb: "Barnebidrag per måned",
       en: "Child support per month",
-      nn: "Fostringstilskot per månad",
+      nn: "Barnebidrag per månad",
     },
   },
   bidragstype: {

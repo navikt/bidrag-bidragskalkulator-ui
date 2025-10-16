@@ -182,19 +182,19 @@ const tekster = definerTekster({
     tittel: {
       nb: "Barnebidragskalkulator",
       en: "Child support calculator",
-      nn: "Fostringstilskotskalkulator",
+      nn: "Barnebidragskalkulator",
     },
     beskrivelse: {
       nb: "Barnebidragskalkulatoren hjelper deg å regne ut hva du skal betale eller motta i barnebidrag.",
       en: "The child support calculator helps you calculate how much you should pay or receive in child support.",
-      nn: "Fostringstilskotskalkulatoren hjelper deg å rekne ut kva du skal betale eller motta i fostringstilskot.",
+      nn: "Barnebidragskalkulatoren hjelper deg å rekne ut kva du skal betale eller motta i barnebidrag.",
     },
   },
   brødsmuler: {
     steg1: {
       label: {
         nb: "Barnebidrag",
-        nn: "Fostringstilskot",
+        nn: "Barnebidrag",
         en: "Child support",
       },
       url: {
@@ -219,7 +219,7 @@ const tekster = definerTekster({
   overskrift: {
     nb: <>Barnebidrags&shy;kalkulator</>,
     en: "Child support calculator",
-    nn: <>Fostringstilskots&shy;kalkulator</>,
+    nn: <>Barnebidrags&shy;kalkulator</>,
   },
 });
 

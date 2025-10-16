@@ -72,7 +72,7 @@ test.describe("Beregningstest", () => {
 
     await expect(
       page.getByText(
-        "Kalkulatoren foreslår at du mottar 800 kr i barnebidrag per måned",
+        "Kalkulatoren foreslår at du mottar 760 kr i barnebidrag per måned",
       ),
     ).toBeVisible();
 

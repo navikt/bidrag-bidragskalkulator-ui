@@ -152,18 +152,18 @@ const tekster = definerTekster({
     tittel: {
       nb: "Min side - dokumenter for barnebidrag",
       en: "My page - documents for child support",
-      nn: "Mi side - dokument for fostringstilskot",
+      nn: "Mi side - dokument for barnebidrag",
     },
     beskrivelse: {
       nb: "Denne siden viser et dokument relatert til barnebidrag og eventuelle vedlegg",
       en: "This page shows documents related to child support and any attachments",
-      nn: "Denne sida viser dokument knytt til fostringstilskot og eventuelle vedlegg",
+      nn: "Denne sida viser dokument knytt til barnebidrag og eventuelle vedlegg",
     },
   },
   overskrift: {
     nb: "Dokumenter barnebidrag",
     en: "Documents child support",
-    nn: "Dokument fostringstilskot",
+    nn: "Dokument barnebidrag",
   },
   åpne: (tittel) => ({
     nb: `Åpne ${tittel}`,
@@ -195,7 +195,7 @@ const tekster = definerTekster({
       verdi: {
         nb: "Bidrag",
         en: "Child support",
-        nn: "Fostringstilskot",
+        nn: "Bidrag",
       },
     },
   },
