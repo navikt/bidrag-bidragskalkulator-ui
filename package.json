@@ -26,7 +26,7 @@
     "@grafana/faro-web-tracing": "^1.19.0",
     "@navikt/aksel-icons": "^7.32.1",
     "@navikt/ds-css": "^7.31.0",
-    "@navikt/ds-react": "^7.31.0",
+    "@navikt/ds-react": "^7.32.1",
     "@navikt/ds-tailwind": "^7.31.0",
     "@navikt/nav-dekoratoren-moduler": "^3.4.0",
     "@navikt/oasis": "^3.8.0",
@@ -48,7 +48,7 @@
     "react-router": "^7.9.2",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^4.1.11"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
