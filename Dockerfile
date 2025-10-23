@@ -1,4 +1,4 @@
-FROM node:24-alpine AS dependencies
+FROM node:25-alpine AS dependencies
 WORKDIR /app
 COPY package*.json ./
 
@@ -8,13 +8,13 @@ RUN --mount=type=secret,id=NODE_AUTH_TOKEN sh -c \
   npm config set @navikt:registry=https://npm.pkg.github.com && \
   npm ci'
 
-FROM node:24-alpine AS builder
+FROM node:25-alpine AS builder
 WORKDIR /app
 COPY . .
 COPY --from=dependencies /app/node_modules ./node_modules
 RUN npm run build
 
-FROM node:24-alpine
+FROM node:25-alpine
 WORKDIR /app
 COPY package*.json ./
 COPY --from=dependencies /app/node_modules ./node_modules
