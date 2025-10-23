@@ -93,7 +93,7 @@ export const kalkulatorGrunnlagsdata = {
 export const defaultBidragsutregning: Barnebidragsutregning = {
   resultater: [
     {
-      alder: 8,
+      alder: 4,
       sum: 760,
       bidragstype: "MOTTAKER",
     },
