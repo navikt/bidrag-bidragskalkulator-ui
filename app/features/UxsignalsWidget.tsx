@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useKalkulatorRootdata } from "~/root";
 
 export function UxsignalsWidget() {
-  const uxsignalId = "panel-nx67sbqrs1";
+  const uxsignalId = "panel-kridpplpc8";
   const { uxSignalsEnabled, uxSignalsMode } = useKalkulatorRootdata();
   const erAktivert = uxSignalsEnabled === "true";
   const mode = uxSignalsMode;
