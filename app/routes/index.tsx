@@ -226,7 +226,7 @@ const tekster = definerTekster({
   },
   lenketekstGammelKalkulator: {
     nb: "Gå til bidragskalkulatoren",
-    en: "Go to the child support calculator",
+    en: "Go to the calculator",
     nn: "Gå til bidragskalkulatoren",
     //  TODO: vi skjuler den nye til alt funksjonaliter er på plass
     // nb: "Gå til den gamle kalkulatoren",
@@ -236,7 +236,7 @@ const tekster = definerTekster({
   personopplysninger: {
     overskrift: {
       nb: "Personopplysninger i bidragskalkulatoren",
-      en: "Personal data in the child support calculator",
+      en: "Personal data in the calculator",
       nn: "Personopplysingar i bidragskalkulatoren",
       //  TODO: vi skjuler den nye til alt funksjonaliter er på plass
       // nb: "Personopplysninger i ny og gammel kalkulator",
@@ -255,7 +255,7 @@ const tekster = definerTekster({
     lesMer: {
       tittel: {
         nb: "Hva vi spør om i bidragskalkulatoren",
-        en: "What information we ask for in the child support calculator",
+        en: "What information we ask for in the calculator",
         nn: "Kva vi spør om i bidragskalkulatoren",
         //  TODO: vi skjuler den nye til alt funksjonaliter er på plass
         // nb: "Hva vi spør om i den nye kalkulatoren",
