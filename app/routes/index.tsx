@@ -1,7 +1,5 @@
 import { BodyLong, Button, Heading, List, ReadMore } from "@navikt/ds-react";
-import { ListItem } from "@navikt/ds-react/List";
 import type { MetaArgs } from "react-router";
-import { Link as ReactRouterLink } from "react-router";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
@@ -33,7 +31,8 @@ const Landingsside = () => {
 
       <BodyLong spacing>{t(tekster.beskrivelse)}</BodyLong>
       <BodyLong spacing>{t(tekster.beskrivelse2)}</BodyLong>
-
+      {/* TODO: vi skjuler den nye til alt funksjonaliter er på plass  */}
+      {/* 
       <section className="mb-7">
         <Heading size="large" level="2" spacing>
           {t(tekster.undertittel)}
@@ -75,6 +74,22 @@ const Landingsside = () => {
             {t(tekster.lenketekstGammelKalkulator)}
           </Button>
         </div>
+      </section> */}
+
+      <section className="mb-7">
+        <Button
+          as="a"
+          href="https://tjenester.nav.no/bidragskalkulator/innledning"
+          className="self-start"
+          onClick={() => {
+            sporHendelse({
+              hendelsetype: "gå til kalkulator klikket",
+              kalkulatorversjon: "gammel",
+            });
+          }}
+        >
+          {t(tekster.lenketekstGammelKalkulator)}
+        </Button>
       </section>
 
       <section>
@@ -210,26 +225,42 @@ const tekster = definerTekster({
     nn: "Prøv den nye kalkulatoren",
   },
   lenketekstGammelKalkulator: {
-    nb: "Gå til den gamle kalkulatoren",
-    en: "Go to the old calculator",
-    nn: "Gå til den gamle kalkulatoren",
+    nb: "Gå til bidragskalkulatoren",
+    en: "Go to the calculator",
+    nn: "Gå til bidragskalkulatoren",
+    //  TODO: vi skjuler den nye til alt funksjonaliter er på plass
+    // nb: "Gå til den gamle kalkulatoren",
+    // en: "Go to the old calculator",
+    // nn: "Gå til den gamle kalkulatoren",
   },
   personopplysninger: {
     overskrift: {
-      nb: "Personopplysninger i ny og gammel bidragskalkulator",
-      en: "Personal data in the new and old calculator",
-      nn: "Personopplysingar i ny og gamal kalkulatoren",
+      nb: "Personopplysninger i bidragskalkulatoren",
+      en: "Personal data in the calculator",
+      nn: "Personopplysingar i bidragskalkulatoren",
+      //  TODO: vi skjuler den nye til alt funksjonaliter er på plass
+      // nb: "Personopplysninger i ny og gammel kalkulator",
+      // en: "Personal data in the new and old calculator",
+      // nn: "Personopplysingar i ny og gamal kalkulatoren",
     },
     beskrivelse: {
-      nb: "I ny og gammel bidragskalkulator er det du som må legge inn opplysninger for å finne ut hva barnebidraget kan være. Vi lagrer ingen opplysninger om deg, og det du legger inn av informasjon, kan ikke spores tilbake til deg.",
-      en: "In both the new and old child support calculator, you must enter information to find out what the child support amount may be. We do not store any information about you, and the information you enter cannot be traced back to you.",
-      nn: "I ny og gamal bidragskalkulator er det du som må legge inn opplysingar for å finne ut kva barnebidraget kan vere. Vi lagrar ingen opplysingar om deg, og det du legg inn av informasjon, kan ikkje sporast tilbake til deg.",
+      nb: "I bidragskalkulator er det du som må legge inn opplysninger for å finne ut hva barnebidraget kan være. Vi lagrer ingen opplysninger om deg, og det du legger inn av informasjon, kan ikke spores tilbake til deg.",
+      en: "In the child support calculator, you must enter information to find out what the child support amount may be. We do not store any information about you, and the information you enter cannot be traced back to you.",
+      nn: "I bidragskalkulator er det du som må legge inn opplysingar for å finne ut kva barnebidraget kan vere. Vi lagrar ingen opplysingar om deg, og det du legg inn av informasjon, kan ikkje sporast tilbake til deg.",
+      //  TODO: vi skjuler den nye til alt funksjonaliter er på plass
+      // nb: "I ny og gammel bidragskalkulator er det du som må legge inn opplysninger for å finne ut hva barnebidraget kan være. Vi lagrer ingen opplysninger om deg, og det du legger inn av informasjon, kan ikke spores tilbake til deg.",
+      // en: "In both the new and old child support calculator, you must enter information to find out what the child support amount may be. We do not store any information about you, and the information you enter cannot be traced back to you.",
+      // nn: "I ny og gamal bidragskalkulator er det du som må legge inn opplysingar for å finne ut kva barnebidraget kan vere. Vi lagrar ingen opplysingar om deg, og det du legg inn av informasjon, kan ikkje sporast tilbake til deg.",
     },
     lesMer: {
       tittel: {
-        nb: "Hva vi spør om i den nye kalkulatoren",
-        en: "What information we ask for in the new calculator",
-        nn: "Kva vi spør om i den nye kalkulatoren",
+        nb: "Hva vi spør om i bidragskalkulatoren",
+        en: "What information we ask for in the calculator",
+        nn: "Kva vi spør om i bidragskalkulatoren",
+        //  TODO: vi skjuler den nye til alt funksjonaliter er på plass
+        // nb: "Hva vi spør om i den nye kalkulatoren",
+        // en: "What information we ask for in the new calculator",
+        // nn: "Kva vi spør om i den nye kalkulatoren",
       },
       beskrivelse: {
         nb: "For å komme frem til en bidragssum, må du legge inn denne informasjonen:",

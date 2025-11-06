@@ -1,7 +1,8 @@
 import { test } from "@playwright/test";
 import { sjekkTilgjengelighet } from "./uu-utils";
 
-test.describe("Smoke test", () => {
+test.skip("Smoke test", () => {
+  // test.describe("Smoke test", () => {
   test("Det fungerer å gå til kalkulatoren", async ({ page }) => {
     await page.goto("/barnebidrag/tjenester/");
 
