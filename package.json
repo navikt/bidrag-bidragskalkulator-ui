@@ -54,7 +54,7 @@
     "@axe-core/playwright": "^4.11.0",
     "@inquirer/prompts": "^7.9.0",
     "@playwright/test": "^1.56.1",
-    "@react-router/dev": "^7.9.2",
+    "@react-router/dev": "^7.9.5",
     "@tailwindcss/vite": "^4.1.16",
     "@types/archiver": "^7.0.0",
     "@types/node": "^24.10.0",
