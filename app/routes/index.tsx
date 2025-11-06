@@ -1,7 +1,6 @@
 import { BodyLong, Button, Heading, List, ReadMore } from "@navikt/ds-react";
 import { ListItem } from "@navikt/ds-react/List";
 import type { MetaArgs } from "react-router";
-import { Link as ReactRouterLink } from "react-router";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, oversett, Språk, useOversettelse } from "~/utils/i18n";
 
@@ -46,7 +45,8 @@ const Landingsside = () => {
           <ListItem>{t(tekster.brukGammelKalkulator.situasjon2)}</ListItem>
         </List>
         <div className="flex flex-col gap-4">
-          <Button
+          {/* TODO: vi skjuler den nye til alt funksjonaliter er på plass */}
+          {/* <Button
             as={ReactRouterLink}
             to="/kalkulator"
             role="link"
@@ -59,7 +59,7 @@ const Landingsside = () => {
             }}
           >
             {t(tekster.lenketekstNyKalkulator)}
-          </Button>
+          </Button> */}
           <Button
             as="a"
             href="https://tjenester.nav.no/bidragskalkulator/innledning"
@@ -210,7 +210,9 @@ const tekster = definerTekster({
     nn: "Prøv den nye kalkulatoren",
   },
   lenketekstGammelKalkulator: {
-    nb: "Gå til den gamle kalkulatoren",
+    nb: "Gå til kalkulatoren",
+    //  TODO: vi skjuler den nye til alt funksjonaliter er på plass
+    // nb: "Gå til den gamle kalkulatoren",
     en: "Go to the old calculator",
     nn: "Gå til den gamle kalkulatoren",
   },
