@@ -1,3 +1,4 @@
+import { getAnalyticsInstance } from "@navikt/nav-dekoratoren-moduler";
 import {
   skjemanavnMapping,
   type Seksjon,
@@ -46,9 +47,8 @@ export const sporHendelse = async (hendelse: Sporingshendelse) => {
     return;
   }
 
-  return window.umami
-    ? window.umami.track(hendelsetype, sporingsdata)
-    : Promise.resolve();
+  const logger = getAnalyticsInstance("barnebidragskalkulator");
+  await logger(hendelsetype, data);
 };
 
 const erSkjemahendelse = (
