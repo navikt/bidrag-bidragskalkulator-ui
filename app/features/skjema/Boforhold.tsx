@@ -1,9 +1,39 @@
 import { BodyShort } from "@navikt/ds-react";
+import { useFormContext } from "@rvf/react";
+import { useMemo } from "react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { BoforholdEnkeltPart } from "./BoforholdEnkeltPart";
+import { FastBostedSchema, type BarnebidragSkjema } from "./schema";
+import { kalkulerBidragstype } from "./utils";
 
 export const Bofohold = () => {
+  const form = useFormContext<BarnebidragSkjema>();
   const { t } = useOversettelse();
+
+  const barn = form.value("barn");
+  const degInntekt = Number(form.value("deg.inntekt"));
+  const medforelderInntekt = Number(form.value("medforelder.inntekt"));
+
+  const bidragstype = useMemo(() => {
+    if (barn.length === 0 || !degInntekt || !medforelderInntekt) {
+      return "";
+    }
+
+    const førsteBosted = barn[0].bosted;
+    const result = FastBostedSchema.safeParse(førsteBosted);
+
+    const harAlleSammeBosted = barn.every((b) => b.bosted === førsteBosted);
+
+    if (harAlleSammeBosted && result.success) {
+      return kalkulerBidragstype(result.data, degInntekt, medforelderInntekt);
+    }
+
+    return "";
+  }, [barn, degInntekt, medforelderInntekt]);
+
+  if (barn.length === 0 || !degInntekt || !medforelderInntekt) {
+    return null;
+  }
 
   return (
     <div className="border p-4 rounded-md">
@@ -13,9 +43,20 @@ export const Bofohold = () => {
         <BodyShort size="medium" textColor="subtle">
           {t(tekster.beskrivelse)}
         </BodyShort>
-        <BoforholdEnkeltPart part="deg" />
-        <hr className="my-4 border-gray-300" />
-        <BoforholdEnkeltPart part="medforelder" />
+
+        {bidragstype === "PLIKTIG" && <BoforholdEnkeltPart part="deg" />}
+
+        {bidragstype === "MOTTAKER" && (
+          <BoforholdEnkeltPart part="medforelder" />
+        )}
+
+        {bidragstype === "" && (
+          <>
+            <BoforholdEnkeltPart part="deg" />
+            <hr className="my-4 border-gray-300" />
+            <BoforholdEnkeltPart part="medforelder" />
+          </>
+        )}
       </fieldset>
     </div>
   );
