@@ -1,4 +1,10 @@
-import { definerTekster } from "~/utils/i18n";
+import { BodyLong, BodyShort, List } from "@navikt/ds-react";
+import { ListItem } from "@navikt/ds-react/List";
+import { ReadMore } from "@navikt/ds-react/ReadMore";
+import { useKalkulatorgrunnlagsdata } from "~/routes/kalkulator";
+import { sporHendelse } from "~/utils/analytics";
+import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { formatterSum } from "~/utils/tall";
 import type { Samværsklasse } from "../beregning/schema";
 import { SAMVÆRSKLASSE_GRENSER } from "../utils";
 
@@ -23,74 +29,79 @@ export const Samværsfradraginfo = ({
   alder,
   samværsklasse,
 }: SamværsfradraginfoProps) => {
-  return null;
+  const {
+    kalkulatorGrunnlagsdata: { samværsfradrag },
+    miljø,
+  } = useKalkulatorgrunnlagsdata();
+  const { t } = useOversettelse();
+
   // TODO: vi skjuler den nye til alt funksjonaliter er på plass
+  if (!["local", "dev"].includes(miljø) || !samværsfradrag) {
+    return null;
+  }
 
-  // const { samværsfradrag } = useKalkulatorgrunnlagsdata();
-  // const { t } = useOversettelse();
+  const samværsfradragForAlder =
+    alder === undefined
+      ? undefined
+      : samværsfradrag.find(
+          (fradrag) => alder >= fradrag.alderFra && alder <= fradrag.alderTil,
+        );
 
-  // const samværsfradragForAlder =
-  //   alder === undefined
-  //     ? undefined
-  //     : samværsfradrag.find(
-  //         (fradrag) => alder >= fradrag.alderFra && alder <= fradrag.alderTil,
-  //       );
+  return (
+    <ReadMore
+      header={t(tekster.overskrift)}
+      onOpenChange={(open) => {
+        if (open) {
+          sporHendelse({
+            hendelsetype: "les mer utvidet",
+            tekst: t(tekster.overskrift),
+            id: "kalkulator-bosted-og-samvær",
+          });
+        }
+      }}
+    >
+      <BodyLong className="mb-4">{t(tekster.beskrivelse)}</BodyLong>
 
-  // return (
-  //   <ReadMore
-  //     header={t(tekster.overskrift)}
-  //     onOpenChange={(open) => {
-  //       if (open) {
-  //         sporHendelse({
-  //           hendelsetype: "les mer utvidet",
-  //           tekst: t(tekster.overskrift),
-  //           id: "kalkulator-bosted-og-samvær",
-  //         });
-  //       }
-  //     }}
-  //   >
-  //     <BodyLong className="mb-4">{t(tekster.beskrivelse)}</BodyLong>
+      {alder === undefined && <BodyShort>{t(tekster.manglerAlder)}</BodyShort>}
 
-  //     {alder === undefined && <BodyShort>{t(tekster.manglerAlder)}</BodyShort>}
+      {samværsfradragForAlder && alder !== undefined && (
+        <>
+          <BodyShort className="mb-2">
+            {t(tekster.fradragslistetittel(alder))}
+          </BodyShort>
 
-  //     {samværsfradragForAlder && alder !== undefined && (
-  //       <>
-  //         <BodyShort className="mb-2">
-  //           {t(tekster.fradragslistetittel(alder))}
-  //         </BodyShort>
+          <List>
+            {samværsklassenumre.map((klasse) => {
+              const erValgtSamværsklasse =
+                samværsklasse === `SAMVÆRSKLASSE_${klasse}`;
 
-  //         <List>
-  //           {samværsklassenumre.map((klasse) => {
-  //             const erValgtSamværsklasse =
-  //               samværsklasse === `SAMVÆRSKLASSE_${klasse}`;
+              const beløpFradrag =
+                klasse === 0
+                  ? 0
+                  : samværsfradragForAlder.beløpFradrag[
+                      `SAMVÆRSKLASSE_${klasse}`
+                    ];
 
-  //             const beløpFradrag =
-  //               klasse === 0
-  //                 ? 0
-  //                 : samværsfradragForAlder.beløpFradrag[
-  //                     `SAMVÆRSKLASSE_${klasse}`
-  //                   ];
-
-  //             return (
-  //               <ListItem key={klasse}>
-  //                 <span
-  //                   className={erValgtSamværsklasse ? "font-bold" : undefined}
-  //                 >
-  //                   {t(
-  //                     tekster.fradragNetter(
-  //                       getSamværsklasseNetterPeriode(klasse),
-  //                       formatterSum(beløpFradrag),
-  //                     ),
-  //                   )}
-  //                 </span>
-  //               </ListItem>
-  //             );
-  //           })}
-  //         </List>
-  //       </>
-  //     )}
-  //   </ReadMore>
-  // );
+              return (
+                <ListItem key={klasse}>
+                  <span
+                    className={erValgtSamværsklasse ? "font-bold" : undefined}
+                  >
+                    {t(
+                      tekster.fradragNetter(
+                        getSamværsklasseNetterPeriode(klasse),
+                        formatterSum(beløpFradrag),
+                      ),
+                    )}
+                  </span>
+                </ListItem>
+              );
+            })}
+          </List>
+        </>
+      )}
+    </ReadMore>
+  );
 };
 
 const tekster = definerTekster({
