@@ -31,7 +31,7 @@ type Sporingsdata = Record<string, unknown> & {
  * @returns Promise<void>
  */
 
-export const sporHendelse = async (hendelse: Sporingshendelse) => {
+export const sporHendelse = (hendelse: Sporingshendelse) => {
   const { hendelsetype, ...data } = hendelse;
   const sporingsdata: Sporingsdata = {
     ...data,
@@ -42,13 +42,15 @@ export const sporHendelse = async (hendelse: Sporingshendelse) => {
     sporingsdata.skjemanavn = skjemanavnMapping[hendelse.skjemaId];
   }
 
-  if (process.env.NODE_ENV === "development") {
-    console.info(`[DEV] hendelse sporet:`, hendelsetype, sporingsdata);
-    return;
-  }
+  // if (process.env.NODE_ENV === "development") {
+  //   console.info(`[DEV] hendelse sporet:`, hendelsetype, sporingsdata);
+  //   return;
+  // }
 
+  // console.log("🚀 ~ sporHendelse ~ hendelsetype:", hendelsetype);
+  // console.log("🚀 ~ sporHendelse ~ data:", data);
   const logger = getAnalyticsInstance("barnebidragskalkulator");
-  await logger(hendelsetype, data);
+  logger(hendelsetype, data);
 };
 
 const erSkjemahendelse = (
