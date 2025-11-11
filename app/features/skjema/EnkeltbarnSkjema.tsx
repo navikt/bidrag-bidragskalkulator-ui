@@ -24,7 +24,9 @@ type Props = {
 };
 
 export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
-  const { boOgForbruksutgifter } = useKalkulatorgrunnlagsdata();
+  const {
+    kalkulatorGrunnlagsdata: { boOgForbruksutgifter },
+  } = useKalkulatorgrunnlagsdata();
   const { t } = useOversettelse();
   const form = useFormContext<BarnebidragSkjema>();
 
