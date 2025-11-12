@@ -92,6 +92,10 @@ const Landingsside = () => {
         </Button>
       </section>
 
+      <section className="mb-7">
+        <BodyLong>{t(tekster.nyeKalkulatorTattNed)}</BodyLong>
+      </section>
+
       <section>
         <Heading size="medium" level="3" spacing>
           {t(tekster.personopplysninger.overskrift)}
@@ -232,6 +236,11 @@ const tekster = definerTekster({
     // nb: "Gå til den gamle kalkulatoren",
     // en: "Go to the old calculator",
     // nn: "Gå til den gamle kalkulatoren",
+  },
+  nyeKalkulatorTattNed: {
+    nb: "Leter du etter den nye kalkulatoren? Vi har midlertidig tatt den bort for å gjøre den enda bedre, basert på tilbakemeldinger fra dere som har brukt den. Kalkulatoren kommer snart tilbake – i en forbedret versjon.",
+    en: "Looking for the new calculator? We have temporarily removed it to make it even better, based on feedback from our users. The calculator will be back soon – in an improved version.",
+    nn: "Leiter du etter den nye kalkulatoren? Vi har mellombels teke han bort for å gjere den endå betre, basert på tilbakemeldingar frå dykk som har brukt han. Kalkulatoren kjem snart attende – i ein forbedra versjon.",
   },
   personopplysninger: {
     overskrift: {
