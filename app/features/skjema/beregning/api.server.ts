@@ -22,6 +22,10 @@ export const hentBarnebidragsutregningFraApi = async ({
   requestData: Barnebidragsutregningsgrunnlag;
   språk: Språk;
 }): Promise<Barnebidragsutregning | { error: string }> => {
+  console.log(
+    "🚀 ~ hentBarnebidragsutregningFraApi ~ requestData:",
+    requestData,
+  );
   try {
     const response = await fetch(
       `${env.SERVER_URL}/api/v1/beregning/barnebidrag/åpen`,
@@ -74,6 +78,7 @@ const tekster = definerTekster({
 });
 
 export const hentBarnebidragsutregning = async (request: Request) => {
+  console.log("🚀 ~ hentBarnebidragsutregning ~ request:", request);
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
   const skjema = lagBarnebidragSkjema(språk);

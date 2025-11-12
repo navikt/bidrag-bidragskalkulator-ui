@@ -236,16 +236,47 @@ export const lagBarnSkjema = (språk: Språk) => {
 };
 
 export const lagBarnebidragSkjema = (språk: Språk) => {
-  return z.object({
-    barn: z
-      .array(lagBarnSkjema(språk))
-      .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
-      .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
-    deg: lagInntektSkjema(språk),
-    medforelder: lagInntektSkjema(språk),
-    dittBoforhold: lagBoforholdSkjema(språk),
-    medforelderBoforhold: lagBoforholdSkjema(språk),
-  });
+  return z
+    .object({
+      barn: z
+        .array(lagBarnSkjema(språk))
+        .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
+        .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
+      deg: lagInntektSkjema(språk),
+      medforelder: lagInntektSkjema(språk),
+      dittBoforhold: lagBoforholdSkjema(språk),
+      medforelderBoforhold: lagBoforholdSkjema(språk),
+    })
+    .superRefine((data, ctx) => {
+      const { dittBoforhold, medforelderBoforhold, deg, medforelder } = data;
+
+      if (deg.inntekt && medforelder.inntekt) {
+        const harDittBoforhold =
+          dittBoforhold.borMedAnnenVoksen &&
+          dittBoforhold.borMedAndreBarn &&
+          dittBoforhold.antallBarnBorFast &&
+          dittBoforhold.antallBarnDeltBosted;
+
+        const harMedforelderBoforhold =
+          medforelderBoforhold.borMedAnnenVoksen &&
+          medforelderBoforhold.borMedAndreBarn &&
+          medforelderBoforhold.antallBarnBorFast &&
+          medforelderBoforhold.antallBarnDeltBosted;
+
+        if (!harDittBoforhold && !harMedforelderBoforhold) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Du må fylle ut din bosituasjon",
+            path: ["dittBoforhold"],
+          });
+          ctx.addIssue({
+            code: "custom",
+            message: "Du må fylle ut den andre forelderen bosituasjon",
+            path: ["medforelderBoforhold"],
+          });
+        }
+      }
+    });
 };
 
 export type BarnebidragSkjema = z.infer<typeof BarnebidragSkjemaSchema>;
