@@ -62,11 +62,6 @@ export function Samvær({ barnIndex }: SamværProps) {
                 "barn-fast-bosted",
                 t(tekster.bosted.label),
               )}
-              description={
-                bosted === "DELT_FAST_BOSTED"
-                  ? t(tekster.bosted.valg.DELT_FAST_BOSTED_BESKRIVELSE)
-                  : ""
-              }
             >
               {t(tekster.bosted.valg[bosted])}
             </Radio>
@@ -116,9 +111,10 @@ export function Samvær({ barnIndex }: SamværProps) {
 const tekster = definerTekster({
   bosted: {
     label: {
-      nb: "Hvor bor barnet?",
-      en: "Where is the child living?",
-      nn: "Kor bur barnet?",
+      nb: "Hvilken avtale har dere for hvordan barnet bor?",
+      // TODO: oppdatert teksten
+      en: "What agreement do you have for how the child lives?",
+      nn: "Kva avtale har de for korleis barnet bur?",
     },
     valg: {
       velg: {
@@ -131,12 +127,6 @@ const tekster = definerTekster({
         // TODO: oppdatert teksten
         en: "We have a written agreement on shared permanent residence",
         nn: "Vi har ein skriftleg avtale om delt fast bustad",
-      },
-      DELT_FAST_BOSTED_BESKRIVELSE: {
-        nb: "Delt fast bosted handler om hvor barnet bor, ikke om samvær. En avtale om delt fast bosted innebærer at barnet bor fast hos begge foreldrene. Velg «Ja» hvis dere har en skriftlig avtale om dette. Hvis du er usikker på om dere har en slik avtale, bør du sjekke det. Delt fast bosted gir en annen beregning i kalkulatoren enn en vanlig samværsavtale.",
-        // TODO: oppdatert teksten
-        en: "Shared permanent residence is about where the child lives, not about visitation. An agreement on shared permanent residence means that the child has permanent residence with both parents. Select 'Yes' if you have a written agreement about this. If you are unsure whether you have such an agreement, you should check. Shared permanent residence gives a different calculation in the calculator than a regular visitation agreement.",
-        nn: "Delt fast bustad handlar om kvar barnet bur, ikkje om samvær. Ein avtale om delt fast bustad inneber at barnet bur fast hos begge foreldra. Vel «Ja» dersom de har ein skriftleg avtale om dette. Dersom du er usikker på om de har ein slik avtale, bør du sjekke det. Delt fast bustad gir ei anna utrekning i kalkulatoren enn ei vanleg samværsavtale.",
       },
       HAR_SAMVÆRSAVTALE: {
         nb: "Barnet bor fast hos meg, og har samvær med den andre forelderen",
