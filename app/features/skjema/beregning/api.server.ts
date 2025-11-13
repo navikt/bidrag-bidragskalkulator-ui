@@ -115,6 +115,7 @@ export const hentBarnebidragsutregning = async (request: Request) => {
     barn: skjemaData.barn.map((barn) => {
       const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
       const bidragstype = kalkulerBidragstype(
+        barn.samvær,
         barn.bosted,
         inntektForelder1,
         inntektForelder2,

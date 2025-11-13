@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { sjekkTilgjengelighet } from "./uu-utils";
 
-test.skip("Beregningstest", () => {
+test.describe("Beregningstest", () => {
   test("En enkel beregning er tilgjengelig", async ({ page }) => {
     await page.goto("/barnebidrag/tjenester/kalkulator");
     await page.waitForSelector("body", { timeout: 10000 });
@@ -10,29 +10,20 @@ test.skip("Beregningstest", () => {
 
     await page.getByLabel("Hvor gammelt er barnet?").fill("4");
     await page
-      .getByLabel("Vi har en juridisk bindende avtale om delt fast bosted")
+      .getByLabel("Vi har en skriftlig avtale om delt fast bosted")
       .check();
     await page
       .getByLabel("Hva koster barnepass for barnet per måned?")
       .fill("1000");
 
-    const dinHusstand = page.getByRole("group", { name: "Din bosituasjon" });
-    const dinHusstandBorMedAnnenVoksen = page.getByRole("group", {
-      name: "Bor du med en annen voksen?",
-    });
-    await dinHusstandBorMedAnnenVoksen.getByLabel("Nei").check();
-
-    const dinHusstandBorMedAndreBarn = page.getByRole("group", {
-      name: "Bor du med andre egne barn enn de som er nevnt over?",
-    });
-    await dinHusstandBorMedAndreBarn.getByLabel("Ja").check();
-
-    await dinHusstand
-      .getByLabel("Antall egne barn under 18 år som bor fast hos deg")
-      .fill("0");
-    await dinHusstand
-      .getByLabel("Antall egne barn under 18 år med delt bosted hos deg")
-      .fill("0");
+    await page
+      .getByLabel("Hva har du hatt i inntekt de siste 12 månedene?")
+      .fill("400000");
+    await page
+      .getByLabel(
+        "Hva har den andre forelderen hatt i inntekt de siste 12 månedene?",
+      )
+      .fill("600000");
 
     const medforelderensHusstand = page.getByRole("group", {
       name: "Den andre forelderen sin bosituasjon",
@@ -56,15 +47,6 @@ test.skip("Beregningstest", () => {
         "Antall egne barn under 18 år med delt bosted hos den andre forelderen",
       )
       .fill("0");
-
-    await page
-      .getByLabel("Hva har du hatt i inntekt de siste 12 månedene?")
-      .fill("400000");
-    await page
-      .getByLabel(
-        "Hva har den andre forelderen hatt i inntekt de siste 12 månedene?",
-      )
-      .fill("600000");
 
     await sjekkTilgjengelighet(page);
 

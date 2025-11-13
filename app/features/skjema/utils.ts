@@ -14,7 +14,7 @@ import {
   type FastBostedSchema,
 } from "./schema";
 
-export const SAMVÆR_STANDARDVERDI = "15";
+export const SAMVÆR_STANDARDVERDI = "0";
 
 type BoOgForbruksutgiftsgrupper = {
   boOgForbruksutgift: number;
@@ -147,6 +147,10 @@ export const SAMVÆRSKLASSE_GRENSER = {
   },
 } as const;
 
+export const beregnBidragstypeFraNetter = (
+  antallNetterHosMeg: number,
+): "PLIKTIG" | "MOTTAKER" => (antallNetterHosMeg < 15 ? "PLIKTIG" : "MOTTAKER");
+
 /**
  * Kalkulerer samværsklasse basert på hvor mange netter barnet bor hos forelderen og bosted
  */
@@ -158,8 +162,10 @@ export const kalkulerSamværsklasse = (
     return "DELT_BOSTED";
   }
 
-  const netterHosBidragspliktig =
-    fastBosted === "HOS_MEG" ? 30 - antallNetterHosMeg : antallNetterHosMeg;
+  const erJegBidragspliktig = beregnBidragstypeFraNetter(antallNetterHosMeg);
+  const netterHosBidragspliktig = erJegBidragspliktig
+    ? antallNetterHosMeg
+    : 30 - antallNetterHosMeg;
 
   for (const [klasse, grenser] of Object.entries(SAMVÆRSKLASSE_GRENSER)) {
     if (
@@ -177,15 +183,51 @@ export const kalkulerSamværsklasse = (
  * Avgjør om forelderen er mottaker eller pliktig basert på samværsgrad
  */
 export function kalkulerBidragstype(
+  antallNetterHosMeg: number,
   bostatus: z.infer<typeof FastBostedSchema>,
-  inntektForelder1: number,
-  inntektForelder2: number,
+  inntektMeg: number,
+  inntektMedforelder: number,
 ): "MOTTAKER" | "PLIKTIG" {
   if (bostatus === "DELT_FAST_BOSTED") {
-    return inntektForelder1 > inntektForelder2 ? "PLIKTIG" : "MOTTAKER";
+    return inntektMeg > inntektMedforelder ? "PLIKTIG" : "MOTTAKER";
   }
-  return bostatus === "HOS_MEG" ? "MOTTAKER" : "PLIKTIG";
+  return beregnBidragstypeFraNetter(antallNetterHosMeg);
 }
+
+export const beregnBidragstypeForAlleBarn = (
+  barn: BarnebidragSkjema["barn"],
+  degInntekt?: number,
+  medforelderInntekt?: number,
+): "MOTTAKER" | "PLIKTIG" | "BEGGE" | "" => {
+  if (barn.length === 0 || !barn[0]?.bosted) {
+    return "";
+  }
+
+  const bidragstyper = barn.map((b) => {
+    if (b.bosted === "DELT_FAST_BOSTED") {
+      if (degInntekt && medforelderInntekt) {
+        return kalkulerBidragstype(
+          15,
+          b.bosted,
+          degInntekt,
+          medforelderInntekt,
+        );
+      }
+      return "";
+    }
+
+    return beregnBidragstypeFraNetter(Number(b.samvær));
+  });
+
+  const harMottaker = bidragstyper.includes("MOTTAKER");
+  const harPliktig = bidragstyper.includes("PLIKTIG");
+
+  if (harMottaker && harPliktig) {
+    return "BEGGE";
+  }
+
+  return bidragstyper[0] || "";
+};
 
 export const sporKalkulatorSpørsmålBesvart =
   (spørsmålId: KalkulatorSpørsmålId, spørsmål: string) =>
