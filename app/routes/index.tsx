@@ -253,9 +253,9 @@ const tekster = definerTekster({
       // nn: "Personopplysingar i ny og gamal kalkulatoren",
     },
     beskrivelse: {
-      nb: "I bidragskalkulator er det du som må legge inn opplysninger for å finne ut hva barnebidraget kan være. Vi lagrer ingen opplysninger om deg, og det du legger inn av informasjon, kan ikke spores tilbake til deg.",
-      en: "In the child support calculator, you must enter information to find out what the child support amount may be. We do not store any information about you, and the information you enter cannot be traced back to you.",
-      nn: "I bidragskalkulator er det du som må legge inn opplysingar for å finne ut kva barnebidraget kan vere. Vi lagrar ingen opplysingar om deg, og det du legg inn av informasjon, kan ikkje sporast tilbake til deg.",
+      nb: "I bidragskalkulatoren er det du som må legge inn opplysninger for å finne ut hva barnebidraget kan være. Vi lagrer ingen opplysninger om deg, og det du legger inn av informasjon, kan ikke spores tilbake til deg.",
+      en: "In the child support calculator, you'll need to enter information to find out what the child support amount may be. We do not store any information about you, and the information you enter cannot be traced back to you.",
+      nn: "I bidragskalkulatoren er det du som må legge inn opplysingar for å finne ut kva barnebidraget kan vere. Vi lagrar ingen opplysingar om deg, og det du legg inn av informasjon, kan ikkje sporast tilbake til deg.",
       //  TODO: vi skjuler den nye til alt funksjonaliter er på plass
       // nb: "I ny og gammel bidragskalkulator er det du som må legge inn opplysninger for å finne ut hva barnebidraget kan være. Vi lagrer ingen opplysninger om deg, og det du legger inn av informasjon, kan ikke spores tilbake til deg.",
       // en: "In both the new and old child support calculator, you must enter information to find out what the child support amount may be. We do not store any information about you, and the information you enter cannot be traced back to you.",
