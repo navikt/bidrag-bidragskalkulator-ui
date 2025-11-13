@@ -3,6 +3,8 @@ import { definerTekster, oversett, Språk } from "~/utils/i18n";
 
 export const MAKS_ALDER_BARNETILSYNSUTGIFT = 10;
 
+export type Bidragstype = "MOTTAKER" | "PLIKTIG";
+
 export const FastBostedSchema = z.enum([
   "DELT_FAST_BOSTED",
   "HOS_MEG",
@@ -17,6 +19,7 @@ const BarnSkjemaSchema = z.object({
 });
 
 const BarnebidragSkjemaSchema = z.object({
+  bidragstype: z.enum(["", "MOTTAKER", "PLIKTIG"]),
   barn: z.array(BarnSkjemaSchema),
   deg: z.object({
     inntekt: z.string(),
@@ -42,21 +45,11 @@ export const lagBoforholdSkjema = (språk: Språk) => {
   return z
     .object({
       borMedAnnenVoksen: z
-        .enum(["true", "false"], {
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen.påkrevd,
-          ),
-        })
-        .transform((value) => value === "true"),
+        .enum(["true", "false", ""])
+        .transform((value) => (value === "" ? undefined : value === "true")),
       borMedAndreBarn: z
-        .enum(["true", "false"], {
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
-          ),
-        })
-        .transform((value) => value === "true"),
+        .enum(["true", "false", ""])
+        .transform((value) => (value === "" ? undefined : value === "true")),
       antallBarnBorFast: z.string(),
       antallBarnDeltBosted: z.string(),
     })
@@ -238,6 +231,7 @@ export const lagBarnSkjema = (språk: Språk) => {
 export const lagBarnebidragSkjema = (språk: Språk) => {
   return z
     .object({
+      bidragstype: z.enum(["", "MOTTAKER", "PLIKTIG"]),
       barn: z
         .array(lagBarnSkjema(språk))
         .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
@@ -248,31 +242,106 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
       medforelderBoforhold: lagBoforholdSkjema(språk),
     })
     .superRefine((data, ctx) => {
-      const { dittBoforhold, medforelderBoforhold, deg, medforelder } = data;
+      const { bidragstype, dittBoforhold, medforelderBoforhold } = data;
+      console.log("🚀 ~ lagBarnebidragSkjema ~ bidragstype:", bidragstype);
 
-      if (deg.inntekt && medforelder.inntekt) {
-        const harDittBoforhold =
-          dittBoforhold.borMedAnnenVoksen &&
-          dittBoforhold.borMedAndreBarn &&
-          dittBoforhold.antallBarnBorFast &&
-          dittBoforhold.antallBarnDeltBosted;
-
-        const harMedforelderBoforhold =
-          medforelderBoforhold.borMedAnnenVoksen &&
-          medforelderBoforhold.borMedAndreBarn &&
-          medforelderBoforhold.antallBarnBorFast &&
-          medforelderBoforhold.antallBarnDeltBosted;
-
-        if (!harDittBoforhold && !harMedforelderBoforhold) {
+      if (bidragstype === "MOTTAKER") {
+        if (medforelderBoforhold.borMedAnnenVoksen === undefined) {
           ctx.addIssue({
+            path: ["medforelderBoforhold", "borMedAnnenVoksen"],
             code: "custom",
-            message: "Du må fylle ut din bosituasjon",
-            path: ["dittBoforhold"],
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
+                .påkrevd,
+            ),
           });
+        }
+
+        if (medforelderBoforhold.borMedAndreBarn === undefined) {
           ctx.addIssue({
+            path: ["medforelderBoforhold", "borMedAndreBarn"],
             code: "custom",
-            message: "Du må fylle ut den andre forelderen bosituasjon",
-            path: ["medforelderBoforhold"],
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
+            ),
+          });
+        }
+      }
+
+      if (bidragstype === "PLIKTIG") {
+        if (dittBoforhold.borMedAnnenVoksen === undefined) {
+          ctx.addIssue({
+            path: ["dittBoforhold", "borMedAnnenVoksen"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
+                .påkrevd,
+            ),
+          });
+        }
+
+        if (dittBoforhold.borMedAndreBarn === undefined) {
+          ctx.addIssue({
+            path: ["dittBoforhold", "borMedAndreBarn"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
+            ),
+          });
+        }
+      }
+      if (bidragstype === "") {
+        console.log(
+          "🚀 ~ lagBarnebidragSkjema ~ medforelderBoforhold:",
+          medforelderBoforhold,
+        );
+        if (medforelderBoforhold.borMedAnnenVoksen === undefined) {
+          ctx.addIssue({
+            path: ["medforelderBoforhold", "borMedAnnenVoksen"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
+                .påkrevd,
+            ),
+          });
+        }
+
+        if (medforelderBoforhold.borMedAndreBarn === undefined) {
+          ctx.addIssue({
+            path: ["medforelderBoforhold", "borMedAndreBarn"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
+            ),
+          });
+        }
+
+        if (dittBoforhold.borMedAnnenVoksen === undefined) {
+          ctx.addIssue({
+            path: ["dittBoforhold", "borMedAnnenVoksen"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
+                .påkrevd,
+            ),
+          });
+        }
+
+        if (dittBoforhold.borMedAndreBarn === undefined) {
+          ctx.addIssue({
+            path: ["dittBoforhold", "borMedAndreBarn"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
+            ),
           });
         }
       }

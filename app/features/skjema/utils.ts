@@ -90,6 +90,7 @@ export const tilBoOgForbruksutgiftsgrupperMedLabel = (
 };
 
 export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
+  bidragstype: "",
   barn: [
     {
       alder: "",

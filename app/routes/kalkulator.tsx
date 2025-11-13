@@ -124,6 +124,46 @@ export default function Barnebidragskalkulator() {
     const unsubscribe = form.subscribe.value((values) => {
       settErEndretSidenUtregning(true);
       sporSkjemaseksjonFullført(values);
+
+      // Oppdater bidragstype basert på form-verdier
+      // const barn = values.barn;
+      // const degInntekt = Number(values.deg.inntekt);
+      // const medforelderInntekt = Number(values.medforelder.inntekt);
+
+      // if (barn.length === 0 || !degInntekt || !medforelderInntekt) {
+      //   setBidragstype("");
+      //   return;
+      // }
+
+      // const førsteBosted = barn[0].bosted;
+      // const result = FastBostedSchema.safeParse(førsteBosted);
+      // const harAlleSammeBosted = barn.every((b) => b.bosted === førsteBosted);
+
+      // if (harAlleSammeBosted && result.success) {
+      //   const nyBidragstype = kalkulerBidragstype(result.data, degInntekt, medforelderInntekt);
+
+      //   // Resett ikke-påkrevde boforhold når bidragstype endres
+      //   if (nyBidragstype !== bidragstype) {
+      //     if (nyBidragstype === "MOTTAKER") {
+      //       // Resett dittBoforhold (ikke påkrevd for MOTTAKER)
+      //       form.resetField("dittBoforhold.borMedAnnenVoksen");
+      //       form.resetField("dittBoforhold.borMedAndreBarn");
+      //       form.resetField("dittBoforhold.antallBarnBorFast");
+      //       form.resetField("dittBoforhold.antallBarnDeltBosted");
+      //     } else if (nyBidragstype === "PLIKTIG") {
+      //       // Resett medforelderBoforhold (ikke påkrevd for PLIKTIG)
+      //       form.resetField("medforelderBoforhold.borMedAnnenVoksen");
+      //       form.resetField("medforelderBoforhold.borMedAndreBarn");
+      //       form.resetField("medforelderBoforhold.antallBarnBorFast");
+      //       form.resetField("medforelderBoforhold.antallBarnDeltBosted");
+      //     }
+      //     // Hvis nyBidragstype === "", behold begge boforhold
+      //   }
+
+      //   setBidragstype(nyBidragstype);
+      // } else {
+      //   setBidragstype("");
+      // }
     });
     return () => unsubscribe();
   }, [form]);

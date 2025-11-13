@@ -1,6 +1,6 @@
 import { BodyShort } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { BoforholdEnkeltPart } from "./BoforholdEnkeltPart";
 import { FastBostedSchema, type BarnebidragSkjema } from "./schema";
@@ -25,11 +25,21 @@ export const Bofohold = () => {
     const harAlleSammeBosted = barn.every((b) => b.bosted === førsteBosted);
 
     if (harAlleSammeBosted && result.success) {
-      return kalkulerBidragstype(result.data, degInntekt, medforelderInntekt);
+      const nyBidragstype = kalkulerBidragstype(
+        result.data,
+        degInntekt,
+        medforelderInntekt,
+      );
+
+      return nyBidragstype;
     }
 
     return "";
   }, [barn, degInntekt, medforelderInntekt]);
+
+  useEffect(() => {
+    form.setValue("bidragstype", bidragstype);
+  }, [bidragstype, form]);
 
   if (barn.length === 0 || !degInntekt || !medforelderInntekt) {
     return null;
@@ -43,7 +53,6 @@ export const Bofohold = () => {
         <BodyShort size="medium" textColor="subtle">
           {t(tekster.beskrivelse)}
         </BodyShort>
-
         {bidragstype === "PLIKTIG" && <BoforholdEnkeltPart part="deg" />}
 
         {bidragstype === "MOTTAKER" && (

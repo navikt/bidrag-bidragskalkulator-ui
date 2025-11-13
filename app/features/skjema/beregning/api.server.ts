@@ -22,10 +22,6 @@ export const hentBarnebidragsutregningFraApi = async ({
   requestData: Barnebidragsutregningsgrunnlag;
   språk: Språk;
 }): Promise<Barnebidragsutregning | { error: string }> => {
-  console.log(
-    "🚀 ~ hentBarnebidragsutregningFraApi ~ requestData:",
-    requestData,
-  );
   try {
     const response = await fetch(
       `${env.SERVER_URL}/api/v1/beregning/barnebidrag/åpen`,
@@ -78,7 +74,6 @@ const tekster = definerTekster({
 });
 
 export const hentBarnebidragsutregning = async (request: Request) => {
-  console.log("🚀 ~ hentBarnebidragsutregning ~ request:", request);
   const cookieHeader = request.headers.get("Cookie");
   const språk = hentSpråkFraCookie(cookieHeader);
   const skjema = lagBarnebidragSkjema(språk);
@@ -89,16 +84,36 @@ export const hentBarnebidragsutregning = async (request: Request) => {
   }
 
   const skjemaData = parsedFormData.data;
+  console.log("🚀 ~ hentBarnebidragsutregning ~ skjemaData:", skjemaData);
 
   const { inntekt: inntektForelder1 } = skjemaData.deg;
   const { inntekt: inntektForelder2 } = skjemaData.medforelder;
-  const { dittBoforhold, medforelderBoforhold } = skjemaData;
+  const { medforelderBoforhold, dittBoforhold } = skjemaData;
 
   const requestData: Barnebidragsutregningsgrunnlag = {
     inntektForelder1,
     inntektForelder2,
-    dittBoforhold,
-    medforelderBoforhold,
+    dittBoforhold:
+      skjemaData.dittBoforhold.borMedAndreBarn &&
+      skjemaData.dittBoforhold.borMedAnnenVoksen
+        ? {
+            borMedAnnenVoksen: skjemaData.dittBoforhold.borMedAnnenVoksen,
+            antallBarnBorFast: skjemaData.dittBoforhold.antallBarnBorFast,
+            antallBarnDeltBosted: skjemaData.dittBoforhold.antallBarnDeltBosted,
+          }
+        : null,
+    medforelderBoforhold:
+      skjemaData.medforelderBoforhold.borMedAndreBarn &&
+      skjemaData.medforelderBoforhold.borMedAnnenVoksen
+        ? {
+            borMedAnnenVoksen:
+              skjemaData.medforelderBoforhold.borMedAnnenVoksen,
+            antallBarnBorFast:
+              skjemaData.medforelderBoforhold.antallBarnBorFast,
+            antallBarnDeltBosted:
+              skjemaData.medforelderBoforhold.antallBarnDeltBosted,
+          }
+        : null,
     barn: skjemaData.barn.map((barn) => {
       const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
       const bidragstype = kalkulerBidragstype(
