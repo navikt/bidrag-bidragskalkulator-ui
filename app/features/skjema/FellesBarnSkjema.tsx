@@ -1,6 +1,6 @@
 import { PlusIcon } from "@navikt/aksel-icons";
 import { Button } from "@navikt/ds-react";
-import { useField, useFieldArray, useFormContext } from "@rvf/react";
+import { useFieldArray, useFormContext } from "@rvf/react";
 import React from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -12,14 +12,18 @@ export const FellesBarnSkjema = () => {
   const form = useFormContext<BarnebidragSkjema>();
 
   const barnArray = useFieldArray(form.scope("barn"));
-  const sisteBarn = useField(form.scope(`barn[${barnArray.length() - 1}]`));
   const antallBarn = barnArray.length();
 
   const handleLeggTilBarn = () => {
+    const sisteIndex = barnArray.length() - 1;
+    const sisteBarn = form.transient.value(
+      `barn[${sisteIndex}]`,
+    ) as BarnebidragSkjema["barn"][number];
+
     barnArray.push({
       alder: "",
-      bosted: sisteBarn.value().bosted,
-      samvær: sisteBarn.value().samvær,
+      bosted: sisteBarn.bosted,
+      samvær: sisteBarn.samvær,
       barnetilsynsutgift: "",
     });
     sporHendelse({

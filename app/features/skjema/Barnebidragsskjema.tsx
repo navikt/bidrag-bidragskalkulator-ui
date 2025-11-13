@@ -16,8 +16,8 @@ export function Barnebidragsskjema({ form }: Props) {
   return (
     <form {...form.getFormProps()} className="flex flex-col gap-4">
       <FellesBarnSkjema />
-      <Bofohold />
       <Inntektsopplysninger />
+      <Bofohold />
 
       <Button
         type="submit"

@@ -1,9 +1,69 @@
 import { BodyShort } from "@navikt/ds-react";
+import { useFormContext } from "@rvf/react";
+import { useEffect, useMemo } from "react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { BoforholdEnkeltPart } from "./BoforholdEnkeltPart";
+import { FastBostedSchema, type BarnebidragSkjema } from "./schema";
+import { kalkulerBidragstype } from "./utils";
 
 export const Bofohold = () => {
+  const form = useFormContext<BarnebidragSkjema>();
   const { t } = useOversettelse();
+
+  const barn = form.value("barn");
+  const degInntekt = Number(form.value("deg.inntekt"));
+  const medforelderInntekt = Number(form.value("medforelder.inntekt"));
+
+  const bidragstype = useMemo(() => {
+    if (barn.length === 0 || !degInntekt || !medforelderInntekt) {
+      return "";
+    }
+
+    const førsteBosted = barn[0].bosted;
+    const result = FastBostedSchema.safeParse(førsteBosted);
+
+    const harAlleSammeBosted = barn.every((b) => b.bosted === førsteBosted);
+
+    if (harAlleSammeBosted && result.success) {
+      const nyBidragstype = kalkulerBidragstype(
+        result.data,
+        degInntekt,
+        medforelderInntekt,
+      );
+
+      return nyBidragstype;
+    }
+
+    return "BEGGE";
+  }, [barn, degInntekt, medforelderInntekt]);
+
+  useEffect(() => {
+    const forrigeBidragstype = form.value("bidragstype");
+
+    if (forrigeBidragstype !== bidragstype) {
+      form.setValue("bidragstype", bidragstype);
+
+      // Resett ikke-påkrevde boforhold når bidragstype endres
+      if (bidragstype === "MOTTAKER") {
+        // Kun medforelderBoforhold er påkrevd, resett dittBoforhold
+        form.setValue("dittBoforhold.borMedAnnenVoksen", "");
+        form.setValue("dittBoforhold.borMedAndreBarn", "");
+        form.setValue("dittBoforhold.antallBarnBorFast", "");
+        form.setValue("dittBoforhold.antallBarnDeltBosted", "");
+      } else if (bidragstype === "PLIKTIG") {
+        // Kun dittBoforhold er påkrevd, resett medforelderBoforhold
+        form.setValue("medforelderBoforhold.borMedAnnenVoksen", "");
+        form.setValue("medforelderBoforhold.borMedAndreBarn", "");
+        form.setValue("medforelderBoforhold.antallBarnBorFast", "");
+        form.setValue("medforelderBoforhold.antallBarnDeltBosted", "");
+      }
+      // Hvis bidragstype === "BEGGE", behold begge boforhold
+    }
+  }, [bidragstype, form]);
+
+  if (barn.length === 0 || !degInntekt || !medforelderInntekt) {
+    return null;
+  }
 
   return (
     <div className="border p-4 rounded-md">
@@ -13,9 +73,28 @@ export const Bofohold = () => {
         <BodyShort size="medium" textColor="subtle">
           {t(tekster.beskrivelse)}
         </BodyShort>
-        <BoforholdEnkeltPart part="deg" />
-        <hr className="my-4 border-gray-300" />
-        <BoforholdEnkeltPart part="medforelder" />
+
+        <div
+          className={
+            bidragstype === "PLIKTIG" || bidragstype === "BEGGE"
+              ? "block"
+              : "hidden"
+          }
+        >
+          <BoforholdEnkeltPart part="deg" />
+        </div>
+
+        {bidragstype === "BEGGE" && <hr className="my-4 border-gray-300" />}
+
+        <div
+          className={
+            bidragstype === "MOTTAKER" || bidragstype === "BEGGE"
+              ? "block"
+              : "hidden"
+          }
+        >
+          <BoforholdEnkeltPart part="medforelder" />
+        </div>
       </fieldset>
     </div>
   );
