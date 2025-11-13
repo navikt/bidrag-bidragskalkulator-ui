@@ -19,7 +19,7 @@ const BarnSkjemaSchema = z.object({
 });
 
 const BarnebidragSkjemaSchema = z.object({
-  bidragstype: z.enum(["", "MOTTAKER", "PLIKTIG"]),
+  bidragstype: z.enum(["", "MOTTAKER", "PLIKTIG", "BEGGE"]),
   barn: z.array(BarnSkjemaSchema),
   deg: z.object({
     inntekt: z.string(),
@@ -28,14 +28,14 @@ const BarnebidragSkjemaSchema = z.object({
     inntekt: z.string(),
   }),
   dittBoforhold: z.object({
-    borMedAnnenVoksen: z.enum(["true", "false", ""]),
-    borMedAndreBarn: z.enum(["true", "false", ""]),
+    borMedAnnenVoksen: z.enum(["true", "false", "", "undefined"]),
+    borMedAndreBarn: z.enum(["true", "false", "", "undefined"]),
     antallBarnBorFast: z.string(),
     antallBarnDeltBosted: z.string(),
   }),
   medforelderBoforhold: z.object({
-    borMedAnnenVoksen: z.enum(["true", "false", ""]),
-    borMedAndreBarn: z.enum(["true", "false", ""]),
+    borMedAnnenVoksen: z.enum(["true", "false", "", "undefined"]),
+    borMedAndreBarn: z.enum(["true", "false", "", "undefined"]),
     antallBarnBorFast: z.string(),
     antallBarnDeltBosted: z.string(),
   }),
@@ -45,11 +45,15 @@ export const lagBoforholdSkjema = (språk: Språk) => {
   return z
     .object({
       borMedAnnenVoksen: z
-        .enum(["true", "false", ""])
-        .transform((value) => (value === "" ? undefined : value === "true")),
+        .enum(["true", "false", "", "undefined"])
+        .transform((value) =>
+          value === "" || value === "undefined" ? undefined : value === "true",
+        ),
       borMedAndreBarn: z
-        .enum(["true", "false", ""])
-        .transform((value) => (value === "" ? undefined : value === "true")),
+        .enum(["true", "false", "", "undefined"])
+        .transform((value) =>
+          value === "" || value === "undefined" ? undefined : value === "true",
+        ),
       antallBarnBorFast: z.string(),
       antallBarnDeltBosted: z.string(),
     })
@@ -231,7 +235,7 @@ export const lagBarnSkjema = (språk: Språk) => {
 export const lagBarnebidragSkjema = (språk: Språk) => {
   return z
     .object({
-      bidragstype: z.enum(["", "MOTTAKER", "PLIKTIG"]),
+      bidragstype: z.enum(["MOTTAKER", "PLIKTIG", "BEGGE"]),
       barn: z
         .array(lagBarnSkjema(språk))
         .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
@@ -243,7 +247,6 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
     })
     .superRefine((data, ctx) => {
       const { bidragstype, dittBoforhold, medforelderBoforhold } = data;
-      console.log("🚀 ~ lagBarnebidragSkjema ~ bidragstype:", bidragstype);
 
       if (bidragstype === "MOTTAKER") {
         if (medforelderBoforhold.borMedAnnenVoksen === undefined) {
@@ -294,11 +297,7 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
           });
         }
       }
-      if (bidragstype === "") {
-        console.log(
-          "🚀 ~ lagBarnebidragSkjema ~ medforelderBoforhold:",
-          medforelderBoforhold,
-        );
+      if (bidragstype === "BEGGE") {
         if (medforelderBoforhold.borMedAnnenVoksen === undefined) {
           ctx.addIssue({
             path: ["medforelderBoforhold", "borMedAnnenVoksen"],

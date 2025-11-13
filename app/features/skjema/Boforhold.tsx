@@ -34,7 +34,7 @@ export const Bofohold = () => {
       return nyBidragstype;
     }
 
-    return "";
+    return "BEGGE";
   }, [barn, degInntekt, medforelderInntekt]);
 
   useEffect(() => {

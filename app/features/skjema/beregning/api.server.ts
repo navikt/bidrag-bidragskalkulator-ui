@@ -84,18 +84,16 @@ export const hentBarnebidragsutregning = async (request: Request) => {
   }
 
   const skjemaData = parsedFormData.data;
-  console.log("🚀 ~ hentBarnebidragsutregning ~ skjemaData:", skjemaData);
 
   const { inntekt: inntektForelder1 } = skjemaData.deg;
   const { inntekt: inntektForelder2 } = skjemaData.medforelder;
-  const { medforelderBoforhold, dittBoforhold } = skjemaData;
 
   const requestData: Barnebidragsutregningsgrunnlag = {
     inntektForelder1,
     inntektForelder2,
     dittBoforhold:
-      skjemaData.dittBoforhold.borMedAndreBarn &&
-      skjemaData.dittBoforhold.borMedAnnenVoksen
+      skjemaData.dittBoforhold.borMedAndreBarn !== undefined &&
+      skjemaData.dittBoforhold.borMedAnnenVoksen !== undefined
         ? {
             borMedAnnenVoksen: skjemaData.dittBoforhold.borMedAnnenVoksen,
             antallBarnBorFast: skjemaData.dittBoforhold.antallBarnBorFast,
@@ -103,8 +101,8 @@ export const hentBarnebidragsutregning = async (request: Request) => {
           }
         : null,
     medforelderBoforhold:
-      skjemaData.medforelderBoforhold.borMedAndreBarn &&
-      skjemaData.medforelderBoforhold.borMedAnnenVoksen
+      skjemaData.medforelderBoforhold.borMedAndreBarn !== undefined &&
+      skjemaData.medforelderBoforhold.borMedAnnenVoksen !== undefined
         ? {
             borMedAnnenVoksen:
               skjemaData.medforelderBoforhold.borMedAnnenVoksen,
