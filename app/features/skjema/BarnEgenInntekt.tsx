@@ -38,7 +38,7 @@ export default function BarnEgenInntekt({ barnIndex }: Props) {
             label={t(tekster.egenInntekt.beløp)}
             error={barnField.field("inntektPerMåned").error()}
             description={t(tekster.egenInntekt.hjelpetekst)}
-            htmlSize={8}
+            htmlSize={10}
           />
         </>
       )}
@@ -47,18 +47,6 @@ export default function BarnEgenInntekt({ barnIndex }: Props) {
 }
 
 const tekster = definerTekster({
-  barnetilsynsutgift: {
-    label: {
-      nb: "Hva koster barnepass for barnet per måned?",
-      en: "What are the childcare costs for the child per month?",
-      nn: "Kva kostar barnepass for barnet per månad?",
-    },
-    description: {
-      nb: "Barnepass inkluderer barnehage (uten penger til kost, bleier og lignende), skolefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma. Kostnader for barnepass kalles også tilsynsutgifter.",
-      en: "Childcare includes kindergarten (excluding expenses for food, diapers etc), after-school program (SFO), the Activity School (AKS) or nanny. Childcare costs are also referred to as supervision expenses.",
-      nn: "Barnepass inkluderer barnehage (utan pengar til kost, bleier og liknande), skulefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma. Kostnadar for barnepass blir óg kalla tilsynsutgifter.",
-    },
-  },
   egenInntekt: {
     spørsmål: {
       nb: "Har barnet egen inntekt?",

@@ -211,7 +211,6 @@ export const lagBarnSkjema = (språk: Språk) => {
       //barn inntekt:
       harEgenInntekt: z.boolean(),
       inntektPerMåned: z.string(),
-      // barnepassUtgift: z.string().optional(),
     })
     .superRefine((data, ctx) => {
       // Barnepass
