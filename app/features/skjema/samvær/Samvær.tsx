@@ -129,9 +129,10 @@ const tekster = definerTekster({
         nn: "Vi har ein skriftleg avtale om delt fast bustad",
       },
       HAR_SAMVÆRSAVTALE: {
-        nb: "Barnet bor fast hos meg, og har samvær med den andre forelderen",
-        en: "The child has permanent residence with me and has visitation with their other parent",
-        nn: "Barnet bur fast hos meg, og har samvær med den andre forelderen",
+        nb: "Vi har en samværsavtale",
+        // TODO: oppdatert teksten
+        en: "e have a visitation agreement",
+        nn: "Vi har ei samværsavtale",
       },
     },
   },
