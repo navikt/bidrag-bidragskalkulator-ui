@@ -7,8 +7,7 @@ export type Bidragstype = "MOTTAKER" | "PLIKTIG";
 
 export const FastBostedSchema = z.enum([
   "DELT_FAST_BOSTED",
-  "HOS_MEG",
-  "HOS_MEDFORELDER",
+  "HAR_SAMVÆRSAVTALE",
 ]);
 
 const BarnSkjemaSchema = z.object({

@@ -1,11 +1,12 @@
 import { PlusIcon } from "@navikt/aksel-icons";
 import { Button } from "@navikt/ds-react";
 import { useFieldArray, useFormContext } from "@rvf/react";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { EnkeltbarnSkjema } from "./EnkeltbarnSkjema";
 import type { BarnebidragSkjema } from "./schema";
+import { beregnBidragstypeForAlleBarn } from "./utils";
 
 export const FellesBarnSkjema = () => {
   const { t } = useOversettelse();
@@ -13,6 +14,23 @@ export const FellesBarnSkjema = () => {
 
   const barnArray = useFieldArray(form.scope("barn"));
   const antallBarn = barnArray.length();
+
+  const barn = form.value("barn");
+  const degInntekt = Number(form.value("deg.inntekt"));
+  const medforelderInntekt = Number(form.value("medforelder.inntekt"));
+
+  const bidragstype = useMemo(
+    () => beregnBidragstypeForAlleBarn(barn, degInntekt, medforelderInntekt),
+    [barn, degInntekt, medforelderInntekt],
+  );
+
+  useEffect(() => {
+    const forrigeBidragstype = form.value("bidragstype");
+
+    if (forrigeBidragstype !== bidragstype) {
+      form.setValue("bidragstype", bidragstype);
+    }
+  }, [bidragstype, form]);
 
   const handleLeggTilBarn = () => {
     const sisteIndex = barnArray.length() - 1;
