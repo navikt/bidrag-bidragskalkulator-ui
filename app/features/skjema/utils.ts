@@ -105,10 +105,10 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
     },
   ],
   deg: {
-    inntekt: "",
+    inntekt: "400000",
   },
   medforelder: {
-    inntekt: "",
+    inntekt: "500000",
   },
   dittBoforhold: {
     borMedAnnenVoksen: "",
@@ -121,6 +121,10 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
     borMedAndreBarn: "",
     antallBarnBorFast: "",
     antallBarnDeltBosted: "",
+  },
+  andreBarnUnder12: {
+    antall: "0",
+    tilsynsutgifter: [],
   },
 };
 
