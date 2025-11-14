@@ -97,6 +97,11 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
       bosted: "",
       samvær: SAMVÆR_STANDARDVERDI,
       barnetilsynsutgift: "",
+      harBarnepassutgift: "",
+      mottarStønadTilBarnepass: "",
+      barnepassPlass: "",
+      harEgenInntekt: false,
+      inntektPerMåned: "",
     },
   ],
   deg: {
@@ -162,10 +167,12 @@ export const kalkulerSamværsklasse = (
     return "DELT_BOSTED";
   }
 
-  const erJegBidragspliktig = beregnBidragstypeFraNetter(antallNetterHosMeg);
-  const netterHosBidragspliktig = erJegBidragspliktig
-    ? antallNetterHosMeg
-    : 30 - antallNetterHosMeg;
+  // Finn hvem som er bidragspliktig
+  const bidragstype = beregnBidragstypeFraNetter(antallNetterHosMeg);
+
+  // Beregn netter hos bidragspliktig
+  const netterHosBidragspliktig =
+    bidragstype === "PLIKTIG" ? antallNetterHosMeg : 30 - antallNetterHosMeg;
 
   for (const [klasse, grenser] of Object.entries(SAMVÆRSKLASSE_GRENSER)) {
     if (
@@ -191,7 +198,13 @@ export function kalkulerBidragstype(
   if (bostatus === "DELT_FAST_BOSTED") {
     return inntektMeg > inntektMedforelder ? "PLIKTIG" : "MOTTAKER";
   }
-  return beregnBidragstypeFraNetter(antallNetterHosMeg);
+
+  // HAR_SAMVÆRSAVTALE
+  if (antallNetterHosMeg > 15) return "MOTTAKER";
+  if (antallNetterHosMeg < 15) return "PLIKTIG";
+
+  // Eksakt 15 netter
+  return inntektMeg > inntektMedforelder ? "PLIKTIG" : "MOTTAKER";
 }
 
 export const beregnBidragstypeForAlleBarn = (
