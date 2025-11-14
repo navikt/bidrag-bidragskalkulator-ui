@@ -1,4 +1,4 @@
-import { Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -19,6 +19,7 @@ export const BarnepassPerBarn = ({ barnIndex }: Props) => {
   const alder = barnField.value().alder;
   const harUtgifter = barnField.value().harBarnepassutgift === "true";
   const mottarStønad = barnField.value().mottarStønadTilBarnepass;
+
   const visSpørsmålOmBarnetilsynsutgift =
     barnField.field("alder").touched() &&
     Number(alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT;
@@ -29,10 +30,6 @@ export const BarnepassPerBarn = ({ barnIndex }: Props) => {
 
   return (
     <div className="space-y-4">
-      <Heading level="3" size="small" spacing>
-        {t(tekster.barn)} {alder ? `${alder} ${t(tekster.år)}` : ""}
-      </Heading>
-
       <RadioGroup
         {...barnField.getInputProps("harBarnepassutgift")}
         legend={t(tekster.harUtgifter.spørsmål)}
@@ -82,16 +79,6 @@ export const BarnepassPerBarn = ({ barnIndex }: Props) => {
 };
 
 const tekster = definerTekster({
-  barn: {
-    nb: "Barn",
-    en: "Child",
-    nn: "Barn",
-  },
-  år: {
-    nb: "år",
-    en: "years",
-    nn: "år",
-  },
   harUtgifter: {
     spørsmål: {
       nb: "Har du utgifter til barnepass?",
@@ -113,9 +100,9 @@ const tekster = definerTekster({
   },
   plass: {
     spørsmål: {
-      nb: "Heltid eller deltid plass?",
-      en: "Full-time or part-time place?",
-      nn: "Heiltid eller deltid plass?",
+      nb: "Heltid eller deltid?",
+      en: "Full-time or part-time?",
+      nn: "Heiltid eller deltid?",
     },
     valg: {
       heltid: {

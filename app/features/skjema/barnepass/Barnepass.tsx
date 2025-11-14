@@ -1,11 +1,96 @@
-import { BodyShort } from "@navikt/ds-react";
+import {
+  CheckmarkCircleIcon,
+  ExclamationmarkTriangleIcon,
+} from "@navikt/aksel-icons";
+import { Accordion, BodyShort, Tag } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
 import { useEffect } from "react";
-import { Fragment } from "react/jsx-runtime";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import type { BarnebidragSkjema } from "../schema";
 import { BarnepassPerBarn } from "./BarnepassPerBarn";
+
+type BarnStatus =
+  | "komplett"
+  | "ufullstendig"
+  | "ikke-startet"
+  | "ikke-relevant";
+
+function beregnBarnStatus(barn: BarnebidragSkjema["barn"][0]): BarnStatus {
+  const harUtgifter = barn.harBarnepassutgift;
+
+  if (harUtgifter === "" || harUtgifter === "undefined") {
+    return "ikke-startet";
+  }
+
+  if (harUtgifter === "false") {
+    return "ikke-relevant";
+  }
+
+  if (harUtgifter === "true") {
+    const mottarStønad = barn.mottarStønadTilBarnepass;
+
+    if (mottarStønad === "undefined" || mottarStønad === "") {
+      return "ufullstendig";
+    }
+
+    if (mottarStønad === "true") {
+      const plass = barn.barnepassPlass;
+      if (plass === "undefined" || plass === "") {
+        return "ufullstendig";
+      }
+      return "komplett";
+    }
+
+    if (mottarStønad === "false") {
+      const beløp = barn.barnetilsynsutgift;
+      if (!beløp || beløp.trim() === "") {
+        return "ufullstendig";
+      }
+      return "komplett";
+    }
+  }
+
+  return "ikke-startet";
+}
+
+interface StatusIndikatorProps {
+  status: BarnStatus;
+}
+
+const StatusIndikator = ({ status }: StatusIndikatorProps) => {
+  const { t } = useOversettelse();
+
+  switch (status) {
+    case "komplett":
+      return (
+        <Tag variant="success" size="small" className="ml-3">
+          <CheckmarkCircleIcon aria-hidden />
+          {t(tekster.status.komplett)}
+        </Tag>
+      );
+    case "ufullstendig":
+      return (
+        <Tag variant="warning" size="small" className="ml-3">
+          <ExclamationmarkTriangleIcon aria-hidden />
+          {t(tekster.status.ufullstendig)}
+        </Tag>
+      );
+    case "ikke-relevant":
+      return (
+        <Tag variant="neutral" size="small" className="ml-3">
+          {t(tekster.status.ikkeRelevant)}
+        </Tag>
+      );
+    case "ikke-startet":
+    default:
+      return (
+        <Tag variant="info" size="small" className="ml-3">
+          {t(tekster.status.ikkeStartet)}
+        </Tag>
+      );
+  }
+};
 
 export const Barnepass = () => {
   const form = useFormContext<BarnebidragSkjema>();
@@ -15,6 +100,7 @@ export const Barnepass = () => {
   const erBM = bidragstype === "MOTTAKER" || bidragstype === "BEGGE";
   const antallAndreBarn = Number(form.value("andreBarnUnder12.antall")) || 0;
   const tilsynsutgifter = form.value("andreBarnUnder12.tilsynsutgifter") || [];
+
   // Sjekk om noen barn har barnepassutgifter
   const harBarnepassutgifter = barn.some(
     (b) => b.barnetilsynsutgift.trim() !== "",
@@ -36,6 +122,16 @@ export const Barnepass = () => {
     return null;
   }
 
+  // Filtrer barn som skal ha barnepass-spørsmål (≤ 10 år)
+  const barnMedBarnepass = barn.filter((b) => {
+    const alder = Number(b.alder);
+    return !isNaN(alder) && alder <= 10;
+  });
+
+  if (barnMedBarnepass.length === 0) {
+    return null;
+  }
+
   return (
     <div className="border p-6 rounded-lg bg-white space-y-6">
       <h2 className="sr-only">{t(tekster.overskrift)}</h2>
@@ -44,20 +140,39 @@ export const Barnepass = () => {
         <BodyShort size="medium" textColor="subtle" spacing>
           {t(tekster.beskrivelse)}
         </BodyShort>
-        {barn.map((_, index) => (
-          <Fragment key={index}>
-            <BarnepassPerBarn barnIndex={index} />
-            {index !== barn.length - 1 && (
-              <hr className="my-8 border-gray-300" />
-            )}
-          </Fragment>
-        ))}
 
+        {/* Accordion for hvert barn */}
+        <Accordion>
+          {barnMedBarnepass.map((_, index) => {
+            const barnIndex = barn.findIndex(
+              (b) => b === barnMedBarnepass[index],
+            );
+            const alder = barn[barnIndex].alder;
+            const status = beregnBarnStatus(barn[barnIndex]);
+
+            return (
+              <Accordion.Item key={barnIndex} defaultOpen={index === 0}>
+                <Accordion.Header className="w-full">
+                  <span className="font-semibold">
+                    {t(tekster.barn)}{" "}
+                    {alder ? `${alder} ${t(tekster.år)}` : barnIndex + 1}
+                  </span>
+                  <StatusIndikator status={status} />
+                </Accordion.Header>
+                <Accordion.Content>
+                  <div className="space-y-4">
+                    <BarnepassPerBarn barnIndex={barnIndex} />
+                  </div>
+                </Accordion.Content>
+              </Accordion.Item>
+            );
+          })}
+        </Accordion>
+
+        {/* Andre barn under 12 år */}
         {erBM && harBarnepassutgifter && (
           <>
-            <hr className="my-8 border-gray-300" />
-
-            <div className="space-y-4">
+            <div className="space-y-4 mt-8">
               <h3 className="text-lg font-semibold">
                 {t(tekster.andreBarnUnder12.overskrift)}
               </h3>
@@ -112,6 +227,38 @@ const tekster = definerTekster({
     nb: "Barnepass inkluderer barnehage (uten penger til kost, bleier og lignende), skolefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma. Kostnader for barnepass kalles også tilsynsutgifter.",
     en: "Childcare includes kindergarten (excluding expenses for food, diapers etc), after-school program (SFO), the Activity School (AKS) or nanny. Childcare costs are also referred to as supervision expenses.",
     nn: "Barnepass inkluderer barnehage (utan pengar til kost, bleier og liknande), skulefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma. Kostnadar for barnepass blir óg kalla tilsynsutgifter.",
+  },
+  barn: {
+    nb: "Barn",
+    en: "Child",
+    nn: "Barn",
+  },
+  år: {
+    nb: "år",
+    en: "years",
+    nn: "år",
+  },
+  status: {
+    komplett: {
+      nb: "Ferdig",
+      en: "Complete",
+      nn: "Ferdig",
+    },
+    ufullstendig: {
+      nb: "Ufullstendig",
+      en: "Incomplete",
+      nn: "Ufullstendig",
+    },
+    ikkeRelevant: {
+      nb: "Ikke relevant",
+      en: "Not relevant",
+      nn: "Ikkje relevant",
+    },
+    ikkeStartet: {
+      nb: "Ikke startet",
+      en: "Not started",
+      nn: "Ikkje starta",
+    },
   },
   andreBarnUnder12: {
     overskrift: {
