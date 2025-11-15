@@ -17,38 +17,31 @@ type BarnStatus =
   | "ikke-relevant";
 
 function beregnBarnStatus(barn: BarnebidragSkjema["barn"][0]): BarnStatus {
-  const harUtgifter = barn.harBarnepassutgift;
+  const { barnepassSituasjon, barnetilsynsutgift } = barn;
 
-  if (harUtgifter === "" || harUtgifter === "undefined") {
+  if (barnepassSituasjon === "") {
     return "ikke-startet";
   }
 
-  if (harUtgifter === "false") {
-    return "ikke-relevant";
+  if (
+    barnepassSituasjon.trim() !== "" &&
+    barnepassSituasjon !== "BETALER_SELV"
+  ) {
+    return "komplett";
   }
 
-  if (harUtgifter === "true") {
-    const mottarStønad = barn.mottarStønadTilBarnepass;
+  if (
+    barnepassSituasjon === "BETALER_SELV" &&
+    barnetilsynsutgift.trim() === ""
+  ) {
+    return "ufullstendig";
+  }
 
-    if (mottarStønad === "undefined" || mottarStønad === "") {
-      return "ufullstendig";
-    }
-
-    if (mottarStønad === "true") {
-      const plass = barn.barnepassPlass;
-      if (plass === "undefined" || plass === "") {
-        return "ufullstendig";
-      }
-      return "komplett";
-    }
-
-    if (mottarStønad === "false") {
-      const beløp = barn.barnetilsynsutgift;
-      if (!beløp || beløp.trim() === "") {
-        return "ufullstendig";
-      }
-      return "komplett";
-    }
+  if (
+    barnepassSituasjon === "BETALER_SELV" &&
+    barnetilsynsutgift.trim() !== ""
+  ) {
+    return "komplett";
   }
 
   return "ikke-startet";
@@ -141,7 +134,6 @@ export const Barnepass = () => {
           {t(tekster.beskrivelse)}
         </BodyShort>
 
-        {/* Accordion for hvert barn */}
         <Accordion>
           {barnMedBarnepass.map((_, index) => {
             const barnIndex = barn.findIndex(
@@ -160,9 +152,7 @@ export const Barnepass = () => {
                   <StatusIndikator status={status} />
                 </Accordion.Header>
                 <Accordion.Content>
-                  <div className="space-y-4">
-                    <BarnepassPerBarn barnIndex={barnIndex} />
-                  </div>
+                  <BarnepassPerBarn barnIndex={barnIndex} />
                 </Accordion.Content>
               </Accordion.Item>
             );

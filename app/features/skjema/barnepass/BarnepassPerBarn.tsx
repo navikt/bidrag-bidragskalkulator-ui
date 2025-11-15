@@ -1,8 +1,9 @@
-import { Radio, RadioGroup } from "@navikt/ds-react";
+import { Select } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import {
+  BarnepassSituasjonSchema,
   MAKS_ALDER_BARNETILSYNSUTGIFT,
   type BarnebidragSkjema,
 } from "../schema";
@@ -17,8 +18,8 @@ export const BarnepassPerBarn = ({ barnIndex }: Props) => {
 
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
   const alder = barnField.value().alder;
-  const harUtgifter = barnField.value().harBarnepassutgift === "true";
-  const mottarStønad = barnField.value().mottarStønadTilBarnepass;
+
+  const barnepassSituasjon = barnField.value().barnepassSituasjon || "";
 
   const visSpørsmålOmBarnetilsynsutgift =
     barnField.field("alder").touched() &&
@@ -30,112 +31,71 @@ export const BarnepassPerBarn = ({ barnIndex }: Props) => {
 
   return (
     <div className="space-y-4">
-      <RadioGroup
-        {...barnField.getInputProps("harBarnepassutgift")}
-        legend={t(tekster.harUtgifter.spørsmål)}
-        description={t(tekster.harUtgifter.beskrivelse)}
-        error={barnField.field("harBarnepassutgift").error()}
+      <Select
+        {...barnField.getInputProps("barnepassSituasjon")}
+        label={t(tekster.barnepass.label)}
+        error={barnField.field("barnepassSituasjon").error()}
       >
-        <Radio value="true">{t(tekster.felles.ja)}</Radio>
-        <Radio value="false">{t(tekster.felles.nei)}</Radio>
-      </RadioGroup>
+        <option value="">{t(tekster.barnepass.velg)}</option>
+        {BarnepassSituasjonSchema.options.map((type) => (
+          <option value={type} key={type}>
+            {t(tekster.barnepass.valg[type])}
+          </option>
+        ))}
+      </Select>
 
-      {harUtgifter && (
-        <div className="space-y-4">
-          <RadioGroup
-            {...barnField.getInputProps("mottarStønadTilBarnepass")}
-            legend={t(tekster.mottarStønad.spørsmål)}
-            error={barnField.field("mottarStønadTilBarnepass").error()}
-          >
-            <Radio value="true">{t(tekster.felles.ja)}</Radio>
-            <Radio value="false">{t(tekster.felles.nei)}</Radio>
-          </RadioGroup>
-
-          {mottarStønad === "true" && (
-            <RadioGroup
-              {...barnField.getInputProps("barnepassPlass")}
-              legend={t(tekster.plass.spørsmål)}
-              description={t(tekster.plass.hjelpetekst)}
-              error={barnField.field("barnepassPlass").error()}
-            >
-              <Radio value="HELTID">{t(tekster.plass.valg.heltid)}</Radio>
-              <Radio value="DELTID">{t(tekster.plass.valg.deltid)}</Radio>
-            </RadioGroup>
-          )}
-
-          {mottarStønad === "false" && (
-            <FormattertTallTextField
-              {...barnField.getControlProps("barnetilsynsutgift")}
-              label={t(tekster.utgift.label)}
-              error={barnField.field("barnetilsynsutgift").error()}
-              description={t(tekster.utgift.hjelpetekst)}
-              htmlSize={15}
-            />
-          )}
-        </div>
+      {barnepassSituasjon === "BETALER_SELV" && (
+        <FormattertTallTextField
+          {...barnField.getControlProps("barnetilsynsutgift")}
+          label={t(tekster.utgift.label)}
+          error={barnField.field("barnetilsynsutgift").error()}
+          htmlSize={12}
+        />
       )}
     </div>
   );
 };
 
 const tekster = definerTekster({
-  harUtgifter: {
-    spørsmål: {
-      nb: "Har du utgifter til barnepass?",
-      en: "Do you have childcare expenses?",
-      nn: "Har du utgifter til barnepass?",
+  barnepass: {
+    label: {
+      nb: "Barnepass",
+      en: "Childcare",
+      nn: "Barnepass",
     },
-    beskrivelse: {
-      nb: "(barnehage, SFO, dagmamma osv.)",
-      en: "(kindergarten, after-school care, childminder, etc.)",
-      nn: "(barnehage, SFO, dagmamma osv.)",
-    },
-  },
-  mottarStønad: {
-    spørsmål: {
-      nb: "Får du stønad til barnepass fra Nav?",
-      en: "Do you receive childcare support from Nav?",
-      nn: "Får du stønad til barnepass frå Nav?",
-    },
-  },
-  plass: {
-    spørsmål: {
-      nb: "Heltid eller deltid?",
-      en: "Full-time or part-time?",
-      nn: "Heiltid eller deltid?",
+    velg: {
+      nb: "Velg...",
+      en: "Choose...",
+      nn: "Vel...",
     },
     valg: {
-      heltid: {
-        nb: "Heltid",
-        en: "Full-time",
-        nn: "Heiltid",
+      INGEN: {
+        nb: "Har ikke barnepass",
+        en: "No childcare",
+        nn: "Har ikkje barnepass",
       },
-      deltid: {
-        nb: "Deltid",
-        en: "Part-time",
-        nn: "Deltid",
+      STØNAD_HELTID: {
+        nb: "Stønad fra Nav - heltid",
+        en: "Nav support - full-time",
+        nn: "Stønad frå Nav - heiltid",
       },
-    },
-    hjelpetekst: {
-      nb: "Barnehage: Heltid = 33+ timer/uke, Deltid ≤ 32 timer. SFO: Heltid = 11 timer/uke, Deltid ≤ 10 timer",
-      en: "Kindergarten: Full-time = 33+ hours/week, Part-time ≤ 32 hours. After-school: Full-time = 11 hours/week, Part-time ≤ 10 hours",
-      nn: "Barnehage: Heiltid = 33+ timar/veke, Deltid ≤ 32 timar. SFO: Heiltid = 11 timar/veke, Deltid ≤ 10 timar",
+      STØNAD_DELTID: {
+        nb: "Stønad fra Nav - deltid",
+        en: "Nav support - part-time",
+        nn: "Stønad frå Nav - deltid",
+      },
+      BETALER_SELV: {
+        nb: "Betaler selv (uten stønad)",
+        en: "Pay myself (no support)",
+        nn: "Betaler sjølv (utan stønad)",
+      },
     },
   },
   utgift: {
     label: {
-      nb: "Hvor mye betaler du per måned?",
-      en: "How much do you pay per month?",
-      nn: "Kor mykje betaler du per månad?",
+      nb: "Beløp per måned",
+      en: "Amount per month",
+      nn: "Beløp per månad",
     },
-    hjelpetekst: {
-      nb: "Oppgi det du faktisk betaler selv",
-      en: "Enter what you actually pay yourself",
-      nn: "Oppgi det du faktisk betaler sjølv",
-    },
-  },
-  felles: {
-    ja: { nb: "Ja", en: "Yes", nn: "Ja" },
-    nei: { nb: "Nei", en: "No", nn: "Nei" },
   },
 });
