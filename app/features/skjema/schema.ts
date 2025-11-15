@@ -2,6 +2,7 @@ import { z } from "zod";
 import { definerTekster, oversett, Språk } from "~/utils/i18n";
 
 export const MAKS_ALDER_BARNETILSYNSUTGIFT = 10;
+export const MAKS_ALDER_BARN_EGEN_INNTEKT = 13;
 
 export type Bidragstype = "MOTTAKER" | "PLIKTIG";
 
@@ -10,11 +11,21 @@ export const FastBostedSchema = z.enum([
   "HAR_SAMVÆRSAVTALE",
 ]);
 
+export const BarnepassSituasjonSchema = z.enum([
+  "INGEN",
+  "STØNAD_HELTID",
+  "STØNAD_DELTID",
+  "BETALER_SELV",
+]);
+
 const BarnSkjemaSchema = z.object({
   alder: z.string(),
   bosted: z.enum([...FastBostedSchema.options, ""]),
   samvær: z.string(),
+  barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
   barnetilsynsutgift: z.string(),
+  harEgenInntekt: z.boolean(),
+  inntektPerMåned: z.string(),
 });
 
 const BarnebidragSkjemaSchema = z.object({
@@ -38,7 +49,79 @@ const BarnebidragSkjemaSchema = z.object({
     antallBarnBorFast: z.string(),
     antallBarnDeltBosted: z.string(),
   }),
+  andreBarnUnder12: z.object({
+    antall: z.string(),
+    tilsynsutgifter: z.array(z.string()),
+  }),
 });
+
+export const lagAndreBarnUnder12Skjema = (språk: Språk) => {
+  return z
+    .object({
+      antall: z.string(),
+      tilsynsutgifter: z.array(z.string()),
+    })
+    .transform((values) => {
+      const antall = Number(values.antall.trim() || 0);
+      const tilsynsutgifter = values.tilsynsutgifter.map((utgift) =>
+        utgift === "" ? undefined : Number(utgift.trim()),
+      );
+
+      return {
+        antall,
+        tilsynsutgifter,
+      };
+    })
+    .superRefine((values, ctx) => {
+      if (values.antall < 0) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.andreBarnUnder12.antall.minimum,
+          ),
+          path: ["antall"],
+        });
+      }
+
+      if (values.antall > 10) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.andreBarnUnder12.antall.maksimum,
+          ),
+          path: ["antall"],
+        });
+      }
+
+      if (values.antall > 0) {
+        values.tilsynsutgifter.forEach((utgift, index) => {
+          if (utgift && utgift < 0) {
+            ctx.addIssue({
+              code: "custom",
+              message: oversett(
+                språk,
+                tekster.feilmeldinger.andreBarnUnder12.tilsynsutgift.minimum,
+              ),
+              path: ["tilsynsutgifter", index],
+            });
+          }
+
+          if (utgift && utgift > 10000) {
+            ctx.addIssue({
+              code: "custom",
+              message: oversett(
+                språk,
+                tekster.feilmeldinger.andreBarnUnder12.tilsynsutgift.maksimum,
+              ),
+              path: ["tilsynsutgifter", index],
+            });
+          }
+        });
+      }
+    });
+};
 
 export const lagBoforholdSkjema = (språk: Språk) => {
   return z
@@ -185,21 +268,51 @@ export const lagBarnSkjema = (språk: Språk) => {
         .refine((verdi) => verdi <= 30, {
           message: oversett(språk, tekster.feilmeldinger.samvær.maksimum),
         }),
+      // barnepass:
+      barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
       barnetilsynsutgift: z.string(),
+      //barn inntekt:
+      harEgenInntekt: z.boolean(),
+      inntektPerMåned: z.string(),
     })
     .superRefine((data, ctx) => {
-      if (
-        data.alder <= MAKS_ALDER_BARNETILSYNSUTGIFT &&
-        data.barnetilsynsutgift.trim() === ""
-      ) {
-        ctx.addIssue({
-          path: ["barnetilsynsutgift"],
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.barnetilsynsutgift.påkrevd,
-          ),
-        });
+      // Barnepass
+      if (data.alder <= MAKS_ALDER_BARNETILSYNSUTGIFT) {
+        if (data.barnepassSituasjon === "") {
+          ctx.addIssue({
+            path: ["barnepassSituasjon"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.barnepass.situasjon.påkrevd,
+            ),
+          });
+        }
+
+        if (
+          data.barnepassSituasjon === "BETALER_SELV" &&
+          data.barnetilsynsutgift.trim() === ""
+        ) {
+          ctx.addIssue({
+            path: ["barnetilsynsutgift"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.barnepass.utgifter.beløp.påkrevd,
+            ),
+          });
+        }
+      }
+
+      // Barn egen inntekt
+      if (data.alder >= MAKS_ALDER_BARN_EGEN_INNTEKT) {
+        if (data.harEgenInntekt && data.inntektPerMåned.trim() === "") {
+          ctx.addIssue({
+            path: ["inntektPerMåned"],
+            code: "custom",
+            message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
+          });
+        }
       }
     })
     .transform((values) => ({
@@ -213,7 +326,7 @@ export const lagBarnSkjema = (språk: Språk) => {
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.barnetilsynsutgift.minimum,
+            tekster.feilmeldinger.barnepass.utgifter.beløp.minimum,
           ),
         });
       }
@@ -224,7 +337,7 @@ export const lagBarnSkjema = (språk: Språk) => {
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.barnetilsynsutgift.maksimum,
+            tekster.feilmeldinger.barnepass.utgifter.beløp.maksimum,
           ),
         });
       }
@@ -243,6 +356,7 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
       medforelder: lagInntektSkjema(språk),
       dittBoforhold: lagBoforholdSkjema(språk),
       medforelderBoforhold: lagBoforholdSkjema(språk),
+      andreBarnUnder12: lagAndreBarnUnder12Skjema(språk),
     })
     .superRefine((data, ctx) => {
       const { bidragstype, dittBoforhold, medforelderBoforhold } = data;
@@ -343,6 +457,28 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
           });
         }
       }
+
+      const erBM = bidragstype === "MOTTAKER" || bidragstype === "BEGGE";
+      const harBarnepassutgifter = data.barn.some(
+        (b) => b.barnetilsynsutgift >= 0,
+      );
+
+      if (erBM && harBarnepassutgifter) {
+        if (data.andreBarnUnder12.antall > 0) {
+          for (let i = 0; i < data.andreBarnUnder12.antall; i++) {
+            if (data.andreBarnUnder12.tilsynsutgifter[i] === undefined) {
+              ctx.addIssue({
+                path: ["andreBarnUnder12", "tilsynsutgifter", i],
+                code: "custom",
+                message: oversett(
+                  språk,
+                  tekster.feilmeldinger.andreBarnUnder12.tilsynsutgift.påkrevd,
+                ),
+              });
+            }
+          }
+        }
+      }
     });
 };
 
@@ -399,21 +535,46 @@ const tekster = definerTekster({
         nn: "Barnet kan ikkje ha flest netter hos deg når barnet bur hos den andre forelderen.",
       },
     },
-    barnetilsynsutgift: {
-      påkrevd: {
-        nb: "Fyll inn kostnader til barnepass",
-        en: "Fill in costs for child care",
-        nn: "Fyll inn kostnadar til barnepass",
+    barnepass: {
+      situasjon: {
+        påkrevd: {
+          nb: "Fyll inn barnepass",
+          en: "Fill in child care",
+          nn: "Fyll inn barnepass",
+        },
       },
-      minimum: {
-        nb: "Kostnader til barnepass må være minst 0",
-        en: "Costs for child care must be at least 0",
-        nn: "Kostnader til barnepass må vere minst 0",
+      utgifter: {
+        beløp: {
+          påkrevd: {
+            nb: "Fyll inn kostnader til barnepass",
+            en: "Fill in costs for child care",
+            nn: "Fyll inn kostnadar til barnepass",
+          },
+          minimum: {
+            nb: "Kostnader til barnepass må være minst 0",
+            en: "Costs for child care must be at least 0",
+            nn: "Kostnader til barnepass må vere minst 0",
+          },
+          maksimum: {
+            nb: "Kostnader for barnepass kan ikke være mer enn 10 000 kr",
+            en: "Costs for child care cannot exceed 10,000 NOK",
+            nn: "Kostnader for barnepass kan ikkje vere meir enn 10 000 kr",
+          },
+        },
       },
-      maksimum: {
-        nb: "Kostnader for barnepass kan ikke være mer enn 10 000 kr",
-        en: "Costs for child care cannot exceed 10,000 NOK",
-        nn: "Kostnader for barnepass kan ikkje vere meir enn 10 000 kr",
+      stønad: {
+        påkrevd: {
+          nb: "Dette feltet er påkrevd",
+          en: "Dette feltet er påkrevd",
+          nn: "Dette feltet er påkrevd",
+        },
+        type: {
+          påkrevd: {
+            nb: "Dette feltet er påkrevd",
+            en: "Dette feltet er påkrevd",
+            nn: "Dette feltet er påkrevd",
+          },
+        },
       },
     },
     bostatus: {
@@ -460,6 +621,14 @@ const tekster = definerTekster({
         nb: "Maksimum 10 barn kan legges til",
         en: "Maximum 10 children can be added",
         nn: "Maksimum 10 barn kan leggjast til",
+      },
+      egenInntekt: {
+        påkrevd: {
+          // TODO: tekst
+          nb: "Velg om barnet har egen inntekt",
+          en: "Velg om barnet har egen inntekt",
+          nn: "Velg om barnet har egen inntekt",
+        },
       },
     },
     inntekt: {
@@ -526,6 +695,42 @@ const tekster = definerTekster({
           nb: "Velg et alternativ",
           en: "Choose an option",
           nn: "Vel eit alternativ",
+        },
+      },
+    },
+    andreBarnUnder12: {
+      antall: {
+        påkrevd: {
+          nb: "Fyll inn antall barn",
+          en: "Fill in the number of children",
+          nn: "Fyll inn antal barn",
+        },
+        minimum: {
+          nb: "Antall barn må være minst 0",
+          en: "Number of children must be at least 0",
+          nn: "Antal barn må vere minst 0",
+        },
+        maksimum: {
+          nb: "Antall barn kan ikke være mer enn 10",
+          en: "Number of children cannot exceed 10",
+          nn: "Antal barn kan ikkje vere meir enn 10",
+        },
+      },
+      tilsynsutgift: {
+        påkrevd: {
+          nb: "Fyll inn tilsynsutgift",
+          en: "Fill in childcare cost",
+          nn: "Fyll inn tilsynsutgift",
+        },
+        minimum: {
+          nb: "Tilsynsutgift må være minst 0",
+          en: "Childcare cost must be at least 0",
+          nn: "Tilsynsutgift må vere minst 0",
+        },
+        maksimum: {
+          nb: "Tilsynsutgift kan ikke være mer enn 10 000 kr",
+          en: "Childcare cost cannot exceed 10,000 NOK",
+          nn: "Tilsynsutgift kan ikkje vere meir enn 10 000 kr",
         },
       },
     },

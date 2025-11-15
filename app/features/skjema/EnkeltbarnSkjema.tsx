@@ -7,9 +7,10 @@ import { useKalkulatorgrunnlagsdata } from "~/routes/kalkulator";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
-import { FormattertTallTextField } from "../../components/ui/FormattertTallTextField";
+import BarnEgenInntekt from "./BarnEgenInntekt";
 import { Samvær } from "./samvær/Samvær";
 import {
+  MAKS_ALDER_BARN_EGEN_INNTEKT,
   MAKS_ALDER_BARNETILSYNSUTGIFT,
   type BarnebidragSkjema,
 } from "./schema";
@@ -36,6 +37,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
   const visSpørsmålOmBarnetilsynsutgift =
     barnField.field("alder").touched() &&
     Number(alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT;
+  const visBarnEgenInntekt = Number(alder) >= MAKS_ALDER_BARN_EGEN_INNTEKT;
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
@@ -103,19 +105,9 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
 
       <Samvær barnIndex={barnIndex} />
 
-      {visSpørsmålOmBarnetilsynsutgift && (
-        <FormattertTallTextField
-          {...barnField.field("barnetilsynsutgift").getControlProps()}
-          label={t(tekster.barnetilsynsutgift.label)}
-          onBlur={sporKalkulatorSpørsmålBesvart(
-            "barn-barnepass",
-            t(tekster.barnetilsynsutgift.label),
-          )}
-          description={t(tekster.barnetilsynsutgift.description)}
-          htmlSize={18}
-          error={barnField.field("barnetilsynsutgift").error()}
-        />
-      )}
+      {/* Barnets egen inntekt (kun hvis ≥ 13 år) */}
+      {visBarnEgenInntekt && <BarnEgenInntekt barnIndex={barnIndex} />}
+
       {onFjernBarn && (
         <Button
           type="button"

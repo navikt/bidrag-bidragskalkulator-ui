@@ -1,6 +1,7 @@
 import { Button } from "@navikt/ds-react";
 import { type FormApi } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { Barnepass } from "./barnepass/Barnepass";
 import { Bofohold } from "./Boforhold";
 import { FellesBarnSkjema } from "./FellesBarnSkjema";
 import { Inntektsopplysninger } from "./Inntektsopplysninger";
@@ -17,6 +18,7 @@ export function Barnebidragsskjema({ form }: Props) {
     <form {...form.getFormProps()} className="flex flex-col gap-4">
       <FellesBarnSkjema />
       <Inntektsopplysninger />
+      <Barnepass />
       <Bofohold />
 
       <Button
