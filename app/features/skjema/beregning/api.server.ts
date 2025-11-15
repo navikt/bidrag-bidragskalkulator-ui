@@ -125,7 +125,10 @@ export const hentBarnebidragsutregning = async (request: Request) => {
         alder: barn.alder,
         samværsklasse,
         bidragstype,
-        barnetilsynsutgift: barn.barnetilsynsutgift ?? 0,
+        barnetilsynsutgift:
+          barn.barnepassSituasjon === "BETALER_SELV"
+            ? barn.barnetilsynsutgift
+            : 0,
       };
     }),
   };
