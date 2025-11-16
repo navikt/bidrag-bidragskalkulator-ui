@@ -4,7 +4,6 @@ import {
 } from "@navikt/aksel-icons";
 import { Accordion, BodyShort, Tag } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
-import { useEffect } from "react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import type { BarnebidragSkjema } from "../schema";
@@ -92,24 +91,11 @@ export const Barnepass = () => {
   const bidragstype = form.value("bidragstype");
   const erBM = bidragstype === "MOTTAKER" || bidragstype === "BEGGE";
   const antallAndreBarn = Number(form.value("andreBarnUnder12.antall")) || 0;
-  const tilsynsutgifter = form.value("andreBarnUnder12.tilsynsutgifter") || [];
 
   // Sjekk om noen barn har barnepassutgifter
   const harBarnepassutgifter = barn.some(
     (b) => b.barnetilsynsutgift.trim() !== "",
   );
-
-  // Synkroniser tilsynsutgifter-arrayen med antall andre barn
-  useEffect(() => {
-    const nåværendeTilsynsutgifter =
-      form.value("andreBarnUnder12.tilsynsutgifter") || [];
-    if (nåværendeTilsynsutgifter.length !== antallAndreBarn) {
-      const newArray = Array.from({ length: antallAndreBarn }, (_, i) =>
-        i < nåværendeTilsynsutgifter.length ? nåværendeTilsynsutgifter[i] : "",
-      );
-      form.setValue("andreBarnUnder12.tilsynsutgifter", newArray);
-    }
-  }, [antallAndreBarn, form]);
 
   if (!erBM) {
     return null;
@@ -184,7 +170,7 @@ export const Barnepass = () => {
                     {t(tekster.andreBarnUnder12.tilsynsutgifterBeskrivelse)}
                   </BodyShort>
 
-                  {tilsynsutgifter.map((_, index) => (
+                  {Array.from({ length: antallAndreBarn }, (_, index) => (
                     <FormattertTallTextField
                       key={index}
                       {...form

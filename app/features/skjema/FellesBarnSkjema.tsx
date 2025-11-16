@@ -44,7 +44,7 @@ export const FellesBarnSkjema = () => {
       samvær: sisteBarn.samvær,
       barnetilsynsutgift: "",
       barnepassSituasjon: "",
-      harEgenInntekt: false,
+      harEgenInntekt: "",
       inntektPerMåned: "",
     });
     sporHendelse({

@@ -98,7 +98,7 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
       samvær: SAMVÆR_STANDARDVERDI,
       barnepassSituasjon: "",
       barnetilsynsutgift: "",
-      harEgenInntekt: false,
+      harEgenInntekt: "false",
       inntektPerMåned: "",
     },
   ],

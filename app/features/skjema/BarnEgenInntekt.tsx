@@ -26,12 +26,12 @@ export default function BarnEgenInntekt({ barnIndex }: Props) {
           direction={{ xs: "column", sm: "row" }}
           wrap={false}
         >
-          <Radio value={true}>{t(tekster.felles.ja)}</Radio>
-          <Radio value={false}>{t(tekster.felles.nei)}</Radio>
+          <Radio value="true">{t(tekster.felles.ja)}</Radio>
+          <Radio value="false">{t(tekster.felles.nei)}</Radio>
         </Stack>
       </RadioGroup>
 
-      {harEgenInntekt && (
+      {harEgenInntekt === "true" && (
         <>
           <FormattertTallTextField
             {...barnField.field("inntektPerMåned").getControlProps()}
