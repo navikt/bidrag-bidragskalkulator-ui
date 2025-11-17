@@ -156,7 +156,9 @@ export const Ytelser = ({ bidragstype }: Props) => {
   return (
     <div className="border p-4 rounded-md">
       <fieldset className="p-0 flex flex-col gap-4">
-        <legend className="text-xl mb-2">{t(tekster.felles.overskrift)}</legend>
+        <legend className="text-xl mb-2">
+          {t(tekster[bidragstype].overskrift)}
+        </legend>
 
         <p className="text-gray-700">{t(tekster.felles.beskrivelse)}</p>
 
@@ -229,10 +231,6 @@ export const Ytelser = ({ bidragstype }: Props) => {
               error={form.field("ytelser.kontantstøtteBeløp").error()}
               htmlSize={10}
               size="small"
-              // onBlur={sporKalkulatorSpørsmålBesvart(
-              //   "kontantstotte-belop",
-              //   t(tekster.kontantstøtte.beløpLabel),
-              // )}
             />
           </div>
         )}
@@ -243,6 +241,11 @@ export const Ytelser = ({ bidragstype }: Props) => {
 
 const tekster = definerTekster({
   MOTTAKER: {
+    overskrift: {
+      nb: "Ytelser fra Nav",
+      en: "Benefits from Nav",
+      nn: "Ytingar frå Nav",
+    },
     comboboxLabel: {
       nb: "Mottar du noen av disse ytelsene?",
       en: "Do you receive any of these benefits?",
@@ -274,42 +277,42 @@ const tekster = definerTekster({
     },
   },
   PLIKTIG: {
+    overskrift: {
+      nb: "Ytelser fra Nav til den andre forelderen",
+      en: "Benefits from Nav to the other parent",
+      nn: "Ytingar frå Nav til den andre forelderen",
+    },
     comboboxLabel: {
       nb: "Mottar den andre forelderen noen av disse ytelsene?",
-      en: "Do the other parent receive any of these benefits?",
+      en: "Does the other parent receive any of these benefits?",
       nn: "Mottar den andre forelderen nokon av desse ytingane?",
     },
     utvidetBarnetrygd: {
       delingBeskrivelse: {
-        nb: "Når den andre forelderen mottar utvidet barnetrygd, regnes det som en del av inntekten din. Men siden barnet har delt bosted, kan dere velge å dele utvidet barnetrygd. Hvis dere gjør det, teller bare halvparten av beløpet i beregningen.",
-        en: "When the other parent receive extended child benefit, it counts as part of your income. But since the child has shared residence, you can choose to share extended child benefit. If you do, only half the amount counts in the calculation.",
-        nn: "Når den andre forelderen mottar utvida barnetrygd, blir det rekna som ein del av inntekta di. Men sidan barnet har delt bustad, kan de velje å dele utvida barnetrygd. Viss de gjer det, tel berre halvparten av beløpet i utrekninga.",
+        nb: "Når den andre forelderen mottar utvidet barnetrygd, regnes det som en del av inntekten til den andre forelderen. Men siden barnet har delt bosted, kan dere velge å dele utvidet barnetrygd. Hvis dere gjør det, teller bare halvparten av beløpet i beregningen.",
+        en: "When the other parent receives extended child benefit, it counts as part of the other parent's income. But since the child has shared residence, you can choose to share extended child benefit. If you do, only half the amount counts in the calculation.",
+        nn: "Når den andre forelderen mottar utvida barnetrygd, blir det rekna som ein del av inntekta til den andre forelderen. Men sidan barnet har delt bustad, kan de velje å dele utvida barnetrygd. Viss de gjer det, tel berre halvparten av beløpet i utrekninga.",
       },
     },
     kontantstøtte: {
       beløpLabel: {
         nb: "Hvor mye kontantstøtte mottar den andre forelderen per måned?",
-        en: "How much cash-for-care benefit do the other parent receive per month?",
+        en: "How much cash-for-care benefit does the other parent receive per month?",
         nn: "Kor mykje kontantstøtte mottar den andre forelderen per månad?",
       },
       beløpBeskrivelse: {
         nb: "Oppgi det totale beløpet den andre forelderen mottar",
-        en: "Enter the total amount the other parent receive",
+        en: "Enter the total amount the other parent receives",
         nn: "Oppgi det totale beløpet den andre forelderen mottar",
       },
     },
     mottarAlt: {
       nb: "Nei, den andre forelderen mottar alt",
-      en: "No, the other parent receive all",
+      en: "No, the other parent receives all",
       nn: "Nei, den andre forelderen mottar alt",
     },
   },
   felles: {
-    overskrift: {
-      nb: "Ytelser fra Nav",
-      en: "Benefits from Nav",
-      nn: "Ytingar frå Nav",
-    },
     beskrivelse: {
       nb: "Enkelte ytelser fra Nav påvirker beregningen av barnebidrag.",
       en: "Certain benefits from Nav affect the calculation of child support.",
