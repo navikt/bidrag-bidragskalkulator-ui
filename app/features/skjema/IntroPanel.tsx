@@ -1,5 +1,4 @@
-import { BodyLong, GuidePanel, Link, List } from "@navikt/ds-react";
-import { ListItem } from "@navikt/ds-react/List";
+import { BodyLong, GuidePanel, Link } from "@navikt/ds-react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
@@ -10,12 +9,12 @@ export function IntroPanel() {
     <GuidePanel poster>
       <BodyLong spacing>{t(tekster.innhold1)}</BodyLong>
       <BodyLong spacing>{t(tekster.innhold2)}</BodyLong>
-      <BodyLong>{t(tekster.brukGammelKalkulator.overskrift)}</BodyLong>
+      {/* <BodyLong>{t(tekster.brukGammelKalkulator.overskrift)}</BodyLong>
 
       <List>
         <ListItem>{t(tekster.brukGammelKalkulator.situasjon1)}</ListItem>
         <ListItem>{t(tekster.brukGammelKalkulator.situasjon2)}</ListItem>
-      </List>
+      </List> */}
     </GuidePanel>
   );
 }
