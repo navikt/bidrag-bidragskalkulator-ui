@@ -63,17 +63,22 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
     },
   ];
 
-  const håndterToggleAlternativ = (
-    alternativ: BoforholdAlternativ,
-    erValgt: boolean,
-  ) => {
+  const håndterToggleAlternativ = (alternativ: string, erValgt: boolean) => {
+    const funnetAlternativ = alleAlternativer.find(
+      (alt) => alt.label === alternativ,
+    );
+
+    if (!funnetAlternativ) {
+      return;
+    }
+
     let nyeValgteAlternativer: BoforholdAlternativ[];
 
     if (erValgt) {
-      nyeValgteAlternativer = [...valgteAlternativer, alternativ];
+      nyeValgteAlternativer = [...valgteAlternativer, funnetAlternativ.value];
     } else {
       nyeValgteAlternativer = valgteAlternativer.filter(
-        (a) => a !== alternativ,
+        (alt) => alt !== funnetAlternativ.value,
       );
     }
 
@@ -120,19 +125,27 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
       <UNSAFE_Combobox
         label={t(tekster[skjemagruppe].label)}
         description={t(tekster[skjemagruppe].beskrivelse)}
-        options={alleAlternativer}
+        options={alleAlternativer.map((ytelse) => ytelse.label)}
         selectedOptions={valgteAlternativer.map(
           (val) => alleAlternativer.find((a) => a.value === val)?.label || val,
         )}
-        onToggleSelected={(alternativ: string, erValgt: boolean) =>
-          håndterToggleAlternativ(alternativ as BoforholdAlternativ, erValgt)
-        }
+        onToggleSelected={håndterToggleAlternativ}
         isMultiSelect
         error={
           form.field(`${skjemagruppe}.borMedAnnenVoksen`).error() ||
           form.field(`${skjemagruppe}.borMedAndreBarn`).error()
         }
       />
+
+      <div className="text-sm text-gray-600 mt-1">
+        <span className="font-semibold">{t(tekster.tilgjengelig)}:</span>{" "}
+        {alleAlternativer.map((y, idx, arr) => (
+          <span key={y.value}>
+            {y.label}
+            {idx < arr.length - 1 ? ", " : ""}
+          </span>
+        ))}
+      </div>
 
       {visBarnFastInput && (
         <FormattertTallTextField
@@ -172,6 +185,11 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
 };
 
 const tekster = definerTekster({
+  tilgjengelig: {
+    nb: "Tilgjengelige bosituasjoner",
+    en: "Available living situations",
+    nn: "Tilgjengelege busituasjonar",
+  },
   dittBoforhold: {
     tittel: {
       nb: "Din bosituasjon",
@@ -207,9 +225,9 @@ const tekster = definerTekster({
     },
     antallBarnBorFast: {
       label: {
-        nb: "Antall barn som bor fast hos deg",
-        nn: "Antal barn som bur fast hos deg",
-        en: "Number of children living permanently with you",
+        nb: "Antall egne barn under 18 år som bor fast hos deg",
+        nn: "Antal eigne barn under 18 år som bur fast hos deg",
+        en: "Number of children of your own under 18 years with permanent residency living with you",
       },
       inputBeskrivelse: {
         nb: "",
@@ -219,9 +237,9 @@ const tekster = definerTekster({
     },
     antallBarnDeltBosted: {
       label: {
-        nb: "Antall barn med delt bosted hos deg",
-        nn: "Antal barn med delt bustad hos deg",
-        en: "Number of children with shared residence with you",
+        nb: "Antall egne barn under 18 år med delt bosted hos deg",
+        nn: "Antal eigne barn under 18 år med delt bustad hos deg",
+        en: "Number of children of your own under 18 years with shared permanent residence living with you",
       },
       inputBeskrivelse: {
         nb: "",
@@ -265,9 +283,9 @@ const tekster = definerTekster({
     },
     antallBarnBorFast: {
       label: {
-        nb: "Antall egne barn under 18 år som bor fast hos den andre forelderen",
-        nn: "Antal eigne barn under 18 år som bur fast hos den andre forelderen",
-        en: "Number of own children under 18 years, with permanent residence living with the other parent",
+        nb: "Antall egne barn under 18 år som bor fast hos deg",
+        nn: "Antal eigne barn under 18 år som bur fast hos deg",
+        en: "Number of children of your own under 18 years with permanent residency living with you",
       },
       inputBeskrivelse: {
         nb: "",
@@ -277,9 +295,9 @@ const tekster = definerTekster({
     },
     antallBarnDeltBosted: {
       label: {
-        nb: "Antall egne barn under 18 år med delt bosted hos den andre forelderen",
-        nn: "Antal eigne barn under 18 år med delt bustad hos den andre forelderen",
-        en: "Number of own children under 18 years, with shared permanent residence living with the other parent",
+        nb: "Antall egne barn under 18 år med delt bosted hos deg",
+        nn: "Antal eigne barn under 18 år med delt bustad hos deg",
+        en: "Number of children of your own under 18 years with shared permanent residence living with you",
       },
       inputBeskrivelse: {
         nb: "",

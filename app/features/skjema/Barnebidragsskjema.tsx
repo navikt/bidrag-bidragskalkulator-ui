@@ -6,6 +6,7 @@ import { Bofohold } from "./Boforhold";
 import { FellesBarnSkjema } from "./FellesBarnSkjema";
 import { Inntektsopplysninger } from "./Inntektsopplysninger";
 import { type BarnebidragSkjema } from "./schema";
+import { Ytelser } from "./Ytelser";
 
 type Props = {
   form: FormApi<BarnebidragSkjema>;
@@ -13,12 +14,23 @@ type Props = {
 
 export function Barnebidragsskjema({ form }: Props) {
   const { t } = useOversettelse();
+  const bidragstype = form.value("bidragstype");
 
   return (
     <form {...form.getFormProps()} className="flex flex-col gap-4">
       <FellesBarnSkjema />
       <Inntektsopplysninger />
       <Barnepass />
+      {bidragstype === "BEGGE" ? (
+        <>
+          <Ytelser bidragstype="MOTTAKER" />
+          <Ytelser bidragstype="PLIKTIG" />
+        </>
+      ) : (
+        (bidragstype === "MOTTAKER" || bidragstype === "PLIKTIG") && (
+          <Ytelser bidragstype={bidragstype} />
+        )
+      )}
       <Bofohold />
 
       <Button
