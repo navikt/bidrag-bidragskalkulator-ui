@@ -124,6 +124,13 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
     antall: "0",
     tilsynsutgifter: [],
   },
+  ytelser: {
+    mottarUtvidetBarnetrygd: "",
+    delerUtvidetBarnetrygd: "",
+    mottarSmåbarnstillegg: "",
+    mottarKontantstøtte: "",
+    kontantstøtteBeløp: "",
+  },
 };
 
 export const SAMVÆRSKLASSE_GRENSER = {

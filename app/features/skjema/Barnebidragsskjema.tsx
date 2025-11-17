@@ -6,6 +6,7 @@ import { Bofohold } from "./Boforhold";
 import { FellesBarnSkjema } from "./FellesBarnSkjema";
 import { Inntektsopplysninger } from "./Inntektsopplysninger";
 import { type BarnebidragSkjema } from "./schema";
+import { Ytelser } from "./Ytelser";
 
 type Props = {
   form: FormApi<BarnebidragSkjema>;
@@ -19,6 +20,7 @@ export function Barnebidragsskjema({ form }: Props) {
       <FellesBarnSkjema />
       <Inntektsopplysninger />
       <Barnepass />
+      <Ytelser />
       <Bofohold />
 
       <Button
