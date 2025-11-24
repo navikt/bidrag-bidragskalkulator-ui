@@ -1,4 +1,4 @@
-import { Radio, RadioGroup } from "@navikt/ds-react";
+import { BodyShort, Radio, RadioGroup } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { sporHendelse } from "~/utils/analytics";
@@ -44,6 +44,9 @@ export function Samvær({ barnIndex }: SamværProps) {
 
   return (
     <>
+      <BodyShort weight="semibold" className="mt-7" spacing>
+        {t(tekster.tittel)}
+      </BodyShort>
       <RadioGroup
         {...barnField.getControlProps("bosted", {
           onChange: () => {
@@ -105,8 +108,12 @@ export function Samvær({ barnIndex }: SamværProps) {
     </>
   );
 }
-
 const tekster = definerTekster({
+  tittel: {
+    nb: "Barnets faste bosted og samvær",
+    en: "",
+    nn: "",
+  },
   bosted: {
     label: {
       nb: "Hvilken avtale har dere for hvordan barnet bor?",

@@ -1,12 +1,9 @@
 import { PersonCrossIcon } from "@navikt/aksel-icons";
-import { BodyLong, Button, List, ReadMore, TextField } from "@navikt/ds-react";
-import { ListItem } from "@navikt/ds-react/List";
+import { Button, TextField } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { useMemo } from "react";
 import { useKalkulatorgrunnlagsdata } from "~/routes/kalkulator";
-import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { formatterSum } from "~/utils/tall";
 import BarnEgenInntekt from "./BarnEgenInntekt";
 import { Samvær } from "./samvær/Samvær";
 import { MAKS_ALDER_BARN_EGEN_INNTEKT, type BarnebidragSkjema } from "./schema";
@@ -59,42 +56,6 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
         inputMode="numeric"
         autoComplete="off"
       />
-
-      <ReadMore
-        header={t(tekster.alder.lesMer.tittel)}
-        onOpenChange={(open) => {
-          if (open) {
-            sporHendelse({
-              hendelsetype: "les mer utvidet",
-              tekst: t(tekster.alder.lesMer.tittel),
-              id: "kalkulator-barnets-alder",
-            });
-          }
-        }}
-      >
-        <BodyLong className="mb-6">
-          {t(tekster.alder.lesMer.beskrivelse)}
-        </BodyLong>
-        <BodyLong className="mb-6" spacing>
-          {t(tekster.alder.lesMer.beskrivelse2)}
-        </BodyLong>
-        <List>
-          {boOgForbruksutgiftsgrupper.map(
-            ({ label, boOgForbruksutgift, aldre }) => {
-              const fremhevGruppe =
-                barnField.field("alder").touched() &&
-                aldre.includes(Number(alder));
-              return (
-                <ListItem key={label}>
-                  <span
-                    className={fremhevGruppe ? "font-bold" : undefined}
-                  >{`${label}: ${formatterSum(boOgForbruksutgift)}`}</span>
-                </ListItem>
-              );
-            },
-          )}
-        </List>
-      </ReadMore>
 
       <Samvær barnIndex={barnIndex} />
 
