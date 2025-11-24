@@ -1,6 +1,12 @@
-import { Alert, Radio, RadioGroup, UNSAFE_Combobox } from "@navikt/ds-react";
+import {
+  BodyShort,
+  Checkbox,
+  Radio,
+  RadioGroup,
+  Stack,
+} from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import {
@@ -12,7 +18,11 @@ import {
   type Bidragstype,
 } from "./schema";
 
-type NavYtelse = "utvidet-barnetrygd" | "småbarnstillegg" | "kontantstøtte";
+type NavYtelse =
+  | "utvidet-barnetrygd"
+  | "småbarnstillegg"
+  | "kontantstøtte"
+  | "barnetillegg";
 
 type Props = {
   bidragstype: Bidragstype;
@@ -21,9 +31,6 @@ type Props = {
 export const Ytelser = ({ bidragstype }: Props) => {
   const form = useFormContext<BarnebidragSkjema>();
   const { t } = useOversettelse();
-
-  const [visNyYtelseAlert, setVisNyYtelseAlert] = useState(false);
-  const [forrigeAlternativer, setForrigeAlternativer] = useState<string[]>([]);
 
   const barn = form.value("barn");
 
@@ -58,70 +65,17 @@ export const Ytelser = ({ bidragstype }: Props) => {
     if (form.value("ytelser.mottarKontantstøtte") === "true") {
       ytelser.push("kontantstøtte");
     }
+    if (form.value("ytelser.mottarBarnetillegg") === "true") {
+      ytelser.push("barnetillegg");
+    }
     setValgteYtelser(ytelser);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Definer alternativer med disabled-logikk
-  const alleYtelser: { value: NavYtelse; label: string; disabled: boolean }[] =
-    useMemo(
-      () => [
-        {
-          value: "utvidet-barnetrygd",
-          label: t(tekster.felles.alternativer.utvidetBarnetrygd),
-          disabled: !harBarnUnderUtvidetBarnetrygdAlder,
-        },
-        {
-          value: "småbarnstillegg",
-          label: t(tekster.felles.alternativer.småbarnstillegg),
-          disabled: !harBarnUnderSmåbarnstilleggAlder,
-        },
-        {
-          value: "kontantstøtte",
-          label: t(tekster.felles.alternativer.kontantstøtte),
-          disabled: !harBarnIKontantstøtteAlder,
-        },
-      ],
-      [
-        harBarnUnderUtvidetBarnetrygdAlder,
-        harBarnUnderSmåbarnstilleggAlder,
-        harBarnIKontantstøtteAlder,
-        t,
-      ],
-    );
-
-  // Sjekk om nye alternativer er blitt tilgjengelige
-  useEffect(() => {
-    const nåværendeAlternativer = alleYtelser
-      .filter((y) => !y.disabled)
-      .map((y) => y.value);
-
-    if (forrigeAlternativer.length > 0) {
-      const nyeAlternativer = nåværendeAlternativer.filter(
-        (alt) => !forrigeAlternativer.includes(alt),
-      );
-
-      if (nyeAlternativer.length > 0) {
-        setVisNyYtelseAlert(true);
-      }
-    }
-
-    setForrigeAlternativer(nåværendeAlternativer);
-  }, [alleYtelser]);
-
-  const håndterToggleYtelse = (value: string, erValgt: boolean) => {
-    const ytelse = alleYtelser.find((y) => y.label === value);
-
-    if (!ytelse) {
-      return;
-    }
-
-    let nyeValgteYtelser: NavYtelse[];
-
-    if (erValgt) {
-      nyeValgteYtelser = [...valgteYtelser, ytelse.value];
-    } else {
-      nyeValgteYtelser = valgteYtelser.filter((y) => y !== ytelse.value);
-    }
+  const håndterToggleYtelse = (value: NavYtelse, erValgt: boolean) => {
+    const nyeValgteYtelser: NavYtelse[] = erValgt
+      ? [...valgteYtelser, value]
+      : valgteYtelser.filter((y) => y !== value);
 
     setValgteYtelser(nyeValgteYtelser);
 
@@ -137,6 +91,10 @@ export const Ytelser = ({ bidragstype }: Props) => {
     form.setValue(
       "ytelser.mottarKontantstøtte",
       nyeValgteYtelser.includes("kontantstøtte") ? "true" : "false",
+    );
+    form.setValue(
+      "ytelser.mottarBarnetillegg",
+      nyeValgteYtelser.includes("barnetillegg") ? "true" : "false",
     );
 
     // Nullstill kontantstøtte-beløp hvis kontantstøtte fjernes
@@ -156,84 +114,75 @@ export const Ytelser = ({ bidragstype }: Props) => {
   return (
     <div className="border p-4 rounded-md">
       <fieldset className="p-0 flex flex-col gap-4">
-        <legend className="text-xl mb-2">
-          {t(tekster[bidragstype].overskrift)}
-        </legend>
+        <legend className="text-xl mb-2">{t(tekster.felles.overskrift)}</legend>
+        <BodyShort>{t(tekster[bidragstype].beskrivelse)}</BodyShort>
 
-        <p className="text-gray-700">{t(tekster.felles.beskrivelse)}</p>
-
-        {visNyYtelseAlert && (
-          <Alert
-            variant="info"
-            size="small"
-            closeButton
-            onClose={() => setVisNyYtelseAlert(false)}
-          >
-            {t(tekster.felles.nyYtelseAlert)}
-          </Alert>
-        )}
-
-        <UNSAFE_Combobox
-          label={t(tekster[bidragstype].comboboxLabel)}
-          description={t(tekster.felles.comboboxBeskrivelse)}
-          options={alleYtelser
-            .filter((ytelse) => !ytelse.disabled)
-            .map((ytelse) => ytelse.label)}
-          selectedOptions={valgteYtelser.map(
-            (val) =>
-              alleYtelser.find((ytelse) => ytelse.value === val)?.label || val,
-          )}
-          onToggleSelected={håndterToggleYtelse}
-          isMultiSelect
-        />
-
-        <div className="text-sm text-gray-600 mt-1">
-          <span className="font-semibold">
-            {t(tekster.felles.tilgjengelig)}:
-          </span>{" "}
-          {alleYtelser
-            .filter((y) => !y.disabled)
-            .map((y, idx, arr) => (
-              <span key={y.value}>
-                {y.label}
-                {idx < arr.length - 1 ? ", " : ""}
-              </span>
-            ))}
-        </div>
-
-        {/* Utvidet barnetrygd - deling */}
-        {mottarUtvidetBarnetrygd && harDeltBosted && (
-          <div className="mt-2 p-4 bg-blue-50 rounded-md">
-            <RadioGroup
-              {...form.field("ytelser.delerUtvidetBarnetrygd").getInputProps()}
-              legend={t(tekster.felles.utvidetBarnetrygd.delingSpørsmål)}
-              description={t(
-                tekster[bidragstype].utvidetBarnetrygd.delingBeskrivelse,
-              )}
-              size="small"
-              error={form.field("ytelser.delerUtvidetBarnetrygd").error()}
-            >
-              <Radio value="false">{t(tekster[bidragstype].mottarAlt)}</Radio>
-              <Radio value="true">{t(tekster.felles.viDeler)}</Radio>
-            </RadioGroup>
-          </div>
-        )}
-
-        {/* Kontantstøtte - beløp */}
+        <Checkbox
+          value="public"
+          onChange={(e) =>
+            håndterToggleYtelse("kontantstøtte", e.target.checked)
+          }
+          disabled={!harBarnIKontantstøtteAlder}
+        >
+          {t(tekster.felles.alternativer.kontantstøtte)}
+        </Checkbox>
         {mottarKontantstøtte && (
-          <div className="mt-2 p-4 bg-blue-50 rounded-md">
-            <FormattertTallTextField
-              {...form.field("ytelser.kontantstøtteBeløp").getControlProps()}
-              label={t(tekster[bidragstype].kontantstøtte.beløpLabel)}
-              description={t(
-                tekster[bidragstype].kontantstøtte.beløpBeskrivelse,
-              )}
-              error={form.field("ytelser.kontantstøtteBeløp").error()}
-              htmlSize={10}
-              size="small"
-            />
-          </div>
+          <FormattertTallTextField
+            {...form.field("ytelser.kontantstøtteBeløp").getControlProps()}
+            label={t(tekster[bidragstype].kontantstøtte.beløpLabel)}
+            error={form.field("ytelser.kontantstøtteBeløp").error()}
+            htmlSize={15}
+          />
         )}
+
+        <Checkbox
+          checked={valgteYtelser.includes("utvidet-barnetrygd")}
+          onChange={(e) =>
+            håndterToggleYtelse("utvidet-barnetrygd", e.target.checked)
+          }
+          disabled={!harBarnUnderUtvidetBarnetrygdAlder}
+        >
+          {t(tekster.felles.alternativer.utvidetBarnetrygd)}
+        </Checkbox>
+        {mottarUtvidetBarnetrygd && harDeltBosted && (
+          <RadioGroup
+            {...form.field("ytelser.delerUtvidetBarnetrygd").getInputProps()}
+            legend={t(tekster.felles.utvidetBarnetrygd.delingSpørsmål)}
+            error={form.field("ytelser.delerUtvidetBarnetrygd").error()}
+          >
+            <Stack
+              gap="space-0 space-24"
+              direction={{ xs: "column", sm: "row" }}
+              wrap={false}
+            >
+              <Radio value="true">
+                {t(tekster.felles.utvidetBarnetrygd.alternativer.ja)}
+              </Radio>
+              <Radio value="false">
+                {t(tekster.felles.utvidetBarnetrygd.alternativer.nei)}
+              </Radio>
+            </Stack>
+          </RadioGroup>
+        )}
+
+        <Checkbox
+          checked={valgteYtelser.includes("småbarnstillegg")}
+          onChange={(e) =>
+            håndterToggleYtelse("småbarnstillegg", e.target.checked)
+          }
+          disabled={!harBarnUnderSmåbarnstilleggAlder}
+        >
+          {t(tekster.felles.alternativer.småbarnstillegg)}
+        </Checkbox>
+
+        <Checkbox
+          checked={valgteYtelser.includes("barnetillegg")}
+          onChange={(e) =>
+            håndterToggleYtelse("barnetillegg", e.target.checked)
+          }
+        >
+          {t(tekster.felles.alternativer.barnetillegg)}
+        </Checkbox>
       </fieldset>
     </div>
   );
@@ -242,14 +191,14 @@ export const Ytelser = ({ bidragstype }: Props) => {
 const tekster = definerTekster({
   MOTTAKER: {
     overskrift: {
-      nb: "Ytelser fra Nav",
-      en: "Benefits from Nav",
-      nn: "Ytingar frå Nav",
+      nb: "Pengestøtte fra Nav",
+      en: "",
+      nn: "",
     },
-    comboboxLabel: {
-      nb: "Mottar du noen av disse ytelsene?",
-      en: "Do you receive any of these benefits?",
-      nn: "Mottar du nokon av desse ytingane?",
+    beskrivelse: {
+      nb: "Kryss av hvis du har noen av disse støtteordningene og tilleggene",
+      en: "",
+      nn: "",
     },
     utvidetBarnetrygd: {
       delingBeskrivelse: {
@@ -260,78 +209,36 @@ const tekster = definerTekster({
     },
     kontantstøtte: {
       beløpLabel: {
-        nb: "Hvor mye kontantstøtte mottar du per måned?",
-        en: "How much cash-for-care benefit do you receive per month?",
-        nn: "Kor mykje kontantstøtte mottar du per månad?",
+        nb: "Hvor mye mottar du i kontantstøtte per måned?",
+        en: "",
+        nn: "",
       },
-      beløpBeskrivelse: {
-        nb: "Oppgi det totale beløpet du mottar",
-        en: "Enter the total amount you receive",
-        nn: "Oppgi det totale beløpet du mottar",
-      },
-    },
-    mottarAlt: {
-      nb: "Nei, jeg mottar alt",
-      en: "No, I receive all",
-      nn: "Nei, eg mottar alt",
     },
   },
   PLIKTIG: {
     overskrift: {
-      nb: "Ytelser fra Nav til den andre forelderen",
-      en: "Benefits from Nav to the other parent",
-      nn: "Ytingar frå Nav til den andre forelderen",
+      nb: "Pengestøtte fra Nav",
+      en: "",
+      nn: "",
     },
-    comboboxLabel: {
-      nb: "Mottar den andre forelderen noen av disse ytelsene?",
-      en: "Does the other parent receive any of these benefits?",
-      nn: "Mottar den andre forelderen nokon av desse ytingane?",
-    },
-    utvidetBarnetrygd: {
-      delingBeskrivelse: {
-        nb: "Når den andre forelderen mottar utvidet barnetrygd, regnes det som en del av inntekten til den andre forelderen. Men siden barnet har delt bosted, kan dere velge å dele utvidet barnetrygd. Hvis dere gjør det, teller bare halvparten av beløpet i beregningen.",
-        en: "When the other parent receives extended child benefit, it counts as part of the other parent's income. But since the child has shared residence, you can choose to share extended child benefit. If you do, only half the amount counts in the calculation.",
-        nn: "Når den andre forelderen mottar utvida barnetrygd, blir det rekna som ein del av inntekta til den andre forelderen. Men sidan barnet har delt bustad, kan de velje å dele utvida barnetrygd. Viss de gjer det, tel berre halvparten av beløpet i utrekninga.",
-      },
+    beskrivelse: {
+      nb: "Kryss av hvis bidragsmottaker har noen av disse støtteordningene og tilleggene",
+      en: "",
+      nn: "",
     },
     kontantstøtte: {
       beløpLabel: {
-        nb: "Hvor mye kontantstøtte mottar den andre forelderen per måned?",
-        en: "How much cash-for-care benefit does the other parent receive per month?",
-        nn: "Kor mykje kontantstøtte mottar den andre forelderen per månad?",
+        nb: "Hvor mye mottar bidragsmottaker i kontantstøtte per måned?",
+        en: "",
+        nn: "",
       },
-      beløpBeskrivelse: {
-        nb: "Oppgi det totale beløpet den andre forelderen mottar",
-        en: "Enter the total amount the other parent receives",
-        nn: "Oppgi det totale beløpet den andre forelderen mottar",
-      },
-    },
-    mottarAlt: {
-      nb: "Nei, den andre forelderen mottar alt",
-      en: "No, the other parent receives all",
-      nn: "Nei, den andre forelderen mottar alt",
     },
   },
   felles: {
-    beskrivelse: {
-      nb: "Enkelte ytelser fra Nav påvirker beregningen av barnebidrag.",
-      en: "Certain benefits from Nav affect the calculation of child support.",
-      nn: "Enkelte ytingar frå Nav påverkar utrekninga av barnebidrag.",
-    },
-    nyYtelseAlert: {
-      nb: "Nye ytelser er nå tilgjengelige basert på barnets alder",
-      en: "New benefits are now available based on the child's age",
-      nn: "Nye ytingar er no tilgjengelege basert på barnet sin alder",
-    },
-    tilgjengelig: {
-      nb: "Tilgjengelige ytelser",
-      en: "Available benefits",
-      nn: "Tilgjengelege ytingar",
-    },
-    comboboxBeskrivelse: {
-      nb: "Velg alle som passer",
-      en: "Select all that apply",
-      nn: "Vel alle som passar",
+    overskrift: {
+      nb: "Pengestøtte fra Nav",
+      en: "",
+      nn: "",
     },
     alternativer: {
       utvidetBarnetrygd: {
@@ -340,27 +247,39 @@ const tekster = definerTekster({
         nn: "Utvida barnetrygd",
       },
       småbarnstillegg: {
-        nb: "Småbarnstillegg (0-3 år)",
-        en: "Infant supplement (0-3 years)",
-        nn: "Småbarnstillegg (0-3 år)",
+        nb: "Småbarnstillegg",
+        en: "Infant supplement",
+        nn: "Småbarnstillegg",
       },
       kontantstøtte: {
-        nb: "Kontantstøtte (1-2 år)",
-        en: "Cash-for-care benefit (1-2 years)",
-        nn: "Kontantstøtte (1-2 år)",
+        nb: "Kontantstøtte",
+        en: "Cash-for-care benefit",
+        nn: "Kontantstøtte",
+      },
+      barnetillegg: {
+        nb: "Barnetillegg",
+        en: "",
+        nn: "Barnetillegg",
       },
     },
     utvidetBarnetrygd: {
       delingSpørsmål: {
-        nb: "Deler dere utvidet barnetrygd?",
-        en: "Do you share extended child benefit?",
-        nn: "Deler de utvida barnetrygd?",
+        nb: "Deler du og den andre forelderen den utvidede barnetrygden?",
+        en: "",
+        nn: "Deler du og den andre forelderen den utvidede barnetrygden?",
       },
-    },
-    viDeler: {
-      nb: "Ja, vi deler likt",
-      en: "Yes, we share equally",
-      nn: "Ja, vi deler likt",
+      alternativer: {
+        ja: {
+          nb: "Ja",
+          en: "Yes",
+          nn: "Ja",
+        },
+        nei: {
+          nb: "Nei",
+          en: "No",
+          nn: "Nei",
+        },
+      },
     },
   },
 });

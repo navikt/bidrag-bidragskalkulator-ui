@@ -130,6 +130,7 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
     mottarSmåbarnstillegg: "",
     mottarKontantstøtte: "",
     kontantstøtteBeløp: "",
+    mottarBarnetillegg: "",
   },
 };
 

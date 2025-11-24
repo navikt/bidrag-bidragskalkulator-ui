@@ -58,17 +58,22 @@ const BarnebidragSkjemaSchema = z.object({
     tilsynsutgifter: z.array(z.string()),
   }),
   ytelser: z.object({
+    kontantstøtteBeløp: z.string(),
+    mottarKontantstøtte: z.enum(["true", "false", ""]),
     mottarUtvidetBarnetrygd: z.enum(["true", "false", ""]),
     delerUtvidetBarnetrygd: z.enum(["true", "false", ""]),
     mottarSmåbarnstillegg: z.enum(["true", "false", ""]),
-    mottarKontantstøtte: z.enum(["true", "false", ""]),
-    kontantstøtteBeløp: z.string(),
+    mottarBarnetillegg: z.enum(["true", "false", ""]),
   }),
 });
 
 export const lagYtelserSkjema = (språk: Språk) => {
   return z
     .object({
+      mottarKontantstøtte: z
+        .enum(["true", "false", ""])
+        .transform((value) => (value === "" ? undefined : value === "true")),
+      kontantstøtteBeløp: z.string(),
       mottarUtvidetBarnetrygd: z
         .enum(["true", "false", ""])
         .transform((value) => (value === "" ? undefined : value === "true")),
@@ -78,10 +83,9 @@ export const lagYtelserSkjema = (språk: Språk) => {
       mottarSmåbarnstillegg: z
         .enum(["true", "false", ""])
         .transform((value) => (value === "" ? undefined : value === "true")),
-      mottarKontantstøtte: z
+      mottarBarnetillegg: z
         .enum(["true", "false", ""])
         .transform((value) => (value === "" ? undefined : value === "true")),
-      kontantstøtteBeløp: z.string(),
     })
     .superRefine((values, ctx) => {
       // Hvis mottar utvidet barnetrygd og delt bosted, må deling besvares
@@ -99,6 +103,20 @@ export const lagYtelserSkjema = (språk: Språk) => {
             tekster.feilmeldinger.ytelser.kontantstøtteBeløp.påkrevd,
           ),
           path: ["kontantstøtteBeløp"],
+        });
+      }
+
+      if (
+        values.mottarUtvidetBarnetrygd &&
+        values.delerUtvidetBarnetrygd === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.ytelser.utvidetBarnetrygd.påkrevd,
+          ),
+          path: ["delerUtvidetBarnetrygd"],
         });
       }
     })
@@ -859,6 +877,13 @@ const tekster = definerTekster({
           nb: "Beløp kan ikke være mer enn 10 000 kr",
           en: "Amount cannot exceed 10,000 NOK",
           nn: "Beløp kan ikkje vere meir enn 10 000 kr",
+        },
+      },
+      utvidetBarnetrygd: {
+        påkrevd: {
+          nb: "Dette feltet er påkrevd",
+          en: "",
+          nn: "",
         },
       },
     },
