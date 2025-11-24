@@ -4,7 +4,7 @@ import { useFormContext, useFormScope } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import BarnEgenInntekt from "./BarnEgenInntekt";
 import { Samvær } from "./samvær/Samvær";
-import { MAKS_ALDER_BARN_EGEN_INNTEKT, type BarnebidragSkjema } from "./schema";
+import { type BarnebidragSkjema } from "./schema";
 import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
 type Props = {
@@ -19,7 +19,6 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
 
   const alder = barnField.value("alder");
-  const visBarnEgenInntekt = Number(alder) >= MAKS_ALDER_BARN_EGEN_INNTEKT;
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
@@ -42,8 +41,7 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
 
       <Samvær barnIndex={barnIndex} />
 
-      {/* Barnets egen inntekt (kun hvis ≥ 13 år) */}
-      {visBarnEgenInntekt && <BarnEgenInntekt barnIndex={barnIndex} />}
+      <BarnEgenInntekt barnIndex={barnIndex} />
 
       {onFjernBarn && (
         <Button
