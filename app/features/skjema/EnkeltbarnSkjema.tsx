@@ -9,11 +9,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { formatterSum } from "~/utils/tall";
 import BarnEgenInntekt from "./BarnEgenInntekt";
 import { Samvær } from "./samvær/Samvær";
-import {
-  MAKS_ALDER_BARN_EGEN_INNTEKT,
-  MAKS_ALDER_BARNETILSYNSUTGIFT,
-  type BarnebidragSkjema,
-} from "./schema";
+import { MAKS_ALDER_BARN_EGEN_INNTEKT, type BarnebidragSkjema } from "./schema";
 import {
   sporKalkulatorSpørsmålBesvart,
   tilBoOgForbruksutgiftsgrupperMedLabel,
@@ -34,9 +30,6 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
 
   const alder = barnField.value("alder");
-  const visSpørsmålOmBarnetilsynsutgift =
-    barnField.field("alder").touched() &&
-    Number(alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT;
   const visBarnEgenInntekt = Number(alder) >= MAKS_ALDER_BARN_EGEN_INNTEKT;
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));

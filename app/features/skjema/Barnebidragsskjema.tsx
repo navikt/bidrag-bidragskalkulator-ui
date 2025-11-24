@@ -15,12 +15,14 @@ type Props = {
 export function Barnebidragsskjema({ form }: Props) {
   const { t } = useOversettelse();
   const bidragstype = form.value("bidragstype");
+  const dinInntekt = form.value("deg.inntekt");
+  const medforelderInntekt = form.value("medforelder.inntekt");
 
   return (
     <form {...form.getFormProps()} className="flex flex-col gap-4">
       <FellesBarnSkjema />
       <Inntektsopplysninger />
-      <Barnepass />
+      {dinInntekt && medforelderInntekt && <Barnepass />}
       {bidragstype === "BEGGE" ? (
         <>
           <Ytelser bidragstype="MOTTAKER" />

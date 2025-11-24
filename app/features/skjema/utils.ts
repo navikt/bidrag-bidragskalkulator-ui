@@ -164,10 +164,6 @@ export const SAMVÆRSKLASSE_GRENSER = {
   },
 } as const;
 
-export const beregnBidragstypeFraNetter = (
-  antallNetterHosMeg: number,
-): "PLIKTIG" | "MOTTAKER" => (antallNetterHosMeg < 15 ? "PLIKTIG" : "MOTTAKER");
-
 /**
  * Kalkulerer samværsklasse basert på hvor mange netter barnet bor hos forelderen og bosted
  */
@@ -179,12 +175,8 @@ export const kalkulerSamværsklasse = (
     return "DELT_BOSTED";
   }
 
-  // Finn hvem som er bidragspliktig
-  const bidragstype = beregnBidragstypeFraNetter(antallNetterHosMeg);
-
-  // Beregn netter hos bidragspliktig
   const netterHosBidragspliktig =
-    bidragstype === "PLIKTIG" ? antallNetterHosMeg : 30 - antallNetterHosMeg;
+    fastBosted === "HOS_MEG" ? 30 - antallNetterHosMeg : antallNetterHosMeg;
 
   for (const [klasse, grenser] of Object.entries(SAMVÆRSKLASSE_GRENSER)) {
     if (
@@ -202,7 +194,6 @@ export const kalkulerSamværsklasse = (
  * Avgjør om forelderen er mottaker eller pliktig basert på samværsgrad
  */
 export function kalkulerBidragstype(
-  antallNetterHosMeg: number,
   bostatus: z.infer<typeof FastBostedSchema>,
   inntektMeg: number,
   inntektMedforelder: number,
@@ -211,12 +202,7 @@ export function kalkulerBidragstype(
     return inntektMeg > inntektMedforelder ? "PLIKTIG" : "MOTTAKER";
   }
 
-  // HAR_SAMVÆRSAVTALE
-  if (antallNetterHosMeg > 15) return "MOTTAKER";
-  if (antallNetterHosMeg < 15) return "PLIKTIG";
-
-  // Eksakt 15 netter
-  return inntektMeg > inntektMedforelder ? "PLIKTIG" : "MOTTAKER";
+  return bostatus === "HOS_MEG" ? "MOTTAKER" : "PLIKTIG";
 }
 
 export const beregnBidragstypeForAlleBarn = (
@@ -231,17 +217,12 @@ export const beregnBidragstypeForAlleBarn = (
   const bidragstyper = barn.map((b) => {
     if (b.bosted === "DELT_FAST_BOSTED") {
       if (degInntekt && medforelderInntekt) {
-        return kalkulerBidragstype(
-          15,
-          b.bosted,
-          degInntekt,
-          medforelderInntekt,
-        );
+        return kalkulerBidragstype(b.bosted, degInntekt, medforelderInntekt);
       }
       return "";
     }
 
-    return beregnBidragstypeFraNetter(Number(b.samvær));
+    return b.bosted === "HOS_MEG" ? "MOTTAKER" : "PLIKTIG";
   });
 
   const harMottaker = bidragstyper.includes("MOTTAKER");

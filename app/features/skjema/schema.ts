@@ -12,7 +12,8 @@ export type Bidragstype = "MOTTAKER" | "PLIKTIG";
 
 export const FastBostedSchema = z.enum([
   "DELT_FAST_BOSTED",
-  "HAR_SAMVÆRSAVTALE",
+  "HOS_MEG",
+  "HOS_MEDFORELDER",
 ]);
 
 export const BarnepassSituasjonSchema = z.enum(["HELTID", "DELTID"]);

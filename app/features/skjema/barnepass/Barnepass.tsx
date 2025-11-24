@@ -1,46 +1,60 @@
 import { BodyShort } from "@navikt/ds-react";
-import { useFormContext } from "@rvf/react";
+import { useField, useFormContext } from "@rvf/react";
+import { Fragment } from "react/jsx-runtime";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import {
   MAKS_ALDER_BARNETILSYNSUTGIFT,
   type BarnebidragSkjema,
 } from "../schema";
-import { beregnBidragstypeFraNetter } from "../utils";
+import { kalkulerBidragstype } from "../utils";
 import { BarnepassPerBarn } from "./BarnepassPerBarn";
 
 export const Barnepass = () => {
   const form = useFormContext<BarnebidragSkjema>();
   const { t } = useOversettelse();
-  const barn = form.value("barn");
+  const barnField = useField(form.scope("barn"));
+  const barn = barnField.value() ?? [];
+
   const bidragstype = form.value("bidragstype");
   const erBM = bidragstype === "MOTTAKER" || bidragstype === "BEGGE";
   const antallAndreBarn = Number(form.value("andreBarnUnder12.antall")) || 0;
 
+  const dinInntekt = form.value("deg.inntekt");
+  const medforelderInntekt = form.value("medforelder.inntekt");
+
   const barnDuErMottaker = barn.filter(
     (enkeltBarn) =>
-      beregnBidragstypeFraNetter(Number(enkeltBarn.samvær)) === "MOTTAKER",
+      enkeltBarn.bosted !== "" &&
+      kalkulerBidragstype(
+        enkeltBarn.bosted,
+        Number(dinInntekt),
+        Number(medforelderInntekt),
+      ) === "MOTTAKER" &&
+      Number(enkeltBarn.alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT,
   );
 
   const barnDuErPliktigFor = barn.filter(
     (enkeltBarn) =>
-      beregnBidragstypeFraNetter(Number(enkeltBarn.samvær)) === "PLIKTIG",
+      enkeltBarn.bosted !== "" &&
+      kalkulerBidragstype(
+        enkeltBarn.bosted,
+        Number(dinInntekt),
+        Number(medforelderInntekt),
+      ) === "PLIKTIG" &&
+      Number(enkeltBarn.alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT,
   );
+
   // Sjekk om noen barn har barnepassutgifter
   const harBarnepassutgifter = barn.some(
     (b) => b.barnetilsynsutgift.trim() !== "",
   );
 
-  const barnMedBarnepass = barn.filter((b) => {
-    const alder = Number(b.alder);
-    return !isNaN(alder) && alder <= MAKS_ALDER_BARNETILSYNSUTGIFT;
-  });
-
   const finnBarnIndex = (alder: string) => {
     return barn.findIndex((b) => b.alder === alder);
   };
 
-  if (barnMedBarnepass.length === 0) {
+  if (barnDuErMottaker.length === 0 && barnDuErPliktigFor.length === 0) {
     return null;
   }
 
@@ -52,31 +66,30 @@ export const Barnepass = () => {
 
         {barnDuErMottaker.map((enkeltBarn, index) => {
           return (
-            <>
+            <Fragment key={enkeltBarn.alder}>
               <BarnepassPerBarn
-                key={enkeltBarn.alder}
                 barnIndex={finnBarnIndex(enkeltBarn.alder)}
                 bidragstype="MOTTAKER"
               />
               {index !== barnDuErMottaker.length - 1 && (
                 <hr className="my-8 border-gray-300" />
               )}
-            </>
+            </Fragment>
           );
         })}
 
         {barnDuErPliktigFor.map((enkeltBarn, index) => {
           return (
-            <>
+            <Fragment key={enkeltBarn.alder}>
+              <hr className="my-8 border-gray-300" />
               <BarnepassPerBarn
-                key={enkeltBarn.alder}
                 barnIndex={finnBarnIndex(enkeltBarn.alder)}
                 bidragstype="PLIKTIG"
               />
               {index !== barnDuErPliktigFor.length - 1 && (
                 <hr className="my-8 border-gray-300" />
               )}
-            </>
+            </Fragment>
           );
         })}
 

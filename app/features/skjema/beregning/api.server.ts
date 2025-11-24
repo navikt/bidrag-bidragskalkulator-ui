@@ -115,7 +115,6 @@ export const hentBarnebidragsutregning = async (request: Request) => {
     barn: skjemaData.barn.map((barn) => {
       const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
       const bidragstype = kalkulerBidragstype(
-        barn.samvær,
         barn.bosted,
         inntektForelder1,
         inntektForelder2,
@@ -125,10 +124,7 @@ export const hentBarnebidragsutregning = async (request: Request) => {
         alder: barn.alder,
         samværsklasse,
         bidragstype,
-        barnetilsynsutgift:
-          barn.barnepassSituasjon === "BETALER_SELV"
-            ? barn.barnetilsynsutgift
-            : 0,
+        barnetilsynsutgift: barn.barnetilsynsutgift,
       };
     }),
   };
