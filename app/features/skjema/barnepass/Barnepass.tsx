@@ -66,22 +66,19 @@ export const Barnepass = () => {
 
         {barnDuErMottaker.map((enkeltBarn, index) => {
           return (
-            <Fragment key={enkeltBarn.alder}>
+            <Fragment key={index}>
               <BarnepassPerBarn
                 barnIndex={finnBarnIndex(enkeltBarn.alder)}
                 bidragstype="MOTTAKER"
               />
-              {index !== barnDuErMottaker.length - 1 && (
-                <hr className="my-8 border-gray-300" />
-              )}
+              <hr className="my-8 border-gray-300" />
             </Fragment>
           );
         })}
 
         {barnDuErPliktigFor.map((enkeltBarn, index) => {
           return (
-            <Fragment key={enkeltBarn.alder}>
-              <hr className="my-8 border-gray-300" />
+            <Fragment key={index}>
               <BarnepassPerBarn
                 barnIndex={finnBarnIndex(enkeltBarn.alder)}
                 bidragstype="PLIKTIG"
