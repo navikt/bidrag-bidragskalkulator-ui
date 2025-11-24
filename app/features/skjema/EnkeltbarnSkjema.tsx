@@ -1,16 +1,11 @@
 import { PersonCrossIcon } from "@navikt/aksel-icons";
 import { Button, TextField } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
-import { useMemo } from "react";
-import { useKalkulatorgrunnlagsdata } from "~/routes/kalkulator";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import BarnEgenInntekt from "./BarnEgenInntekt";
 import { Samvær } from "./samvær/Samvær";
 import { MAKS_ALDER_BARN_EGEN_INNTEKT, type BarnebidragSkjema } from "./schema";
-import {
-  sporKalkulatorSpørsmålBesvart,
-  tilBoOgForbruksutgiftsgrupperMedLabel,
-} from "./utils";
+import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
 type Props = {
   barnIndex: number;
@@ -18,9 +13,6 @@ type Props = {
 };
 
 export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
-  const {
-    kalkulatorGrunnlagsdata: { boOgForbruksutgifter },
-  } = useKalkulatorgrunnlagsdata();
   const { t } = useOversettelse();
   const form = useFormContext<BarnebidragSkjema>();
 
@@ -30,15 +22,6 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
   const visBarnEgenInntekt = Number(alder) >= MAKS_ALDER_BARN_EGEN_INNTEKT;
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
-
-  const boOgForbruksutgiftsgrupper = useMemo(
-    () =>
-      tilBoOgForbruksutgiftsgrupperMedLabel(boOgForbruksutgifter, {
-        årEntall: t(tekster.år.entall),
-        årFlertall: t(tekster.år.flertall),
-      }),
-    [boOgForbruksutgifter, t],
-  );
 
   return (
     <fieldset className="p-0 space-y-4">
