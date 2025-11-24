@@ -16,6 +16,11 @@ export const FastBostedSchema = z.enum([
   "HOS_MEDFORELDER",
 ]);
 
+export const BorMedAnnenVoksenTypeSchema = z.enum([
+  "SAMBOER_ELLER_EKTEFELLE",
+  "EGNE_BARN_OVER_18",
+]);
+
 export const BarnepassSituasjonSchema = z.enum(["HELTID", "DELTID"]);
 
 const BarnSkjemaSchema = z.object({
@@ -42,14 +47,18 @@ const BarnebidragSkjemaSchema = z.object({
   dittBoforhold: z.object({
     borMedAnnenVoksen: z.enum(["true", "false", "", "undefined"]),
     borMedAndreBarn: z.enum(["true", "false", "", "undefined"]),
+    betalerBarnebidrageForAndreBarn: z.enum(["true", "false", "", "undefined"]),
     antallBarnBorFast: z.string(),
-    antallBarnDeltBosted: z.string(),
+    // antallBarnDeltBosted: z.string(),
+    borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
   }),
   medforelderBoforhold: z.object({
     borMedAnnenVoksen: z.enum(["true", "false", "", "undefined"]),
     borMedAndreBarn: z.enum(["true", "false", "", "undefined"]),
+    betalerBarnebidrageForAndreBarn: z.enum(["true", "false", "", "undefined"]),
     antallBarnBorFast: z.string(),
-    antallBarnDeltBosted: z.string(),
+    // antallBarnDeltBosted: z.string(),
+    borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
   }),
   andreBarnUnder12: z.object({
     antall: z.string(),
@@ -248,11 +257,20 @@ export const lagBoforholdSkjema = (språk: Språk) => {
         .transform((value) =>
           value === "" || value === "undefined" ? undefined : value === "true",
         ),
+      betalerBarnebidrageForAndreBarn: z
+        .enum(["true", "false", "", "undefined"])
+        .transform((value) =>
+          value === "" || value === "undefined" ? undefined : value === "true",
+        ),
       antallBarnBorFast: z.string(),
-      antallBarnDeltBosted: z.string(),
+      // antallBarnDeltBosted: z.string(),
+      borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
     })
     .superRefine((values, ctx) => {
-      if (values.borMedAndreBarn && values.antallBarnBorFast.trim() === "") {
+      if (
+        values.borMedAndreBarn === true &&
+        values.antallBarnBorFast.trim() === ""
+      ) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
@@ -263,24 +281,41 @@ export const lagBoforholdSkjema = (språk: Språk) => {
         });
       }
 
-      if (values.borMedAndreBarn && values.antallBarnDeltBosted.trim() === "") {
+      if (
+        values.borMedAnnenVoksen === true &&
+        values.borMedAnnenVoksenType.trim() === ""
+      ) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
+            tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksenType
               .påkrevd,
           ),
-          path: ["antallBarnDeltBosted"],
+          path: ["borMedAnnenVoksenType"],
         });
       }
+
+      // if (values.borMedAndreBarn && values.antallBarnDeltBosted.trim() === "") {
+      //   ctx.addIssue({
+      //     code: "custom",
+      //     message: oversett(
+      //       språk,
+      //       tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
+      //         .påkrevd,
+      //     ),
+      //     path: ["antallBarnDeltBosted"],
+      //   });
+      // }
     })
     .transform((values) => {
       return {
         borMedAnnenVoksen: values.borMedAnnenVoksen,
         borMedAndreBarn: values.borMedAndreBarn,
         antallBarnBorFast: Number(values.antallBarnBorFast.trim() || 0),
-        antallBarnDeltBosted: Number(values.antallBarnDeltBosted.trim() || 0),
+        betalerBarnebidrageForAndreBarn: values.betalerBarnebidrageForAndreBarn,
+        borMedAnnenVoksenType: values.borMedAnnenVoksenType,
+        // antallBarnDeltBosted: Number(values.antallBarnDeltBosted.trim() || 0),
       };
     })
     .superRefine((values, ctx) => {
@@ -304,26 +339,26 @@ export const lagBoforholdSkjema = (språk: Språk) => {
         });
       }
 
-      if (isNaN(values.antallBarnDeltBosted)) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted.tall,
-          ),
-          path: ["antallBarnDeltBosted"],
-        });
-      } else if (values.antallBarnDeltBosted < 0) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
-              .minimum,
-          ),
-          path: ["antallBarnDeltBosted"],
-        });
-      }
+      // if (isNaN(values.antallBarnDeltBosted)) {
+      //   ctx.addIssue({
+      //     code: "custom",
+      //     message: oversett(
+      //       språk,
+      //       tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted.tall,
+      //     ),
+      //     path: ["antallBarnDeltBosted"],
+      //   });
+      // } else if (values.antallBarnDeltBosted < 0) {
+      //   ctx.addIssue({
+      //     code: "custom",
+      //     message: oversett(
+      //       språk,
+      //       tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
+      //         .minimum,
+      //     ),
+      //     path: ["antallBarnDeltBosted"],
+      //   });
+      // }
     });
 };
 
@@ -513,7 +548,18 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
     .superRefine((data, ctx) => {
       const { bidragstype, dittBoforhold, medforelderBoforhold } = data;
 
-      if (bidragstype === "MOTTAKER") {
+      if (bidragstype === "MOTTAKER" || bidragstype === "BEGGE") {
+        if (medforelderBoforhold.borMedAndreBarn === undefined) {
+          ctx.addIssue({
+            path: ["medforelderBoforhold", "borMedAndreBarn"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
+            ),
+          });
+        }
+
         if (medforelderBoforhold.borMedAnnenVoksen === undefined) {
           ctx.addIssue({
             path: ["medforelderBoforhold", "borMedAnnenVoksen"],
@@ -526,9 +572,25 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
           });
         }
 
-        if (medforelderBoforhold.borMedAndreBarn === undefined) {
+        if (
+          medforelderBoforhold.betalerBarnebidrageForAndreBarn === undefined
+        ) {
           ctx.addIssue({
-            path: ["medforelderBoforhold", "borMedAndreBarn"],
+            path: ["medforelderBoforhold", "betalerBarnebidrageForAndreBarn"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer
+                .betalerBarnebidragForAndreBarn.påkrevd,
+            ),
+          });
+        }
+      }
+
+      if (bidragstype === "PLIKTIG" || bidragstype === "BEGGE") {
+        if (dittBoforhold.borMedAndreBarn === undefined) {
+          ctx.addIssue({
+            path: ["dittBoforhold", "borMedAndreBarn"],
             code: "custom",
             message: oversett(
               språk,
@@ -536,9 +598,6 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
             ),
           });
         }
-      }
-
-      if (bidragstype === "PLIKTIG") {
         if (dittBoforhold.borMedAnnenVoksen === undefined) {
           ctx.addIssue({
             path: ["dittBoforhold", "borMedAnnenVoksen"],
@@ -551,60 +610,14 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
           });
         }
 
-        if (dittBoforhold.borMedAndreBarn === undefined) {
+        if (dittBoforhold.betalerBarnebidrageForAndreBarn === undefined) {
           ctx.addIssue({
-            path: ["dittBoforhold", "borMedAndreBarn"],
+            path: ["dittBoforhold", "betalerBarnebidrageForAndreBarn"],
             code: "custom",
             message: oversett(
               språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
-            ),
-          });
-        }
-      }
-      if (bidragstype === "BEGGE") {
-        if (medforelderBoforhold.borMedAnnenVoksen === undefined) {
-          ctx.addIssue({
-            path: ["medforelderBoforhold", "borMedAnnenVoksen"],
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
-                .påkrevd,
-            ),
-          });
-        }
-
-        if (medforelderBoforhold.borMedAndreBarn === undefined) {
-          ctx.addIssue({
-            path: ["medforelderBoforhold", "borMedAndreBarn"],
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
-            ),
-          });
-        }
-
-        if (dittBoforhold.borMedAnnenVoksen === undefined) {
-          ctx.addIssue({
-            path: ["dittBoforhold", "borMedAnnenVoksen"],
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
-                .påkrevd,
-            ),
-          });
-        }
-
-        if (dittBoforhold.borMedAndreBarn === undefined) {
-          ctx.addIssue({
-            path: ["dittBoforhold", "borMedAndreBarn"],
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
+              tekster.feilmeldinger.husstandsmedlemmer
+                .betalerBarnebidragForAndreBarn.påkrevd,
             ),
           });
         }
@@ -850,6 +863,20 @@ const tekster = definerTekster({
         },
       },
       borMedAndreBarn: {
+        påkrevd: {
+          nb: "Velg et alternativ",
+          en: "Choose an option",
+          nn: "Vel eit alternativ",
+        },
+      },
+      betalerBarnebidragForAndreBarn: {
+        påkrevd: {
+          nb: "Velg et alternativ",
+          en: "Choose an option",
+          nn: "Vel eit alternativ",
+        },
+      },
+      borMedAnnenVoksenType: {
         påkrevd: {
           nb: "Velg et alternativ",
           en: "Choose an option",

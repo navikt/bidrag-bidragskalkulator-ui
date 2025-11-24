@@ -113,14 +113,16 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
   dittBoforhold: {
     borMedAnnenVoksen: "",
     borMedAndreBarn: "",
+    betalerBarnebidrageForAndreBarn: "",
     antallBarnBorFast: "",
-    antallBarnDeltBosted: "",
+    borMedAnnenVoksenType: "",
   },
   medforelderBoforhold: {
     borMedAnnenVoksen: "",
     borMedAndreBarn: "",
+    betalerBarnebidrageForAndreBarn: "",
     antallBarnBorFast: "",
-    antallBarnDeltBosted: "",
+    borMedAnnenVoksenType: "",
   },
   andreBarnUnder12: {
     antall: "0",
