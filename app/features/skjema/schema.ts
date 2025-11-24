@@ -15,19 +15,16 @@ export const FastBostedSchema = z.enum([
   "HAR_SAMVÆRSAVTALE",
 ]);
 
-export const BarnepassSituasjonSchema = z.enum([
-  "INGEN",
-  "STØNAD_HELTID",
-  "STØNAD_DELTID",
-  "BETALER_SELV",
-]);
+export const BarnepassSituasjonSchema = z.enum(["HELTID", "DELTID"]);
 
 const BarnSkjemaSchema = z.object({
   alder: z.string(),
   bosted: z.enum([...FastBostedSchema.options, ""]),
   samvær: z.string(),
-  barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
+  harBarnetilsynsutgift: z.enum(["true", "false", ""]),
+  mottarStønadTilBarnetilsyn: z.enum(["true", "false", ""]),
   barnetilsynsutgift: z.string(),
+  barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
   harEgenInntekt: z.enum(["true", "false", ""]),
   inntektPerMåned: z.string(),
 });
@@ -383,8 +380,14 @@ export const lagBarnSkjema = (språk: Språk) => {
           message: oversett(språk, tekster.feilmeldinger.samvær.maksimum),
         }),
       // barnepass:
-      barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
+      harBarnetilsynsutgift: z
+        .enum(["true", "false", ""])
+        .transform((value) => (value === "" ? undefined : value === "true")),
+      mottarStønadTilBarnetilsyn: z
+        .enum(["true", "false", ""])
+        .transform((value) => (value === "" ? undefined : value === "true")),
       barnetilsynsutgift: z.string(),
+      barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
       //barn inntekt:
       harEgenInntekt: z
         .enum(["true", "false", ""])
@@ -394,19 +397,47 @@ export const lagBarnSkjema = (språk: Språk) => {
     .superRefine((data, ctx) => {
       // Barnepass
       if (data.alder <= MAKS_ALDER_BARNETILSYNSUTGIFT) {
-        if (data.barnepassSituasjon === "") {
+        if (data.harBarnetilsynsutgift === undefined) {
           ctx.addIssue({
-            path: ["barnepassSituasjon"],
+            path: ["harBarnetilsynsutgift"],
             code: "custom",
             message: oversett(
               språk,
-              tekster.feilmeldinger.barnepass.situasjon.påkrevd,
+              tekster.feilmeldinger.barnepass.utgifter.påkrevd,
             ),
           });
         }
 
         if (
-          data.barnepassSituasjon === "BETALER_SELV" &&
+          data.harBarnetilsynsutgift === true &&
+          data.mottarStønadTilBarnetilsyn === undefined
+        ) {
+          ctx.addIssue({
+            path: ["mottarStønadTilBarnetilsyn"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.barnepass.utgifter.påkrevd,
+            ),
+          });
+        }
+
+        if (
+          data.mottarStønadTilBarnetilsyn &&
+          data.barnepassSituasjon.trim() === ""
+        ) {
+          ctx.addIssue({
+            path: ["barnepassSituasjon"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.barnepass.utgifter.påkrevd,
+            ),
+          });
+        }
+
+        if (
+          data.mottarStønadTilBarnetilsyn === false &&
           data.barnetilsynsutgift.trim() === ""
         ) {
           ctx.addIssue({
@@ -667,6 +698,11 @@ const tekster = definerTekster({
         },
       },
       utgifter: {
+        påkrevd: {
+          nb: "Dette feltet er påkrevd",
+          en: "",
+          nn: "",
+        },
         beløp: {
           påkrevd: {
             nb: "Fyll inn kostnader til barnepass",

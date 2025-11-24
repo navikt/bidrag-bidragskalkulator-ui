@@ -1,88 +1,13 @@
-import {
-  CheckmarkCircleIcon,
-  ExclamationmarkTriangleIcon,
-} from "@navikt/aksel-icons";
-import { Accordion, BodyShort, Tag } from "@navikt/ds-react";
+import { BodyShort } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import type { BarnebidragSkjema } from "../schema";
+import {
+  MAKS_ALDER_BARNETILSYNSUTGIFT,
+  type BarnebidragSkjema,
+} from "../schema";
+import { beregnBidragstypeFraNetter } from "../utils";
 import { BarnepassPerBarn } from "./BarnepassPerBarn";
-
-type BarnStatus =
-  | "komplett"
-  | "ufullstendig"
-  | "ikke-startet"
-  | "ikke-relevant";
-
-function beregnBarnStatus(barn: BarnebidragSkjema["barn"][0]): BarnStatus {
-  const { barnepassSituasjon, barnetilsynsutgift } = barn;
-
-  if (barnepassSituasjon === "") {
-    return "ikke-startet";
-  }
-
-  if (
-    barnepassSituasjon.trim() !== "" &&
-    barnepassSituasjon !== "BETALER_SELV"
-  ) {
-    return "komplett";
-  }
-
-  if (
-    barnepassSituasjon === "BETALER_SELV" &&
-    barnetilsynsutgift.trim() === ""
-  ) {
-    return "ufullstendig";
-  }
-
-  if (
-    barnepassSituasjon === "BETALER_SELV" &&
-    barnetilsynsutgift.trim() !== ""
-  ) {
-    return "komplett";
-  }
-
-  return "ikke-startet";
-}
-
-interface StatusIndikatorProps {
-  status: BarnStatus;
-}
-
-const StatusIndikator = ({ status }: StatusIndikatorProps) => {
-  const { t } = useOversettelse();
-
-  switch (status) {
-    case "komplett":
-      return (
-        <Tag variant="success" size="small" className="ml-3">
-          <CheckmarkCircleIcon aria-hidden />
-          {t(tekster.status.komplett)}
-        </Tag>
-      );
-    case "ufullstendig":
-      return (
-        <Tag variant="warning" size="small" className="ml-3">
-          <ExclamationmarkTriangleIcon aria-hidden />
-          {t(tekster.status.ufullstendig)}
-        </Tag>
-      );
-    case "ikke-relevant":
-      return (
-        <Tag variant="neutral" size="small" className="ml-3">
-          {t(tekster.status.ikkeRelevant)}
-        </Tag>
-      );
-    case "ikke-startet":
-    default:
-      return (
-        <Tag variant="info" size="small" className="ml-3">
-          {t(tekster.status.ikkeStartet)}
-        </Tag>
-      );
-  }
-};
 
 export const Barnepass = () => {
   const form = useFormContext<BarnebidragSkjema>();
@@ -92,20 +17,28 @@ export const Barnepass = () => {
   const erBM = bidragstype === "MOTTAKER" || bidragstype === "BEGGE";
   const antallAndreBarn = Number(form.value("andreBarnUnder12.antall")) || 0;
 
+  const barnDuErMottaker = barn.filter(
+    (enkeltBarn) =>
+      beregnBidragstypeFraNetter(Number(enkeltBarn.samvær)) === "MOTTAKER",
+  );
+
+  const barnDuErPliktigFor = barn.filter(
+    (enkeltBarn) =>
+      beregnBidragstypeFraNetter(Number(enkeltBarn.samvær)) === "PLIKTIG",
+  );
   // Sjekk om noen barn har barnepassutgifter
   const harBarnepassutgifter = barn.some(
     (b) => b.barnetilsynsutgift.trim() !== "",
   );
 
-  if (!erBM) {
-    return null;
-  }
-
-  // Filtrer barn som skal ha barnepass-spørsmål (≤ 10 år)
   const barnMedBarnepass = barn.filter((b) => {
     const alder = Number(b.alder);
-    return !isNaN(alder) && alder <= 10;
+    return !isNaN(alder) && alder <= MAKS_ALDER_BARNETILSYNSUTGIFT;
   });
+
+  const finnBarnIndex = (alder: string) => {
+    return barn.findIndex((b) => b.alder === alder);
+  };
 
   if (barnMedBarnepass.length === 0) {
     return null;
@@ -116,38 +49,41 @@ export const Barnepass = () => {
       <h2 className="sr-only">{t(tekster.overskrift)}</h2>
       <fieldset className="p-0">
         <legend className="text-xl mb-2">{t(tekster.overskrift)}</legend>
-        <BodyShort size="medium" textColor="subtle" spacing>
-          {t(tekster.beskrivelse)}
-        </BodyShort>
 
-        <Accordion>
-          {barnMedBarnepass.map((_, index) => {
-            const barnIndex = barn.findIndex(
-              (b) => b === barnMedBarnepass[index],
-            );
-            const alder = barn[barnIndex].alder;
-            const status = beregnBarnStatus(barn[barnIndex]);
+        {barnDuErMottaker.map((enkeltBarn, index) => {
+          return (
+            <>
+              <BarnepassPerBarn
+                key={enkeltBarn.alder}
+                barnIndex={finnBarnIndex(enkeltBarn.alder)}
+                bidragstype="MOTTAKER"
+              />
+              {index !== barnDuErMottaker.length - 1 && (
+                <hr className="my-8 border-gray-300" />
+              )}
+            </>
+          );
+        })}
 
-            return (
-              <Accordion.Item key={barnIndex} defaultOpen={index === 0}>
-                <Accordion.Header className="w-full">
-                  <span className="font-semibold">
-                    {t(tekster.barn)}{" "}
-                    {alder ? `${alder} ${t(tekster.år)}` : barnIndex + 1}
-                  </span>
-                  <StatusIndikator status={status} />
-                </Accordion.Header>
-                <Accordion.Content>
-                  <BarnepassPerBarn barnIndex={barnIndex} />
-                </Accordion.Content>
-              </Accordion.Item>
-            );
-          })}
-        </Accordion>
+        {barnDuErPliktigFor.map((enkeltBarn, index) => {
+          return (
+            <>
+              <BarnepassPerBarn
+                key={enkeltBarn.alder}
+                barnIndex={finnBarnIndex(enkeltBarn.alder)}
+                bidragstype="PLIKTIG"
+              />
+              {index !== barnDuErPliktigFor.length - 1 && (
+                <hr className="my-8 border-gray-300" />
+              )}
+            </>
+          );
+        })}
 
         {/* Andre barn under 12 år */}
         {erBM && harBarnepassutgifter && (
           <>
+            <hr className="my-8 border-gray-300" />
             <div className="space-y-4 mt-8">
               <h3 className="text-lg font-semibold">
                 {t(tekster.andreBarnUnder12.overskrift)}
@@ -198,43 +134,6 @@ const tekster = definerTekster({
     nb: "Barnepass",
     en: "Childcare",
     nn: "Barnepass",
-  },
-  beskrivelse: {
-    nb: "Barnepass inkluderer barnehage (uten penger til kost, bleier og lignende), skolefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma. Kostnader for barnepass kalles også tilsynsutgifter.",
-    en: "Childcare includes kindergarten (excluding expenses for food, diapers etc), after-school program (SFO), the Activity School (AKS) or nanny. Childcare costs are also referred to as supervision expenses.",
-    nn: "Barnepass inkluderer barnehage (utan pengar til kost, bleier og liknande), skulefritidsordning (SFO), Aktivitetsskolen (AKS) eller dagmamma. Kostnadar for barnepass blir óg kalla tilsynsutgifter.",
-  },
-  barn: {
-    nb: "Barn",
-    en: "Child",
-    nn: "Barn",
-  },
-  år: {
-    nb: "år",
-    en: "years",
-    nn: "år",
-  },
-  status: {
-    komplett: {
-      nb: "Ferdig",
-      en: "Complete",
-      nn: "Ferdig",
-    },
-    ufullstendig: {
-      nb: "Ufullstendig",
-      en: "Incomplete",
-      nn: "Ufullstendig",
-    },
-    ikkeRelevant: {
-      nb: "Ikke relevant",
-      en: "Not relevant",
-      nn: "Ikkje relevant",
-    },
-    ikkeStartet: {
-      nb: "Ikke startet",
-      en: "Not started",
-      nn: "Ikkje starta",
-    },
   },
   andreBarnUnder12: {
     overskrift: {

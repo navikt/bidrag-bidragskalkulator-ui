@@ -1,25 +1,23 @@
-import { Select } from "@navikt/ds-react";
+import { BodyShort, Radio, RadioGroup, Stack } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import {
-  BarnepassSituasjonSchema,
   MAKS_ALDER_BARNETILSYNSUTGIFT,
   type BarnebidragSkjema,
 } from "../schema";
 
 type Props = {
   barnIndex: number;
+  bidragstype: "MOTTAKER" | "PLIKTIG";
 };
 
-export const BarnepassPerBarn = ({ barnIndex }: Props) => {
+export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
   const form = useFormContext<BarnebidragSkjema>();
   const { t } = useOversettelse();
 
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
   const alder = barnField.value().alder;
-
-  const barnepassSituasjon = barnField.value().barnepassSituasjon || "";
 
   const visSpørsmålOmBarnetilsynsutgift =
     barnField.field("alder").touched() &&
@@ -30,72 +28,137 @@ export const BarnepassPerBarn = ({ barnIndex }: Props) => {
   }
 
   return (
-    <div className="space-y-4">
-      <Select
-        {...barnField.getInputProps("barnepassSituasjon")}
-        label={t(tekster.barnepass.label)}
-        error={barnField.field("barnepassSituasjon").error()}
-      >
-        <option value="">{t(tekster.barnepass.velg)}</option>
-        {BarnepassSituasjonSchema.options.map((type) => (
-          <option value={type} key={type}>
-            {t(tekster.barnepass.valg[type])}
-          </option>
-        ))}
-      </Select>
+    <>
+      <BodyShort>{t(tekster.barnAlder(alder))}</BodyShort>
 
-      {barnepassSituasjon === "BETALER_SELV" && (
+      <RadioGroup
+        legend={t(tekster[bidragstype].barnepassUtgifter)}
+        {...barnField.getControlProps("harBarnetilsynsutgift")}
+        error={barnField.error("harBarnetilsynsutgift")}
+      >
+        <Stack
+          gap="space-0 space-24"
+          direction={{ xs: "column", sm: "row" }}
+          wrap={false}
+        >
+          <Radio value="true">{t(tekster.jaNei.ja)}</Radio>
+          <Radio value="false">{t(tekster.jaNei.nei)}</Radio>
+        </Stack>
+      </RadioGroup>
+
+      {barnField.value("harBarnetilsynsutgift") === "true" && (
+        <RadioGroup
+          legend={t(tekster[bidragstype].mottarStønadTilBarnetilsyn)}
+          {...barnField.getControlProps("mottarStønadTilBarnetilsyn")}
+          error={barnField.error("mottarStønadTilBarnetilsyn")}
+        >
+          <Stack
+            gap="space-0 space-24"
+            direction={{ xs: "column", sm: "row" }}
+            wrap={false}
+          >
+            <Radio value="true">{t(tekster.jaNei.ja)}</Radio>
+            <Radio value="false">{t(tekster.jaNei.nei)}</Radio>
+          </Stack>
+        </RadioGroup>
+      )}
+
+      {barnField.value("mottarStønadTilBarnetilsyn") === "true" && (
+        <RadioGroup
+          legend={t(tekster.barnepassType.spørsmål)}
+          {...barnField.getControlProps("barnepassSituasjon")}
+          error={barnField.error("barnepassSituasjon")}
+        >
+          <Stack
+            gap="space-0 space-24"
+            direction={{ xs: "column", sm: "row" }}
+            wrap={false}
+          >
+            <Radio value="HELTID">{t(tekster.barnepassType.heltid)}</Radio>
+            <Radio value="DELTID">{t(tekster.barnepassType.deltid)}</Radio>
+          </Stack>
+        </RadioGroup>
+      )}
+
+      {barnField.value("mottarStønadTilBarnetilsyn") === "false" && (
         <FormattertTallTextField
           {...barnField.getControlProps("barnetilsynsutgift")}
-          label={t(tekster.utgift.label)}
+          label={t(tekster[bidragstype].barnepassUtgifterBeløp)}
           error={barnField.field("barnetilsynsutgift").error()}
           htmlSize={12}
         />
       )}
-    </div>
+    </>
   );
 };
 
 const tekster = definerTekster({
-  barnepass: {
-    label: {
-      nb: "Barnepass",
-      en: "Childcare",
-      nn: "Barnepass",
+  MOTTAKER: {
+    barnepassUtgifter: {
+      nb: "Har du utgifter til barnepass for dette barnet?",
+      en: "",
+      nn: "",
     },
-    velg: {
-      nb: "Velg...",
-      en: "Choose...",
-      nn: "Vel...",
+    mottarStønadTilBarnetilsyn: {
+      nb: "Mottar du pengestøtte til barnepass? (Stønad til barnetilsyn)",
+      en: "",
+      nn: "",
     },
-    valg: {
-      INGEN: {
-        nb: "Har ikke barnepass",
-        en: "No childcare",
-        nn: "Har ikkje barnepass",
-      },
-      STØNAD_HELTID: {
-        nb: "Stønad fra Nav - heltid",
-        en: "Nav support - full-time",
-        nn: "Stønad frå Nav - heiltid",
-      },
-      STØNAD_DELTID: {
-        nb: "Stønad fra Nav - deltid",
-        en: "Nav support - part-time",
-        nn: "Stønad frå Nav - deltid",
-      },
-      BETALER_SELV: {
-        nb: "Betaler selv (uten stønad)",
-        en: "Pay myself (no support)",
-        nn: "Betaler sjølv (utan stønad)",
-      },
+    barnepassUtgifterBeløp: {
+      nb: "Hvor mye betaler du for barnepass per måned?",
+      en: "",
+      nn: "",
     },
   },
-  utgift: {
-    label: {
-      nb: "Beløp per måned",
-      en: "Amount per month",
-      nn: "Beløp per månad",
+  PLIKTIG: {
+    barnepassUtgifter: {
+      nb: "Har bidragsmottaker utgifter til barnepass for dette barnet?",
+      en: "",
+      nn: "",
+    },
+    mottarStønadTilBarnetilsyn: {
+      nb: "Mottar bidragsmottaker pengestøtte til barnepass? (Stønad til barnetilsyn)",
+      en: "",
+      nn: "",
+    },
+    barnepassUtgifterBeløp: {
+      nb: "Hvor mye betaler bidragsmottaker for barnepass per måned?",
+      en: "",
+      nn: "",
     },
   },
+  barnepassType: {
+    spørsmål: {
+      nb: "Heltid eller deltid plass? ",
+      en: "",
+      nn: "",
+    },
+    heltid: {
+      nb: "Heltid",
+      en: "",
+      nn: "",
+    },
+    deltid: {
+      nb: "Deltid",
+      en: "",
+      nn: "",
+    },
+  },
+  jaNei: {
+    ja: {
+      nb: "Ja",
+      en: "",
+      nn: "",
+    },
+    nei: {
+      nb: "Nei",
+      en: "",
+      nn: "",
+    },
+  },
+  barnAlder: (alder) => ({
+    nb: `Barn ${alder} år`,
+    en: `Child ${alder} years`,
+    nn: `Barn ${alder} år`,
+  }),
 });
