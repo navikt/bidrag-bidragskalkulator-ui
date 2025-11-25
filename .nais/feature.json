@@ -1,0 +1,9 @@
+{
+  "SERVER_URL": "http://bidrag-bidragskalkulator-api",
+  "ENVIRONMENT": "dev",
+  "UMAMI_WEBSITE_ID": "",
+  "INGRESS": "https://www.ekstern.dev.nav.no/barnebidrag-feature/tjenester",
+  "TELEMETRY_URL": "",
+  "UXSIGNALS_ENABLED": "false",
+  "UXSIGNALS_MODE": "demo"
+}
