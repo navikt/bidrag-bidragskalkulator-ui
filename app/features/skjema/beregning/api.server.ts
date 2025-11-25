@@ -97,7 +97,7 @@ export const hentBarnebidragsutregning = async (request: Request) => {
         ? {
             borMedAnnenVoksen: skjemaData.dittBoforhold.borMedAnnenVoksen,
             antallBarnBorFast: skjemaData.dittBoforhold.antallBarnBorFast,
-            antallBarnDeltBosted: skjemaData.dittBoforhold.antallBarnDeltBosted,
+            antallBarnDeltBosted: 0,
           }
         : null,
     medforelderBoforhold:
@@ -108,8 +108,7 @@ export const hentBarnebidragsutregning = async (request: Request) => {
               skjemaData.medforelderBoforhold.borMedAnnenVoksen,
             antallBarnBorFast:
               skjemaData.medforelderBoforhold.antallBarnBorFast,
-            antallBarnDeltBosted:
-              skjemaData.medforelderBoforhold.antallBarnDeltBosted,
+            antallBarnDeltBosted: 0,
           }
         : null,
     barn: skjemaData.barn.map((barn) => {
