@@ -1,10 +1,4 @@
-import {
-  BodyShort,
-  Checkbox,
-  Radio,
-  RadioGroup,
-  Stack,
-} from "@navikt/ds-react";
+import { BodyShort, Checkbox } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
 import { useEffect, useState } from "react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
@@ -217,27 +211,14 @@ export const Ytelser = ({ bidragstype }: Props) => {
               {t(tekster.felles.alternativer.utvidetBarnetrygd)}
             </Checkbox>
             {mottarUtvidetBarnetrygd && harDeltBosted && (
-              <RadioGroup
+              <JaNeiRadio
                 {...form
                   .field("ytelser.delerUtvidetBarnetrygd")
                   .getInputProps()}
                 legend={t(tekster.felles.utvidetBarnetrygd.delingSpørsmål)}
                 error={form.field("ytelser.delerUtvidetBarnetrygd").error()}
                 className="pl-8"
-              >
-                <Stack
-                  gap="space-0 space-24"
-                  direction={{ xs: "column", sm: "row" }}
-                  wrap={false}
-                >
-                  <Radio value="true">
-                    {t(tekster.felles.utvidetBarnetrygd.alternativer.ja)}
-                  </Radio>
-                  <Radio value="false">
-                    {t(tekster.felles.utvidetBarnetrygd.alternativer.nei)}
-                  </Radio>
-                </Stack>
-              </RadioGroup>
+              />
             )}
           </>
         )}
@@ -375,18 +356,6 @@ const tekster = definerTekster({
         nb: "Deler du og den andre forelderen den utvidede barnetrygden?",
         en: "",
         nn: "Deler du og den andre forelderen den utvidede barnetrygden?",
-      },
-      alternativer: {
-        ja: {
-          nb: "Ja",
-          en: "Yes",
-          nn: "Ja",
-        },
-        nei: {
-          nb: "Nei",
-          en: "No",
-          nn: "Nei",
-        },
       },
     },
   },
