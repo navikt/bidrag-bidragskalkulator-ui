@@ -51,35 +51,6 @@ export const Ytelser = ({ bidragstype }: Props) => {
   // State for valgte ytelser
   const [valgteYtelser, setValgteYtelser] = useState<NavYtelse[]>([]);
 
-  useEffect(() => {
-    const forrigeHarDeltFastBosted = form.value(
-      "ytelser.kontantstøtte.harDeltFastBosted",
-    );
-
-    const harDeltBostedString = harDeltBosted ? "true" : "false";
-
-    if (forrigeHarDeltFastBosted !== harDeltBostedString) {
-      setValgteYtelser([]);
-      form.setValue("ytelser.kontantstøtte", {
-        harDeltFastBosted: harDeltBostedString,
-        mottar: "",
-        deler: "",
-        beløp: "",
-      });
-
-      form.setValue("ytelser.barnetillegg", {
-        mottar: "",
-        hvemFår: [""],
-        dineBeløpPerBarn: [""],
-        denAndreForelderenBeløp: "",
-      });
-
-      form.setValue("ytelser.delerUtvidetBarnetrygd", "");
-      form.setValue("ytelser.mottarSmåbarnstillegg", "");
-      form.setValue("ytelser.mottarUtvidetBarnetrygd", "");
-    }
-  }, [harDeltBosted, form]);
-
   // Initialiser fra skjemaverdier - kjør hver gang form-verdiene endres
   useEffect(() => {
     const ytelser: NavYtelse[] = [];
@@ -126,7 +97,6 @@ export const Ytelser = ({ bidragstype }: Props) => {
     // Nullstill kontantstøtte-beløp hvis kontantstøtte fjernes
     if (!nyeValgteYtelser.includes("kontantstøtte")) {
       form.setValue("ytelser.kontantstøtte", {
-        harDeltFastBosted: "",
         mottar: "",
         deler: "",
         beløp: "",

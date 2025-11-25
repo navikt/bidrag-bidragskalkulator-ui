@@ -93,7 +93,7 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
   bidragstype: "",
   barn: [
     {
-      alder: "2",
+      alder: "",
       bosted: "",
       samvær: SAMVÆR_STANDARDVERDI,
       harBarnetilsynsutgift: "",
@@ -139,7 +139,6 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
     delerUtvidetBarnetrygd: "",
     mottarSmåbarnstillegg: "",
     kontantstøtte: {
-      harDeltFastBosted: "",
       mottar: "",
       deler: "",
       beløp: "",

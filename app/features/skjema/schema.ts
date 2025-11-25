@@ -74,7 +74,6 @@ const BarnebidragSkjemaSchema = z.object({
   }),
   ytelser: z.object({
     kontantstøtte: z.object({
-      harDeltFastBosted: z.enum(["true", "false", ""]),
       mottar: z.enum(["true", "false", ""]),
       beløp: z.string(),
       deler: z.enum(["true", "false", ""]),
@@ -95,9 +94,6 @@ export const lagYtelserSkjema = (språk: Språk) => {
   return z
     .object({
       kontantstøtte: z.object({
-        harDeltFastBosted: z
-          .enum(["true", "false", ""])
-          .transform((value) => (value === "" ? undefined : value === "true")),
         mottar: z
           .enum(["true", "false", ""])
           .transform((value) => (value === "" ? undefined : value === "true")),
@@ -125,43 +121,13 @@ export const lagYtelserSkjema = (språk: Språk) => {
       }),
     })
     .superRefine((values, ctx) => {
-      // Kontantstøtte: har ikke delt fast bosted
+      // Kontantstøtte: Når mottar er true, må beløp fylles ut hvis:
+      // 1. Barn ikke har delt bosted (deler-spørsmål stilles aldri), ELLER
+      // 2. Barn har delt bosted OG de deler kontantstøtten
       if (
-        values.kontantstøtte.harDeltFastBosted === false &&
         values.kontantstøtte.mottar === true &&
-        values.kontantstøtte.beløp.trim() === ""
-      ) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.ytelser.kontantstøtte.beløp.påkrevd,
-          ),
-          path: ["kontantstøtte", "kontantstøtteBeløp"],
-        });
-      }
-
-      // Kontantstøtte: har delt fast bosted
-      if (
-        values.kontantstøtte.harDeltFastBosted === true &&
-        values.kontantstøtte.mottar === true &&
-        values.kontantstøtte.deler === undefined
-      ) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.ytelser.kontantstøtte.deler.påkrevd,
-          ),
-          path: ["kontantstøtte", "deler"],
-        });
-      }
-
-      if (
-        values.kontantstøtte.harDeltFastBosted === true &&
-        values.kontantstøtte.mottar === true &&
-        values.kontantstøtte.deler === true &&
-        values.kontantstøtte.beløp.trim() === ""
+        values.kontantstøtte.beløp.trim() === "" &&
+        values.kontantstøtte.deler !== false // Beløp kreves hvis de ikke har svart "nei" på deling
       ) {
         ctx.addIssue({
           code: "custom",
