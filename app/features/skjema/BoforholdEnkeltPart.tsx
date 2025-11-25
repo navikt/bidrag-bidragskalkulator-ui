@@ -98,6 +98,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
               t(tekster[skjemagruppe].antallBarnBorFast.label),
             )}
             htmlSize={8}
+            className="pl-8"
           />
         </>
       )}
@@ -133,6 +134,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
               .getInputProps()}
             error={form.field(`${skjemagruppe}.borMedAnnenVoksenType`).error()}
             legend={t(tekster[skjemagruppe].borSammenMed.label)}
+            className="pl-8"
           >
             {BorMedAnnenVoksenTypeSchema.options.map((alternativ) => {
               return (
@@ -151,6 +153,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
                   .getInputProps()}
                 error={form.field(`${skjemagruppe}.borMedBarnOver18`).error()}
                 legend={t(tekster[skjemagruppe].borMedBarnOver18.label)}
+                className="pl-8"
               >
                 <Stack
                   gap="0 6"
@@ -175,6 +178,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
                   label={t(tekster[skjemagruppe].antallBarnOver18.label)}
                   error={form.field(`${skjemagruppe}.antallBarnOver18`).error()}
                   htmlSize={8}
+                  className="pl-8"
                 />
               )}
             </>
@@ -221,7 +225,8 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
           error={form
             .field(`${skjemagruppe}.andreBarnebidragerPerMåned`)
             .error()}
-          htmlSize={8}
+          htmlSize={10}
+          className="pl-8"
         />
       )}
     </fieldset>
