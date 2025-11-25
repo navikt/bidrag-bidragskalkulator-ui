@@ -8,6 +8,7 @@ import {
 import { useFormContext } from "@rvf/react";
 import { useEffect, useState } from "react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
+import JaNeiRadio from "~/components/ui/JaNeiRadio";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import {
   MAKS_ALDER_KONTANTSTØTTE,
@@ -53,6 +54,24 @@ export const Ytelser = ({ bidragstype }: Props) => {
   // State for valgte ytelser
   const [valgteYtelser, setValgteYtelser] = useState<NavYtelse[]>([]);
 
+  useEffect(() => {
+    const forrigeHarDeltFastBosted = form.value(
+      "ytelser.kontantstøtte.harDeltFastBosted",
+    );
+
+    const harDeltBostedString = harDeltBosted ? "true" : "false";
+
+    if (forrigeHarDeltFastBosted !== harDeltBostedString) {
+      setValgteYtelser([]);
+      form.setValue("ytelser.kontantstøtte", {
+        harDeltFastBosted: harDeltBostedString,
+        mottar: "",
+        deler: "",
+        beløp: "",
+      });
+    }
+  }, [harDeltBosted, form]);
+
   // Initialiser fra skjemaverdier
   useEffect(() => {
     const ytelser: NavYtelse[] = [];
@@ -62,7 +81,7 @@ export const Ytelser = ({ bidragstype }: Props) => {
     if (form.value("ytelser.mottarSmåbarnstillegg") === "true") {
       ytelser.push("småbarnstillegg");
     }
-    if (form.value("ytelser.mottarKontantstøtte") === "true") {
+    if (form.value("ytelser.kontantstøtte.mottar") === "true") {
       ytelser.push("kontantstøtte");
     }
     if (form.value("ytelser.mottarBarnetillegg") === "true") {
@@ -89,7 +108,7 @@ export const Ytelser = ({ bidragstype }: Props) => {
       nyeValgteYtelser.includes("småbarnstillegg") ? "true" : "false",
     );
     form.setValue(
-      "ytelser.mottarKontantstøtte",
+      "ytelser.kontantstøtte.mottar",
       nyeValgteYtelser.includes("kontantstøtte") ? "true" : "false",
     );
     form.setValue(
@@ -99,7 +118,12 @@ export const Ytelser = ({ bidragstype }: Props) => {
 
     // Nullstill kontantstøtte-beløp hvis kontantstøtte fjernes
     if (!nyeValgteYtelser.includes("kontantstøtte")) {
-      form.setValue("ytelser.kontantstøtteBeløp", "");
+      form.setValue("ytelser.kontantstøtte", {
+        harDeltFastBosted: "",
+        mottar: "",
+        deler: "",
+        beløp: "",
+      });
     }
 
     // Nullstill deling hvis utvidet barnetrygd fjernes
@@ -108,8 +132,16 @@ export const Ytelser = ({ bidragstype }: Props) => {
     }
   };
 
+  // Kontantstøtte
   const mottarUtvidetBarnetrygd = valgteYtelser.includes("utvidet-barnetrygd");
-  const mottarKontantstøtte = valgteYtelser.includes("kontantstøtte");
+  const mottarKontantstøtteOgHarIkkeDeltBosted =
+    valgteYtelser.includes("kontantstøtte") && !harDeltBosted;
+  const mottarKontantstøtteOgHarDeltBosted =
+    valgteYtelser.includes("kontantstøtte") && harDeltBosted;
+  const delerKontantstøtte =
+    valgteYtelser.includes("kontantstøtte") &&
+    harDeltBosted &&
+    form.value("ytelser.kontantstøtte.deler") === "true";
 
   return (
     <div className="border p-4 rounded-md">
@@ -117,28 +149,63 @@ export const Ytelser = ({ bidragstype }: Props) => {
         <legend className="text-xl mb-2">{t(tekster.felles.overskrift)}</legend>
         <BodyShort>{t(tekster[bidragstype].beskrivelse)}</BodyShort>
 
+        {/* Kontantstøtte */}
         {harBarnIKontantstøtteAlder && (
           <>
             <Checkbox
-              value="public"
+              checked={valgteYtelser.includes("kontantstøtte")}
               onChange={(e) =>
                 håndterToggleYtelse("kontantstøtte", e.target.checked)
               }
             >
               {t(tekster.felles.alternativer.kontantstøtte)}
             </Checkbox>
-            {mottarKontantstøtte && (
+
+            {mottarKontantstøtteOgHarIkkeDeltBosted && (
               <FormattertTallTextField
-                {...form.field("ytelser.kontantstøtteBeløp").getControlProps()}
-                label={t(tekster[bidragstype].kontantstøtte.beløpLabel)}
-                error={form.field("ytelser.kontantstøtteBeløp").error()}
+                {...form.field("ytelser.kontantstøtte.beløp").getControlProps()}
+                label={t(
+                  tekster[bidragstype].kontantstøtte.ikkeDeltFastBosted
+                    .hovedSpørsmål,
+                )}
+                error={form.field("ytelser.kontantstøtte.beløp").error()}
                 htmlSize={15}
                 className="pl-8"
               />
             )}
+
+            {mottarKontantstøtteOgHarDeltBosted && (
+              <>
+                <JaNeiRadio
+                  {...form.field("ytelser.kontantstøtte.deler").getInputProps()}
+                  legend={t(
+                    tekster[bidragstype].kontantstøtte.deltFastBosted
+                      .hovedSpørsmål,
+                  )}
+                  error={form.field("ytelser.kontantstøtte.deler").error()}
+                  className="pl-8"
+                />
+
+                {delerKontantstøtte && (
+                  <FormattertTallTextField
+                    {...form
+                      .field("ytelser.kontantstøtte.beløp")
+                      .getControlProps()}
+                    label={t(
+                      tekster[bidragstype].kontantstøtte.ikkeDeltFastBosted
+                        .hovedSpørsmål,
+                    )}
+                    error={form.field("ytelser.kontantstøtte.beløp").error()}
+                    htmlSize={15}
+                    className="pl-8"
+                  />
+                )}
+              </>
+            )}
           </>
         )}
 
+        {/* Utvidet barnetrygd */}
         {harBarnUnderUtvidetBarnetrygdAlder && (
           <>
             <Checkbox
@@ -175,6 +242,7 @@ export const Ytelser = ({ bidragstype }: Props) => {
           </>
         )}
 
+        {/* Småbarnstillegg */}
         {harBarnUnderSmåbarnstilleggAlder && (
           <Checkbox
             checked={valgteYtelser.includes("småbarnstillegg")}
@@ -186,6 +254,7 @@ export const Ytelser = ({ bidragstype }: Props) => {
           </Checkbox>
         )}
 
+        {/* Barnetillegg */}
         <Checkbox
           checked={valgteYtelser.includes("barnetillegg")}
           onChange={(e) =>
@@ -219,10 +288,24 @@ const tekster = definerTekster({
       },
     },
     kontantstøtte: {
-      beløpLabel: {
-        nb: "Hvor mye mottar du i kontantstøtte per måned?",
-        en: "",
-        nn: "",
+      ikkeDeltFastBosted: {
+        hovedSpørsmål: {
+          nb: "Hvor mye mottar du i kontantstøtte for Barn 1 år per måned?",
+          en: "",
+          nn: "",
+        },
+      },
+      deltFastBosted: {
+        hovedSpørsmål: {
+          nb: "Deler du og den andre forelderen kontantstøtten for dette barnet?",
+          en: "",
+          nn: "",
+        },
+        underSpørsmål: {
+          nb: "Hvor mye mottar du i kontantstøtte for Barn 1år per måned?",
+          en: "",
+          nn: "",
+        },
       },
     },
   },
@@ -238,10 +321,24 @@ const tekster = definerTekster({
       nn: "",
     },
     kontantstøtte: {
-      beløpLabel: {
-        nb: "Hvor mye mottar bidragsmottaker i kontantstøtte per måned?",
-        en: "",
-        nn: "",
+      ikkeDeltFastBosted: {
+        hovedSpørsmål: {
+          nb: "Hvor mye mottar bidragsmottaker i kontantstøtte for Barn 1 år per måned?",
+          en: "",
+          nn: "",
+        },
+      },
+      deltFastBosted: {
+        hovedSpørsmål: {
+          nb: "Deler du og den andre forelderen kontantstøtten for dette barnet?",
+          en: "",
+          nn: "",
+        },
+        underSpørsmål: {
+          nb: "Hvor mye mottar bidragsmottaker i kontantstøtte for Barn 1år per måned?",
+          en: "",
+          nn: "",
+        },
       },
     },
   },

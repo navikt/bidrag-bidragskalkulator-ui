@@ -71,8 +71,12 @@ const BarnebidragSkjemaSchema = z.object({
     tilsynsutgifter: z.array(z.string()),
   }),
   ytelser: z.object({
-    kontantstøtteBeløp: z.string(),
-    mottarKontantstøtte: z.enum(["true", "false", ""]),
+    kontantstøtte: z.object({
+      harDeltFastBosted: z.enum(["true", "false", ""]),
+      mottar: z.enum(["true", "false", ""]),
+      beløp: z.string(),
+      deler: z.enum(["true", "false", ""]),
+    }),
     mottarUtvidetBarnetrygd: z.enum(["true", "false", ""]),
     delerUtvidetBarnetrygd: z.enum(["true", "false", ""]),
     mottarSmåbarnstillegg: z.enum(["true", "false", ""]),
@@ -83,10 +87,18 @@ const BarnebidragSkjemaSchema = z.object({
 export const lagYtelserSkjema = (språk: Språk) => {
   return z
     .object({
-      mottarKontantstøtte: z
-        .enum(["true", "false", ""])
-        .transform((value) => (value === "" ? undefined : value === "true")),
-      kontantstøtteBeløp: z.string(),
+      kontantstøtte: z.object({
+        harDeltFastBosted: z
+          .enum(["true", "false", ""])
+          .transform((value) => (value === "" ? undefined : value === "true")),
+        mottar: z
+          .enum(["true", "false", ""])
+          .transform((value) => (value === "" ? undefined : value === "true")),
+        beløp: z.string(),
+        deler: z
+          .enum(["true", "false", ""])
+          .transform((value) => (value === "" ? undefined : value === "true")),
+      }),
       mottarUtvidetBarnetrygd: z
         .enum(["true", "false", ""])
         .transform((value) => (value === "" ? undefined : value === "true")),
@@ -101,24 +113,55 @@ export const lagYtelserSkjema = (språk: Språk) => {
         .transform((value) => (value === "" ? undefined : value === "true")),
     })
     .superRefine((values, ctx) => {
-      // Hvis mottar utvidet barnetrygd og delt bosted, må deling besvares
-      // Dette må håndteres i komponenten basert på barn-data
-
-      // Hvis mottar kontantstøtte, må beløp fylles inn
+      // Kontantstøtte: har ikke delt fast bosted
       if (
-        values.mottarKontantstøtte &&
-        values.kontantstøtteBeløp.trim() === ""
+        values.kontantstøtte.harDeltFastBosted === false &&
+        values.kontantstøtte.mottar === true &&
+        values.kontantstøtte.beløp.trim() === ""
       ) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.ytelser.kontantstøtteBeløp.påkrevd,
+            tekster.feilmeldinger.ytelser.kontantstøtte.beløp.påkrevd,
           ),
-          path: ["kontantstøtteBeløp"],
+          path: ["kontantstøtte", "kontantstøtteBeløp"],
         });
       }
 
+      // Kontantstøtte: har delt fast bosted
+      if (
+        values.kontantstøtte.harDeltFastBosted === true &&
+        values.kontantstøtte.mottar === true &&
+        values.kontantstøtte.deler === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.ytelser.kontantstøtte.deler.påkrevd,
+          ),
+          path: ["kontantstøtte", "deler"],
+        });
+      }
+
+      if (
+        values.kontantstøtte.harDeltFastBosted === true &&
+        values.kontantstøtte.mottar === true &&
+        values.kontantstøtte.deler === true &&
+        values.kontantstøtte.beløp.trim() === ""
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.ytelser.kontantstøtte.beløp.påkrevd,
+          ),
+          path: ["kontantstøtte", "beløp"],
+        });
+      }
+
+      // Utvidet barnetrygd
       if (
         values.mottarUtvidetBarnetrygd &&
         values.delerUtvidetBarnetrygd === undefined
@@ -135,47 +178,44 @@ export const lagYtelserSkjema = (språk: Språk) => {
     })
     .transform((values) => {
       return {
-        mottarUtvidetBarnetrygd: values.mottarUtvidetBarnetrygd,
-        delerUtvidetBarnetrygd: values.delerUtvidetBarnetrygd,
-        mottarSmåbarnstillegg: values.mottarSmåbarnstillegg,
-        mottarKontantstøtte: values.mottarKontantstøtte,
-        kontantstøtteBeløp:
-          values.kontantstøtteBeløp.trim() === ""
-            ? 0
-            : Number(values.kontantstøtteBeløp.trim()),
+        ...values,
+        kontantstøtte: {
+          ...values.kontantstøtte,
+          beløp: Number(values.kontantstøtte.beløp.trim() ?? 0),
+        },
       };
     })
     .superRefine((values, ctx) => {
-      if (values.mottarKontantstøtte && isNaN(values.kontantstøtteBeløp)) {
+      if (values.kontantstøtte.beløp && isNaN(values.kontantstøtte.beløp)) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.ytelser.kontantstøtteBeløp.tall,
+            tekster.feilmeldinger.ytelser.kontantstøtte.beløp.tall,
           ),
-          path: ["kontantstøtteBeløp"],
+          path: ["kontantstøtte", "beløp"],
         });
       }
 
-      if (values.mottarKontantstøtte && values.kontantstøtteBeløp < 0) {
+      if (values.kontantstøtte.beløp && values.kontantstøtte.beløp < 0) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.ytelser.kontantstøtteBeløp.minimum,
+            tekster.feilmeldinger.ytelser.kontantstøtte.beløp.minimum,
           ),
-          path: ["kontantstøtteBeløp"],
+          path: ["kontantstøtte", "beløp"],
         });
       }
 
-      if (values.mottarKontantstøtte && values.kontantstøtteBeløp > 10000) {
+      if (values.kontantstøtte.beløp && values.kontantstøtte.beløp > 10000) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.ytelser.kontantstøtteBeløp.maksimum,
+            tekster.feilmeldinger.ytelser.kontantstøtte.beløp.maksimum,
           ),
-          path: ["kontantstøtteBeløp"],
+          path: ["kontantstøtte", "beløp"],
         });
       }
     });
@@ -1004,26 +1044,35 @@ const tekster = definerTekster({
       },
     },
     ytelser: {
-      kontantstøtteBeløp: {
-        påkrevd: {
-          nb: "Fyll inn beløp for kontantstøtte",
-          en: "Fill in amount for cash-for-care benefit",
-          nn: "Fyll inn beløp for kontantstøtte",
+      kontantstøtte: {
+        beløp: {
+          påkrevd: {
+            nb: "Fyll inn beløp for kontantstøtte",
+            en: "Fill in amount for cash-for-care benefit",
+            nn: "Fyll inn beløp for kontantstøtte",
+          },
+          tall: {
+            nb: "Beløp må være et tall",
+            en: "Amount must be a number",
+            nn: "Beløp må vere eit tal",
+          },
+          minimum: {
+            nb: "Beløp må være minst 0",
+            en: "Amount must be at least 0",
+            nn: "Beløp må vere minst 0",
+          },
+          maksimum: {
+            nb: "Beløp kan ikke være mer enn 10 000 kr",
+            en: "Amount cannot exceed 10,000 NOK",
+            nn: "Beløp kan ikkje vere meir enn 10 000 kr",
+          },
         },
-        tall: {
-          nb: "Beløp må være et tall",
-          en: "Amount must be a number",
-          nn: "Beløp må vere eit tal",
-        },
-        minimum: {
-          nb: "Beløp må være minst 0",
-          en: "Amount must be at least 0",
-          nn: "Beløp må vere minst 0",
-        },
-        maksimum: {
-          nb: "Beløp kan ikke være mer enn 10 000 kr",
-          en: "Amount cannot exceed 10,000 NOK",
-          nn: "Beløp kan ikkje vere meir enn 10 000 kr",
+        deler: {
+          påkrevd: {
+            nb: "Dette feltet er påkrevd",
+            en: "",
+            nn: "",
+          },
         },
       },
       utvidetBarnetrygd: {
