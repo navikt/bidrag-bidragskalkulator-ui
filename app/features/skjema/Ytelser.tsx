@@ -117,63 +117,72 @@ export const Ytelser = ({ bidragstype }: Props) => {
         <legend className="text-xl mb-2">{t(tekster.felles.overskrift)}</legend>
         <BodyShort>{t(tekster[bidragstype].beskrivelse)}</BodyShort>
 
-        <Checkbox
-          value="public"
-          onChange={(e) =>
-            håndterToggleYtelse("kontantstøtte", e.target.checked)
-          }
-          disabled={!harBarnIKontantstøtteAlder}
-        >
-          {t(tekster.felles.alternativer.kontantstøtte)}
-        </Checkbox>
-        {mottarKontantstøtte && (
-          <FormattertTallTextField
-            {...form.field("ytelser.kontantstøtteBeløp").getControlProps()}
-            label={t(tekster[bidragstype].kontantstøtte.beløpLabel)}
-            error={form.field("ytelser.kontantstøtteBeløp").error()}
-            htmlSize={15}
-          />
-        )}
-
-        <Checkbox
-          checked={valgteYtelser.includes("utvidet-barnetrygd")}
-          onChange={(e) =>
-            håndterToggleYtelse("utvidet-barnetrygd", e.target.checked)
-          }
-          disabled={!harBarnUnderUtvidetBarnetrygdAlder}
-        >
-          {t(tekster.felles.alternativer.utvidetBarnetrygd)}
-        </Checkbox>
-        {mottarUtvidetBarnetrygd && harDeltBosted && (
-          <RadioGroup
-            {...form.field("ytelser.delerUtvidetBarnetrygd").getInputProps()}
-            legend={t(tekster.felles.utvidetBarnetrygd.delingSpørsmål)}
-            error={form.field("ytelser.delerUtvidetBarnetrygd").error()}
-          >
-            <Stack
-              gap="space-0 space-24"
-              direction={{ xs: "column", sm: "row" }}
-              wrap={false}
+        {harBarnIKontantstøtteAlder && (
+          <>
+            <Checkbox
+              value="public"
+              onChange={(e) =>
+                håndterToggleYtelse("kontantstøtte", e.target.checked)
+              }
             >
-              <Radio value="true">
-                {t(tekster.felles.utvidetBarnetrygd.alternativer.ja)}
-              </Radio>
-              <Radio value="false">
-                {t(tekster.felles.utvidetBarnetrygd.alternativer.nei)}
-              </Radio>
-            </Stack>
-          </RadioGroup>
+              {t(tekster.felles.alternativer.kontantstøtte)}
+            </Checkbox>
+            {mottarKontantstøtte && (
+              <FormattertTallTextField
+                {...form.field("ytelser.kontantstøtteBeløp").getControlProps()}
+                label={t(tekster[bidragstype].kontantstøtte.beløpLabel)}
+                error={form.field("ytelser.kontantstøtteBeløp").error()}
+                htmlSize={15}
+              />
+            )}
+          </>
         )}
 
-        <Checkbox
-          checked={valgteYtelser.includes("småbarnstillegg")}
-          onChange={(e) =>
-            håndterToggleYtelse("småbarnstillegg", e.target.checked)
-          }
-          disabled={!harBarnUnderSmåbarnstilleggAlder}
-        >
-          {t(tekster.felles.alternativer.småbarnstillegg)}
-        </Checkbox>
+        {harBarnUnderUtvidetBarnetrygdAlder && (
+          <>
+            <Checkbox
+              checked={valgteYtelser.includes("utvidet-barnetrygd")}
+              onChange={(e) =>
+                håndterToggleYtelse("utvidet-barnetrygd", e.target.checked)
+              }
+            >
+              {t(tekster.felles.alternativer.utvidetBarnetrygd)}
+            </Checkbox>
+            {mottarUtvidetBarnetrygd && harDeltBosted && (
+              <RadioGroup
+                {...form
+                  .field("ytelser.delerUtvidetBarnetrygd")
+                  .getInputProps()}
+                legend={t(tekster.felles.utvidetBarnetrygd.delingSpørsmål)}
+                error={form.field("ytelser.delerUtvidetBarnetrygd").error()}
+              >
+                <Stack
+                  gap="space-0 space-24"
+                  direction={{ xs: "column", sm: "row" }}
+                  wrap={false}
+                >
+                  <Radio value="true">
+                    {t(tekster.felles.utvidetBarnetrygd.alternativer.ja)}
+                  </Radio>
+                  <Radio value="false">
+                    {t(tekster.felles.utvidetBarnetrygd.alternativer.nei)}
+                  </Radio>
+                </Stack>
+              </RadioGroup>
+            )}
+          </>
+        )}
+
+        {harBarnUnderSmåbarnstilleggAlder && (
+          <Checkbox
+            checked={valgteYtelser.includes("småbarnstillegg")}
+            onChange={(e) =>
+              håndterToggleYtelse("småbarnstillegg", e.target.checked)
+            }
+          >
+            {t(tekster.felles.alternativer.småbarnstillegg)}
+          </Checkbox>
+        )}
 
         <Checkbox
           checked={valgteYtelser.includes("barnetillegg")}
