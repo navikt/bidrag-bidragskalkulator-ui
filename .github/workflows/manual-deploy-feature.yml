@@ -27,6 +27,6 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
-          IMAGE: ${{ steps.docker-push-dev.outputs.image }}
+          IMAGE: ${{ steps.docker-push-feature.outputs.image }}
           RESOURCE: .nais/naiserator.yml
           VARS: .nais/feature.json
