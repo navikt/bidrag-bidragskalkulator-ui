@@ -20,6 +20,7 @@ export default function BarnEgenInntekt({ barnIndex }: Props) {
       <RadioGroup
         {...barnField.getControlProps("harEgenInntekt")}
         legend={t(tekster.egenInntekt.spørsmål)}
+        error={barnField.field("harEgenInntekt").error()}
       >
         <Stack
           gap="space-0 space-24"

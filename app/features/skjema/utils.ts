@@ -93,14 +93,14 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
   bidragstype: "",
   barn: [
     {
-      alder: "",
+      alder: "11",
       bosted: "",
       samvær: SAMVÆR_STANDARDVERDI,
       harBarnetilsynsutgift: "",
       mottarStønadTilBarnetilsyn: "",
       barnetilsynsutgift: "",
       barnepassSituasjon: "",
-      harEgenInntekt: "false",
+      harEgenInntekt: "",
       inntektPerMåned: "",
     },
   ],
@@ -118,6 +118,7 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
     borMedAnnenVoksenType: "",
     borMedBarnOver18: "",
     antallBarnOver18: "",
+    andreBarnebidragerPerMåned: "",
   },
   medforelderBoforhold: {
     borMedAnnenVoksen: "",
@@ -127,6 +128,7 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
     borMedAnnenVoksenType: "",
     borMedBarnOver18: "",
     antallBarnOver18: "",
+    andreBarnebidragerPerMåned: "",
   },
   andreBarnUnder12: {
     antall: "0",

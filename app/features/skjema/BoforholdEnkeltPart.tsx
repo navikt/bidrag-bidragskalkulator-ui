@@ -33,6 +33,10 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
   const borMedBarnVgs =
     form.field(`${skjemagruppe}.borMedBarnOver18`).value() === "true";
 
+  const harAlleredeBarnebidrag =
+    form.field(`${skjemagruppe}.betalerBarnebidrageForAndreBarn`).value() ===
+    "true";
+
   const vedEndreBorMedAndreBarn = (value: string) => {
     if (value === "false") {
       form.resetField(`${skjemagruppe}.antallBarnBorFast`);
@@ -207,6 +211,19 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
           })}
         </Stack>
       </RadioGroup>
+
+      {harAlleredeBarnebidrag && (
+        <FormattertTallTextField
+          {...form
+            .field(`${skjemagruppe}.andreBarnebidragerPerMåned`)
+            .getControlProps()}
+          label={t(tekster[skjemagruppe].andreBarnebidragerPerMåned.label)}
+          error={form
+            .field(`${skjemagruppe}.andreBarnebidragerPerMåned`)
+            .error()}
+          htmlSize={8}
+        />
+      )}
     </fieldset>
   );
 };
@@ -306,6 +323,13 @@ const tekster = definerTekster({
         en: "",
       },
     },
+    andreBarnebidragerPerMåned: {
+      label: {
+        nb: "Hvor mye betaler bidragspliktig] totalt i barnebidrag for andre egne barn per måned?",
+        nn: "",
+        en: "",
+      },
+    },
   },
   medforelderBoforhold: {
     tittel: {
@@ -397,6 +421,13 @@ const tekster = definerTekster({
     antallBarnOver18: {
       label: {
         nb: "Antall barn som går på videregående skole",
+        nn: "",
+        en: "",
+      },
+    },
+    andreBarnebidragerPerMåned: {
+      label: {
+        nb: "Hvor mye betaler bidragspliktig] totalt i barnebidrag for andre egne barn per måned?",
         nn: "",
         en: "",
       },
