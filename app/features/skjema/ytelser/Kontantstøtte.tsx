@@ -21,15 +21,11 @@ export default function Kontantstøtte({
 
   const barn = form.value("barn");
 
-  // Finn alle barn som er 1 år (eller mellom MIN og MAKS kontantstøtte-alder)
-  const barnMedKontantstøtte = barn.filter(
-    (b) => Number(b.alder) === 1, // Kun 1 år gamle barn
-  );
+  const barnMedKontantstøtte = barn.filter((b) => Number(b.alder) === 1);
 
   // Kontantstøtte
   const mottarKontantstøtte = valgteYtelser.includes("kontantstøtte");
 
-  // VIKTIG: Logikken er nå snudd riktig vei
   const harDeltBostedOgMottarKontantstøtte =
     mottarKontantstøtte && harDeltBosted;
   const harIkkeDeltBostedOgMottarKontantstøtte =

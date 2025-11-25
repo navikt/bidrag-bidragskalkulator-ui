@@ -1,6 +1,6 @@
 import { BodyShort, Checkbox } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import {
@@ -10,7 +10,7 @@ import {
   type BarnebidragSkjema,
   type Bidragstype,
 } from "./schema";
-import Barnetillegg from "./ytelser/BarneTillegg";
+import Barnetillegg from "./ytelser/Barnetillegg";
 import Kontantstøtte from "./ytelser/Kontantstøtte";
 
 export type NavYtelse =
@@ -50,6 +50,47 @@ export const Ytelser = ({ bidragstype }: Props) => {
 
   // State for valgte ytelser
   const [valgteYtelser, setValgteYtelser] = useState<NavYtelse[]>([]);
+
+  // Ref for å tracke forrige barn-signatur
+  const forrigeBarnSignatur = useRef<string>("");
+
+  // Reset ytelser når barn-data endres (alder, antall, bosted)
+  useEffect(() => {
+    const barnSignatur = barn
+      .map((b) => `${b.alder}-${b.bosted}`)
+      .sort()
+      .join("|");
+
+    // Hvis barn-data har endret seg OG dette ikke er første render, reset alle ytelser
+    if (
+      forrigeBarnSignatur.current &&
+      barnSignatur !== forrigeBarnSignatur.current
+    ) {
+      // Reset alle ytelse-verdier
+      form.setValue("ytelser", {
+        mottarUtvidetBarnetrygd: "",
+        delerUtvidetBarnetrygd: "",
+        mottarSmåbarnstillegg: "",
+        kontantstøtte: {
+          mottar: "",
+          deler: "",
+          beløp: "",
+        },
+        barnetillegg: {
+          mottar: "",
+          hvemFår: [""],
+          dineBeløpPerBarn: [],
+          denAndreForelderenBeløp: "",
+        },
+      });
+
+      // Reset state
+      setValgteYtelser([]);
+    }
+
+    // Oppdater signaturen
+    forrigeBarnSignatur.current = barnSignatur;
+  }, [barn, form]);
 
   // Initialiser fra skjemaverdier - kjør hver gang form-verdiene endres
   useEffect(() => {
