@@ -1,10 +1,10 @@
-name: Manuell deploy til feature
+name: Manuell deploy til demo
 on:
   workflow_dispatch:
 
 jobs:
-  deploy-feature:
-    name: Deploy til feature
+  deploy-demo:
+    name: Deploy til demo
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,7 +17,7 @@ jobs:
           ref: ${{ github.ref }}
       - name: Bygg og push docker image til GAR
         uses: nais/docker-build-push@main
-        id: docker-push-feature
+        id: docker-push-demo
         with:
           team: bidrag
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
@@ -27,6 +27,6 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
-          IMAGE: ${{ steps.docker-push-feature.outputs.image }}
+          IMAGE: ${{ steps.docker-push-demo.outputs.image }}
           RESOURCE: .nais/naiserator.yml
-          VARS: .nais/feature.json
+          VARS: .nais/demo.json
