@@ -1,19 +1,19 @@
 import { BodyShort, Checkbox } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
 import { useEffect, useState } from "react";
-import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import {
-  MAKS_ALDER_KONTANTSTØTTE,
+  MAKS_ALDER_BARNETILLEGG,
   MAKS_ALDER_SMÅBARNSTILLEGG,
   MAKS_ALDER_UTVIDET_BARNETRYGD,
-  MIN_ALDER_KONTANTSTØTTE,
   type BarnebidragSkjema,
   type Bidragstype,
 } from "./schema";
+import Barnetillegg from "./ytelser/BarneTillegg";
+import Kontantstøtte from "./ytelser/Kontantstøtte";
 
-type NavYtelse =
+export type NavYtelse =
   | "utvidet-barnetrygd"
   | "småbarnstillegg"
   | "kontantstøtte"
@@ -36,11 +36,14 @@ export const Ytelser = ({ bidragstype }: Props) => {
   const harBarnUnderSmåbarnstilleggAlder = barn.some(
     (b) => Number(b.alder) <= MAKS_ALDER_SMÅBARNSTILLEGG,
   );
-  const harBarnIKontantstøtteAlder = barn.some(
-    (b) =>
-      Number(b.alder) >= MIN_ALDER_KONTANTSTØTTE &&
-      Number(b.alder) <= MAKS_ALDER_KONTANTSTØTTE,
+
+  // Kontantstøtte er KUN for barn som er nøyaktig 1 år
+  const harBarnIKontantstøtteAlder = barn.some((b) => Number(b.alder) === 1);
+
+  const barnUnder18 = barn.filter(
+    (b) => Number(b.alder) < MAKS_ALDER_BARNETILLEGG,
   );
+  const harBarnUnderBarnetilleggAlder = barnUnder18.length > 0;
 
   // Sjekk om noe barn har delt bosted
   const harDeltBosted = barn.some((b) => b.bosted === "DELT_FAST_BOSTED");
@@ -63,10 +66,21 @@ export const Ytelser = ({ bidragstype }: Props) => {
         deler: "",
         beløp: "",
       });
+
+      form.setValue("ytelser.barnetillegg", {
+        mottar: "",
+        hvemFår: [""],
+        dineBeløpPerBarn: [""],
+        denAndreForelderenBeløp: "",
+      });
+
+      form.setValue("ytelser.delerUtvidetBarnetrygd", "");
+      form.setValue("ytelser.mottarSmåbarnstillegg", "");
+      form.setValue("ytelser.mottarUtvidetBarnetrygd", "");
     }
   }, [harDeltBosted, form]);
 
-  // Initialiser fra skjemaverdier
+  // Initialiser fra skjemaverdier - kjør hver gang form-verdiene endres
   useEffect(() => {
     const ytelser: NavYtelse[] = [];
     if (form.value("ytelser.mottarUtvidetBarnetrygd") === "true") {
@@ -78,12 +92,11 @@ export const Ytelser = ({ bidragstype }: Props) => {
     if (form.value("ytelser.kontantstøtte.mottar") === "true") {
       ytelser.push("kontantstøtte");
     }
-    if (form.value("ytelser.mottarBarnetillegg") === "true") {
+    if (form.value("ytelser.barnetillegg.mottar") === "true") {
       ytelser.push("barnetillegg");
     }
     setValgteYtelser(ytelser);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [form]);
 
   const håndterToggleYtelse = (value: NavYtelse, erValgt: boolean) => {
     const nyeValgteYtelser: NavYtelse[] = erValgt
@@ -106,7 +119,7 @@ export const Ytelser = ({ bidragstype }: Props) => {
       nyeValgteYtelser.includes("kontantstøtte") ? "true" : "false",
     );
     form.setValue(
-      "ytelser.mottarBarnetillegg",
+      "ytelser.barnetillegg.mottar",
       nyeValgteYtelser.includes("barnetillegg") ? "true" : "false",
     );
 
@@ -124,18 +137,19 @@ export const Ytelser = ({ bidragstype }: Props) => {
     if (!nyeValgteYtelser.includes("utvidet-barnetrygd")) {
       form.setValue("ytelser.delerUtvidetBarnetrygd", "");
     }
+
+    // Nullstill barnetillegg hvis det fjernes
+    if (!nyeValgteYtelser.includes("barnetillegg")) {
+      form.setValue("ytelser.barnetillegg", {
+        mottar: "",
+        hvemFår: [""],
+        dineBeløpPerBarn: [],
+        denAndreForelderenBeløp: "",
+      });
+    }
   };
 
-  // Kontantstøtte
   const mottarUtvidetBarnetrygd = valgteYtelser.includes("utvidet-barnetrygd");
-  const mottarKontantstøtteOgHarIkkeDeltBosted =
-    valgteYtelser.includes("kontantstøtte") && !harDeltBosted;
-  const mottarKontantstøtteOgHarDeltBosted =
-    valgteYtelser.includes("kontantstøtte") && harDeltBosted;
-  const delerKontantstøtte =
-    valgteYtelser.includes("kontantstøtte") &&
-    harDeltBosted &&
-    form.value("ytelser.kontantstøtte.deler") === "true";
 
   return (
     <div className="border p-4 rounded-md">
@@ -143,7 +157,7 @@ export const Ytelser = ({ bidragstype }: Props) => {
         <legend className="text-xl mb-2">{t(tekster.felles.overskrift)}</legend>
         <BodyShort>{t(tekster[bidragstype].beskrivelse)}</BodyShort>
 
-        {/* Kontantstøtte */}
+        {/* Kontantstøtte - kun for barn som er 1 år */}
         {harBarnIKontantstøtteAlder && (
           <>
             <Checkbox
@@ -154,48 +168,11 @@ export const Ytelser = ({ bidragstype }: Props) => {
             >
               {t(tekster.felles.alternativer.kontantstøtte)}
             </Checkbox>
-
-            {mottarKontantstøtteOgHarIkkeDeltBosted && (
-              <FormattertTallTextField
-                {...form.field("ytelser.kontantstøtte.beløp").getControlProps()}
-                label={t(
-                  tekster[bidragstype].kontantstøtte.ikkeDeltFastBosted
-                    .hovedSpørsmål,
-                )}
-                error={form.field("ytelser.kontantstøtte.beløp").error()}
-                htmlSize={15}
-                className="pl-8"
-              />
-            )}
-
-            {mottarKontantstøtteOgHarDeltBosted && (
-              <>
-                <JaNeiRadio
-                  {...form.field("ytelser.kontantstøtte.deler").getInputProps()}
-                  legend={t(
-                    tekster[bidragstype].kontantstøtte.deltFastBosted
-                      .hovedSpørsmål,
-                  )}
-                  error={form.field("ytelser.kontantstøtte.deler").error()}
-                  className="pl-8"
-                />
-
-                {delerKontantstøtte && (
-                  <FormattertTallTextField
-                    {...form
-                      .field("ytelser.kontantstøtte.beløp")
-                      .getControlProps()}
-                    label={t(
-                      tekster[bidragstype].kontantstøtte.ikkeDeltFastBosted
-                        .hovedSpørsmål,
-                    )}
-                    error={form.field("ytelser.kontantstøtte.beløp").error()}
-                    htmlSize={15}
-                    className="pl-8"
-                  />
-                )}
-              </>
-            )}
+            <Kontantstøtte
+              valgteYtelser={valgteYtelser}
+              harDeltBosted={harDeltBosted}
+              bidragstype={bidragstype}
+            />
           </>
         )}
 
@@ -227,6 +204,7 @@ export const Ytelser = ({ bidragstype }: Props) => {
         {harBarnUnderSmåbarnstilleggAlder && (
           <Checkbox
             checked={valgteYtelser.includes("småbarnstillegg")}
+            description={t(tekster[bidragstype].småbarnstillegg.beskrivelse)}
             onChange={(e) =>
               håndterToggleYtelse("småbarnstillegg", e.target.checked)
             }
@@ -235,15 +213,24 @@ export const Ytelser = ({ bidragstype }: Props) => {
           </Checkbox>
         )}
 
-        {/* Barnetillegg */}
-        <Checkbox
-          checked={valgteYtelser.includes("barnetillegg")}
-          onChange={(e) =>
-            håndterToggleYtelse("barnetillegg", e.target.checked)
-          }
-        >
-          {t(tekster.felles.alternativer.barnetillegg)}
-        </Checkbox>
+        {/* Barnetillegg - vises bare hvis det finnes barn under 18 år */}
+        {harBarnUnderBarnetilleggAlder && (
+          <>
+            <Checkbox
+              checked={valgteYtelser.includes("barnetillegg")}
+              description={t(tekster.felles.barnetillegg.beskrivelse)}
+              onChange={(e) =>
+                håndterToggleYtelse("barnetillegg", e.target.checked)
+              }
+            >
+              {t(tekster.felles.alternativer.barnetillegg)}
+            </Checkbox>
+            <Barnetillegg
+              valgteYtelser={valgteYtelser}
+              barnUnder18={barnUnder18}
+            />
+          </>
+        )}
       </fieldset>
     </div>
   );
@@ -268,25 +255,11 @@ const tekster = definerTekster({
         nn: "Når du mottar utvida barnetrygd, blir det rekna som ein del av inntekta di. Men sidan barnet har delt bustad, kan de velje å dele utvida barnetrygd. Viss de gjer det, tel berre halvparten av beløpet i utrekninga.",
       },
     },
-    kontantstøtte: {
-      ikkeDeltFastBosted: {
-        hovedSpørsmål: {
-          nb: "Hvor mye mottar du i kontantstøtte for Barn 1 år per måned?",
-          en: "",
-          nn: "",
-        },
-      },
-      deltFastBosted: {
-        hovedSpørsmål: {
-          nb: "Deler du og den andre forelderen kontantstøtten for dette barnet?",
-          en: "",
-          nn: "",
-        },
-        underSpørsmål: {
-          nb: "Hvor mye mottar du i kontantstøtte for Barn 1år per måned?",
-          en: "",
-          nn: "",
-        },
+    småbarnstillegg: {
+      beskrivelse: {
+        nb: "Aktuelt hvis du har full overgangsstønad og barn i alderen 0-3 år",
+        en: "",
+        nn: "",
       },
     },
   },
@@ -301,25 +274,11 @@ const tekster = definerTekster({
       en: "",
       nn: "",
     },
-    kontantstøtte: {
-      ikkeDeltFastBosted: {
-        hovedSpørsmål: {
-          nb: "Hvor mye mottar bidragsmottaker i kontantstøtte for Barn 1 år per måned?",
-          en: "",
-          nn: "",
-        },
-      },
-      deltFastBosted: {
-        hovedSpørsmål: {
-          nb: "Deler du og den andre forelderen kontantstøtten for dette barnet?",
-          en: "",
-          nn: "",
-        },
-        underSpørsmål: {
-          nb: "Hvor mye mottar bidragsmottaker i kontantstøtte for Barn 1år per måned?",
-          en: "",
-          nn: "",
-        },
+    småbarnstillegg: {
+      beskrivelse: {
+        nb: "Aktuelt hvis forelderen har full overgangsstønad og barn i alderen 0-3 år",
+        en: "",
+        nn: "",
       },
     },
   },
@@ -356,6 +315,35 @@ const tekster = definerTekster({
         nb: "Deler du og den andre forelderen den utvidede barnetrygden?",
         en: "",
         nn: "Deler du og den andre forelderen den utvidede barnetrygden?",
+      },
+    },
+    barnetillegg: {
+      beskrivelse: {
+        nb: "Aktuelt for deg som for eksempel har uføretrygd, arbeidsavklaringspenger eller dagpenger",
+        en: "Relevant for you who, for example, have disability pension, work assessment allowance or unemployment benefits",
+        nn: "Aktuelt for deg som til dømes har uføretrygd, arbeidsavklaringspengar eller dagpengar",
+      },
+      hvemFår: {
+        MEG: {
+          nb: "Jeg får utbetalt barnetillegg",
+          en: "I receive child supplement",
+          nn: "Eg får utbetalt barnetillegg",
+        },
+        DEN_ANDRE_FORELDREN: {
+          nb: "Den andre forelderen får utbetalt barnetillegg",
+          en: "The other parent receives child supplement",
+          nn: "Den andre forelderen får utbetalt barnetillegg",
+        },
+      },
+      beløpPerBarn: (alder) => ({
+        nb: `Hvor mye får du utbetalt i barnetillegg for barnet ${alder} år?`,
+        en: `How much child supplement do you receive for the ${alder} year old child?`,
+        nn: `Kor mykje får du utbetalt i barnetillegg for barnet ${alder} år?`,
+      }),
+      denAndreForelderenBeløp: {
+        nb: "Hvor mye får den andre forelderen utbetalt i barnetillegg per måned?",
+        en: "How much child supplement does the other parent receive per month?",
+        nn: "Kor mykje får den andre forelderen utbetalt i barnetillegg per månad?",
       },
     },
   },
