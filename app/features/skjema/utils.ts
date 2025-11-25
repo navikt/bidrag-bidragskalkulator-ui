@@ -116,6 +116,8 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
     betalerBarnebidrageForAndreBarn: "",
     antallBarnBorFast: "",
     borMedAnnenVoksenType: "",
+    borMedBarnOver18: "",
+    antallBarnOver18: "",
   },
   medforelderBoforhold: {
     borMedAnnenVoksen: "",
@@ -123,6 +125,8 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
     betalerBarnebidrageForAndreBarn: "",
     antallBarnBorFast: "",
     borMedAnnenVoksenType: "",
+    borMedBarnOver18: "",
+    antallBarnOver18: "",
   },
   andreBarnUnder12: {
     antall: "0",

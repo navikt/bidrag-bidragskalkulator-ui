@@ -11,6 +11,8 @@ const BOFORHOLD_FIELDS = [
   "antallBarnBorFast",
   "betalerBarnebidrageForAndreBarn",
   "borMedAnnenVoksenType",
+  "borMedBarnOver18",
+  "antallBarnOver18",
 ] as const;
 
 export const Bofohold = () => {

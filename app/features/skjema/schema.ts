@@ -51,6 +51,8 @@ const BarnebidragSkjemaSchema = z.object({
     antallBarnBorFast: z.string(),
     // antallBarnDeltBosted: z.string(),
     borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
+    borMedBarnOver18: z.enum(["true", "false", "", "undefined"]),
+    antallBarnOver18: z.string(),
   }),
   medforelderBoforhold: z.object({
     borMedAnnenVoksen: z.enum(["true", "false", "", "undefined"]),
@@ -59,6 +61,8 @@ const BarnebidragSkjemaSchema = z.object({
     antallBarnBorFast: z.string(),
     // antallBarnDeltBosted: z.string(),
     borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
+    borMedBarnOver18: z.enum(["true", "false", "", "undefined"]),
+    antallBarnOver18: z.string(),
   }),
   andreBarnUnder12: z.object({
     antall: z.string(),
@@ -265,6 +269,12 @@ export const lagBoforholdSkjema = (språk: Språk) => {
       antallBarnBorFast: z.string(),
       // antallBarnDeltBosted: z.string(),
       borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
+      borMedBarnOver18: z
+        .enum(["true", "false", "", "undefined"])
+        .transform((value) =>
+          value === "" || value === "undefined" ? undefined : value === "true",
+        ),
+      antallBarnOver18: z.string(),
     })
     .superRefine((values, ctx) => {
       if (
@@ -296,6 +306,34 @@ export const lagBoforholdSkjema = (språk: Språk) => {
         });
       }
 
+      if (
+        values.borMedAnnenVoksenType === "EGNE_BARN_OVER_18" &&
+        values.borMedBarnOver18 === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.husstandsmedlemmer.borMedBarnOver18.påkrevd,
+          ),
+          path: ["borMedBarnOver18"],
+        });
+      }
+
+      if (
+        values.borMedBarnOver18 === true &&
+        values.antallBarnOver18.trim() === ""
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.husstandsmedlemmer.antallBarnOver18.påkrevd,
+          ),
+          path: ["antallBarnOver18"],
+        });
+      }
+
       // if (values.borMedAndreBarn && values.antallBarnDeltBosted.trim() === "") {
       //   ctx.addIssue({
       //     code: "custom",
@@ -315,6 +353,8 @@ export const lagBoforholdSkjema = (språk: Språk) => {
         antallBarnBorFast: Number(values.antallBarnBorFast.trim() || 0),
         betalerBarnebidrageForAndreBarn: values.betalerBarnebidrageForAndreBarn,
         borMedAnnenVoksenType: values.borMedAnnenVoksenType,
+        borMedBarnOver18: values.borMedBarnOver18,
+        anantallBarnOver18: Number(values.antallBarnOver18.trim() || 0),
         // antallBarnDeltBosted: Number(values.antallBarnDeltBosted.trim() || 0),
       };
     })
@@ -881,6 +921,20 @@ const tekster = definerTekster({
           nb: "Velg et alternativ",
           en: "Choose an option",
           nn: "Vel eit alternativ",
+        },
+      },
+      borMedBarnOver18: {
+        påkrevd: {
+          nb: "Velg et alternativ",
+          en: "Choose an option",
+          nn: "Vel eit alternativ",
+        },
+      },
+      antallBarnOver18: {
+        påkrevd: {
+          nb: "Fyll inn antall barn",
+          en: "Fill in the number of children",
+          nn: "Fyll inn antal barn",
         },
       },
     },

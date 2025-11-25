@@ -7,12 +7,7 @@ import { sporHendelse } from "~/utils/analytics";
 import { BorMedAnnenVoksenTypeSchema, type BarnebidragSkjema } from "./schema";
 import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
-const BOR_MED_ANNEN_VOKSEN_ALTERNATIVER = ["true", "false"] as const;
-const BOR_MED_ANDRE_BARN_ALTERNATIVER = ["true", "false"] as const;
-const BETALER_BARNEBIDRAG_FOR_EGNE_BARN_ALTERNATIVER = [
-  "true",
-  "false",
-] as const;
+const JA_NEI_ALTERNATIVER = ["true", "false"] as const;
 
 type Props = {
   part: "deg" | "medforelder";
@@ -30,6 +25,13 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
 
   const borMedAnnenVoksen =
     form.field(`${skjemagruppe}.borMedAnnenVoksen`).value() === "true";
+
+  const borMedEgneBarnOver18 =
+    form.field(`${skjemagruppe}.borMedAnnenVoksenType`).value() ===
+    "EGNE_BARN_OVER_18";
+
+  const borMedBarnVgs =
+    form.field(`${skjemagruppe}.borMedBarnOver18`).value() === "true";
 
   const vedEndreBorMedAndreBarn = (value: string) => {
     if (value === "false") {
@@ -52,7 +54,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
               direction={{ xs: "column", sm: "row" }}
               wrap={false}
             >
-              {BOR_MED_ANDRE_BARN_ALTERNATIVER.map((alternativ) => {
+              {JA_NEI_ALTERNATIVER.map((alternativ) => {
                 return (
                   <Radio
                     value={alternativ}
@@ -65,12 +67,11 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
                         spørsmål: t(
                           tekster[skjemagruppe].borMedAndreBarn.label,
                         ),
-                        svar: tekster[skjemagruppe].borMedAndreBarn[alternativ]
-                          .nb,
+                        svar: tekster.felles.jaNei[alternativ].nb,
                       });
                     }}
                   >
-                    {t(tekster[skjemagruppe].borMedAndreBarn[alternativ])}
+                    {t(tekster.felles.jaNei[alternativ])}
                   </Radio>
                 );
               })}
@@ -103,7 +104,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
         legend={t(tekster[skjemagruppe].borMedAnnenVoksen.label)}
       >
         <Stack gap="0 6" direction={{ xs: "column", sm: "row" }} wrap={false}>
-          {BOR_MED_ANNEN_VOKSEN_ALTERNATIVER.map((alternativ) => {
+          {JA_NEI_ALTERNATIVER.map((alternativ) => {
             return (
               <Radio
                 value={alternativ}
@@ -113,7 +114,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
                   t(tekster[skjemagruppe].borMedAnnenVoksen.label),
                 )}
               >
-                {t(tekster[skjemagruppe].borMedAnnenVoksen[alternativ])}
+                {t(tekster.felles.jaNei[alternativ])}
               </Radio>
             );
           })}
@@ -137,6 +138,43 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
               );
             })}
           </RadioGroup>
+
+          {borMedEgneBarnOver18 && (
+            <>
+              <RadioGroup
+                {...form
+                  .field(`${skjemagruppe}.borMedBarnOver18`)
+                  .getInputProps()}
+                error={form.field(`${skjemagruppe}.borMedBarnOver18`).error()}
+                legend={t(tekster[skjemagruppe].borMedBarnOver18.label)}
+              >
+                <Stack
+                  gap="0 6"
+                  direction={{ xs: "column", sm: "row" }}
+                  wrap={false}
+                >
+                  {JA_NEI_ALTERNATIVER.map((alternativ) => {
+                    return (
+                      <Radio value={alternativ} key={alternativ}>
+                        {t(tekster.felles.jaNei[alternativ])}
+                      </Radio>
+                    );
+                  })}
+                </Stack>
+              </RadioGroup>
+
+              {borMedBarnVgs && (
+                <FormattertTallTextField
+                  {...form
+                    .field(`${skjemagruppe}.antallBarnOver18`)
+                    .getControlProps()}
+                  label={t(tekster[skjemagruppe].antallBarnOver18.label)}
+                  error={form.field(`${skjemagruppe}.antallBarnOver18`).error()}
+                  htmlSize={8}
+                />
+              )}
+            </>
+          )}
         </>
       )}
 
@@ -153,7 +191,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
         )}
       >
         <Stack gap="0 6" direction={{ xs: "column", sm: "row" }} wrap={false}>
-          {BETALER_BARNEBIDRAG_FOR_EGNE_BARN_ALTERNATIVER.map((alternativ) => {
+          {JA_NEI_ALTERNATIVER.map((alternativ) => {
             return (
               <Radio
                 value={alternativ}
@@ -163,7 +201,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
                   t(tekster[skjemagruppe].borMedAnnenVoksen.label),
                 )}
               >
-                {t(tekster[skjemagruppe].borMedAnnenVoksen[alternativ])}
+                {t(tekster.felles.jaNei[alternativ])}
               </Radio>
             );
           })}
@@ -210,32 +248,12 @@ const tekster = definerTekster({
         nn: "",
         en: "",
       },
-      true: {
-        nb: "Ja",
-        nn: "Ja",
-        en: "Yes",
-      },
-      false: {
-        nb: "Nei",
-        nn: "Nei",
-        en: "No",
-      },
     },
     borMedAndreBarn: {
       label: {
         nb: "Har du andre egne barn under 18 år som bor fast hos deg",
         nn: "",
         en: "",
-      },
-      true: {
-        nb: "Ja",
-        nn: "Ja",
-        en: "Yes",
-      },
-      false: {
-        nb: "Nei",
-        nn: "Nei",
-        en: "No",
       },
     },
     barnebidragForAndreEgneBarn: {
@@ -270,6 +288,20 @@ const tekster = definerTekster({
     borSammenMed: {
       label: {
         nb: "Hvem bor du sammen med?",
+        nn: "",
+        en: "",
+      },
+    },
+    borMedBarnOver18: {
+      label: {
+        nb: "Bor du sammen med egne barn som går på videregående skole?",
+        nn: "",
+        en: "",
+      },
+    },
+    antallBarnOver18: {
+      label: {
+        nb: "Antall barn som går på videregående skole",
         nn: "",
         en: "",
       },
@@ -311,32 +343,12 @@ const tekster = definerTekster({
         nn: "",
         en: "",
       },
-      true: {
-        nb: "Ja",
-        nn: "Ja",
-        en: "Yes",
-      },
-      false: {
-        nb: "Nei",
-        nn: "Nei",
-        en: "No",
-      },
     },
     borMedAndreBarn: {
       label: {
         nb: "Har bidragspliktig andre egne barn under 18 år som bor fast hos seg?",
         nn: "",
         en: "",
-      },
-      true: {
-        nb: "Ja",
-        nn: "Ja",
-        en: "Yes",
-      },
-      false: {
-        nb: "Nei",
-        nn: "Nei",
-        en: "No",
       },
     },
     barnebidragForAndreEgneBarn: {
@@ -373,6 +385,34 @@ const tekster = definerTekster({
         nb: "Hvem bor bidragspliktig sammen med?",
         nn: "",
         en: "",
+      },
+    },
+    borMedBarnOver18: {
+      label: {
+        nb: "Bor bidragspliktig sammen med egne barn som går på videregående skole?",
+        nn: "",
+        en: "",
+      },
+    },
+    antallBarnOver18: {
+      label: {
+        nb: "Antall barn som går på videregående skole",
+        nn: "",
+        en: "",
+      },
+    },
+  },
+  felles: {
+    jaNei: {
+      true: {
+        nb: "Ja",
+        nn: "Ja",
+        en: "Yes",
+      },
+      false: {
+        nb: "Nei",
+        nn: "Nei",
+        en: "No",
       },
     },
   },

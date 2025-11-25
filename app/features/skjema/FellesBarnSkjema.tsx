@@ -100,7 +100,7 @@ export const FellesBarnSkjema = () => {
 
         <Button
           type="button"
-          variant="secondary"
+          variant="primary"
           size="small"
           onClick={handleLeggTilBarn}
           icon={<PlusIcon aria-hidden />}
