@@ -33,7 +33,6 @@ export const hentBarnebidragsutregningFraApi = async ({
         body: JSON.stringify(requestData),
       },
     );
-
     if (!response.ok) {
       console.error(await response.text());
       return {
