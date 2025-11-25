@@ -133,6 +133,7 @@ export const Ytelser = ({ bidragstype }: Props) => {
                 label={t(tekster[bidragstype].kontantstøtte.beløpLabel)}
                 error={form.field("ytelser.kontantstøtteBeløp").error()}
                 htmlSize={15}
+                className="pl-8"
               />
             )}
           </>
@@ -155,6 +156,7 @@ export const Ytelser = ({ bidragstype }: Props) => {
                   .getInputProps()}
                 legend={t(tekster.felles.utvidetBarnetrygd.delingSpørsmål)}
                 error={form.field("ytelser.delerUtvidetBarnetrygd").error()}
+                className="pl-8"
               >
                 <Stack
                   gap="space-0 space-24"

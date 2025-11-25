@@ -51,6 +51,7 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
           legend={t(tekster[bidragstype].mottarStønadTilBarnetilsyn)}
           {...barnField.getControlProps("mottarStønadTilBarnetilsyn")}
           error={barnField.error("mottarStønadTilBarnetilsyn")}
+          className="pl-8"
         >
           <Stack
             gap="space-0 space-24"
@@ -68,6 +69,7 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
           legend={t(tekster.barnepassType.spørsmål)}
           {...barnField.getControlProps("barnepassSituasjon")}
           error={barnField.error("barnepassSituasjon")}
+          className="pl-8"
         >
           <Stack
             gap="space-0 space-24"
@@ -85,7 +87,8 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
           {...barnField.getControlProps("barnetilsynsutgift")}
           label={t(tekster[bidragstype].barnepassUtgifterBeløp)}
           error={barnField.field("barnetilsynsutgift").error()}
-          htmlSize={12}
+          htmlSize={10}
+          className="pl-8"
         />
       )}
     </>
