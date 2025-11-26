@@ -12,7 +12,9 @@ metadata:
     
 spec:
   ingresses:
-    - {{ INGRESS }}
+  {{#each INGRESSES as |url|}}
+     - {{url}}
+  {{/each}}
       
   image: {{ image }}
   port: 3000
