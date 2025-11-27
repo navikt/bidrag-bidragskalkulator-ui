@@ -28,8 +28,7 @@ export function Samvær({ barnIndex }: SamværProps) {
       : t(tekster.samvær.netter(samvær));
 
   const bosted = barnField.value("bosted");
-  const borHosMeg = bosted === "HOS_MEG";
-  const borHosMedforelder = bosted === "HOS_MEDFORELDER";
+  const harSamværsavtale = bosted === "HAR_SAMVÆRSAVTALE";
   const alder = barnField.value("alder");
 
   const sporSamvær = (verdi: string) => {
@@ -70,31 +69,7 @@ export function Samvær({ barnIndex }: SamværProps) {
         })}
       </RadioGroup>
 
-      {borHosMeg && (
-        <Slider
-          {...barnField.field("samvær").getControlProps({
-            onChange: sporSamvær,
-          })}
-          label={t(tekster.samvær.label)}
-          description={t(tekster.samvær.beskrivelse)}
-          error={barnField.field("samvær").error()}
-          min={15}
-          max={30}
-          step={1}
-          list={[
-            {
-              label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosDeg),
-              value: 15,
-            },
-            {
-              label: t(tekster.samvær.beskrivelser.alleNetterHosDeg),
-              value: 30,
-            },
-          ]}
-          valueDescription={samværsgradBeskrivelse}
-        />
-      )}
-      {borHosMedforelder && (
+      {harSamværsavtale && (
         <Slider
           {...barnField.field("samvær").getControlProps({
             onChange: sporSamvær,
@@ -103,16 +78,16 @@ export function Samvær({ barnIndex }: SamværProps) {
           description={t(tekster.samvær.beskrivelse)}
           error={barnField.field("samvær").error()}
           min={0}
-          max={15}
+          max={30}
           step={1}
           list={[
             {
-              label: t(tekster.samvær.beskrivelser.ingenNetterHosDeg),
+              label: t(tekster.samvær.beskrivelser.ingenSamvær),
               value: 0,
             },
             {
-              label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosDeg),
-              value: 15,
+              label: t(tekster.samvær.beskrivelser.alleNetterSamvær),
+              value: 30,
             },
           ]}
           valueDescription={samværsgradBeskrivelse}
@@ -136,9 +111,10 @@ export function Samvær({ barnIndex }: SamværProps) {
 const tekster = definerTekster({
   bosted: {
     label: {
-      nb: "Hvor bor barnet?",
-      en: "Where is the child living?",
-      nn: "Kor bur barnet?",
+      nb: "Hvilken avtale har dere for hvordan barnet bor?",
+      // TODO: oppdatert teksten
+      en: "What agreement do you have for how the child lives?",
+      nn: "Kva avtale har de for korleis barnet bur?",
     },
     valg: {
       velg: {
@@ -147,19 +123,16 @@ const tekster = definerTekster({
         nn: "Velg kvar barnet skal bu",
       },
       DELT_FAST_BOSTED: {
-        nb: "Vi har en juridisk bindende avtale om delt fast bosted",
-        en: "We have a legally binding agreement on shared permanent residence",
-        nn: "Vi har ein juridisk bindande avtale om delt fast bustad",
+        nb: "Vi har en skriftlig avtale om delt fast bosted",
+        // TODO: oppdatert teksten
+        en: "We have a written agreement on shared permanent residence",
+        nn: "Vi har ein skriftleg avtale om delt fast bustad",
       },
-      HOS_MEG: {
-        nb: "Barnet bor fast hos meg, og har samvær med den andre forelderen",
-        en: "The child has permanent residence with me and has visitation with their other parent",
-        nn: "Barnet bur fast hos meg, og har samvær med den andre forelderen",
-      },
-      HOS_MEDFORELDER: {
-        nb: "Barnet bor fast hos den andre forelderen, og har samvær med meg",
-        en: "The child has permanent residence with their other parent and has visitation with me",
-        nn: "Barnet bur fast hos den andre forelderen, og har samvær med meg",
+      HAR_SAMVÆRSAVTALE: {
+        nb: "Vi har en samværsavtale",
+        // TODO: oppdatert teksten
+        en: "e have a visitation agreement",
+        nn: "Vi har ei samværsavtale",
       },
     },
   },
@@ -175,12 +148,14 @@ const tekster = definerTekster({
       nn: "Estimer kor mange netter barnet vil vere hos deg i snitt per månad",
     },
     netter: (antall) => ({
-      nb: `${antall} netter hos deg`,
-      en: `${antall} nights with you`,
-      nn: `${antall} netter hos deg`,
+      nb: `Barnet bor ${antall} netter hos deg`,
+      //TODO: sjekk teksten
+      en: `The child lives ${antall} nights with you`,
+      nn: `Barnet bur ${antall} netter hos deg`,
     }),
     enNatt: {
-      nb: "1 natt hos deg",
+      nb: "Barnet bor 1 natt hos deg",
+      //TODO: sjekk teksten
       en: "1 night with you",
       nn: "1 natt hos deg",
     },
@@ -190,15 +165,17 @@ const tekster = definerTekster({
         en: "No nights with you",
         nn: "Ingen netter hos deg",
       },
-      halvpartenAvTidenHosDeg: {
-        nb: "Halvparten av nettene hos deg",
-        en: "Half the nights with you",
-        nn: "Halvparten av nettene hos deg",
+      ingenSamvær: {
+        nb: "0 netter hos deg",
+        //TODO: sjekk teksten
+        en: "0 nights with you",
+        nn: "0 netter hos deg",
       },
-      alleNetterHosDeg: {
-        nb: "Alle netter hos deg",
-        en: "All the nights with you",
-        nn: "Alle netter hos deg",
+      alleNetterSamvær: {
+        nb: "30 netter hos deg",
+        //TODO: sjekk teksten
+        en: "30 days with you",
+        nn: "30 netter hos deg",
       },
     },
   },
