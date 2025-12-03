@@ -1,5 +1,6 @@
 name: Deploy release til prod
 on:
+  workflow_dispatch:
   release:
     types: [published]
 
@@ -22,7 +23,7 @@ jobs:
           team: bidrag
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN_2 }}
+          build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
       - name: Deploy til nais
         uses: nais/deploy/actions/deploy@v2
         env:
