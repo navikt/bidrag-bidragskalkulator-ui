@@ -1,22 +1,11 @@
 import { PersonCrossIcon } from "@navikt/aksel-icons";
-import { BodyLong, Button, List, ReadMore, TextField } from "@navikt/ds-react";
-import { ListItem } from "@navikt/ds-react/List";
+import { Button, TextField } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
-import { useMemo } from "react";
-import { useKalkulatorgrunnlagsdata } from "~/routes/kalkulator";
-import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { formatterSum } from "~/utils/tall";
-import { FormattertTallTextField } from "../../components/ui/FormattertTallTextField";
+import BarnEgenInntekt from "./BarnEgenInntekt";
 import { Samvær } from "./samvær/Samvær";
-import {
-  MAKS_ALDER_BARNETILSYNSUTGIFT,
-  type BarnebidragSkjema,
-} from "./schema";
-import {
-  sporKalkulatorSpørsmålBesvart,
-  tilBoOgForbruksutgiftsgrupperMedLabel,
-} from "./utils";
+import { type BarnebidragSkjema } from "./schema";
+import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
 type Props = {
   barnIndex: number;
@@ -24,29 +13,14 @@ type Props = {
 };
 
 export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
-  const {
-    kalkulatorGrunnlagsdata: { boOgForbruksutgifter },
-  } = useKalkulatorgrunnlagsdata();
   const { t } = useOversettelse();
   const form = useFormContext<BarnebidragSkjema>();
 
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
 
   const alder = barnField.value("alder");
-  const visSpørsmålOmBarnetilsynsutgift =
-    barnField.field("alder").touched() &&
-    Number(alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT;
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
-
-  const boOgForbruksutgiftsgrupper = useMemo(
-    () =>
-      tilBoOgForbruksutgiftsgrupperMedLabel(boOgForbruksutgifter, {
-        årEntall: t(tekster.år.entall),
-        årFlertall: t(tekster.år.flertall),
-      }),
-    [boOgForbruksutgifter, t],
-  );
 
   return (
     <fieldset className="p-0 space-y-4">
@@ -65,57 +39,10 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
         autoComplete="off"
       />
 
-      <ReadMore
-        header={t(tekster.alder.lesMer.tittel)}
-        onOpenChange={(open) => {
-          if (open) {
-            sporHendelse({
-              hendelsetype: "les mer utvidet",
-              tekst: t(tekster.alder.lesMer.tittel),
-              id: "kalkulator-barnets-alder",
-            });
-          }
-        }}
-      >
-        <BodyLong className="mb-6">
-          {t(tekster.alder.lesMer.beskrivelse)}
-        </BodyLong>
-        <BodyLong className="mb-6" spacing>
-          {t(tekster.alder.lesMer.beskrivelse2)}
-        </BodyLong>
-        <List>
-          {boOgForbruksutgiftsgrupper.map(
-            ({ label, boOgForbruksutgift, aldre }) => {
-              const fremhevGruppe =
-                barnField.field("alder").touched() &&
-                aldre.includes(Number(alder));
-              return (
-                <ListItem key={label}>
-                  <span
-                    className={fremhevGruppe ? "font-bold" : undefined}
-                  >{`${label}: ${formatterSum(boOgForbruksutgift)}`}</span>
-                </ListItem>
-              );
-            },
-          )}
-        </List>
-      </ReadMore>
-
       <Samvær barnIndex={barnIndex} />
 
-      {visSpørsmålOmBarnetilsynsutgift && (
-        <FormattertTallTextField
-          {...barnField.field("barnetilsynsutgift").getControlProps()}
-          label={t(tekster.barnetilsynsutgift.label)}
-          onBlur={sporKalkulatorSpørsmålBesvart(
-            "barn-barnepass",
-            t(tekster.barnetilsynsutgift.label),
-          )}
-          description={t(tekster.barnetilsynsutgift.description)}
-          htmlSize={18}
-          error={barnField.field("barnetilsynsutgift").error()}
-        />
-      )}
+      <BarnEgenInntekt barnIndex={barnIndex} />
+
       {onFjernBarn && (
         <Button
           type="button"

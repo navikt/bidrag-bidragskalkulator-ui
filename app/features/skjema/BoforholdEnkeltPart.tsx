@@ -4,11 +4,10 @@ import { FormattertTallTextField } from "../../components/ui/FormattertTallTextF
 
 import { Radio, RadioGroup, Stack } from "@navikt/ds-react";
 import { sporHendelse } from "~/utils/analytics";
-import type { BarnebidragSkjema } from "./schema";
+import { BorMedAnnenVoksenTypeSchema, type BarnebidragSkjema } from "./schema";
 import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
-const BOR_MED_ANNEN_VOKSEN_ALTERNATIVER = ["true", "false"] as const;
-const BOR_MED_ANDRE_BARN_ALTERNATIVER = ["true", "false"] as const;
+const JA_NEI_ALTERNATIVER = ["true", "false"] as const;
 
 type Props = {
   part: "deg" | "medforelder";
@@ -24,38 +23,29 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
   const borMedAndreBarn =
     form.field(`${skjemagruppe}.borMedAndreBarn`).value() === "true";
 
+  const borMedAnnenVoksen =
+    form.field(`${skjemagruppe}.borMedAnnenVoksen`).value() === "true";
+
+  const borMedEgneBarnOver18 =
+    form.field(`${skjemagruppe}.borMedAnnenVoksenType`).value() ===
+    "EGNE_BARN_OVER_18";
+
+  const borMedBarnVgs =
+    form.field(`${skjemagruppe}.borMedBarnOver18`).value() === "true";
+
+  const harAlleredeBarnebidrag =
+    form.field(`${skjemagruppe}.betalerBarnebidrageForAndreBarn`).value() ===
+    "true";
+
   const vedEndreBorMedAndreBarn = (value: string) => {
     if (value === "false") {
       form.resetField(`${skjemagruppe}.antallBarnBorFast`);
-      form.resetField(`${skjemagruppe}.antallBarnDeltBosted`);
     }
   };
 
   return (
     <fieldset className="p-0 flex flex-col gap-4">
       <legend className="sr-only">{t(tekster[skjemagruppe].tittel)}</legend>
-      <RadioGroup
-        {...form.field(`${skjemagruppe}.borMedAnnenVoksen`).getInputProps()}
-        error={form.field(`${skjemagruppe}.borMedAnnenVoksen`).error()}
-        legend={t(tekster[skjemagruppe].borMedAnnenVoksen.label)}
-      >
-        <Stack gap="0 6" direction={{ xs: "column", sm: "row" }} wrap={false}>
-          {BOR_MED_ANNEN_VOKSEN_ALTERNATIVER.map((alternativ) => {
-            return (
-              <Radio
-                value={alternativ}
-                key={alternativ}
-                onChange={sporKalkulatorSpørsmålBesvart(
-                  `${part}-bor-med-voksen`,
-                  t(tekster[skjemagruppe].borMedAnnenVoksen.label),
-                )}
-              >
-                {t(tekster[skjemagruppe].borMedAnnenVoksen[alternativ])}
-              </Radio>
-            );
-          })}
-        </Stack>
-      </RadioGroup>
 
       <RadioGroup
         {...form.field(`${skjemagruppe}.borMedAndreBarn`).getInputProps({
@@ -68,7 +58,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
               direction={{ xs: "column", sm: "row" }}
               wrap={false}
             >
-              {BOR_MED_ANDRE_BARN_ALTERNATIVER.map((alternativ) => {
+              {JA_NEI_ALTERNATIVER.map((alternativ) => {
                 return (
                   <Radio
                     value={alternativ}
@@ -81,12 +71,11 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
                         spørsmål: t(
                           tekster[skjemagruppe].borMedAndreBarn.label,
                         ),
-                        svar: tekster[skjemagruppe].borMedAndreBarn[alternativ]
-                          .nb,
+                        svar: tekster.felles.jaNei[alternativ].nb,
                       });
                     }}
                   >
-                    {t(tekster[skjemagruppe].borMedAndreBarn[alternativ])}
+                    {t(tekster.felles.jaNei[alternativ])}
                   </Radio>
                 );
               })}
@@ -109,24 +98,136 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
               t(tekster[skjemagruppe].antallBarnBorFast.label),
             )}
             htmlSize={8}
-          />
-
-          <FormattertTallTextField
-            {...form
-              .field(`${skjemagruppe}.antallBarnDeltBosted`)
-              .getControlProps()}
-            label={t(tekster[skjemagruppe].antallBarnDeltBosted.label)}
-            error={form.field(`${skjemagruppe}.antallBarnDeltBosted`).error()}
-            description={t(
-              tekster[skjemagruppe].antallBarnDeltBosted.beskrivelse,
-            )}
-            onBlur={sporKalkulatorSpørsmålBesvart(
-              `${part}-antall-barn-bor-delt-bosted`,
-              t(tekster[skjemagruppe].antallBarnDeltBosted.label),
-            )}
-            htmlSize={8}
+            className="pl-8"
           />
         </>
+      )}
+
+      <RadioGroup
+        {...form.field(`${skjemagruppe}.borMedAnnenVoksen`).getInputProps()}
+        error={form.field(`${skjemagruppe}.borMedAnnenVoksen`).error()}
+        legend={t(tekster[skjemagruppe].borMedAnnenVoksen.label)}
+      >
+        <Stack gap="0 6" direction={{ xs: "column", sm: "row" }} wrap={false}>
+          {JA_NEI_ALTERNATIVER.map((alternativ) => {
+            return (
+              <Radio
+                value={alternativ}
+                key={alternativ}
+                onChange={sporKalkulatorSpørsmålBesvart(
+                  `${part}-bor-med-voksen`,
+                  t(tekster[skjemagruppe].borMedAnnenVoksen.label),
+                )}
+              >
+                {t(tekster.felles.jaNei[alternativ])}
+              </Radio>
+            );
+          })}
+        </Stack>
+      </RadioGroup>
+
+      {borMedAnnenVoksen && (
+        <>
+          <RadioGroup
+            {...form
+              .field(`${skjemagruppe}.borMedAnnenVoksenType`)
+              .getInputProps()}
+            error={form.field(`${skjemagruppe}.borMedAnnenVoksenType`).error()}
+            legend={t(tekster[skjemagruppe].borSammenMed.label)}
+            className="pl-8"
+          >
+            {BorMedAnnenVoksenTypeSchema.options.map((alternativ) => {
+              return (
+                <Radio value={alternativ} key={alternativ}>
+                  {t(tekster[skjemagruppe].borMedAnnenVoksenType[alternativ])}
+                </Radio>
+              );
+            })}
+          </RadioGroup>
+
+          {borMedEgneBarnOver18 && (
+            <>
+              <RadioGroup
+                {...form
+                  .field(`${skjemagruppe}.borMedBarnOver18`)
+                  .getInputProps()}
+                error={form.field(`${skjemagruppe}.borMedBarnOver18`).error()}
+                legend={t(tekster[skjemagruppe].borMedBarnOver18.label)}
+                className="pl-8"
+              >
+                <Stack
+                  gap="0 6"
+                  direction={{ xs: "column", sm: "row" }}
+                  wrap={false}
+                >
+                  {JA_NEI_ALTERNATIVER.map((alternativ) => {
+                    return (
+                      <Radio value={alternativ} key={alternativ}>
+                        {t(tekster.felles.jaNei[alternativ])}
+                      </Radio>
+                    );
+                  })}
+                </Stack>
+              </RadioGroup>
+
+              {borMedBarnVgs && (
+                <FormattertTallTextField
+                  {...form
+                    .field(`${skjemagruppe}.antallBarnOver18`)
+                    .getControlProps()}
+                  label={t(tekster[skjemagruppe].antallBarnOver18.label)}
+                  error={form.field(`${skjemagruppe}.antallBarnOver18`).error()}
+                  htmlSize={8}
+                  className="pl-8"
+                />
+              )}
+            </>
+          )}
+        </>
+      )}
+
+      <RadioGroup
+        {...form
+          .field(`${skjemagruppe}.betalerBarnebidrageForAndreBarn`)
+          .getInputProps()}
+        error={form
+          .field(`${skjemagruppe}.betalerBarnebidrageForAndreBarn`)
+          .error()}
+        legend={t(tekster[skjemagruppe].barnebidragForAndreEgneBarn.label)}
+        description={t(
+          tekster[skjemagruppe].barnebidragForAndreEgneBarn.beskrivelse,
+        )}
+      >
+        <Stack gap="0 6" direction={{ xs: "column", sm: "row" }} wrap={false}>
+          {JA_NEI_ALTERNATIVER.map((alternativ) => {
+            return (
+              <Radio
+                value={alternativ}
+                key={alternativ}
+                onChange={sporKalkulatorSpørsmålBesvart(
+                  `${part}-bor-med-voksen`,
+                  t(tekster[skjemagruppe].borMedAnnenVoksen.label),
+                )}
+              >
+                {t(tekster.felles.jaNei[alternativ])}
+              </Radio>
+            );
+          })}
+        </Stack>
+      </RadioGroup>
+
+      {harAlleredeBarnebidrag && (
+        <FormattertTallTextField
+          {...form
+            .field(`${skjemagruppe}.andreBarnebidragerPerMåned`)
+            .getControlProps()}
+          label={t(tekster[skjemagruppe].andreBarnebidragerPerMåned.label)}
+          error={form
+            .field(`${skjemagruppe}.andreBarnebidragerPerMåned`)
+            .error()}
+          htmlSize={10}
+          className="pl-8"
+        />
       )}
     </fieldset>
   );
@@ -141,9 +242,9 @@ const tekster = definerTekster({
     },
     antallBarnBorFast: {
       label: {
-        nb: "Antall egne barn under 18 år som bor fast hos deg",
-        nn: "Antal eigne barn under 18 år som bur fast hos deg",
-        en: "Number of children of your own under 18 years with permanent residency living with you",
+        nb: "Hvor mange andre egne barn bor fast hos deg?",
+        nn: "",
+        en: "",
       },
       beskrivelse: {
         nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
@@ -165,36 +266,73 @@ const tekster = definerTekster({
     },
     borMedAnnenVoksen: {
       label: {
-        nb: "Bor du med en annen voksen?",
-        nn: "Bur du med ein annan vaksen?",
-        en: "Do you live with another adult?",
-      },
-      true: {
-        nb: "Ja",
-        nn: "Ja",
-        en: "Yes",
-      },
-      false: {
-        nb: "Nei",
-        nn: "Nei",
-        en: "No",
+        nb: "Bor du sammen med voksne over 18 år?",
+        nn: "",
+        en: "",
       },
     },
     borMedAndreBarn: {
       label: {
-        nb: "Bor du med andre egne barn enn de som er nevnt over?",
-        nn: "Bur du med andre eigne barn enn dei som er nemnde over?",
-        en: "Do you live with other children of your own, than those previously mentioned in the calculator?",
+        nb: "Har du andre egne barn under 18 år som bor fast hos deg",
+        nn: "",
+        en: "",
       },
-      true: {
-        nb: "Ja",
-        nn: "Ja",
-        en: "Yes",
+    },
+    barnebidragForAndreEgneBarn: {
+      label: {
+        nb: "Betaler du barnebidrag for andre egne barn?",
+        nn: "",
+        en: "",
       },
-      false: {
-        nb: "Nei",
-        nn: "Nei",
-        en: "No",
+      beskrivelse: {
+        nb: "Dette kan være barn over 18 år, eller samboer/ektefelle",
+        nn: "",
+        en: "",
+      },
+    },
+    borMedAnnenVoksenType: {
+      label: {
+        nb: "Hvem bor du sammen med?",
+        nn: "",
+        en: "",
+      },
+      SAMBOER_ELLER_EKTEFELLE: {
+        nb: "Samboer eller ektefelle",
+        nn: "",
+        en: "",
+      },
+      EGNE_BARN_OVER_18: {
+        nb: "Egne barn over 18 år",
+        nn: "",
+        en: "",
+      },
+    },
+    borSammenMed: {
+      label: {
+        nb: "Hvem bor du sammen med?",
+        nn: "",
+        en: "",
+      },
+    },
+    borMedBarnOver18: {
+      label: {
+        nb: "Bor du sammen med egne barn som går på videregående skole?",
+        nn: "",
+        en: "",
+      },
+    },
+    antallBarnOver18: {
+      label: {
+        nb: "Antall barn som går på videregående skole",
+        nn: "",
+        en: "",
+      },
+    },
+    andreBarnebidragerPerMåned: {
+      label: {
+        nb: "Hvor mye betaler bidragspliktig] totalt i barnebidrag for andre egne barn per måned?",
+        nn: "",
+        en: "",
       },
     },
   },
@@ -202,13 +340,13 @@ const tekster = definerTekster({
     tittel: {
       nb: "Den andre forelderen sin bosituasjon",
       en: "The other parent's housing situation",
-      nn: "Den andre forelderen sin busituasjon",
+      nn: "bidragspliktig sin busituasjon",
     },
     antallBarnBorFast: {
       label: {
-        nb: "Antall egne barn under 18 år som bor fast hos den andre forelderen",
-        nn: "Antal eigne barn under 18 år som bur fast hos den andre forelderen",
-        en: "Number of own children under 18 years, with permanent residence living with the other parent",
+        nb: "Hvor mange andre egne barn bor fast hos bidragspliktig?",
+        nn: "",
+        en: "",
       },
       beskrivelse: {
         nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
@@ -218,8 +356,8 @@ const tekster = definerTekster({
     },
     antallBarnDeltBosted: {
       label: {
-        nb: "Antall egne barn under 18 år med delt bosted hos den andre forelderen",
-        nn: "Antal eigne barn under 18 år med delt bustad hos den andre forelderen",
+        nb: "Antall egne barn under 18 år med delt bosted hos bidragspliktig",
+        nn: "Antal eigne barn under 18 år med delt bustad hos bidragspliktig",
         en: "Number of own children under 18 years, with shared permanent residence living with the other parent",
       },
       beskrivelse: {
@@ -230,27 +368,78 @@ const tekster = definerTekster({
     },
     borMedAnnenVoksen: {
       label: {
-        nb: "Bor den andre forelderen med en annen voksen?",
-        nn: "Bur den andre forelderen med ein annan vaksen?",
-        en: "Does the other parent live with another adult?",
-      },
-      true: {
-        nb: "Ja",
-        nn: "Ja",
-        en: "Yes",
-      },
-      false: {
-        nb: "Nei",
-        nn: "Nei",
-        en: "No",
+        nb: "Bor bidragsplikitig sammen med voksne over 18 år?",
+        nn: "",
+        en: "",
       },
     },
     borMedAndreBarn: {
       label: {
-        nb: "Bor den andre forelderen med andre egne barn enn de som er nevnt over?",
-        nn: "Bur den andre forelderen med andre eigne barn enn dei som er nemnde over?",
-        en: "Does the other parent live with other children of their own, than those previously mentioned in the calculator?",
+        nb: "Har bidragspliktig andre egne barn under 18 år som bor fast hos seg?",
+        nn: "",
+        en: "",
       },
+    },
+    barnebidragForAndreEgneBarn: {
+      label: {
+        nb: "Betaler bidragspliktig barnebidrag for andre egne barn?",
+        nn: "",
+        en: "",
+      },
+      beskrivelse: {
+        nb: "Dette kan være barn over 18 år, eller samboer/ektefelle",
+        nn: "",
+        en: "",
+      },
+    },
+    borMedAnnenVoksenType: {
+      label: {
+        nb: "Hvem bor bidragspliktig sammen med?",
+        nn: "",
+        en: "",
+      },
+      SAMBOER_ELLER_EKTEFELLE: {
+        nb: "Samboer eller ektefelle",
+        nn: "",
+        en: "",
+      },
+      EGNE_BARN_OVER_18: {
+        nb: "Egne barn over 18 år",
+        nn: "",
+        en: "",
+      },
+    },
+    borSammenMed: {
+      label: {
+        nb: "Hvem bor bidragspliktig sammen med?",
+        nn: "",
+        en: "",
+      },
+    },
+    borMedBarnOver18: {
+      label: {
+        nb: "Bor bidragspliktig sammen med egne barn som går på videregående skole?",
+        nn: "",
+        en: "",
+      },
+    },
+    antallBarnOver18: {
+      label: {
+        nb: "Antall barn som går på videregående skole",
+        nn: "",
+        en: "",
+      },
+    },
+    andreBarnebidragerPerMåned: {
+      label: {
+        nb: "Hvor mye betaler bidragspliktig] totalt i barnebidrag for andre egne barn per måned?",
+        nn: "",
+        en: "",
+      },
+    },
+  },
+  felles: {
+    jaNei: {
       true: {
         nb: "Ja",
         nn: "Ja",

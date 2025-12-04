@@ -14,7 +14,7 @@ import {
   type FastBostedSchema,
 } from "./schema";
 
-export const SAMVÆR_STANDARDVERDI = "15";
+export const SAMVÆR_STANDARDVERDI = "0";
 
 type BoOgForbruksutgiftsgrupper = {
   boOgForbruksutgift: number;
@@ -96,7 +96,12 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
       alder: "",
       bosted: "",
       samvær: SAMVÆR_STANDARDVERDI,
+      harBarnetilsynsutgift: "",
+      mottarStønadTilBarnetilsyn: "",
       barnetilsynsutgift: "",
+      barnepassSituasjon: "",
+      harEgenInntekt: "",
+      inntektPerMåned: "",
     },
   ],
   deg: {
@@ -108,14 +113,42 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
   dittBoforhold: {
     borMedAnnenVoksen: "",
     borMedAndreBarn: "",
+    betalerBarnebidrageForAndreBarn: "",
     antallBarnBorFast: "",
-    antallBarnDeltBosted: "",
+    borMedAnnenVoksenType: "",
+    borMedBarnOver18: "",
+    antallBarnOver18: "",
+    andreBarnebidragerPerMåned: "",
   },
   medforelderBoforhold: {
     borMedAnnenVoksen: "",
     borMedAndreBarn: "",
+    betalerBarnebidrageForAndreBarn: "",
     antallBarnBorFast: "",
-    antallBarnDeltBosted: "",
+    borMedAnnenVoksenType: "",
+    borMedBarnOver18: "",
+    antallBarnOver18: "",
+    andreBarnebidragerPerMåned: "",
+  },
+  andreBarnUnder12: {
+    antall: "0",
+    tilsynsutgifter: [],
+  },
+  ytelser: {
+    mottarUtvidetBarnetrygd: "",
+    delerUtvidetBarnetrygd: "",
+    mottarSmåbarnstillegg: "",
+    kontantstøtte: {
+      mottar: "",
+      deler: "",
+      beløp: "",
+    },
+    barnetillegg: {
+      mottar: "",
+      hvemFår: [""],
+      dineBeløpPerBarn: [""],
+      denAndreForelderenBeløp: "",
+    },
   },
 };
 
@@ -178,14 +211,45 @@ export const kalkulerSamværsklasse = (
  */
 export function kalkulerBidragstype(
   bostatus: z.infer<typeof FastBostedSchema>,
-  inntektForelder1: number,
-  inntektForelder2: number,
+  inntektMeg: number,
+  inntektMedforelder: number,
 ): "MOTTAKER" | "PLIKTIG" {
   if (bostatus === "DELT_FAST_BOSTED") {
-    return inntektForelder1 > inntektForelder2 ? "PLIKTIG" : "MOTTAKER";
+    return inntektMeg > inntektMedforelder ? "PLIKTIG" : "MOTTAKER";
   }
+
   return bostatus === "HOS_MEG" ? "MOTTAKER" : "PLIKTIG";
 }
+
+export const beregnBidragstypeForAlleBarn = (
+  barn: BarnebidragSkjema["barn"],
+  degInntekt?: number,
+  medforelderInntekt?: number,
+): "MOTTAKER" | "PLIKTIG" | "BEGGE" | "" => {
+  if (barn.length === 0 || !barn[0]?.bosted) {
+    return "";
+  }
+
+  const bidragstyper = barn.map((b) => {
+    if (b.bosted === "DELT_FAST_BOSTED") {
+      if (degInntekt && medforelderInntekt) {
+        return kalkulerBidragstype(b.bosted, degInntekt, medforelderInntekt);
+      }
+      return "";
+    }
+
+    return b.bosted === "HOS_MEG" ? "MOTTAKER" : "PLIKTIG";
+  });
+
+  const harMottaker = bidragstyper.includes("MOTTAKER");
+  const harPliktig = bidragstyper.includes("PLIKTIG");
+
+  if (harMottaker && harPliktig) {
+    return "BEGGE";
+  }
+
+  return bidragstyper[0] || "";
+};
 
 export const sporKalkulatorSpørsmålBesvart =
   (spørsmålId: KalkulatorSpørsmålId, spørsmål: string) =>

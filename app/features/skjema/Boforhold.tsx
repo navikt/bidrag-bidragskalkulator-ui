@@ -1,67 +1,43 @@
 import { BodyShort } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { BoforholdEnkeltPart } from "./BoforholdEnkeltPart";
-import { FastBostedSchema, type BarnebidragSkjema } from "./schema";
-import { kalkulerBidragstype } from "./utils";
+import { type BarnebidragSkjema } from "./schema";
+
+const BOFORHOLD_FIELDS = [
+  "borMedAnnenVoksen",
+  "borMedAndreBarn",
+  "antallBarnBorFast",
+  "betalerBarnebidrageForAndreBarn",
+  "borMedAnnenVoksenType",
+  "borMedBarnOver18",
+  "antallBarnOver18",
+  "andreBarnebidragerPerMåned",
+] as const;
 
 export const Bofohold = () => {
   const form = useFormContext<BarnebidragSkjema>();
   const { t } = useOversettelse();
-
-  const barn = form.value("barn");
-  const degInntekt = Number(form.value("deg.inntekt"));
-  const medforelderInntekt = Number(form.value("medforelder.inntekt"));
-
-  const bidragstype = useMemo(() => {
-    if (barn.length === 0 || !degInntekt || !medforelderInntekt) {
-      return "";
-    }
-
-    const førsteBosted = barn[0].bosted;
-    const result = FastBostedSchema.safeParse(førsteBosted);
-
-    const harAlleSammeBosted = barn.every((b) => b.bosted === førsteBosted);
-
-    if (harAlleSammeBosted && result.success) {
-      const nyBidragstype = kalkulerBidragstype(
-        result.data,
-        degInntekt,
-        medforelderInntekt,
-      );
-
-      return nyBidragstype;
-    }
-
-    return "BEGGE";
-  }, [barn, degInntekt, medforelderInntekt]);
+  const bidragstype = form.value("bidragstype");
 
   useEffect(() => {
-    const forrigeBidragstype = form.value("bidragstype");
-
-    if (forrigeBidragstype !== bidragstype) {
-      form.setValue("bidragstype", bidragstype);
-
-      // Resett ikke-påkrevde boforhold når bidragstype endres
-      if (bidragstype === "MOTTAKER") {
-        // Kun medforelderBoforhold er påkrevd, resett dittBoforhold
-        form.setValue("dittBoforhold.borMedAnnenVoksen", "");
-        form.setValue("dittBoforhold.borMedAndreBarn", "");
-        form.setValue("dittBoforhold.antallBarnBorFast", "");
-        form.setValue("dittBoforhold.antallBarnDeltBosted", "");
-      } else if (bidragstype === "PLIKTIG") {
-        // Kun dittBoforhold er påkrevd, resett medforelderBoforhold
-        form.setValue("medforelderBoforhold.borMedAnnenVoksen", "");
-        form.setValue("medforelderBoforhold.borMedAndreBarn", "");
-        form.setValue("medforelderBoforhold.antallBarnBorFast", "");
-        form.setValue("medforelderBoforhold.antallBarnDeltBosted", "");
-      }
-      // Hvis bidragstype === "BEGGE", behold begge boforhold
+    // Resett ikke-påkrevde boforhold når bidragstype endres
+    if (bidragstype === "MOTTAKER") {
+      // Kun medforelderBoforhold er påkrevd, resett dittBoforhold
+      BOFORHOLD_FIELDS.forEach((field) => {
+        form.setValue(`dittBoforhold.${field}`, "");
+      });
+    } else if (bidragstype === "PLIKTIG") {
+      // Kun dittBoforhold er påkrevd, resett medforelderBoforhold
+      BOFORHOLD_FIELDS.forEach((field) => {
+        form.setValue(`medforelderBoforhold.${field}`, "");
+      });
     }
+    // Hvis bidragstype === "BEGGE", behold begge boforhold
   }, [bidragstype, form]);
 
-  if (barn.length === 0 || !degInntekt || !medforelderInntekt) {
+  if (bidragstype === "") {
     return null;
   }
 
@@ -102,13 +78,13 @@ export const Bofohold = () => {
 
 const tekster = definerTekster({
   overskrift: {
-    nb: "Bosituasjon",
-    en: "Living situation",
-    nn: "Busituasjon",
+    nb: "Bosituasjon og andre egne barn",
+    en: "",
+    nn: "",
   },
   beskrivelse: {
-    nb: "Det påvirker barnebidraget hvis forelderen som skal betale bidraget, bor sammen med flere egne barn, i tillegg til barna du vil regne ut bidrag for i denne kalkulatoren.",
-    en: "It affects the child support if the parent who is to pay the support lives with several of their own children, in addition to the children you want to calculate support for in this calculator.",
-    nn: "Det påverkar barnebidraget viss forelderen som skal betale tilskotet, bur saman med fleire eigne barn, i tillegg til barna du vil rekne ut tilskot for i denne kalkulatoren.",
+    nb: "Med andre egne barn mener vi barn bidragspliktig ikke skal avtale barnebidrag med for nå",
+    en: "",
+    nn: "",
   },
 });
