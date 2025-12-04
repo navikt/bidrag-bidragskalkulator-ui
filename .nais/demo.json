@@ -2,7 +2,7 @@
   "SERVER_URL": "http://bidrag-bidragskalkulator-api",
   "ENVIRONMENT": "dev",
   "UMAMI_WEBSITE_ID": "d360c8df-aca3-4a5f-b07f-82dae9df3052",
-  "INGRESS": "https://www.bidrag-demo.ekstern.dev.nav.no/barnebidrag/tjenester",
+  "INGRESS": "https://bidrag-demo.ekstern.dev.nav.no/barnebidrag/tjenester",
   "TELEMETRY_URL": "https://telemetry.ekstern.dev.nav.no/collect",
   "UXSIGNALS_ENABLED": "true",
   "UXSIGNALS_MODE": "demo"
