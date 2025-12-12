@@ -1,14 +1,28 @@
-import { useFormContext } from "@rvf/react";
+import { useFieldArray, useFormContext, useFormScope } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "../../components/ui/FormattertTallTextField";
 
-import { BodyLong, ReadMore } from "@navikt/ds-react";
+import {
+  BodyLong,
+  BodyShort,
+  Checkbox,
+  Radio,
+  RadioGroup,
+  ReadMore,
+  Stack,
+} from "@navikt/ds-react";
+import BarnEgenInntekt from "~/features/skjema/BarnEgenInntekt";
 import { sporHendelse } from "~/utils/analytics";
 import type { BarnebidragSkjema } from "./schema";
 import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
 export const Inntektsopplysninger = () => {
   const form = useFormContext<BarnebidragSkjema>();
+  const barnArray = useFieldArray(form.scope("barn"));
+  const barnHarEgenInntekt = useFormScope(
+    form.scope("inntekt.barnHarEgenInntekt"),
+  ).value();
+
   const { t } = useOversettelse();
 
   return (
@@ -16,6 +30,27 @@ export const Inntektsopplysninger = () => {
       <h2 className="sr-only">{t(tekster.tittel)}</h2>
       <fieldset className="p-0 flex flex-col gap-4">
         <legend className="text-xl mb-5">{t(tekster.tittel)}</legend>
+
+        <ReadMore
+          header={t(tekster.inntektsinformasjon.overskrift)}
+          onOpenChange={(open) => {
+            if (open) {
+              sporHendelse({
+                hendelsetype: "les mer utvidet",
+                tekst: t(tekster.inntektsinformasjon.overskrift),
+                id: "kalkulator-inntekt",
+              });
+            }
+          }}
+        >
+          <BodyLong spacing>
+            {t(tekster.inntektsinformasjon.beskrivelseDel1)}
+          </BodyLong>
+          <BodyLong spacing>
+            {t(tekster.inntektsinformasjon.beskrivelseDel2)}
+          </BodyLong>
+          <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel3)}</BodyLong>
+        </ReadMore>
 
         <FormattertTallTextField
           {...form.field("deg.inntekt").getControlProps()}
@@ -39,26 +74,67 @@ export const Inntektsopplysninger = () => {
           htmlSize={18}
         />
 
-        <ReadMore
-          header={t(tekster.inntektsinformasjon.overskrift)}
-          onOpenChange={(open) => {
-            if (open) {
-              sporHendelse({
-                hendelsetype: "les mer utvidet",
-                tekst: t(tekster.inntektsinformasjon.overskrift),
-                id: "kalkulator-inntekt",
-              });
-            }
-          }}
+        <Checkbox
+          {...form.field("inntekt.kapitalinntektOver10k").getControlProps()}
+          checked={form.value("inntekt.kapitalinntektOver10k")}
+          onChange={(e) =>
+            form.setValue("inntekt.kapitalinntektOver10k", e.target.checked)
+          }
         >
-          <BodyLong spacing>
-            {t(tekster.inntektsinformasjon.beskrivelseDel1)}
-          </BodyLong>
-          <BodyLong spacing>
-            {t(tekster.inntektsinformasjon.beskrivelseDel2)}
-          </BodyLong>
-          <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel3)}</BodyLong>
-        </ReadMore>
+          {t(tekster.kapitalinntektOver10k.label)}
+        </Checkbox>
+
+        <FormattertTallTextField
+          {...form.field("deg.kapitalinntekt").getControlProps()}
+          label={t(tekster.kapitalinntekt.din)}
+          error={form.field("deg.kapitalinntekt").error()}
+          onBlur={sporKalkulatorSpørsmålBesvart(
+            "deg-kapitalinntekt",
+            t(tekster.hvaErInntektenTilDenAndreForelderen),
+          )}
+          htmlSize={18}
+        />
+
+        <FormattertTallTextField
+          {...form.field("medforelder.kapitalinntekt").getControlProps()}
+          label={t(tekster.kapitalinntekt.medforelder)}
+          error={form.field("medforelder.kapitalinntekt").error()}
+          onBlur={sporKalkulatorSpørsmålBesvart(
+            "medforelder-kapitalinntekt",
+            t(tekster.hvaErInntektenTilDenAndreForelderen),
+          )}
+          htmlSize={18}
+        />
+
+        <RadioGroup
+          {...form.field("inntekt.barnHarEgenInntekt").getControlProps()}
+          legend={t(
+            barnArray.length() > 1
+              ? tekster.barnHarEgenInntekt.plural
+              : tekster.barnHarEgenInntekt.singular,
+          )}
+          error={form.field("inntekt.barnHarEgenInntekt").error()}
+        >
+          <Stack
+            gap="space-0 space-24"
+            direction={{ xs: "column", sm: "row" }}
+            wrap={false}
+          >
+            <Radio value="true">{t(tekster.felles.ja)}</Radio>
+            <Radio value="false">{t(tekster.felles.nei)}</Radio>
+          </Stack>
+        </RadioGroup>
+
+        {barnHarEgenInntekt === "true" && (
+          <>
+            <BodyShort className="navds-form-field__description">
+              {t(tekster.barnHarEgenInntekt.beskrivelse)}
+            </BodyShort>
+            {barnArray.map((key, _, index) => (
+              <BarnEgenInntekt key={key} barnIndex={index} />
+            ))}
+          </>
+        )}
       </fieldset>
     </div>
   );
@@ -103,5 +179,53 @@ const tekster = definerTekster({
     nb: "Hva har den andre forelderen hatt i inntekt de siste 12 månedene?",
     en: "What has the other parent's income been in the last 12 months?",
     nn: "Kva har den andre forelderen hatt i inntekt dei siste 12 månadane?",
+  },
+  kapitalinntektOver10k: {
+    label: {
+      nb: "Kryss av hvis du eller den andre forelderen har positiv netto kapitalinntekt over 10 000 kroner per år",
+      en: "Check if you or the other parent has positive net capital income of over NOK 10,000 per year",
+      nn: "Kryss av hvis du eller den andre forelderen har positiv netto kapitalinntekt over 10 000 kroner per år",
+    },
+  },
+  kapitalinntekt: {
+    din: {
+      nb: "Hva er din netto kapitalinntekt per år?",
+      en: "What is your net capital income per year?",
+      nn: "Hva er din netto kapitalinntekt per år?",
+    },
+    medforelder: {
+      nb: "Hva er den andre forelderen sin netto kapitalinntekt per år?",
+      en: "What is the other parent's net capital income per year?",
+      nn: "Hva er den andre forelderen sin netto kapitalinntekt per år?",
+    },
+  },
+  felles: {
+    ja: { nb: "Ja", en: "Yes", nn: "Ja" },
+    nei: { nb: "Nei", en: "No", nn: "Nei" },
+  },
+  barnHarEgenInntekt: {
+    singular: {
+      nb: "Har barnet egen inntekt?",
+      en: "Does a child have its own income?",
+      nn: "",
+    },
+    plural: {
+      nb: "Har barna egen inntekt?",
+      en: "Do children have their own income?",
+      nn: "",
+    },
+    beskrivelse: {
+      nb: (
+        <>
+          Hvis barnet har en årsinntekt over{" "}
+          <span style={{ color: "#C30000" }}>60 300 kroner</span>, vil det
+          påvirke beregningen i kalkulatoren. Ved inntekt over{" "}
+          <span style={{ color: "#C30000" }}>201 000</span> regnes barnet som
+          selvforsørget. Skriv 0 hvis barnet ikke har inntekt.
+        </>
+      ),
+      en: "",
+      nn: "",
+    },
   },
 });
