@@ -506,28 +506,27 @@ export const lagInntektSkjema = (språk: Språk) => {
         message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
       }),
     kapitalinntekt: z
-        .string()
-        .refine((verdi) => verdi.trim() !== "", {
-          message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
-        })
-        .transform((verdi) => Number(verdi.trim()))
-        .refine((verdi) => verdi >= 0, {
-          message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
-        })
-        .refine((verdi) => Number.isInteger(verdi), {
-          message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
-        }),
+      .string()
+      .refine((verdi) => verdi.trim() !== "", {
+        message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
+      })
+      .transform((verdi) => Number(verdi.trim()))
+      .refine((verdi) => verdi >= 0, {
+        message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
+      })
+      .refine((verdi) => Number.isInteger(verdi), {
+        message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
+      }),
   });
 };
 
 export const lagKapitalinntektSkjema = (språk: Språk) => {
   return z.object({
-    kapitalinntektOver10k: z
-        .boolean(),
+    kapitalinntektOver10k: z.boolean(),
     barnHarEgenInntekt: z
-        .enum(["true", "false", ""])
-        .transform((value) => (value === "" ? undefined : value === "true")),
-  })
+      .enum(["true", "false", ""])
+      .transform((value) => (value === "" ? undefined : value === "true")),
+  });
 };
 
 export const lagBarnSkjema = (språk: Språk) => {
