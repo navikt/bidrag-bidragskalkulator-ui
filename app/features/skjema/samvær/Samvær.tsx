@@ -4,11 +4,7 @@ import { Slider } from "~/components/ui/slider";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FastBostedSchema, type BarnebidragSkjema } from "../schema";
-import {
-  kalkulerSamværsklasse,
-  SAMVÆR_STANDARDVERDI,
-  sporKalkulatorSpørsmålBesvart,
-} from "../utils";
+import { SAMVÆR_STANDARDVERDI, sporKalkulatorSpørsmålBesvart } from "../utils";
 import { SamværOgFerierInfo } from "./SamværOgFerierInfo";
 import { Samværsfradraginfo } from "./Samværsfradraginfo";
 
@@ -97,13 +93,7 @@ export function Samvær({ barnIndex }: SamværProps) {
         />
       )}
 
-      <Samværsfradraginfo
-        alder={alder ? Number(alder) : undefined}
-        samværsklasse={
-          bosted ? kalkulerSamværsklasse(Number(samvær), bosted) : undefined
-        }
-      />
-
+      <Samværsfradraginfo />
       <SamværOgFerierInfo />
     </>
   );
@@ -116,10 +106,10 @@ const tekster = definerTekster({
   },
   bosted: {
     label: {
-      nb: "Hvilken avtale har dere for hvordan barnet bor?",
+      nb: "Har dere avtale om delt fast bosted for dette barnet?",
       // TODO: oppdatert teksten
-      en: "What agreement do you have for how the child lives?",
-      nn: "Kva avtale har de for korleis barnet bur?",
+      en: "Do you have an agreement on shared permanent residence for this child?",
+      nn: "Har de avtale om delt fast bustad for dette barnet?",
     },
     valg: {
       velg: {

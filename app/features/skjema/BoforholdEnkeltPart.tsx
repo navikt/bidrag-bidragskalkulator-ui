@@ -186,36 +186,6 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
         </>
       )}
 
-      <RadioGroup
-        {...form
-          .field(`${skjemagruppe}.betalerBarnebidrageForAndreBarn`)
-          .getInputProps()}
-        error={form
-          .field(`${skjemagruppe}.betalerBarnebidrageForAndreBarn`)
-          .error()}
-        legend={t(tekster[skjemagruppe].barnebidragForAndreEgneBarn.label)}
-        description={t(
-          tekster[skjemagruppe].barnebidragForAndreEgneBarn.beskrivelse,
-        )}
-      >
-        <Stack gap="0 6" direction={{ xs: "column", sm: "row" }} wrap={false}>
-          {JA_NEI_ALTERNATIVER.map((alternativ) => {
-            return (
-              <Radio
-                value={alternativ}
-                key={alternativ}
-                onChange={sporKalkulatorSpørsmålBesvart(
-                  `${part}-bor-med-voksen`,
-                  t(tekster[skjemagruppe].borMedAnnenVoksen.label),
-                )}
-              >
-                {t(tekster.felles.jaNei[alternativ])}
-              </Radio>
-            );
-          })}
-        </Stack>
-      </RadioGroup>
-
       {harAlleredeBarnebidrag && (
         <FormattertTallTextField
           {...form

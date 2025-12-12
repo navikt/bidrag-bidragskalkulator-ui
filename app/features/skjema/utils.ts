@@ -100,15 +100,20 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
       mottarStønadTilBarnetilsyn: "",
       barnetilsynsutgift: "",
       barnepassSituasjon: "",
-      harEgenInntekt: "",
       inntektPerMåned: "",
     },
   ],
   deg: {
     inntekt: "",
+    kapitalinntekt: "",
   },
   medforelder: {
     inntekt: "",
+    kapitalinntekt: "",
+  },
+  inntekt: {
+    kapitalinntektOver10k: false,
+    barnHarEgenInntekt: "",
   },
   dittBoforhold: {
     borMedAnnenVoksen: "",

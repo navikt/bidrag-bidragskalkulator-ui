@@ -1,5 +1,5 @@
 import { PlusIcon } from "@navikt/aksel-icons";
-import { Button } from "@navikt/ds-react";
+import { BodyShort, Button } from "@navikt/ds-react";
 import { useFieldArray, useFormContext } from "@rvf/react";
 import React, { useEffect, useMemo } from "react";
 import { sporHendelse } from "~/utils/analytics";
@@ -82,8 +82,15 @@ export const FellesBarnSkjema = () => {
   return (
     <div className="border p-4 rounded-md space-y-4">
       <h2 className="sr-only">{t(tekster.overskrift)}</h2>
-      <fieldset className="p-0">
-        <legend className="text-xl mb-5">{t(tekster.overskrift)}</legend>
+      <fieldset className="p-0" aria-describedby="barn-skjema-desc">
+        <legend className="text-xl">{t(tekster.overskrift)}</legend>
+        <BodyShort
+          id="barn-skjema-desc"
+          size="medium"
+          className="navds-fieldset__description mb-5"
+        >
+          {t(tekster.beskrivelse)}
+        </BodyShort>
         {barnArray.map((key, _, index) => {
           return (
             <React.Fragment key={key}>
@@ -123,9 +130,14 @@ const finnFokuserbartInputPåBarn = (index: number) => {
 
 const tekster = definerTekster({
   overskrift: {
-    nb: "Felles barn med den du ønsker å avtale barnebidrag med",
-    en: "Shared children with the parent you want to agree on child support with",
-    nn: "Felles barn med den du ønsker å avtale barnebidrag med",
+    nb: "Barn du ønsker å avtale barnebidrag for",
+    en: "Children you wish to arrange child support for",
+    nn: "Barn du ønskjer å avtale barnebidrag for",
+  },
+  beskrivelse: {
+    nb: "Hvis dere har flere felles barn dere skal avtale barnebidrag for, kan du legge til flere barn ved å klikke på «Legg til barn» under",
+    en: "If you have several children for whom you need to agree on child support, you can add more children by clicking “Add child” below",
+    nn: "Viss de har fleire felles barn de skal avtale barnebidrag for, kan du legge til fleire barn ved å klikke på «Legg til barn» nedanfor.",
   },
   leggTilBarn: {
     nb: "Legg til barn",

@@ -10,7 +10,6 @@ import {
   type BarnebidragSkjema,
   type Bidragstype,
 } from "./schema";
-import Barnetillegg from "./ytelser/Barnetillegg";
 import Kontantstøtte from "./ytelser/Kontantstøtte";
 
 export type NavYtelse =
@@ -222,25 +221,6 @@ export const Ytelser = ({ bidragstype }: Props) => {
           >
             {t(tekster.felles.alternativer.småbarnstillegg)}
           </Checkbox>
-        )}
-
-        {/* Barnetillegg - vises bare hvis det finnes barn under 18 år */}
-        {harBarnUnderBarnetilleggAlder && (
-          <>
-            <Checkbox
-              checked={valgteYtelser.includes("barnetillegg")}
-              description={t(tekster.felles.barnetillegg.beskrivelse)}
-              onChange={(e) =>
-                håndterToggleYtelse("barnetillegg", e.target.checked)
-              }
-            >
-              {t(tekster.felles.alternativer.barnetillegg)}
-            </Checkbox>
-            <Barnetillegg
-              valgteYtelser={valgteYtelser}
-              barnUnder18={barnUnder18}
-            />
-          </>
         )}
       </fieldset>
     </div>

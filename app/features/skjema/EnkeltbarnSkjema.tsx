@@ -2,7 +2,6 @@ import { PersonCrossIcon } from "@navikt/aksel-icons";
 import { Button, TextField } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import BarnEgenInntekt from "./BarnEgenInntekt";
 import { Samvær } from "./samvær/Samvær";
 import { type BarnebidragSkjema } from "./schema";
 import { sporKalkulatorSpørsmålBesvart } from "./utils";
@@ -17,8 +16,6 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
   const form = useFormContext<BarnebidragSkjema>();
 
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
-
-  const alder = barnField.value("alder");
 
   const overskrift = t(tekster.overskrift.barn(barnIndex + 1));
 
@@ -40,8 +37,6 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
       />
 
       <Samvær barnIndex={barnIndex} />
-
-      <BarnEgenInntekt barnIndex={barnIndex} />
 
       {onFjernBarn && (
         <Button

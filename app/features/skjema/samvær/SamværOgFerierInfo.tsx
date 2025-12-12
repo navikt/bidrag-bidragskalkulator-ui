@@ -19,31 +19,25 @@ export const SamværOgFerierInfo = () => {
       }}
     >
       <BodyLong className="mb-4">{t(tekster.beskrivelse1)}</BodyLong>
-      <BodyLong className="mb-4">{t(tekster.beskrivelse2)}</BodyLong>
-      <BodyLong>{t(tekster.beskrivelse3)}</BodyLong>
+      <BodyLong>{t(tekster.beskrivelse2)}</BodyLong>
     </ReadMore>
   );
 };
 
 const tekster = definerTekster({
   overskrift: {
-    nb: "Du må regne ut og legge til ferie i månedlig samvær selv",
-    en: "You need to calculate and add vacation time to the monthly visitation yourself",
-    nn: "Du må rekne ut og legge til ferie i månadleg samvær sjølv",
+    nb: "Du kan legge til samvær i ferier og høytider selv",
+    en: "You can add visitation during holidays and vacations yourself",
+    nn: "Du kan sjølv legge til samvær i feriar og høgtider",
   },
   beskrivelse1: {
-    nb: "Hvis dere fordeler feriene på samme måte som dere fordeler samværet ellers i året, vil det vanligvis ikke påvirke barnebidraget.",
-    en: "If you distribute the holidays in the same way as you distribute the visitation throughout the year, it will usually not affect the child support amount.",
-    nn: "Dersom de fordeler feriane på same måte som de fordeler samværet elles i året, vil det vanlegvis ikkje påverke barnebidraget.",
+    nb: "Kalkulatoren kan foreløpig ikke legge til samvær i ferier og høytider separat. Derfor kan dere enten legge dette til selv i det månedlige samværet, eller bli enige om hvordan dere håndterer bidraget i månedene det er ekstra samvær.",
+    en: "The calculator cannot yet add contact time for holidays and festive seasons separately. Therefore, you can either include this yourselves in the monthly contact time, or agree on how to handle the child support in the months with extra contact time.",
+    nn: "Kalkulatoren kan førebels ikkje leggje til samvær i feriar og høgtider separat. Difor kan de anten leggje dette inn sjølve i det månadlege samværet, eller bli einige om korleis de vil handtere bidraget i månadene med ekstra samvær.",
   },
   beskrivelse2: {
-    nb: "Hvis det er stor forskjell mellom hvordan dere fordeler feriene, og hvordan dere fordeler samværet ellers i året, bør dere regne feriedagene med i det totale antallet samværsdager per måned.",
-    en: "If there is a big difference between how you distribute the holidays and how you distribute the visitation throughout the year, you should include the holiday days in the total number of visitation days per month.",
-    nn: "Dersom det er stor skilnad mellom korleis de fordeler feriane, og korleis de fordeler samværet elles i året, bør de rekne feriedagane med i det totale antalet samværsdagar per månad.",
-  },
-  beskrivelse3: {
-    nb: "Eksempel: 12 dager samvær i ferien er i gjennomsnitt én ekstra samværsdag per måned.",
-    en: "Example: 12 days of visitation during the holidays is on average one extra visitation day per month.",
-    nn: "Døme: 12 dagar samvær i ferien tilsvarer i gjennomsnitt éin ekstra samværsdag per månad.",
+    nb: "Eksempel: Lille Trille har 25 ekstra samværsdager med samværsforelderen per år i forbindelse med ferier og høytider. Da deler dere 25 dager på 12 måneder: 25/12 = 2,08333. Da kan dere legge til 2 dager i det månedlige samværet for samværsforelderen.",
+    en: "Example: Little Trille has 25 extra days of visitation with the custodial parent per year with regards to vacations and holidays. Then you divide 25 days by 12 months: 25/12 = 2.08333. Then you can add 2 days to the monthly visitation for the custodial parent.",
+    nn: "Eksempel: Lille Trille har 25 ekstra samværsdager med samværsforelderen per år i forbindelse med feriar og høgtider. Da deler de 25 dager på 12 måneder: 25/12 = 2,08333. Da kan de leggje til 2 dager i det månadlege samværet for samværsforelderen.",
   },
 });

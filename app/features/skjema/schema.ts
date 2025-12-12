@@ -33,7 +33,6 @@ const BarnSkjemaSchema = z.object({
   mottarStønadTilBarnetilsyn: z.enum(["true", "false", ""]),
   barnetilsynsutgift: z.string(),
   barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
-  harEgenInntekt: z.enum(["true", "false", ""]),
   inntektPerMåned: z.string(),
 });
 
@@ -42,9 +41,15 @@ const BarnebidragSkjemaSchema = z.object({
   barn: z.array(BarnSkjemaSchema),
   deg: z.object({
     inntekt: z.string(),
+    kapitalinntekt: z.string(),
   }),
   medforelder: z.object({
     inntekt: z.string(),
+    kapitalinntekt: z.string(),
+  }),
+  inntekt: z.object({
+    kapitalinntektOver10k: z.boolean(),
+    barnHarEgenInntekt: z.enum(["true", "false", ""]),
   }),
   dittBoforhold: z.object({
     borMedAnnenVoksen: z.enum(["true", "false", "", "undefined"]),
