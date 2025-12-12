@@ -505,7 +505,29 @@ export const lagInntektSkjema = (språk: Språk) => {
       .refine((verdi) => Number.isInteger(verdi), {
         message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
       }),
+    kapitalinntekt: z
+        .string()
+        .refine((verdi) => verdi.trim() !== "", {
+          message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
+        })
+        .transform((verdi) => Number(verdi.trim()))
+        .refine((verdi) => verdi >= 0, {
+          message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
+        })
+        .refine((verdi) => Number.isInteger(verdi), {
+          message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
+        }),
   });
+};
+
+export const lagKapitalinntektSkjema = (språk: Språk) => {
+  return z.object({
+    kapitalinntektOver10k: z
+        .boolean(),
+    barnHarEgenInntekt: z
+        .enum(["true", "false", ""])
+        .transform((value) => (value === "" ? undefined : value === "true")),
+  })
 };
 
 export const lagBarnSkjema = (språk: Språk) => {
@@ -553,13 +575,6 @@ export const lagBarnSkjema = (språk: Språk) => {
         .transform((value) => (value === "" ? undefined : value === "true")),
       barnetilsynsutgift: z.string(),
       barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
-      //barn inntekt:
-      harEgenInntekt: z
-        .enum(["true", "false", ""])
-        .transform((value) => (value === "" ? undefined : value === "true"))
-        .refine((verdi) => verdi !== undefined, {
-          message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
-        }),
       inntektPerMåned: z.string(),
     })
     .superRefine((data, ctx) => {
@@ -619,7 +634,7 @@ export const lagBarnSkjema = (språk: Språk) => {
         }
       }
 
-      if (data.harEgenInntekt === true && data.inntektPerMåned.trim() === "") {
+      if (data.inntektPerMåned.trim() === "") {
         ctx.addIssue({
           path: ["inntektPerMåned"],
           code: "custom",
@@ -667,6 +682,7 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
         .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
       deg: lagInntektSkjema(språk),
       medforelder: lagInntektSkjema(språk),
+      inntekt: lagKapitalinntektSkjema(språk),
       dittBoforhold: lagBoforholdSkjema(språk),
       medforelderBoforhold: lagBoforholdSkjema(språk),
       andreBarnUnder12: lagAndreBarnUnder12Skjema(språk),
