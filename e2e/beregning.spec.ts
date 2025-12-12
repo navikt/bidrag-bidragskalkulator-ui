@@ -9,12 +9,6 @@ test.describe("Beregningstest", () => {
     await sjekkTilgjengelighet(page);
 
     await page.getByLabel("Hvor gammelt er barnet?").fill("4");
-    await page
-      .getByLabel("Vi har en skriftlig avtale om delt fast bosted")
-      .check();
-    await page
-      .getByLabel("Hva koster barnepass for barnet per måned?")
-      .fill("1000");
 
     await page
       .getByLabel("Hva har du hatt i inntekt de siste 12 månedene?")
@@ -24,29 +18,6 @@ test.describe("Beregningstest", () => {
         "Hva har den andre forelderen hatt i inntekt de siste 12 månedene?",
       )
       .fill("600000");
-
-    const medforelderensHusstand = page.getByRole("group", {
-      name: "Den andre forelderen sin bosituasjon",
-    });
-    const medforelderensHusstandBorMedAnnenVoksen = page.getByRole("group", {
-      name: "Bor den andre forelderen med en annen voksen?",
-    });
-    await medforelderensHusstandBorMedAnnenVoksen.getByLabel("Nei").check();
-
-    const medforelderensHusstandBorMedAndreBarn = page.getByRole("group", {
-      name: "Bor den andre forelderen med andre egne barn enn de som er nevnt over?",
-    });
-    await medforelderensHusstandBorMedAndreBarn.getByLabel("Ja").check();
-    await medforelderensHusstand
-      .getByLabel(
-        "Antall egne barn under 18 år som bor fast hos den andre forelderen",
-      )
-      .fill("0");
-    await medforelderensHusstand
-      .getByLabel(
-        "Antall egne barn under 18 år med delt bosted hos den andre forelderen",
-      )
-      .fill("0");
 
     await sjekkTilgjengelighet(page);
 
