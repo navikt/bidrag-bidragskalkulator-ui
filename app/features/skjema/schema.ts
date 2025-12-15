@@ -128,6 +128,20 @@ export const lagYtelserSkjema = (språk: Språk) => {
 
       if (
         values.kontantstøtte.mottar === true &&
+        values.kontantstøtte.deler === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.ytelser.kontantstøtte.deler.påkrevd,
+          ),
+          path: ["kontantstøtte", "deler"],
+        });
+      }
+
+      if (
+        values.kontantstøtte.mottar === true &&
         values.kontantstøtte.beløp.trim() === "" &&
         values.kontantstøtte.deler !== false // Beløp kreves hvis de ikke har svart "nei" på deling
       ) {
@@ -852,9 +866,9 @@ const tekster = definerTekster({
       },
       utgifter: {
         påkrevd: {
-          nb: "Dette feltet er påkrevd",
-          en: "",
-          nn: "",
+          nb: "Velg om du har utgifter til barnepass",
+          en: "Select if you have childcare expenses",
+          nn: "Vel om du har utgifter til barnepass",
         },
         beløp: {
           påkrevd: {
@@ -876,15 +890,15 @@ const tekster = definerTekster({
       },
       stønad: {
         påkrevd: {
-          nb: "Dette feltet er påkrevd",
-          en: "Dette feltet er påkrevd",
-          nn: "Dette feltet er påkrevd",
+          nb: "Velg om du mottar stønad til barnetilsyn",
+          en: "Select if you receive childcare support",
+          nn: "Vel om du mottar stønad til barnetilsyn",
         },
         type: {
           påkrevd: {
-            nb: "Dette feltet er påkrevd",
-            en: "Dette feltet er påkrevd",
-            nn: "Dette feltet er påkrevd",
+            nb: "Velg type barnepass",
+            en: "Select childcare type",
+            nn: "Vel type barnepass",
           },
         },
       },
@@ -944,7 +958,7 @@ const tekster = definerTekster({
     },
     inntekt: {
       påkrevd: {
-        nb: "Dette feltet er påkrevd",
+        nb: "Fyll inn inntekt",
         en: "Fill in income",
         nn: "Fyll inn inntekt",
       },
@@ -1127,9 +1141,9 @@ const tekster = definerTekster({
         },
         deler: {
           påkrevd: {
-            nb: "Dette feltet er påkrevd",
-            en: "",
-            nn: "",
+            nb: "Velg om dere deler kontantstøtten",
+            en: "Select if you share the cash-for-care benefit",
+            nn: "Vel om de deler kontantstøtta",
           },
         },
       },
@@ -1142,9 +1156,9 @@ const tekster = definerTekster({
           },
         },
         påkrevd: {
-          nb: "Dette feltet er påkrevd",
-          en: "",
-          nn: "",
+          nb: "Velg om dere deler utvidet barnetrygd",
+          en: "Select if you share extended child benefit",
+          nn: "Vel om de deler utvida barnetrygd",
         },
       },
       småbarnstillegg: {

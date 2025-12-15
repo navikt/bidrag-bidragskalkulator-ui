@@ -15,22 +15,35 @@ type Props = {
 export function Barnebidragsskjema({ form }: Props) {
   const { t } = useOversettelse();
   const bidragstype = form.value("bidragstype");
+  const barn = form.value("barn");
+  const gyldigeBarn = barn.filter((b) => b.alder !== "");
+  const harGyldigeBarn = gyldigeBarn.length > 0;
+  const harValgtBidragstype = bidragstype !== "";
+
+  const skalViseBarnepass = harValgtBidragstype && harGyldigeBarn;
+  const skalViseYtelser =
+    harGyldigeBarn &&
+    (bidragstype === "MOTTAKER" ||
+      bidragstype === "PLIKTIG" ||
+      bidragstype === "BEGGE");
 
   return (
     <form {...form.getFormProps()} className="flex flex-col gap-4">
       <FellesBarnSkjema />
       <Inntektsopplysninger />
-      {bidragstype !== "" && <Barnepass />}
-      {bidragstype === "BEGGE" ? (
-        <>
-          <Ytelser bidragstype="MOTTAKER" />
-          <Ytelser bidragstype="PLIKTIG" />
-        </>
-      ) : (
-        (bidragstype === "MOTTAKER" || bidragstype === "PLIKTIG") && (
+
+      {skalViseBarnepass && <Barnepass />}
+
+      {skalViseYtelser &&
+        (bidragstype === "BEGGE" ? (
+          <>
+            <Ytelser bidragstype="MOTTAKER" />
+            <Ytelser bidragstype="PLIKTIG" />
+          </>
+        ) : (
           <Ytelser bidragstype={bidragstype} />
-        )
-      )}
+        ))}
+
       <Bofohold />
 
       <Button
