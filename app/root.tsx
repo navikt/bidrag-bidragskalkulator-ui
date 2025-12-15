@@ -24,7 +24,7 @@ import { InternalServerError } from "./features/feilhåndtering/500";
 import { lagHeaders } from "./features/headers/headers.server";
 import { hentApplikasjonsside } from "./utils/applikasjonssider";
 import { hentSpråkFraCookie, OversettelseProvider, Språk } from "./utils/i18n";
-import { getFaro } from "./utils/telemetri";
+import { useFaro } from "./utils/telemetri";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
@@ -66,9 +66,8 @@ export const headers = ({ loaderHeaders }: HeadersArgs) => {
 
 export default function App() {
   const { telemetriUrl } = useLoaderData<typeof loader>();
-  useEffect(() => {
-    getFaro(telemetriUrl);
-  }, [telemetriUrl]);
+  useFaro();
+
   return (
     <FaroErrorBoundary>
       <Outlet />
