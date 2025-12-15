@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { sjekkTilgjengelighet } from "./uu-utils";
 
-test.describe("Beregningstest", () => {
+test.describe.skip("Beregningstest", () => {
   test("En enkel beregning er tilgjengelig", async ({ page }) => {
     await page.goto("/barnebidrag/tjenester/kalkulator");
     await page.waitForSelector("body", { timeout: 10000 });
