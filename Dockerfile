@@ -26,7 +26,7 @@ RUN rm -rf /usr/local/lib/node_modules/npm \
 
 ENV NODE_ENV=production
 EXPOSE 3000
+ENV HOSTNAME=0.0.0.0
 
-# Start direkte (ikke via "npm run start")
-CMD ["node", "./build/server/index.js"]
+CMD ["./node_modules/.bin/react-router-serve", "./build/server/index.js"]
 
