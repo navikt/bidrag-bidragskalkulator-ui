@@ -87,13 +87,31 @@ export const hentBarnebidragsutregning = async (request: Request) => {
 
   const { inntekt: inntektForelder1 } = skjemaData.deg;
   const { inntekt: inntektForelder2 } = skjemaData.medforelder;
-  const { dittBoforhold, medforelderBoforhold } = skjemaData;
 
   const requestData: Barnebidragsutregningsgrunnlag = {
     inntektForelder1,
     inntektForelder2,
-    dittBoforhold,
-    medforelderBoforhold,
+    dittBoforhold:
+      skjemaData.dittBoforhold.borMedAndreBarn !== undefined &&
+      skjemaData.dittBoforhold.borMedAnnenVoksen !== undefined
+        ? {
+            borMedAnnenVoksen: skjemaData.dittBoforhold.borMedAnnenVoksen,
+            antallBarnBorFast: skjemaData.dittBoforhold.antallBarnBorFast,
+            antallBarnDeltBosted: skjemaData.dittBoforhold.antallBarnDeltBosted,
+          }
+        : null,
+    medforelderBoforhold:
+      skjemaData.medforelderBoforhold.borMedAndreBarn !== undefined &&
+      skjemaData.medforelderBoforhold.borMedAnnenVoksen !== undefined
+        ? {
+            borMedAnnenVoksen:
+              skjemaData.medforelderBoforhold.borMedAnnenVoksen,
+            antallBarnBorFast:
+              skjemaData.medforelderBoforhold.antallBarnBorFast,
+            antallBarnDeltBosted:
+              skjemaData.medforelderBoforhold.antallBarnDeltBosted,
+          }
+        : null,
     barn: skjemaData.barn.map((barn) => {
       const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
       const bidragstype = kalkulerBidragstype(
@@ -110,6 +128,8 @@ export const hentBarnebidragsutregning = async (request: Request) => {
       };
     }),
   };
+
+  console.log("🚀 ~ hentBarnebidragsutregning ~ requestData:", requestData);
 
   return hentBarnebidragsutregningFraApi({
     requestData,

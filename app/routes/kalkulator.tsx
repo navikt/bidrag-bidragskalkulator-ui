@@ -7,9 +7,11 @@ import {
 import { useEffect, useRef, useState } from "react";
 import type { ActionFunctionArgs, MetaArgs } from "react-router";
 import { redirect, useActionData, useRouteLoaderData } from "react-router";
+import { env } from "~/config/env.server";
 import { BetaNotis } from "~/features/BetaNotis";
 import { Barnebidragsskjema } from "~/features/skjema/Barnebidragsskjema";
 import { hentBarnebidragsutregning } from "~/features/skjema/beregning/api.server";
+import { hentKalkulatorgrunnlagsdata } from "~/features/skjema/grunnlagsdata/api.server";
 import { IntroPanel } from "~/features/skjema/IntroPanel";
 import { Resultatpanel } from "~/features/skjema/Resultatpanel";
 import {
@@ -47,9 +49,14 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export async function loader() {
+  if (env.ENVIRONMENT === "prod") {
+    return redirect("https://tjenester.nav.no/bidragskalkulator/innledning");
+  }
   // TODO: vi skjuler den nye til alt funksjonaliter er på plass
-  return redirect("https://tjenester.nav.no/bidragskalkulator/innledning");
-  // return hentKalkulatorgrunnlagsdata();
+  return {
+    kalkulatorGrunnlagsdata: await hentKalkulatorgrunnlagsdata(),
+    miljø: env.ENVIRONMENT,
+  };
 }
 
 export const useKalkulatorgrunnlagsdata = () => {
