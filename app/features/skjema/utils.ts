@@ -148,12 +148,6 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
       deler: "",
       beløp: "",
     },
-    barnetillegg: {
-      mottar: "",
-      hvemFår: [""],
-      dineBeløpPerBarn: [""],
-      denAndreForelderenBeløp: "",
-    },
   },
 };
 

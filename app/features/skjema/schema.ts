@@ -86,12 +86,6 @@ const BarnebidragSkjemaSchema = z.object({
     mottarUtvidetBarnetrygd: z.enum(["true", ""]),
     delerUtvidetBarnetrygd: z.enum(["true", "false", ""]),
     mottarSmåbarnstillegg: z.enum(["true", ""]),
-    barnetillegg: z.object({
-      mottar: z.enum(["true", "false", ""]),
-      hvemFår: z.array(HvemFårBarnetilleggSchema.or(z.literal(""))),
-      dineBeløpPerBarn: z.array(z.string()),
-      denAndreForelderenBeløp: z.string(),
-    }),
   }),
 });
 
@@ -116,14 +110,6 @@ export const lagYtelserSkjema = (språk: Språk) => {
       mottarSmåbarnstillegg: z
         .enum(["true", ""])
         .transform((value) => (value === "" ? undefined : value === "true")),
-      barnetillegg: z.object({
-        mottar: z
-          .enum(["true", "false", ""])
-          .transform((value) => (value === "" ? undefined : value === "true")),
-        hvemFår: z.array(HvemFårBarnetilleggSchema.or(z.literal(""))),
-        dineBeløpPerBarn: z.array(z.string()),
-        denAndreForelderenBeløp: z.string(),
-      }),
     })
     .superRefine((values, ctx) => {
       // Kontantstøtte: Når mottar er true, må beløp fylles ut hvis:
@@ -191,55 +177,6 @@ export const lagYtelserSkjema = (språk: Språk) => {
           ),
           path: ["mottarSmåbarnstillegg"],
         });
-      }
-
-      // Barnetillegg
-      if (values.barnetillegg.mottar === true) {
-        const hvemFår = values.barnetillegg.hvemFår.filter((v) => v !== "");
-
-        // Sjekk at minst én er valgt
-        if (hvemFår.length === 0) {
-          ctx.addIssue({
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.ytelser.barnetillegg.hvemFår.påkrevd,
-            ),
-            path: ["barnetillegg", "hvemFår"],
-          });
-        }
-
-        // Hvis MEG er valgt, sjekk at alle beløp er fylt ut
-        if (hvemFår.includes("MEG")) {
-          values.barnetillegg.dineBeløpPerBarn.forEach((beløp, index) => {
-            if (beløp.trim() === "") {
-              ctx.addIssue({
-                code: "custom",
-                message: oversett(
-                  språk,
-                  tekster.feilmeldinger.ytelser.barnetillegg.beløpPerBarn
-                    .påkrevd,
-                ),
-                path: ["barnetillegg", "dineBeløpPerBarn", index],
-              });
-            }
-          });
-        }
-
-        // Hvis DEN_ANDRE_FORELDREN er valgt, sjekk at beløp er fylt ut
-        if (hvemFår.includes("DEN_ANDRE_FORELDREN")) {
-          if (values.barnetillegg.denAndreForelderenBeløp.trim() === "") {
-            ctx.addIssue({
-              code: "custom",
-              message: oversett(
-                språk,
-                tekster.feilmeldinger.ytelser.barnetillegg
-                  .denAndreForelderenBeløp.påkrevd,
-              ),
-              path: ["barnetillegg", "denAndreForelderenBeløp"],
-            });
-          }
-        }
       }
     })
     .transform((values) => {
@@ -1215,49 +1152,6 @@ const tekster = definerTekster({
           nb: "Velg om du mottar småbarnstillegg",
           en: "Select if you receive infant supplement",
           nn: "Vel om du mottar småbarnstillegg",
-        },
-      },
-      barnetillegg: {
-        hvemFår: {
-          påkrevd: {
-            nb: "Velg minst ett alternativ",
-            en: "Choose at least one option",
-            nn: "Vel minst eitt alternativ",
-          },
-        },
-        beløpPerBarn: {
-          påkrevd: {
-            nb: "Fyll inn beløp for barnetillegg",
-            en: "Enter child supplement amount",
-            nn: "Fyll inn beløp for barnetillegg",
-          },
-          tall: {
-            nb: "Beløp må være et tall",
-            en: "Amount must be a number",
-            nn: "Beløp må vere eit tal",
-          },
-          minimum: {
-            nb: "Beløp må være minst 0",
-            en: "Amount must be at least 0",
-            nn: "Beløp må vere minst 0",
-          },
-        },
-        denAndreForelderenBeløp: {
-          påkrevd: {
-            nb: "Fyll inn beløp for barnetillegg",
-            en: "Enter child supplement amount",
-            nn: "Fyll inn beløp for barnetillegg",
-          },
-          tall: {
-            nb: "Beløp må være et tall",
-            en: "Amount must be a number",
-            nn: "Beløp må vere eit tal",
-          },
-          minimum: {
-            nb: "Beløp må være minst 0",
-            en: "Amount must be at least 0",
-            nn: "Beløp må vere minst 0",
-          },
         },
       },
     },
