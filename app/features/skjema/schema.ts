@@ -48,7 +48,7 @@ const BarnebidragSkjemaSchema = z.object({
     kapitalinntekt: z.string(),
   }),
   inntekt: z.object({
-    kapitalinntektOver10k: z.boolean(),
+    kapitalinntektOver10k: z.enum(["true", ""]),
     barnHarEgenInntekt: z.enum(["true", "false", ""]),
   }),
   dittBoforhold: z.object({
@@ -521,12 +521,38 @@ export const lagInntektSkjema = (språk: Språk) => {
 };
 
 export const lagKapitalinntektSkjema = (språk: Språk) => {
-  return z.object({
-    kapitalinntektOver10k: z.boolean(),
-    barnHarEgenInntekt: z
-      .enum(["true", "false", ""])
-      .transform((value) => (value === "" ? undefined : value === "true")),
-  });
+  return z
+    .object({
+      kapitalinntektOver10k: z
+        .enum(["true", ""])
+        .transform((value) => (value === "" ? undefined : value === "true")),
+      barnHarEgenInntekt: z
+        .enum(["true", "false", ""])
+        .transform((value) => (value === "" ? undefined : value === "true")),
+    })
+    .superRefine((values, ctx) => {
+      if (values.kapitalinntektOver10k === undefined) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.inntekt.kapitalinntektOver10k.påkrevd,
+          ),
+          path: ["kapitalinntektOver10k"],
+        });
+      }
+
+      if (values.barnHarEgenInntekt === undefined) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.barn.egenInntekt.påkrevd,
+          ),
+          path: ["barnHarEgenInntekt"],
+        });
+      }
+    });
 };
 
 export const lagBarnSkjema = (språk: Språk) => {
@@ -967,6 +993,13 @@ const tekster = definerTekster({
         nb: "Fyll inn inntekt i hele kroner",
         en: "Fill in income in whole kroner",
         nn: "Fyll inn inntekt i heile kroner",
+      },
+      kapitalinntektOver10k: {
+        påkrevd: {
+          nb: "Velg om kapitalinntekt er over 10 000 kroner",
+          en: "Select if capital income is over NOK 10,000",
+          nn: "Vel om kapitalinntekt er over 10 000 kroner",
+        },
       },
     },
     husstandsmedlemmer: {

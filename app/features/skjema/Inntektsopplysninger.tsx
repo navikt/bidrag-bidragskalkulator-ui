@@ -6,6 +6,7 @@ import {
   BodyLong,
   BodyShort,
   Checkbox,
+  CheckboxGroup,
   Radio,
   RadioGroup,
   ReadMore,
@@ -74,15 +75,27 @@ export const Inntektsopplysninger = () => {
           htmlSize={18}
         />
 
-        <Checkbox
+        <CheckboxGroup
           {...form.field("inntekt.kapitalinntektOver10k").getControlProps()}
-          checked={form.value("inntekt.kapitalinntektOver10k")}
-          onChange={(e) =>
-            form.setValue("inntekt.kapitalinntektOver10k", e.target.checked)
+          legend={t(tekster.kapitalinntektOver10k.legend)}
+          hideLegend
+          error={form.field("inntekt.kapitalinntektOver10k").error()}
+          value={
+            form.value("inntekt.kapitalinntektOver10k") === "true"
+              ? ["true"]
+              : []
+          }
+          onChange={(value) =>
+            form.setValue(
+              "inntekt.kapitalinntektOver10k",
+              value.includes("true") ? "true" : "",
+            )
           }
         >
-          {t(tekster.kapitalinntektOver10k.label)}
-        </Checkbox>
+          <Checkbox value="true">
+            {t(tekster.kapitalinntektOver10k.label)}
+          </Checkbox>
+        </CheckboxGroup>
 
         <FormattertTallTextField
           {...form.field("deg.kapitalinntekt").getControlProps()}
@@ -181,6 +194,11 @@ const tekster = definerTekster({
     nn: "Kva har den andre forelderen hatt i inntekt dei siste 12 månadane?",
   },
   kapitalinntektOver10k: {
+    legend: {
+      nb: "Har du eller den andre forelderen positiv netto kapitalinntekt over 10 000 kroner per år?",
+      en: "Do you or the other parent have positive net capital income of over NOK 10,000 per year?",
+      nn: "Har du eller den andre forelderen positiv netto kapitalinntekt over 10 000 kroner per år?",
+    },
     label: {
       nb: "Kryss av hvis du eller den andre forelderen har positiv netto kapitalinntekt over 10 000 kroner per år",
       en: "Check if you or the other parent has positive net capital income of over NOK 10,000 per year",
