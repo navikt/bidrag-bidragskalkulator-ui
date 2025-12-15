@@ -224,7 +224,7 @@ export const beregnBidragstypeForAlleBarn = (
   barn: BarnebidragSkjema["barn"],
   degInntekt?: number,
   medforelderInntekt?: number,
-): "MOTTAKER" | "PLIKTIG" | "BEGGE" | "" => {
+): "MOTTAKER" | "PLIKTIG" | "" => {
   if (barn.length === 0 || !barn[0]?.bosted) {
     return "";
   }
@@ -243,8 +243,10 @@ export const beregnBidragstypeForAlleBarn = (
   const harMottaker = bidragstyper.includes("MOTTAKER");
   const harPliktig = bidragstyper.includes("PLIKTIG");
 
+  // Hvis begge typer finnes, returner den første som ikke er tom
+  // Dette tvinger brukeren til å velge én kategori
   if (harMottaker && harPliktig) {
-    return "BEGGE";
+    return bidragstyper.find((t) => t === "MOTTAKER" || t === "PLIKTIG") || "";
   }
 
   return bidragstyper[0] || "";

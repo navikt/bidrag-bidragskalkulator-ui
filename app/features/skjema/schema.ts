@@ -37,7 +37,7 @@ const BarnSkjemaSchema = z.object({
 });
 
 const BarnebidragSkjemaSchema = z.object({
-  bidragstype: z.enum(["", "MOTTAKER", "PLIKTIG", "BEGGE"]),
+  bidragstype: z.enum(["", "MOTTAKER", "PLIKTIG"]),
   barn: z.array(BarnSkjemaSchema),
   deg: z.object({
     inntekt: z.string(),
@@ -685,7 +685,7 @@ export const lagBarnSkjema = (språk: Språk) => {
 export const lagBarnebidragSkjema = (språk: Språk) => {
   return z
     .object({
-      bidragstype: z.enum(["MOTTAKER", "PLIKTIG", "BEGGE"]),
+      bidragstype: z.enum(["MOTTAKER", "PLIKTIG"]),
       barn: z
         .array(lagBarnSkjema(språk))
         .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
@@ -701,7 +701,7 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
     .superRefine((data, ctx) => {
       const { bidragstype, dittBoforhold, medforelderBoforhold } = data;
 
-      if (bidragstype === "MOTTAKER" || bidragstype === "BEGGE") {
+      if (bidragstype === "MOTTAKER") {
         if (medforelderBoforhold.borMedAndreBarn === undefined) {
           ctx.addIssue({
             path: ["medforelderBoforhold", "borMedAndreBarn"],
@@ -740,7 +740,7 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
         }
       }
 
-      if (bidragstype === "PLIKTIG" || bidragstype === "BEGGE") {
+      if (bidragstype === "PLIKTIG") {
         if (dittBoforhold.borMedAndreBarn === undefined) {
           ctx.addIssue({
             path: ["dittBoforhold", "borMedAndreBarn"],
@@ -776,7 +776,7 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
         }
       }
 
-      const erBM = bidragstype === "MOTTAKER" || bidragstype === "BEGGE";
+      const erBM = bidragstype === "MOTTAKER";
       const harBarnepassutgifter = data.barn.some(
         (b) => b.barnetilsynsutgift >= 0,
       );

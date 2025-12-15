@@ -34,7 +34,6 @@ export const Bofohold = () => {
         form.setValue(`medforelderBoforhold.${field}`, "");
       });
     }
-    // Hvis bidragstype === "BEGGE", behold begge boforhold
   }, [bidragstype, form]);
 
   if (bidragstype === "") {
@@ -50,27 +49,11 @@ export const Bofohold = () => {
           {t(tekster.beskrivelse)}
         </BodyShort>
 
-        <div
-          className={
-            bidragstype === "PLIKTIG" || bidragstype === "BEGGE"
-              ? "block"
-              : "hidden"
-          }
-        >
-          <BoforholdEnkeltPart part="deg" />
-        </div>
+        {bidragstype === "PLIKTIG" && <BoforholdEnkeltPart part="deg" />}
 
-        {bidragstype === "BEGGE" && <hr className="my-4 border-gray-300" />}
-
-        <div
-          className={
-            bidragstype === "MOTTAKER" || bidragstype === "BEGGE"
-              ? "block"
-              : "hidden"
-          }
-        >
+        {bidragstype === "MOTTAKER" && (
           <BoforholdEnkeltPart part="medforelder" />
-        </div>
+        )}
       </fieldset>
     </div>
   );

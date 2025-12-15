@@ -19,6 +19,10 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
   const alder = barnField.value().alder;
 
+  if (alder === "") {
+    return null;
+  }
+
   const visSpørsmålOmBarnetilsynsutgift =
     barnField.field("alder").touched() &&
     Number(alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT;

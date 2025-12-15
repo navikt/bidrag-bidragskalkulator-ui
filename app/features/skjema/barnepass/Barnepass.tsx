@@ -17,13 +17,13 @@ export const Barnepass = () => {
   const barn = barnField.value() ?? [];
 
   const bidragstype = form.value("bidragstype");
-  const erBM = bidragstype === "MOTTAKER" || bidragstype === "BEGGE";
+  const erBM = bidragstype === "MOTTAKER";
   const antallAndreBarn = Number(form.value("andreBarnUnder12.antall")) || 0;
 
   const dinInntekt = form.value("deg.inntekt");
   const medforelderInntekt = form.value("medforelder.inntekt");
 
-  const barnDuErMottaker = barn.filter(
+  const barnDuErMottakerFor = barn.filter(
     (enkeltBarn) =>
       enkeltBarn.bosted !== "" &&
       kalkulerBidragstype(
@@ -54,7 +54,7 @@ export const Barnepass = () => {
     return barn.findIndex((b) => b.alder === alder);
   };
 
-  if (barnDuErMottaker.length === 0 && barnDuErPliktigFor.length === 0) {
+  if (barnDuErMottakerFor.length === 0 && barnDuErPliktigFor.length === 0) {
     return null;
   }
 
@@ -64,14 +64,14 @@ export const Barnepass = () => {
       <fieldset className="p-0">
         <legend className="text-xl mb-2">{t(tekster.overskrift)}</legend>
 
-        {barnDuErMottaker.map((enkeltBarn, index) => {
+        {barnDuErMottakerFor.map((enkeltBarn, index) => {
           return (
             <Fragment key={index}>
               <BarnepassPerBarn
                 barnIndex={finnBarnIndex(enkeltBarn.alder)}
                 bidragstype="MOTTAKER"
               />
-              {index !== barnDuErMottaker.length - 1 && (
+              {index !== barnDuErMottakerFor.length - 1 && (
                 <hr className="my-8 border-gray-300" />
               )}
             </Fragment>
