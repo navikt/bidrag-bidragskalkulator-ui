@@ -1,4 +1,4 @@
-import { BodyShort, Checkbox } from "@navikt/ds-react";
+import { BodyShort, Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
 import { useEffect, useRef, useState } from "react";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
@@ -119,15 +119,15 @@ export const Ytelser = ({ bidragstype }: Props) => {
     // Oppdater form-verdier
     form.setValue(
       "ytelser.mottarUtvidetBarnetrygd",
-      nyeValgteYtelser.includes("utvidet-barnetrygd") ? "true" : "false",
+      nyeValgteYtelser.includes("utvidet-barnetrygd") ? "true" : "",
     );
     form.setValue(
       "ytelser.mottarSmåbarnstillegg",
-      nyeValgteYtelser.includes("småbarnstillegg") ? "true" : "false",
+      nyeValgteYtelser.includes("småbarnstillegg") ? "true" : "",
     );
     form.setValue(
       "ytelser.kontantstøtte.mottar",
-      nyeValgteYtelser.includes("kontantstøtte") ? "true" : "false",
+      nyeValgteYtelser.includes("kontantstøtte") ? "true" : "",
     );
     form.setValue(
       "ytelser.barnetillegg.mottar",
@@ -170,14 +170,19 @@ export const Ytelser = ({ bidragstype }: Props) => {
         {/* Kontantstøtte - kun for barn som er 1 år */}
         {harBarnIKontantstøtteAlder && (
           <>
-            <Checkbox
-              checked={valgteYtelser.includes("kontantstøtte")}
-              onChange={(e) =>
-                håndterToggleYtelse("kontantstøtte", e.target.checked)
+            <CheckboxGroup
+              legend={t(tekster.felles.alternativer.kontantstøtte)}
+              hideLegend
+              error={form.field("ytelser.kontantstøtte.mottar").error()}
+              value={valgteYtelser.includes("kontantstøtte") ? ["true"] : []}
+              onChange={(value) =>
+                håndterToggleYtelse("kontantstøtte", value.includes("true"))
               }
             >
-              {t(tekster.felles.alternativer.kontantstøtte)}
-            </Checkbox>
+              <Checkbox value="true">
+                {t(tekster.felles.alternativer.kontantstøtte)}
+              </Checkbox>
+            </CheckboxGroup>
             <Kontantstøtte
               valgteYtelser={valgteYtelser}
               harDeltBosted={harDeltBosted}
@@ -189,14 +194,24 @@ export const Ytelser = ({ bidragstype }: Props) => {
         {/* Utvidet barnetrygd */}
         {harBarnUnderUtvidetBarnetrygdAlder && (
           <>
-            <Checkbox
-              checked={valgteYtelser.includes("utvidet-barnetrygd")}
-              onChange={(e) =>
-                håndterToggleYtelse("utvidet-barnetrygd", e.target.checked)
+            <CheckboxGroup
+              legend={t(tekster.felles.alternativer.utvidetBarnetrygd)}
+              hideLegend
+              error={form.field("ytelser.mottarUtvidetBarnetrygd").error()}
+              value={
+                valgteYtelser.includes("utvidet-barnetrygd") ? ["true"] : []
+              }
+              onChange={(value) =>
+                håndterToggleYtelse(
+                  "utvidet-barnetrygd",
+                  value.includes("true"),
+                )
               }
             >
-              {t(tekster.felles.alternativer.utvidetBarnetrygd)}
-            </Checkbox>
+              <Checkbox value="true">
+                {t(tekster.felles.alternativer.utvidetBarnetrygd)}
+              </Checkbox>
+            </CheckboxGroup>
             {mottarUtvidetBarnetrygd && harDeltBosted && (
               <JaNeiRadio
                 {...form
@@ -212,15 +227,22 @@ export const Ytelser = ({ bidragstype }: Props) => {
 
         {/* Småbarnstillegg */}
         {harBarnUnderSmåbarnstilleggAlder && (
-          <Checkbox
-            checked={valgteYtelser.includes("småbarnstillegg")}
-            description={t(tekster[bidragstype].småbarnstillegg.beskrivelse)}
-            onChange={(e) =>
-              håndterToggleYtelse("småbarnstillegg", e.target.checked)
+          <CheckboxGroup
+            legend={t(tekster.felles.alternativer.småbarnstillegg)}
+            hideLegend
+            error={form.field("ytelser.mottarSmåbarnstillegg").error()}
+            value={valgteYtelser.includes("småbarnstillegg") ? ["true"] : []}
+            onChange={(value) =>
+              håndterToggleYtelse("småbarnstillegg", value.includes("true"))
             }
           >
-            {t(tekster.felles.alternativer.småbarnstillegg)}
-          </Checkbox>
+            <Checkbox
+              value="true"
+              description={t(tekster[bidragstype].småbarnstillegg.beskrivelse)}
+            >
+              {t(tekster.felles.alternativer.småbarnstillegg)}
+            </Checkbox>
+          </CheckboxGroup>
         )}
       </fieldset>
     </div>
