@@ -12,6 +12,10 @@ export default function BarnEgenInntekt({ barnIndex }: Props) {
   const form = useFormContext<BarnebidragSkjema>();
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
 
+  if (barnField.value().alder === "") {
+    return null;
+  }
+
   return (
     <div className="space-y-2">
       <FormattertTallTextField
