@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import {
-  MAKS_ALDER_BARNETILLEGG,
+  ALDER_KONTANTSTØTTE,
   MAKS_ALDER_SMÅBARNSTILLEGG,
   MAKS_ALDER_UTVIDET_BARNETRYGD,
   type BarnebidragSkjema,
@@ -36,12 +36,9 @@ export const Ytelser = ({ bidragstype }: Props) => {
   );
 
   // Kontantstøtte er KUN for barn som er nøyaktig 1 år
-  const harBarnIKontantstøtteAlder = barn.some((b) => Number(b.alder) === 1);
-
-  const barnUnder18 = barn.filter(
-    (b) => Number(b.alder) < MAKS_ALDER_BARNETILLEGG,
+  const harBarnIKontantstøtteAlder = barn.some(
+    (b) => Number(b.alder) === ALDER_KONTANTSTØTTE,
   );
-  const harBarnUnderBarnetilleggAlder = barnUnder18.length > 0;
 
   // Sjekk om noe barn har delt bosted
   const harDeltBosted = barn.some((b) => b.bosted === "DELT_FAST_BOSTED");
@@ -134,6 +131,14 @@ export const Ytelser = ({ bidragstype }: Props) => {
       form.setValue("ytelser.delerUtvidetBarnetrygd", "");
     }
   };
+
+  if (
+    !harBarnUnderUtvidetBarnetrygdAlder &&
+    !harBarnUnderSmåbarnstilleggAlder &&
+    !harBarnIKontantstøtteAlder
+  ) {
+    return null;
+  }
 
   const mottarUtvidetBarnetrygd = valgteYtelser.includes("utvidet-barnetrygd");
 

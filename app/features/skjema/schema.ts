@@ -5,9 +5,7 @@ export const MAKS_ALDER_BARNETILSYNSUTGIFT = 10;
 export const MAKS_ALDER_BARN_EGEN_INNTEKT = 13;
 export const MAKS_ALDER_SMÅBARNSTILLEGG = 3;
 export const MAKS_ALDER_UTVIDET_BARNETRYGD = 18;
-export const MAKS_ALDER_KONTANTSTØTTE = 2;
-export const MIN_ALDER_KONTANTSTØTTE = 1;
-export const MAKS_ALDER_BARNETILLEGG = 18;
+export const ALDER_KONTANTSTØTTE = 1;
 
 export type Bidragstype = "MOTTAKER" | "PLIKTIG";
 
