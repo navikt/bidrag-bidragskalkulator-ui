@@ -23,6 +23,7 @@ export const Inntektsopplysninger = () => {
   const barnHarEgenInntekt = useFormScope(
     form.scope("inntekt.barnHarEgenInntekt"),
   ).value();
+  const harKapitalinntektOver10k = form.value("inntekt.kapitalinntektOver10k");
 
   const { t } = useOversettelse();
 
@@ -97,27 +98,24 @@ export const Inntektsopplysninger = () => {
           </Checkbox>
         </CheckboxGroup>
 
-        <FormattertTallTextField
-          {...form.field("deg.kapitalinntekt").getControlProps()}
-          label={t(tekster.kapitalinntekt.din)}
-          error={form.field("deg.kapitalinntekt").error()}
-          onBlur={sporKalkulatorSpørsmålBesvart(
-            "deg-kapitalinntekt",
-            t(tekster.hvaErInntektenTilDenAndreForelderen),
-          )}
-          htmlSize={18}
-        />
-
-        <FormattertTallTextField
-          {...form.field("medforelder.kapitalinntekt").getControlProps()}
-          label={t(tekster.kapitalinntekt.medforelder)}
-          error={form.field("medforelder.kapitalinntekt").error()}
-          onBlur={sporKalkulatorSpørsmålBesvart(
-            "medforelder-kapitalinntekt",
-            t(tekster.hvaErInntektenTilDenAndreForelderen),
-          )}
-          htmlSize={18}
-        />
+        {harKapitalinntektOver10k === "true" && (
+          <>
+            <FormattertTallTextField
+              {...form.field("deg.kapitalinntekt").getControlProps()}
+              className="pl-8"
+              label={t(tekster.kapitalinntekt.din)}
+              error={form.field("deg.kapitalinntekt").error()}
+              htmlSize={18}
+            />
+            <FormattertTallTextField
+              {...form.field("medforelder.kapitalinntekt").getControlProps()}
+              className="pl-8"
+              label={t(tekster.kapitalinntekt.medforelder)}
+              error={form.field("medforelder.kapitalinntekt").error()}
+              htmlSize={18}
+            />
+          </>
+        )}
 
         <RadioGroup
           {...form.field("inntekt.barnHarEgenInntekt").getControlProps()}
