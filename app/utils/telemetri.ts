@@ -36,7 +36,6 @@ function initFaro(url: string) {
     instrumentations: [
       ...getWebInstrumentations({
         captureConsole: true,
-        captureConsoleDisabledLevels: [],
       }),
       new ReactIntegration({
         router: createReactRouterV6DataOptions({
