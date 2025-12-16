@@ -38,7 +38,7 @@ export function Barnebidragsskjema({ form }: Props) {
       <FellesBarnSkjema />
 
       {erBådeMottakerOgPliktig && (
-        <InfoCard data-color="info">
+        <InfoCard data-color="brand-beige">
           <InfoCard.Header>
             <InfoCard.Title>{t(tekster.infoTittel)}</InfoCard.Title>
           </InfoCard.Header>
@@ -76,13 +76,13 @@ const tekster = definerTekster({
     nn: "Beregn barnebidraget",
   },
   infoTittel: {
-    nb: "Viktig informasjon",
-    en: "Important information",
-    nn: "Viktig informasjon",
+    nb: "Har barna du vil avtale bidrag for, fast bosted hos hver sin forelder?",
+    en: "Do the children you want to agree on support for have a fixed residence with each parent?",
+    nn: "Har barna du vil avtale bidrag for, fast bustad hjå kvar sin forelder?",
   },
   infoOmBeregning: {
-    nb: "Du kan bare beregne barnebidrag for barn du enten er bidragsmottaker eller bidragspliktig for - ikke begge deler samtidig. Hvis du har barn i begge kategorier, må du fylle ut et eget skjema for hver kategori.",
-    en: "You can only calculate child support for children where you are either the recipient or the payer - not both at the same time. If you have children in both categories, you must fill out a separate form for each category.",
-    nn: "Du kan berre berekne barnebidrag for barn du anten er bidragsmottakar eller bidragspliktig for - ikkje begge delar samtidig. Dersom du har barn i begge kategoriar, må du fylle ut eit eige skjema for kvar kategori.",
+    nb: "Hvis barna du oppgir har fast bosted hos hver sin forelder må du kalkulere bidraget for barna hver for seg. Det betyr at du må bruke kalkulatoren to ganger - én gang per barn.",
+    en: "If the children you specify have a fixed residence with each parent, you must calculate the support for the children separately. This means that you need to use the calculator twice - once per child.",
+    nn: "Viss barna du oppgir har fast bustad hjå kvar sin forelder må du kalkulere bidraget for barna kvar for seg. Det betyr at du må bruke kalkulatoren to gonger - éin gong per barn.",
   },
 });
