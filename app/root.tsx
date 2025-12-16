@@ -10,7 +10,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
   useRouteLoaderData,
   type HeadersArgs,
   type LoaderFunctionArgs,
@@ -65,7 +64,6 @@ export const headers = ({ loaderHeaders }: HeadersArgs) => {
 };
 
 export default function App() {
-  const { telemetriUrl } = useLoaderData<typeof loader>();
   useFaro();
 
   return (
