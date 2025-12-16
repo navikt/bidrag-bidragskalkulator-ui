@@ -7,11 +7,9 @@ import {
   BodyShort,
   Checkbox,
   CheckboxGroup,
-  Radio,
-  RadioGroup,
   ReadMore,
-  Stack,
 } from "@navikt/ds-react";
+import JaNeiRadio from "~/components/ui/JaNeiRadio";
 import BarnEgenInntekt from "~/features/skjema/BarnEgenInntekt";
 import { sporHendelse } from "~/utils/analytics";
 import type { BarnebidragSkjema } from "./schema";
@@ -19,10 +17,12 @@ import { sporKalkulatorSpørsmålBesvart } from "./utils";
 
 export const Inntektsopplysninger = () => {
   const form = useFormContext<BarnebidragSkjema>();
+  const barn = form.value("barn");
   const barnArray = useFieldArray(form.scope("barn"));
   const barnHarEgenInntekt = useFormScope(
     form.scope("inntekt.barnHarEgenInntekt"),
   ).value();
+  const harGyldigeBarn = barn.filter((b) => b.alder !== "").length > 0;
   const harKapitalinntektOver10k = form.value("inntekt.kapitalinntektOver10k");
 
   const { t } = useOversettelse();
@@ -117,33 +117,28 @@ export const Inntektsopplysninger = () => {
           </>
         )}
 
-        <RadioGroup
-          {...form.field("inntekt.barnHarEgenInntekt").getControlProps()}
-          legend={t(
-            barnArray.length() > 1
-              ? tekster.barnHarEgenInntekt.plural
-              : tekster.barnHarEgenInntekt.singular,
-          )}
-          error={form.field("inntekt.barnHarEgenInntekt").error()}
-        >
-          <Stack
-            gap="space-0 space-24"
-            direction={{ xs: "column", sm: "row" }}
-            wrap={false}
-          >
-            <Radio value="true">{t(tekster.felles.ja)}</Radio>
-            <Radio value="false">{t(tekster.felles.nei)}</Radio>
-          </Stack>
-        </RadioGroup>
-
-        {barnHarEgenInntekt === "true" && (
+        {harGyldigeBarn && (
           <>
-            <BodyShort className="navds-form-field__description">
-              {t(tekster.barnHarEgenInntekt.beskrivelse)}
-            </BodyShort>
-            {barnArray.map((key, _, index) => (
-              <BarnEgenInntekt key={key} barnIndex={index} />
-            ))}
+            <JaNeiRadio
+              {...form.field("inntekt.barnHarEgenInntekt").getInputProps()}
+              legend={t(
+                barnArray.length() > 1
+                  ? tekster.barnHarEgenInntekt.plural
+                  : tekster.barnHarEgenInntekt.singular,
+              )}
+              error={form.field("inntekt.barnHarEgenInntekt").error()}
+            />
+
+            {barnHarEgenInntekt === "true" && (
+              <>
+                <BodyShort className="navds-form-field__description">
+                  {t(tekster.barnHarEgenInntekt.beskrivelse)}
+                </BodyShort>
+                {barnArray.map((key, _, index) => (
+                  <BarnEgenInntekt key={key} barnIndex={index} />
+                ))}
+              </>
+            )}
           </>
         )}
       </fieldset>
@@ -214,10 +209,6 @@ const tekster = definerTekster({
       en: "What is the other parent's net capital income per year?",
       nn: "Hva er den andre forelderen sin netto kapitalinntekt per år?",
     },
-  },
-  felles: {
-    ja: { nb: "Ja", en: "Yes", nn: "Ja" },
-    nei: { nb: "Nei", en: "No", nn: "Nei" },
   },
   barnHarEgenInntekt: {
     singular: {
