@@ -25,7 +25,6 @@ export function Samvær({ barnIndex }: SamværProps) {
   const bosted = barnField.value("bosted");
   const borHosMeg = bosted === "HOS_MEG";
   const borHosMedforelder = bosted === "HOS_MEDFORELDER";
-  const alder = barnField.value("alder");
 
   const sporSamvær = (verdi: string) => {
     if (verdi) {
@@ -128,14 +127,56 @@ const tekster = definerTekster({
         nn: "",
       },
       HOS_MEG: {
-        nb: "Nei, vi har vanlig samværsavtale hvor barnet bor fast hos meg og har samvær med den andre forelderen",
-        en: "",
-        nn: "",
+        nb: (
+          <>
+            Nei, vi har vanlig samværsavtale hvor{" "}
+            <span style={{ fontWeight: "bold" }}>barnet bor fast hos meg </span>
+            og har samvær med den andre forelderen
+          </>
+        ),
+        en: (
+          <>
+            No, we have a regular custody arrangement where{" "}
+            <span style={{ fontWeight: "bold" }}>the child lives with me </span>
+            and has visitation with the other parent
+          </>
+        ),
+        nn: (
+          <>
+            Nei, vi har vanleg samværsavtale der{" "}
+            <span style={{ fontWeight: "bold" }}>barnet bur hjå meg </span> og
+            har samvær med den andre forelderen
+          </>
+        ),
       },
       HOS_MEDFORELDER: {
-        nb: "Nei, vi har vanlig samværsavtale hvor barnet bor fast hos den andre forelderen og har samvær med meg",
-        en: "",
-        nn: "",
+        nb: (
+          <>
+            Nei, vi har vanlig samværsavtale hvor{" "}
+            <span style={{ fontWeight: "bold" }}>
+              barnet bor fast hos den andre forelderen{" "}
+            </span>
+            og har samvær med meg
+          </>
+        ),
+        en: (
+          <>
+            No, we have a regular custody arrangement where{" "}
+            <span style={{ fontWeight: "bold" }}>
+              the child lives with the other parent{" "}
+            </span>
+            and has visitation with me
+          </>
+        ),
+        nn: (
+          <>
+            Nei, vi har vanleg samværsavtale der{" "}
+            <span style={{ fontWeight: "bold" }}>
+              barnet bur hjå den andre forelderen{" "}
+            </span>
+            og har samvær med meg
+          </>
+        ),
       },
     },
   },

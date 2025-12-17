@@ -51,7 +51,6 @@ export const Inntektsopplysninger = () => {
           <BodyLong spacing>
             {t(tekster.inntektsinformasjon.beskrivelseDel2)}
           </BodyLong>
-          <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel3)}</BodyLong>
         </ReadMore>
 
         <FormattertTallTextField
@@ -171,11 +170,6 @@ const tekster = definerTekster({
       nn: "Her oppgir du all skattepliktig inntekt dei siste 12 månadane. Det er til dømes løn, feriepengar, overtidsbetaling, utbetalingar frå Nav, renteinntekter, skattepliktige husleigeinntekter eller aksjeinntekter.",
     },
     beskrivelseDel2: {
-      nb: "Utvidet barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal også regnes med for den av foreldrene som mottar dette. Dersom dere deler den utvidede barnetrygden, skal begge foreldrene legge det til sin inntekt.",
-      en: "Extended child benefit, infant supplement, and cash for care benefit for the support child should be included for the parent who receives this. If you share the extended child benefit, both parents should include it in their income.",
-      nn: "Utvida barnetrygd, ekstra småbarnstillegg og kontantstøtte for bidragsbarnet skal takast med for den som har barna mest. Dersom de deler den utvida barnetrygda, skal begge foreldra legge ho til i inntekta si.",
-    },
-    beskrivelseDel3: {
       nb: "Inntekter som du ikke oppgir i skattemeldingen, skal du ikke ta med her, for eksempel skattefrie husleieinntekter.",
       en: "Income that you do not report in your tax return should not be included here, such as tax-free rental income.",
       nn: "Inntekter som du ikkje oppgir i skattemeldinga, skal du ikkje ta med her, til dømes skattefrie husleigeinntekter.",
@@ -200,14 +194,14 @@ const tekster = definerTekster({
   },
   kapitalinntekt: {
     din: {
-      nb: "Hva er din netto kapitalinntekt per år?",
-      en: "What is your net capital income per year?",
-      nn: "Hva er din netto kapitalinntekt per år?",
+      nb: "Hva er din netto positive kapitalinntekt per år?",
+      en: "What is your net positive capital income per year?",
+      nn: "Hva er din netto positive kapitalinntekt per år?",
     },
     medforelder: {
-      nb: "Hva er den andre forelderen sin netto kapitalinntekt per år?",
-      en: "What is the other parent's net capital income per year?",
-      nn: "Hva er den andre forelderen sin netto kapitalinntekt per år?",
+      nb: "Hva er den andre forelderen sin netto positive kapitalinntekt per år?",
+      en: "What is the other parent's net positive capital income per year?",
+      nn: "Hva er den andre forelderen sin netto positive kapitalinntekt per år?",
     },
   },
   barnHarEgenInntekt: {
