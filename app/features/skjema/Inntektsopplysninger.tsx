@@ -51,6 +51,7 @@ export const Inntektsopplysninger = () => {
           <BodyLong spacing>
             {t(tekster.inntektsinformasjon.beskrivelseDel2)}
           </BodyLong>
+          <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel3)}</BodyLong>
         </ReadMore>
 
         <FormattertTallTextField
@@ -170,6 +171,11 @@ const tekster = definerTekster({
       nn: "Her oppgir du all skattepliktig inntekt dei siste 12 månadane. Det er til dømes løn, feriepengar, overtidsbetaling, utbetalingar frå Nav, renteinntekter, skattepliktige husleigeinntekter eller aksjeinntekter.",
     },
     beskrivelseDel2: {
+      nb: "Har du renteinntekter, skattepliktige utleieinntekter eller aksjeinntekter skal det føres opp i feltet for netto kapitalinntekter under.",
+      en: "If you have interest income, taxable rental income, or share income, it should be entered in the field for net capital income below.",
+      nn: "Har du renteinntekter, skattepliktige husleigeinntekter eller aksjeinntekter skal det førast opp i feltet for netto kapitalinntekter under.",
+    },
+    beskrivelseDel3: {
       nb: "Inntekter som du ikke oppgir i skattemeldingen, skal du ikke ta med her, for eksempel skattefrie husleieinntekter.",
       en: "Income that you do not report in your tax return should not be included here, such as tax-free rental income.",
       nn: "Inntekter som du ikkje oppgir i skattemeldinga, skal du ikkje ta med her, til dømes skattefrie husleigeinntekter.",
