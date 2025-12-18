@@ -232,55 +232,38 @@ export const Ytelser = ({ bidragstype }: Props) => {
 
 const tekster = definerTekster({
   MOTTAKER: {
-    overskrift: {
-      nb: "Pengestøtte fra Nav",
-      en: "",
-      nn: "",
-    },
     beskrivelse: {
       nb: "Kryss av hvis du har noen av disse støtteordningene og tilleggene",
-      en: "",
-      nn: "",
-    },
-    utvidetBarnetrygd: {
-      delingBeskrivelse: {
-        nb: "Når du mottar utvidet barnetrygd, regnes det som en del av inntekten din. Men siden barnet har delt bosted, kan dere velge å dele utvidet barnetrygd. Hvis dere gjør det, teller bare halvparten av beløpet i beregningen.",
-        en: "When you receive extended child benefit, it counts as part of your income. But since the child has shared residence, you can choose to share extended child benefit. If you do, only half the amount counts in the calculation.",
-        nn: "Når du mottar utvida barnetrygd, blir det rekna som ein del av inntekta di. Men sidan barnet har delt bustad, kan de velje å dele utvida barnetrygd. Viss de gjer det, tel berre halvparten av beløpet i utrekninga.",
-      },
-    },
-    småbarnstillegg: {
-      beskrivelse: {
-        nb: "Aktuelt hvis du har full overgangsstønad og barn i alderen 0-3 år",
-        en: "",
-        nn: "",
-      },
-    },
-  },
-  PLIKTIG: {
-    overskrift: {
-      nb: "Pengestøtte fra Nav",
-      en: "",
-      nn: "",
-    },
-    beskrivelse: {
-      nb: "Kryss av hvis bidragsmottaker har noen av disse støtteordningene og tilleggene",
-      en: "",
-      nn: "",
+      en: "Check if you has any of these support schemes and supplements",
+      nn: "Kryss av viss du har nokre av desse støtteordningane og tillegga",
     },
     småbarnstillegg: {
       beskrivelse: {
         nb: "Aktuelt hvis forelderen har full overgangsstønad og barn i alderen 0-3 år",
-        en: "",
-        nn: "",
+        en: "Relevant if the parent has full transitional benefits and children aged 0-3 years",
+        nn: "Aktuelt viss forelderen har full overgangsstønad og barn i alderen 0-3 år",
+      },
+    },
+  },
+  PLIKTIG: {
+    beskrivelse: {
+      nb: "Kryss av hvis den andre forelderen har noen av disse støtteordningene og tilleggene",
+      en: "Check if the other parent has any of these support schemes and supplements",
+      nn: "Kryss av viss den andre forelderen har nokre av desse støtteordningane og tillegga",
+    },
+    småbarnstillegg: {
+      beskrivelse: {
+        nb: "Aktuelt hvis forelderen har full overgangsstønad og barn i alderen 0-3 år",
+        en: "Relevant if the parent has full transitional benefits and children aged 0-3 years",
+        nn: "Aktuelt viss forelderen har full overgangsstønad og barn i alderen 0-3 år",
       },
     },
   },
   felles: {
     overskrift: {
       nb: "Pengestøtte fra Nav",
-      en: "",
-      nn: "",
+      en: "Financial support from NAV",
+      nn: "Pengestøtte frå Nav",
     },
     alternativer: {
       utvidetBarnetrygd: {
@@ -298,46 +281,12 @@ const tekster = definerTekster({
         en: "Cash-for-care benefit",
         nn: "Kontantstøtte",
       },
-      barnetillegg: {
-        nb: "Barnetillegg",
-        en: "",
-        nn: "Barnetillegg",
-      },
     },
     utvidetBarnetrygd: {
       delingSpørsmål: {
         nb: "Deler du og den andre forelderen den utvidede barnetrygden?",
         en: "",
         nn: "Deler du og den andre forelderen den utvidede barnetrygden?",
-      },
-    },
-    barnetillegg: {
-      beskrivelse: {
-        nb: "Aktuelt for deg som for eksempel har uføretrygd, arbeidsavklaringspenger eller dagpenger",
-        en: "Relevant for you who, for example, have disability pension, work assessment allowance or unemployment benefits",
-        nn: "Aktuelt for deg som til dømes har uføretrygd, arbeidsavklaringspengar eller dagpengar",
-      },
-      hvemFår: {
-        MEG: {
-          nb: "Jeg får utbetalt barnetillegg",
-          en: "I receive child supplement",
-          nn: "Eg får utbetalt barnetillegg",
-        },
-        DEN_ANDRE_FORELDREN: {
-          nb: "Den andre forelderen får utbetalt barnetillegg",
-          en: "The other parent receives child supplement",
-          nn: "Den andre forelderen får utbetalt barnetillegg",
-        },
-      },
-      beløpPerBarn: (alder) => ({
-        nb: `Hvor mye får du utbetalt i barnetillegg for barnet ${alder} år?`,
-        en: `How much child supplement do you receive for the ${alder} year old child?`,
-        nn: `Kor mykje får du utbetalt i barnetillegg for barnet ${alder} år?`,
-      }),
-      denAndreForelderenBeløp: {
-        nb: "Hvor mye får den andre forelderen utbetalt i barnetillegg per måned?",
-        en: "How much child supplement does the other parent receive per month?",
-        nn: "Kor mykje får den andre forelderen utbetalt i barnetillegg per månad?",
       },
     },
   },
