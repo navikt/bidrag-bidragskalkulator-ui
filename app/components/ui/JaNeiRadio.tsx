@@ -4,15 +4,11 @@ import {
   Stack,
   type RadioGroupProps,
 } from "@navikt/ds-react";
-import type { FormApi } from "@rvf/react";
-import type { BarnebidragSkjema } from "~/features/skjema/schema";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 
 const JA_NEI_ALTERNATIVER = ["true", "false"] as const;
 
-type Props = {
-  form: FormApi<BarnebidragSkjema>;
-} & RadioGroupProps;
+type Props = Omit<RadioGroupProps, "children">;
 
 export default function JaNeiRadio(props: Props) {
   const { t } = useOversettelse();

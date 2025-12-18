@@ -1,6 +1,7 @@
 import { BodyShort, Radio, RadioGroup, Stack } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
+import JaNeiRadio from "~/components/ui/JaNeiRadio";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import {
   MAKS_ALDER_BARNETILSYNSUTGIFT,
@@ -35,37 +36,19 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
     <>
       <BodyShort>{t(tekster.barnAlder(alder))}</BodyShort>
 
-      <RadioGroup
+      <JaNeiRadio
         legend={t(tekster[bidragstype].barnepassUtgifter)}
         {...barnField.getControlProps("harBarnetilsynsutgift")}
         error={barnField.error("harBarnetilsynsutgift")}
-      >
-        <Stack
-          gap="space-0 space-24"
-          direction={{ xs: "column", sm: "row" }}
-          wrap={false}
-        >
-          <Radio value="true">{t(tekster.jaNei.ja)}</Radio>
-          <Radio value="false">{t(tekster.jaNei.nei)}</Radio>
-        </Stack>
-      </RadioGroup>
+      />
 
       {barnField.value("harBarnetilsynsutgift") === "true" && (
-        <RadioGroup
-          legend={t(tekster[bidragstype].mottarStønadTilBarnetilsyn)}
+        <JaNeiRadio
           {...barnField.getControlProps("mottarStønadTilBarnetilsyn")}
+          legend={t(tekster[bidragstype].mottarStønadTilBarnetilsyn)}
           error={barnField.error("mottarStønadTilBarnetilsyn")}
           className="pl-8"
-        >
-          <Stack
-            gap="space-0 space-24"
-            direction={{ xs: "column", sm: "row" }}
-            wrap={false}
-          >
-            <Radio value="true">{t(tekster.jaNei.ja)}</Radio>
-            <Radio value="false">{t(tekster.jaNei.nei)}</Radio>
-          </Stack>
-        </RadioGroup>
+        />
       )}
 
       {barnField.value("mottarStønadTilBarnetilsyn") === "true" && (
@@ -92,7 +75,6 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
           label={t(tekster[bidragstype].barnepassUtgifterBeløp)}
           error={barnField.field("barnetilsynsutgift").error()}
           htmlSize={10}
-          className="pl-8"
         />
       )}
     </>
@@ -103,64 +85,52 @@ const tekster = definerTekster({
   MOTTAKER: {
     barnepassUtgifter: {
       nb: "Har du utgifter til barnepass for dette barnet?",
-      en: "",
-      nn: "",
+      en: "Do you have expenses for childcare for this child?",
+      nn: "Har du utgifter til barnepass for dette barnet?",
     },
     mottarStønadTilBarnetilsyn: {
       nb: "Mottar du pengestøtte til barnepass? (Stønad til barnetilsyn)",
-      en: "",
-      nn: "",
+      en: "Do you receive financial support for childcare? (Support for child supervision)",
+      nn: "Mottar du pengestøtte til barnepass? (Stønad til barnetilsyn)",
     },
     barnepassUtgifterBeløp: {
       nb: "Hvor mye betaler du for barnepass per måned?",
-      en: "",
-      nn: "",
+      en: "How much do you pay for childcare per month?",
+      nn: "Kor mykje betaler du for barnepass per månad?",
     },
   },
   PLIKTIG: {
     barnepassUtgifter: {
-      nb: "Har bidragsmottaker utgifter til barnepass for dette barnet?",
-      en: "",
-      nn: "",
+      nb: "Har den andre forelderen utgifter til barnepass for dette barnet?",
+      en: "Has the other parent expenses for childcare for this child?",
+      nn: "Har den andre forelderen utgifter til barnepass for dette barnet?",
     },
     mottarStønadTilBarnetilsyn: {
-      nb: "Mottar bidragsmottaker pengestøtte til barnepass? (Stønad til barnetilsyn)",
-      en: "",
-      nn: "",
+      nb: "Mottar den andre forelderen pengestøtte til barnepass? (Stønad til barnetilsyn)",
+      en: "Does the other parent receive financial support for childcare? (Support for child supervision)",
+      nn: "Mottar den andre forelderen pengestøtte til barnepass? (Stønad til barnetilsyn)",
     },
     barnepassUtgifterBeløp: {
-      nb: "Hvor mye betaler bidragsmottaker for barnepass per måned?",
-      en: "",
-      nn: "",
+      nb: "Hvor mye betaler den andre forelderen for barnepass per måned?",
+      en: "How much does the other parent pay for childcare per month?",
+      nn: "Kor mykje betaler den andre forelderen for barnepass per månad?",
     },
   },
   barnepassType: {
     spørsmål: {
       nb: "Heltid eller deltid plass? ",
-      en: "",
-      nn: "",
+      en: "Full-time or part-time place?",
+      nn: "Heltid eller deltid plass?",
     },
     heltid: {
       nb: "Heltid",
-      en: "",
-      nn: "",
+      en: "Full-time",
+      nn: "Heltid",
     },
     deltid: {
       nb: "Deltid",
-      en: "",
-      nn: "",
-    },
-  },
-  jaNei: {
-    ja: {
-      nb: "Ja",
-      en: "",
-      nn: "",
-    },
-    nei: {
-      nb: "Nei",
-      en: "",
-      nn: "",
+      en: "Part-time",
+      nn: "Deltid",
     },
   },
   barnAlder: (alder) => ({
