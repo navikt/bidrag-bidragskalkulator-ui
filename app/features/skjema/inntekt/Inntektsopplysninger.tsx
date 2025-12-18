@@ -69,9 +69,10 @@ export const Inntektsopplysninger = () => {
           htmlSize={18}
         />
 
-        <Kapitalinntekt part="deg" />
-
-        <Kapitalinntekt part="medforelder" />
+        <div>
+          <Kapitalinntekt part="deg" />
+          <Kapitalinntekt part="medforelder" />
+        </div>
 
         {harGyldigeBarn && (
           <>

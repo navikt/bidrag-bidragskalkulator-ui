@@ -1,4 +1,4 @@
-import { BodyLong, BodyShort, ReadMore } from "@navikt/ds-react";
+import { BodyLong, BodyShort } from "@navikt/ds-react";
 import { useField, useFormContext } from "@rvf/react";
 import { Fragment } from "react/jsx-runtime";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
@@ -69,15 +69,6 @@ export const Barnepass = () => {
         <BodyLong spacing size="medium" textColor="subtle">
           {t(tekster.beskrivelse)}
         </BodyLong>
-
-        <ReadMore
-          className="mb-5"
-          header={t(tekster[bidragstype].barnepassInformasjon.overskrift)}
-        >
-          <BodyLong spacing>
-            {t(tekster[bidragstype].barnepassInformasjon.beskrivelseDel1)}
-          </BodyLong>
-        </ReadMore>
 
         {barnDuErMottakerFor.map((enkeltBarn, index) => {
           return (
