@@ -110,14 +110,14 @@ const tekster = definerTekster({
   PLIKTIG: {
     kontantstøtte: {
       etBarn: {
-        nb: "Hvor mye mottar bidragsmottaker i kontantstøtte for Barn 1 år per måned?",
-        en: "How much cash-for-care benefit does the support recipient receive for Child 1 year per month?",
-        nn: "Kor mykje mottar bidragsmottakar i kontantstøtte for Barn 1 år per månad?",
+        nb: "Hvor mye mottar den andre forelderen i kontantstøtte for Barn 1 år per måned?",
+        en: "How much cash-for-care benefit does the other parent receive for Child 1 year per month?",
+        nn: "Kor mykje mottar den andre forelderen i kontantstøtte for Barn 1 år per månad?",
       },
       flereBarn: {
-        nb: "Hvor mye mottar bidragsmottaker i kontantstøtte for Barn 1 år per måned?",
-        en: "How much cash-for-care benefit does the support recipient receive for Children 1 year per month?",
-        nn: "Kor mykje mottar bidragsmottakar i kontantstøtte for Barn 1 år per månad?",
+        nb: "Hvor mye mottar den andre forelderen i kontantstøtte for Barn 1 år per måned?",
+        en: "How much cash-for-care benefit does the other parent receive for Children 1 year per month?",
+        nn: "Kor mykje mottar den andre forelderen i kontantstøtte for Barn 1 år per månad?",
       },
       deltFastBosted: {
         nb: "Deler du og den andre forelderen kontantstøtten for dette barnet?",
