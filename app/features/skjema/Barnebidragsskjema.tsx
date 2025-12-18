@@ -5,7 +5,7 @@ import { Barnepass } from "./barnepass/Barnepass";
 import BidragsrolleInfo from "./BidragsrolleInfo";
 import { Bofohold } from "./Boforhold";
 import { FellesBarnSkjema } from "./FellesBarnSkjema";
-import { Inntektsopplysninger } from "./Inntektsopplysninger";
+import { Inntektsopplysninger } from "./inntekt/Inntektsopplysninger";
 import { type BarnebidragSkjema } from "./schema";
 import { Ytelser } from "./Ytelser";
 

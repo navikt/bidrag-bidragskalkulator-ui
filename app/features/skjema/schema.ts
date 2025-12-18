@@ -40,13 +40,14 @@ const BarnebidragSkjemaSchema = z.object({
   deg: z.object({
     inntekt: z.string(),
     kapitalinntekt: z.string(),
+    harKapitalinntektOver10k: z.enum(["true", ""]),
   }),
   medforelder: z.object({
     inntekt: z.string(),
     kapitalinntekt: z.string(),
+    harKapitalinntektOver10k: z.enum(["true", ""]),
   }),
   inntekt: z.object({
-    kapitalinntektOver10k: z.enum(["true", ""]),
     barnHarEgenInntekt: z.enum(["true", "false", ""]),
   }),
   dittBoforhold: z.object({
@@ -431,15 +432,15 @@ export const lagInntektSkjema = (språk: Språk) => {
       .refine((verdi) => Number.isInteger(verdi), {
         message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
       }),
+    harKapitalinntektOver10k: z
+      .enum(["true", ""])
+      .transform((value) => (value === "" ? undefined : value === "true")),
   });
 };
 
 export const lagKapitalinntektSkjema = (språk: Språk) => {
   return z
     .object({
-      kapitalinntektOver10k: z
-        .enum(["true", ""])
-        .transform((value) => (value === "" ? undefined : value === "true")),
       barnHarEgenInntekt: z
         .enum(["true", "false", ""])
         .transform((value) => (value === "" ? undefined : value === "true")),

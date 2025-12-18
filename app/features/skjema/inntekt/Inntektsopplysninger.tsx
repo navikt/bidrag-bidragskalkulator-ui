@@ -1,19 +1,13 @@
+import { BodyLong, BodyShort, ReadMore } from "@navikt/ds-react";
 import { useFieldArray, useFormContext, useFormScope } from "@rvf/react";
-import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { FormattertTallTextField } from "../../components/ui/FormattertTallTextField";
-
-import {
-  BodyLong,
-  BodyShort,
-  Checkbox,
-  CheckboxGroup,
-  ReadMore,
-} from "@navikt/ds-react";
+import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
-import BarnEgenInntekt from "~/features/skjema/BarnEgenInntekt";
 import { sporHendelse } from "~/utils/analytics";
-import type { BarnebidragSkjema } from "./schema";
-import { sporKalkulatorSpørsmålBesvart } from "./utils";
+import { definerTekster, useOversettelse } from "~/utils/i18n";
+import BarnEgenInntekt from "../BarnEgenInntekt";
+import type { BarnebidragSkjema } from "../schema";
+import { sporKalkulatorSpørsmålBesvart } from "../utils";
+import Kapitalinntekt from "./Kapitalinntekt";
 
 export const Inntektsopplysninger = () => {
   const form = useFormContext<BarnebidragSkjema>();
@@ -23,7 +17,6 @@ export const Inntektsopplysninger = () => {
     form.scope("inntekt.barnHarEgenInntekt"),
   ).value();
   const harGyldigeBarn = barn.filter((b) => b.alder !== "").length > 0;
-  const harKapitalinntektOver10k = form.value("inntekt.kapitalinntektOver10k");
 
   const { t } = useOversettelse();
 
@@ -56,11 +49,11 @@ export const Inntektsopplysninger = () => {
 
         <FormattertTallTextField
           {...form.field("deg.inntekt").getControlProps()}
-          label={t(tekster.dinInntekt.label)}
+          label={t(tekster.dinInntekt)}
           error={form.field("deg.inntekt").error()}
           onBlur={sporKalkulatorSpørsmålBesvart(
             "deg-inntekt",
-            t(tekster.dinInntekt.label),
+            t(tekster.dinInntekt),
           )}
           htmlSize={18}
         />
@@ -76,45 +69,9 @@ export const Inntektsopplysninger = () => {
           htmlSize={18}
         />
 
-        <CheckboxGroup
-          {...form.field("inntekt.kapitalinntektOver10k").getControlProps()}
-          legend={t(tekster.kapitalinntektOver10k.legend)}
-          hideLegend
-          value={
-            form.value("inntekt.kapitalinntektOver10k") === "true"
-              ? ["true"]
-              : []
-          }
-          onChange={(value) =>
-            form.setValue(
-              "inntekt.kapitalinntektOver10k",
-              value.includes("true") ? "true" : "",
-            )
-          }
-        >
-          <Checkbox value="true">
-            {t(tekster.kapitalinntektOver10k.label)}
-          </Checkbox>
-        </CheckboxGroup>
+        <Kapitalinntekt part="deg" />
 
-        {harKapitalinntektOver10k === "true" && (
-          <>
-            <FormattertTallTextField
-              {...form.field("deg.kapitalinntekt").getControlProps()}
-              className="pl-8"
-              label={t(tekster.kapitalinntekt.din)}
-              error={form.field("deg.kapitalinntekt").error()}
-              htmlSize={18}
-            />
-            <FormattertTallTextField
-              {...form.field("medforelder.kapitalinntekt").getControlProps()}
-              className="pl-8"
-              label={t(tekster.kapitalinntekt.medforelder)}
-              error={form.field("medforelder.kapitalinntekt").error()}
-              htmlSize={18}
-            />
-          </>
-        )}
+        <Kapitalinntekt part="medforelder" />
 
         {harGyldigeBarn && (
           <>
@@ -152,11 +109,9 @@ const tekster = definerTekster({
     nn: "Inntekt",
   },
   dinInntekt: {
-    label: {
-      nb: "Hva har du hatt i inntekt de siste 12 månedene?",
-      en: "What has your income been in the last 12 months?",
-      nn: "Kva har du hatt i inntekt dei siste 12 månadane?",
-    },
+    nb: "Hva har du hatt i inntekt de siste 12 månedene?",
+    en: "What has your income been in the last 12 months?",
+    nn: "Kva har du hatt i inntekt dei siste 12 månadane?",
   },
   inntektsinformasjon: {
     overskrift: {
@@ -185,40 +140,16 @@ const tekster = definerTekster({
     en: "What has the other parent's income been in the last 12 months?",
     nn: "Kva har den andre forelderen hatt i inntekt dei siste 12 månadane?",
   },
-  kapitalinntektOver10k: {
-    legend: {
-      nb: "Har du eller den andre forelderen positiv netto kapitalinntekt over 10 000 kroner per år?",
-      en: "Do you or the other parent have positive net capital income of over NOK 10,000 per year?",
-      nn: "Har du eller den andre forelderen positiv netto kapitalinntekt over 10 000 kroner per år?",
-    },
-    label: {
-      nb: "Kryss av hvis du eller den andre forelderen har positiv netto kapitalinntekt over 10 000 kroner per år",
-      en: "Check if you or the other parent has positive net capital income of over NOK 10,000 per year",
-      nn: "Kryss av hvis du eller den andre forelderen har positiv netto kapitalinntekt over 10 000 kroner per år",
-    },
-  },
-  kapitalinntekt: {
-    din: {
-      nb: "Hva er din netto positive kapitalinntekt per år?",
-      en: "What is your net positive capital income per year?",
-      nn: "Hva er din netto positive kapitalinntekt per år?",
-    },
-    medforelder: {
-      nb: "Hva er den andre forelderen sin netto positive kapitalinntekt per år?",
-      en: "What is the other parent's net positive capital income per year?",
-      nn: "Hva er den andre forelderen sin netto positive kapitalinntekt per år?",
-    },
-  },
   barnHarEgenInntekt: {
     singular: {
       nb: "Har barnet egen inntekt?",
       en: "Does a child have its own income?",
-      nn: "",
+      nn: "Har barnet eigen inntekt?",
     },
     plural: {
       nb: "Har barna egen inntekt?",
       en: "Do children have their own income?",
-      nn: "",
+      nn: "Har barna eigen inntekt?",
     },
     beskrivelse: {
       nb: (
@@ -230,8 +161,24 @@ const tekster = definerTekster({
           selvforsørget. Skriv 0 hvis barnet ikke har inntekt.
         </>
       ),
-      en: "",
-      nn: "",
+      en: (
+        <>
+          If the child has an annual income over{" "}
+          <span style={{ color: "#C30000" }}>60 300 kroner</span>, it will
+          affect the calculation. With an income over{" "}
+          <span style={{ color: "#C30000" }}>201 000</span>, the child is
+          considered self-sufficient. Write 0 if the child has no income.
+        </>
+      ),
+      nn: (
+        <>
+          Dersom barnet har ei årsinntekt over{" "}
+          <span style={{ color: "#C30000" }}>60 300 kroner</span>, vil det
+          påverke berekninga i kalkulatoren. Ved inntekt over{" "}
+          <span style={{ color: "#C30000" }}>201 000</span> blir barnet rekna
+          som sjølvforsørga. Skriv 0 dersom barnet ikkje har inntekt.
+        </>
+      ),
     },
   },
 });

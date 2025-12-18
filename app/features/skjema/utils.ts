@@ -106,13 +106,14 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
   deg: {
     inntekt: "",
     kapitalinntekt: "",
+    harKapitalinntektOver10k: "",
   },
   medforelder: {
     inntekt: "",
     kapitalinntekt: "",
+    harKapitalinntektOver10k: "",
   },
   inntekt: {
-    kapitalinntektOver10k: "",
     barnHarEgenInntekt: "",
   },
   dittBoforhold: {
