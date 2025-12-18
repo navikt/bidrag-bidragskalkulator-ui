@@ -202,20 +202,6 @@ const tekster = definerTekster({
   MOTTAKER: {
     barnepassInformasjon: {
       overskrift: {
-        nb: "Betaler du for barnepass?",
-        en: "Do you pay for childcare?",
-        nn: "Betaler du for barnepass?",
-      },
-      beskrivelseDel1: {
-        nb: "Hvis den du betaler for barnepass, legg inn opplysningene slik kalkulatoren ber om. Når kalkulatoren har foreslått et barnebidrag, kan dere for eksempel trekke utgiftene til barnepass  fra forslaget til barnebidrag og justere slik det passer dere.",
-        en: "If the person you pay for childcare, enter the information as the calculator requests. When the calculator has suggested a child support amount, you can, for example, deduct the childcare expenses from the proposed child support and adjust it as it suits you.",
-        nn: "Dersom den du betaler for barnepass, legg inn opplysningane slik kalkulatoren ber om. Når kalkulatoren har føreslått eit barnebidrag, kan de til dømes trekkje frå utgiftene til barnepass frå forslaget til barnebidrag og justere slik det passar dykk.",
-      },
-    },
-  },
-  PLIKTIG: {
-    barnepassInformasjon: {
-      overskrift: {
         nb: "Betaler den andre forelderen for barnepass?",
         en: "Does the other parent pay for childcare?",
         nn: "Betaler den andre forelderen for barnepass?",
@@ -224,6 +210,20 @@ const tekster = definerTekster({
         nb: "Hvis den andre forelderen betaler for barnepass, legg inn opplysningene slik kalkulatoren ber om. Når kalkulatoren har foreslått et barnebidrag, kan dere for eksempel trekke utgiftene til barnepass  fra forslaget til barnebidrag og justere slik det passer dere.",
         en: "If the other parent pays for childcare, enter the information as the calculator requests. When the calculator has suggested a child support amount, you can, for example, deduct the childcare expenses from the proposed child support and adjust it as it suits you.",
         nn: "Dersom den andre forelderen betaler for barnepass, legg inn opplysningane slik kalkulatoren ber om. Når kalkulatoren har føreslått eit barnebidrag, kan de til dømes trekkje frå utgiftene til barnepass frå forslaget til barnebidrag og justere slik det passar dykk.",
+      },
+    },
+  },
+  PLIKTIG: {
+    barnepassInformasjon: {
+      overskrift: {
+        nb: "Betaler du for barnepass?",
+        en: "Do you pay for childcare?",
+        nn: "Betaler du for barnepass?",
+      },
+      beskrivelseDel1: {
+        nb: "Hvis du betaler for barnepass, legg inn opplysningene slik kalkulatoren ber om. Når kalkulatoren har foreslått et barnebidrag, kan dere for eksempel trekke utgiftene til barnepass  fra forslaget til barnebidrag og justere slik det passer dere.",
+        en: "If you pay for childcare, enter the information as the calculator requests. When the calculator has suggested a child support amount, you can, for example, deduct the childcare expenses from the proposed child support and adjust it as it suits you.",
+        nn: "Dersom du betaler for barnepass, legg inn opplysningane slik kalkulatoren ber om. Når kalkulatoren har føreslått eit barnebidrag, kan de til dømes trekkje frå utgiftene til barnepass frå forslaget til barnebidrag og justere slik det passar dykk.",
       },
     },
   },
