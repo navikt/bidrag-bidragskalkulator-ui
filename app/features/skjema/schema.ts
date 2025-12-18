@@ -113,16 +113,6 @@ export const lagYtelserSkjema = (språk: Språk) => {
       // Kontantstøtte: Når mottar er true, må beløp fylles ut hvis:
       // 1. Barn ikke har delt bosted (deler-spørsmål stilles aldri), ELLER
       // 2. Barn har delt bosted OG de deler kontantstøtten
-      if (values.kontantstøtte.mottar === undefined) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.ytelser.kontantstøtte.mottar.påkrevd,
-          ),
-          path: ["kontantstøtte", "mottar"],
-        });
-      }
 
       if (
         values.kontantstøtte.mottar === true &&
@@ -154,17 +144,6 @@ export const lagYtelserSkjema = (språk: Språk) => {
       }
 
       // Utvidet barnetrygd
-      if (values.mottarUtvidetBarnetrygd === undefined) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.ytelser.utvidetBarnetrygd.mottar.påkrevd,
-          ),
-          path: ["mottarUtvidetBarnetrygd"],
-        });
-      }
-
       if (
         values.mottarUtvidetBarnetrygd &&
         values.delerUtvidetBarnetrygd === undefined
@@ -173,21 +152,9 @@ export const lagYtelserSkjema = (språk: Språk) => {
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.ytelser.utvidetBarnetrygd.påkrevd,
+            tekster.feilmeldinger.ytelser.utvidetBarnetrygd.deler.påkrevd,
           ),
           path: ["delerUtvidetBarnetrygd"],
-        });
-      }
-
-      // Småbarnstillegg
-      if (values.mottarSmåbarnstillegg === undefined) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.ytelser.småbarnstillegg.påkrevd,
-          ),
-          path: ["mottarSmåbarnstillegg"],
         });
       }
     })
@@ -1090,13 +1057,6 @@ const tekster = definerTekster({
     },
     ytelser: {
       kontantstøtte: {
-        mottar: {
-          påkrevd: {
-            nb: "Velg om du mottar kontantstøtte",
-            en: "Select if you receive cash-for-care benefit",
-            nn: "Vel om du mottar kontantstøtte",
-          },
-        },
         beløp: {
           påkrevd: {
             nb: "Fyll inn beløp for kontantstøtte",
@@ -1128,24 +1088,12 @@ const tekster = definerTekster({
         },
       },
       utvidetBarnetrygd: {
-        mottar: {
+        deler: {
           påkrevd: {
-            nb: "Velg om du mottar utvidet barnetrygd",
-            en: "Select if you receive extended child benefit",
-            nn: "Vel om du mottar utvida barnetrygd",
+            nb: "Velg om dere deler utvidet barnetrygd",
+            en: "Select if you share extended child benefit",
+            nn: "Vel om de deler utvida barnetrygd",
           },
-        },
-        påkrevd: {
-          nb: "Velg om dere deler utvidet barnetrygd",
-          en: "Select if you share extended child benefit",
-          nn: "Vel om de deler utvida barnetrygd",
-        },
-      },
-      småbarnstillegg: {
-        påkrevd: {
-          nb: "Velg om du mottar småbarnstillegg",
-          en: "Select if you receive infant supplement",
-          nn: "Vel om du mottar småbarnstillegg",
         },
       },
     },
