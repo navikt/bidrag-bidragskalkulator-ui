@@ -42,11 +42,13 @@ export const Bofohold = () => {
 
   return (
     <div className="border p-4 rounded-md">
-      <h2 className="sr-only">{t(tekster.overskrift)}</h2>
+      <h2 className="sr-only">{t(tekster[bidragstype].overskrift)}</h2>
       <fieldset className="p-0 flex flex-col gap-4">
-        <legend className="text-xl mb-2">{t(tekster.overskrift)}</legend>
+        <legend className="text-xl mb-2">
+          {t(tekster[bidragstype].overskrift)}
+        </legend>
         <BodyShort size="medium" textColor="subtle">
-          {t(tekster.beskrivelse)}
+          {t(tekster[bidragstype].beskrivelse)}
         </BodyShort>
 
         {bidragstype === "PLIKTIG" && <BoforholdEnkeltPart part="deg" />}
@@ -60,14 +62,28 @@ export const Bofohold = () => {
 };
 
 const tekster = definerTekster({
-  overskrift: {
-    nb: "Bosituasjon og andre egne barn",
-    en: "",
-    nn: "",
+  PLIKTIG: {
+    overskrift: {
+      nb: "Din bosituasjon og andre egne barn",
+      en: "Your living situation and other own children",
+      nn: "Din busituasjon og andre eigne barn",
+    },
+    beskrivelse: {
+      nb: "Med andre egne barn mener vi barn du ikke skal avtale barnebidrag med for nå",
+      en: "By other own children, we mean children you are not going to arrange child support for at the moment.",
+      nn: "Med andre eigne barn meiner vi barn du ikkje skal avtale barnebidrag med for no",
+    },
   },
-  beskrivelse: {
-    nb: "Med andre egne barn mener vi barn bidragspliktig ikke skal avtale barnebidrag med for nå",
-    en: "",
-    nn: "",
+  MOTTAKER: {
+    overskrift: {
+      nb: "Den andre forelderens bosituasjon og andre egne barn",
+      en: "The other parent's living situation and other own children",
+      nn: "Den andre forelderen sin busituasjon og andre eigne barn",
+    },
+    beskrivelse: {
+      nb: "Med andre egne barn mener vi barn du ikke skal avtale barnebidrag med for nå",
+      en: "By other own children, we mean children you are not going to arrange child support for at the moment.",
+      nn: "Med andre eigne barn meiner vi barn du ikkje skal avtale barnebidrag med for no",
+    },
   },
 });

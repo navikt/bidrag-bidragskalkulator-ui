@@ -2,12 +2,10 @@ import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "../../components/ui/FormattertTallTextField";
 
-import { Radio, RadioGroup, Stack } from "@navikt/ds-react";
-import { sporHendelse } from "~/utils/analytics";
+import { Radio, RadioGroup } from "@navikt/ds-react";
+import JaNeiRadio from "~/components/ui/JaNeiRadio";
 import { BorMedAnnenVoksenTypeSchema, type BarnebidragSkjema } from "./schema";
 import { sporKalkulatorSpørsmålBesvart } from "./utils";
-
-const JA_NEI_ALTERNATIVER = ["true", "false"] as const;
 
 type Props = {
   part: "deg" | "medforelder";
@@ -45,42 +43,11 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
 
   return (
     <fieldset className="p-0 flex flex-col gap-4">
-      <legend className="sr-only">{t(tekster[skjemagruppe].tittel)}</legend>
-
-      <RadioGroup
+      <JaNeiRadio
         {...form.field(`${skjemagruppe}.borMedAndreBarn`).getInputProps({
           onChange: vedEndreBorMedAndreBarn,
           legend: t(tekster[skjemagruppe].borMedAndreBarn.label),
           error: form.field(`${skjemagruppe}.borMedAndreBarn`).error(),
-          children: (
-            <Stack
-              gap="0 6"
-              direction={{ xs: "column", sm: "row" }}
-              wrap={false}
-            >
-              {JA_NEI_ALTERNATIVER.map((alternativ) => {
-                return (
-                  <Radio
-                    value={alternativ}
-                    key={alternativ}
-                    onChange={() => {
-                      sporHendelse({
-                        hendelsetype: "skjema spørsmål besvart",
-                        skjemaId: "barnebidragskalkulator-under-18",
-                        spørsmålId: `${part}-bor-med-andre-barn`,
-                        spørsmål: t(
-                          tekster[skjemagruppe].borMedAndreBarn.label,
-                        ),
-                        svar: tekster.felles.jaNei[alternativ].nb,
-                      });
-                    }}
-                  >
-                    {t(tekster.felles.jaNei[alternativ])}
-                  </Radio>
-                );
-              })}
-            </Stack>
-          ),
         })}
       />
 
@@ -103,28 +70,11 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
         </>
       )}
 
-      <RadioGroup
+      <JaNeiRadio
         {...form.field(`${skjemagruppe}.borMedAnnenVoksen`).getInputProps()}
         error={form.field(`${skjemagruppe}.borMedAnnenVoksen`).error()}
         legend={t(tekster[skjemagruppe].borMedAnnenVoksen.label)}
-      >
-        <Stack gap="0 6" direction={{ xs: "column", sm: "row" }} wrap={false}>
-          {JA_NEI_ALTERNATIVER.map((alternativ) => {
-            return (
-              <Radio
-                value={alternativ}
-                key={alternativ}
-                onChange={sporKalkulatorSpørsmålBesvart(
-                  `${part}-bor-med-voksen`,
-                  t(tekster[skjemagruppe].borMedAnnenVoksen.label),
-                )}
-              >
-                {t(tekster.felles.jaNei[alternativ])}
-              </Radio>
-            );
-          })}
-        </Stack>
-      </RadioGroup>
+      />
 
       {borMedAnnenVoksen && (
         <>
@@ -147,28 +97,14 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
 
           {borMedEgneBarnOver18 && (
             <>
-              <RadioGroup
+              <JaNeiRadio
                 {...form
                   .field(`${skjemagruppe}.borMedBarnOver18`)
                   .getInputProps()}
                 error={form.field(`${skjemagruppe}.borMedBarnOver18`).error()}
                 legend={t(tekster[skjemagruppe].borMedBarnOver18.label)}
                 className="pl-8"
-              >
-                <Stack
-                  gap="0 6"
-                  direction={{ xs: "column", sm: "row" }}
-                  wrap={false}
-                >
-                  {JA_NEI_ALTERNATIVER.map((alternativ) => {
-                    return (
-                      <Radio value={alternativ} key={alternativ}>
-                        {t(tekster.felles.jaNei[alternativ])}
-                      </Radio>
-                    );
-                  })}
-                </Stack>
-              </RadioGroup>
+              />
 
               {borMedBarnVgs && (
                 <FormattertTallTextField
@@ -205,28 +141,11 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
 
 const tekster = definerTekster({
   dittBoforhold: {
-    tittel: {
-      nb: "Din bosituasjon",
-      en: "Your housing situation",
-      nn: "Din busituasjon",
-    },
     antallBarnBorFast: {
       label: {
         nb: "Hvor mange andre egne barn bor fast hos deg?",
-        nn: "",
-        en: "",
-      },
-      beskrivelse: {
-        nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
-        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal du ikkje telje med her.",
-        en: "Children you have previously entered in the calculator should not be included here.",
-      },
-    },
-    antallBarnDeltBosted: {
-      label: {
-        nb: "Antall egne barn under 18 år med delt bosted hos deg",
-        nn: "Antal eigne barn under 18 år med delt bustad hos deg",
-        en: "Number of children of your own under 18 years with shared permanent residence living with you",
+        nn: "Kor mange andre eigne barn bur fast hos deg?",
+        en: "How many other own children live permanently with you?",
       },
       beskrivelse: {
         nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
@@ -237,98 +156,64 @@ const tekster = definerTekster({
     borMedAnnenVoksen: {
       label: {
         nb: "Bor du sammen med voksne over 18 år?",
-        nn: "",
-        en: "",
+        nn: "Bur du saman med vaksne over 18 år?",
+        en: "Do you live with adults over 18 years?",
       },
     },
     borMedAndreBarn: {
       label: {
         nb: "Har du andre egne barn under 18 år som bor fast hos deg",
-        nn: "",
-        en: "",
-      },
-    },
-    barnebidragForAndreEgneBarn: {
-      label: {
-        nb: "Betaler du barnebidrag for andre egne barn?",
-        nn: "",
-        en: "",
-      },
-      beskrivelse: {
-        nb: "Dette kan være barn over 18 år, eller samboer/ektefelle",
-        nn: "",
-        en: "",
+        nn: "Har du andre eigne barn under 18 år som bur fast hos deg",
+        en: "Do you have other own children under 18 years who live permanently with you",
       },
     },
     borMedAnnenVoksenType: {
-      label: {
-        nb: "Hvem bor du sammen med?",
-        nn: "",
-        en: "",
-      },
       SAMBOER_ELLER_EKTEFELLE: {
         nb: "Samboer eller ektefelle",
-        nn: "",
-        en: "",
+        nn: "Sambuar eller ektefelle",
+        en: "Cohabitant or spouse",
       },
       EGNE_BARN_OVER_18: {
         nb: "Egne barn over 18 år",
-        nn: "",
-        en: "",
+        nn: "Eigne barn over 18 år",
+        en: "Own children over 18 years",
       },
     },
     borSammenMed: {
       label: {
         nb: "Hvem bor du sammen med?",
-        nn: "",
-        en: "",
+        nn: "Kven bur du saman med?",
+        en: "Who do you live with?",
       },
     },
     borMedBarnOver18: {
       label: {
         nb: "Bor du sammen med egne barn som går på videregående skole?",
-        nn: "",
-        en: "",
+        nn: "Bur du saman med eigne barn som går på vidaregåande skule?",
+        en: "Do you live with own children who are in upper secondary school?",
       },
     },
     antallBarnOver18: {
       label: {
         nb: "Antall barn som går på videregående skole",
-        nn: "",
-        en: "",
+        nn: "Antall barn som går på vidaregåande skule",
+        en: "Number of children in upper secondary school",
       },
     },
     andreBarnebidragerPerMåned: {
       label: {
-        nb: "Hvor mye betaler bidragspliktig] totalt i barnebidrag for andre egne barn per måned?",
-        nn: "",
-        en: "",
+        nb: "Hvor mye betaler du totalt i barnebidrag for andre egne barn per måned?",
+        nn: "Kor mykje betalar du totalt i barnebidrag for andre eigne barn per månad?",
+        en: "How much do you pay in child support for other own children per month?",
       },
     },
   },
   medforelderBoforhold: {
-    tittel: {
-      nb: "Den andre forelderen sin bosituasjon",
-      en: "The other parent's housing situation",
-      nn: "bidragspliktig sin busituasjon",
-    },
     antallBarnBorFast: {
       label: {
-        nb: "Hvor mange andre egne barn bor fast hos bidragspliktig?",
-        nn: "",
-        en: "",
-      },
-      beskrivelse: {
-        nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
-        nn: "Barn du har lagt inn tidlegare i kalkulatoren, skal du ikkje telje med her.",
-        en: "Children you have previously entered in the calculator should not be included here.",
-      },
-    },
-    antallBarnDeltBosted: {
-      label: {
-        nb: "Antall egne barn under 18 år med delt bosted hos bidragspliktig",
-        nn: "Antal eigne barn under 18 år med delt bustad hos bidragspliktig",
-        en: "Number of own children under 18 years, with shared permanent residence living with the other parent",
+        nb: "Hvor mange andre egne barn bor fast hos den andre forelderen?",
+        nn: "Kor mange andre eigne barn bur fast hos den andre forelderen?",
+        en: "How many other own children live permanently with the other parent?",
       },
       beskrivelse: {
         nb: "Barn du har lagt inn tidligere i kalkulatoren, skal ikke telles med her.",
@@ -338,87 +223,56 @@ const tekster = definerTekster({
     },
     borMedAnnenVoksen: {
       label: {
-        nb: "Bor bidragsplikitig sammen med voksne over 18 år?",
-        nn: "",
-        en: "",
+        nb: "Bor den andre forelderen sammen med voksne over 18 år?",
+        nn: "Bur den andre forelderen saman med vaksne over 18 år?",
+        en: "Does the other parent live with adults over 18 years?",
       },
     },
     borMedAndreBarn: {
       label: {
-        nb: "Har bidragspliktig andre egne barn under 18 år som bor fast hos seg?",
-        nn: "",
-        en: "",
-      },
-    },
-    barnebidragForAndreEgneBarn: {
-      label: {
-        nb: "Betaler bidragspliktig barnebidrag for andre egne barn?",
-        nn: "",
-        en: "",
-      },
-      beskrivelse: {
-        nb: "Dette kan være barn over 18 år, eller samboer/ektefelle",
-        nn: "",
-        en: "",
+        nb: "Har den andre forelderen andre egne barn under 18 år som bor fast hos seg?",
+        nn: "Har den andre forelderen andre eigne barn under 18 år som bur fast hos seg?",
+        en: "Does the other parent have other own children under 18 years who live permanently with them?",
       },
     },
     borMedAnnenVoksenType: {
-      label: {
-        nb: "Hvem bor bidragspliktig sammen med?",
-        nn: "",
-        en: "",
-      },
       SAMBOER_ELLER_EKTEFELLE: {
         nb: "Samboer eller ektefelle",
-        nn: "",
-        en: "",
+        nn: "Sambuar eller ektefelle",
+        en: "Cohabitant or spouse",
       },
       EGNE_BARN_OVER_18: {
         nb: "Egne barn over 18 år",
-        nn: "",
-        en: "",
+        nn: "Eigne barn over 18 år",
+        en: "Own children over 18 years",
       },
     },
     borSammenMed: {
       label: {
-        nb: "Hvem bor bidragspliktig sammen med?",
-        nn: "",
-        en: "",
+        nb: "Hvem bor den andre forelderen sammen med?",
+        nn: "Hvem bur den andre forelderen saman med?",
+        en: "Who does the other parent live with?",
       },
     },
     borMedBarnOver18: {
       label: {
-        nb: "Bor bidragspliktig sammen med egne barn som går på videregående skole?",
-        nn: "",
-        en: "",
+        nb: "Bor den andre forelderen sammen med egne barn som går på videregående skole?",
+        nn: "Bur den andre forelderen saman med eigne barn som går på vidaregåande skule?",
+        en: "Does the other parent live with own children who are in upper secondary school?",
       },
     },
     antallBarnOver18: {
       label: {
         nb: "Antall barn som går på videregående skole",
-        nn: "",
-        en: "",
+        nn: "Antall barn som går på vidaregåande skule",
+        en: "Number of children in upper secondary school",
       },
     },
     andreBarnebidragerPerMåned: {
       label: {
-        nb: "Hvor mye betaler bidragspliktig] totalt i barnebidrag for andre egne barn per måned?",
-        nn: "",
-        en: "",
-      },
-    },
-  },
-  felles: {
-    jaNei: {
-      true: {
-        nb: "Ja",
-        nn: "Ja",
-        en: "Yes",
-      },
-      false: {
-        nb: "Nei",
-        nn: "Nei",
-        en: "No",
+        nb: "Hvor mye betaler den andre forelderen totalt i barnebidrag for andre egne barn per måned?",
+        nn: "Kor mykje betalar den andre forelderen totalt i barnebidrag for andre eigne barn per månad?",
+        en: "How much does the other parent pay in child support for other own children per month?",
       },
     },
   },
