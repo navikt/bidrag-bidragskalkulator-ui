@@ -120,7 +120,7 @@ const tekster = definerTekster({
   },
   barnepassType: {
     spørsmål: {
-      nb: "Heltid eller deltid plass? ",
+      nb: "Heltid eller deltid plass?",
       en: "Full-time or part-time place?",
       nn: "Heltid eller deltid plass?",
     },

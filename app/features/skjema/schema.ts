@@ -54,7 +54,6 @@ const BarnebidragSkjemaSchema = z.object({
     borMedAndreBarn: z.enum(["true", "false", "", "undefined"]),
     betalerBarnebidrageForAndreBarn: z.enum(["true", "false", "", "undefined"]),
     antallBarnBorFast: z.string(),
-    // antallBarnDeltBosted: z.string(),
     borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
     borMedBarnOver18: z.enum(["true", "false", "", "undefined"]),
     antallBarnOver18: z.string(),
@@ -65,7 +64,6 @@ const BarnebidragSkjemaSchema = z.object({
     borMedAndreBarn: z.enum(["true", "false", "", "undefined"]),
     betalerBarnebidrageForAndreBarn: z.enum(["true", "false", "", "undefined"]),
     antallBarnBorFast: z.string(),
-    // antallBarnDeltBosted: z.string(),
     borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
     borMedBarnOver18: z.enum(["true", "false", "", "undefined"]),
     antallBarnOver18: z.string(),
@@ -373,18 +371,6 @@ export const lagBoforholdSkjema = (språk: Språk) => {
           path: ["andreBarnebidragerPerMåned"],
         });
       }
-
-      // if (values.borMedAndreBarn && values.antallBarnDeltBosted.trim() === "") {
-      //   ctx.addIssue({
-      //     code: "custom",
-      //     message: oversett(
-      //       språk,
-      //       tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
-      //         .påkrevd,
-      //     ),
-      //     path: ["antallBarnDeltBosted"],
-      //   });
-      // }
     })
     .transform((values) => {
       return {
@@ -394,7 +380,6 @@ export const lagBoforholdSkjema = (språk: Språk) => {
         andreBarnebidragerPerMåned: Number(
           values.andreBarnebidragerPerMåned.trim() || 0,
         ),
-        // antallBarnDeltBosted: Number(values.antallBarnDeltBosted.trim() || 0),
       };
     })
     .superRefine((values, ctx) => {
@@ -417,27 +402,6 @@ export const lagBoforholdSkjema = (språk: Språk) => {
           path: ["antallBarnBorFast"],
         });
       }
-
-      // if (isNaN(values.antallBarnDeltBosted)) {
-      //   ctx.addIssue({
-      //     code: "custom",
-      //     message: oversett(
-      //       språk,
-      //       tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted.tall,
-      //     ),
-      //     path: ["antallBarnDeltBosted"],
-      //   });
-      // } else if (values.antallBarnDeltBosted < 0) {
-      //   ctx.addIssue({
-      //     code: "custom",
-      //     message: oversett(
-      //       språk,
-      //       tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
-      //         .minimum,
-      //     ),
-      //     path: ["antallBarnDeltBosted"],
-      //   });
-      // }
     });
 };
 

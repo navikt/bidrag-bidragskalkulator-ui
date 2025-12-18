@@ -154,7 +154,6 @@ export default function Barnebidragskalkulator() {
   return (
     <>
       <FormProvider scope={form.scope()}>
-        {/* <BetaNotis /> */}
         <div className="max-w-xl mx-auto mt-8 flex flex-col gap-4 mb-16">
           <Heading size="xlarge" level="1" spacing align="center">
             {t(tekster.overskrift)}
