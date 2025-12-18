@@ -2,6 +2,7 @@ import { Button, InfoCard } from "@navikt/ds-react";
 import { type FormApi } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { Barnepass } from "./barnepass/Barnepass";
+import BidragsrolleInfo from "./BidragsrolleInfo";
 import { Bofohold } from "./Boforhold";
 import { FellesBarnSkjema } from "./FellesBarnSkjema";
 import { Inntektsopplysninger } from "./Inntektsopplysninger";
@@ -49,6 +50,7 @@ export function Barnebidragsskjema({ form }: Props) {
       {!erBådeMottakerOgPliktig && (
         <>
           <Inntektsopplysninger />
+          <BidragsrolleInfo />
 
           {skalViseBarnepass && <Barnepass />}
 
