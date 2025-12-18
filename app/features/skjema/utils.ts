@@ -14,7 +14,7 @@ import {
   type FastBostedSchema,
 } from "./schema";
 
-export const SAMVÆR_STANDARDVERDI = "0";
+export const SAMVÆR_STANDARDVERDI = "15";
 
 type BoOgForbruksutgiftsgrupper = {
   boOgForbruksutgift: number;

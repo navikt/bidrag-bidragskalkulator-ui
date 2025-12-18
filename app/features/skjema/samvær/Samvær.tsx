@@ -44,8 +44,12 @@ export function Samvær({ barnIndex }: SamværProps) {
       </BodyShort>
       <RadioGroup
         {...barnField.getControlProps("bosted", {
-          onChange: () => {
-            barnField.field("samvær").setValue(SAMVÆR_STANDARDVERDI);
+          onChange: (verdi) => {
+            barnField
+              .field("samvær")
+              .setValue(
+                verdi === "HOS_MEG" ? SAMVÆR_STANDARDVERDI : String("0"),
+              );
           },
         })}
         error={barnField.field("bosted").error()}
@@ -68,7 +72,31 @@ export function Samvær({ barnIndex }: SamværProps) {
         })}
       </RadioGroup>
 
-      {(borHosMeg || borHosMedforelder) && (
+      {borHosMeg && (
+        <Slider
+          {...barnField.field("samvær").getControlProps({
+            onChange: sporSamvær,
+          })}
+          label={t(tekster.samvær.label)}
+          error={barnField.field("samvær").error()}
+          min={15}
+          max={30}
+          step={1}
+          list={[
+            {
+              label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosMeg),
+              value: 15,
+            },
+            {
+              label: t(tekster.samvær.beskrivelser.alleNetterSamvær),
+              value: 30,
+            },
+          ]}
+          valueDescription={samværsgradBeskrivelse}
+        />
+      )}
+
+      {borHosMedforelder && (
         <Slider
           {...barnField.field("samvær").getControlProps({
             onChange: sporSamvær,
@@ -76,7 +104,7 @@ export function Samvær({ barnIndex }: SamværProps) {
           label={t(tekster.samvær.label)}
           error={barnField.field("samvær").error()}
           min={0}
-          max={30}
+          max={15}
           step={1}
           list={[
             {
@@ -84,8 +112,8 @@ export function Samvær({ barnIndex }: SamværProps) {
               value: 0,
             },
             {
-              label: t(tekster.samvær.beskrivelser.alleNetterSamvær),
-              value: 30,
+              label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosMeg),
+              value: 15,
             },
           ]}
           valueDescription={samværsgradBeskrivelse}
@@ -199,21 +227,19 @@ const tekster = definerTekster({
       nn: "1 natt hos meg",
     },
     beskrivelser: {
-      ingenNetterHosDeg: {
-        nb: "Ingen netter hos meg",
-        en: "No nights with me",
-        nn: "Ingen netter hos meg",
-      },
       ingenSamvær: {
         nb: "0 netter hos meg",
-        //TODO: sjekk teksten
         en: "0 nights with me",
         nn: "0 netter hos meg",
       },
+      halvpartenAvTidenHosMeg: {
+        nb: "15 netter hos meg",
+        en: "15 nights with me",
+        nn: "15 netter hos meg",
+      },
       alleNetterSamvær: {
         nb: "30 netter hos meg",
-        //TODO: sjekk teksten
-        en: "30 days with me",
+        en: "30 nights with me",
         nn: "30 netter hos meg",
       },
     },
