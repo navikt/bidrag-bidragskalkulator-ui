@@ -514,17 +514,6 @@ export const lagKapitalinntektSkjema = (språk: Språk) => {
         .transform((value) => (value === "" ? undefined : value === "true")),
     })
     .superRefine((values, ctx) => {
-      if (values.kapitalinntektOver10k === undefined) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.inntekt.kapitalinntektOver10k.påkrevd,
-          ),
-          path: ["kapitalinntektOver10k"],
-        });
-      }
-
       if (values.barnHarEgenInntekt === undefined) {
         ctx.addIssue({
           code: "custom",
@@ -976,13 +965,6 @@ const tekster = definerTekster({
         nb: "Fyll inn inntekt i hele kroner",
         en: "Fill in income in whole kroner",
         nn: "Fyll inn inntekt i heile kroner",
-      },
-      kapitalinntektOver10k: {
-        påkrevd: {
-          nb: "Velg om kapitalinntekt er over 10 000 kroner",
-          en: "Select if capital income is over NOK 10,000",
-          nn: "Vel om kapitalinntekt er over 10 000 kroner",
-        },
       },
     },
     husstandsmedlemmer: {

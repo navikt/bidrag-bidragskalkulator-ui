@@ -80,7 +80,6 @@ export const Inntektsopplysninger = () => {
           {...form.field("inntekt.kapitalinntektOver10k").getControlProps()}
           legend={t(tekster.kapitalinntektOver10k.legend)}
           hideLegend
-          error={form.field("inntekt.kapitalinntektOver10k").error()}
           value={
             form.value("inntekt.kapitalinntektOver10k") === "true"
               ? ["true"]
