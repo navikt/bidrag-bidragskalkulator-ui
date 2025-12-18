@@ -34,7 +34,9 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
 
   return (
     <>
-      <BodyShort>{t(tekster.barnAlder(alder))}</BodyShort>
+      <BodyShort className="font-bold" spacing>
+        {t(tekster.barnAlder(alder))}
+      </BodyShort>
 
       <JaNeiRadio
         legend={t(tekster[bidragstype].barnepassUtgifter)}
