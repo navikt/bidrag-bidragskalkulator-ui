@@ -31,9 +31,9 @@ const tekster = definerTekster({
     nn: "Du kan sjølv legge til samvær i feriar og høgtider",
   },
   beskrivelse1: {
-    nb: "Kalkulatoren kan foreløpig ikke legge til samvær i ferier og høytider separat. Derfor kan dere enten legge dette til selv i det månedlige samværet, eller bli enige om hvordan dere håndterer bidraget i månedene det er ekstra samvær.",
-    en: "The calculator cannot yet add contact time for holidays and festive seasons separately. Therefore, you can either include this yourselves in the monthly contact time, or agree on how to handle the child support in the months with extra contact time.",
-    nn: "Kalkulatoren kan førebels ikkje leggje til samvær i feriar og høgtider separat. Difor kan de anten leggje dette inn sjølve i det månadlege samværet, eller bli einige om korleis de vil handtere bidraget i månadene med ekstra samvær.",
+    nb: "Kalkulatoren er fremdeles under utvikling, og kan foreløpig ikke legge til samvær i ferier og høytider separat. Derfor kan dere enten legge dette til selv i det månedlige samværet, eller bli enige om hvordan dere håndterer bidraget i månedene det er ekstra samvær.",
+    en: "The calculator is still under development and cannot yet add visitation during holidays and vacations separately. Therefore, you can either add this yourself in the monthly visitation, or agree on how to handle the support in the months with extra visitation.",
+    nn: "Kalkulatoren er framleis under utvikling, og kan førebels ikkje leggje til samvær i feriar og høgtider separat. Difor kan de anten leggje dette til sjølv i det månadlege samværet, eller bli einige om korleis de handterer bidraget i månadene det er ekstra samvær.",
   },
   beskrivelse2: {
     nb: "Eksempel: Lille Trille har 25 ekstra samværsdager med samværsforelderen per år i forbindelse med ferier og høytider. Da deler dere 25 dager på 12 måneder: 25/12 = 2,08333. Da kan dere legge til 2 dager i det månedlige samværet for samværsforelderen.",
