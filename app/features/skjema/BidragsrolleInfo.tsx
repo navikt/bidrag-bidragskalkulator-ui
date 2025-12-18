@@ -1,3 +1,4 @@
+import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, InfoCard } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -8,34 +9,74 @@ export default function BidragsrolleInfo() {
   const form = useFormContext<BarnebidragSkjema>();
   const bidragstype = form.value("bidragstype");
   const barn = form.value("barn");
+  const bosted = barn[0]?.bosted ?? "";
 
-  if (bidragstype === "") {
+  if (bidragstype === "" || bosted === "") {
     return null;
   }
 
   const beskrivelseFørsteDel =
     barn.length === 1
-      ? t(tekster.beskrivelseDel1.ettBarn)
-      : t(tekster.beskrivelseDel1.flereBarn);
+      ? t(tekster[bosted].beskrivelseDel1.ettBarn)
+      : t(tekster[bosted].beskrivelseDel1.flereBarn);
 
   return (
     <InfoCard data-color="info">
-      <InfoCard.Header>
+      <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
         <InfoCard.Title>{t(tekster.header)}</InfoCard.Title>
       </InfoCard.Header>
       <InfoCard.Content>
-        {
-          <>
-            <BodyLong spacing>{beskrivelseFørsteDel}</BodyLong>
-            <BodyLong spacing>
-              {t(tekster[bidragstype].beskrivelseDel2)}
-            </BodyLong>
-          </>
-        }
+        <BodyLong spacing>{beskrivelseFørsteDel}</BodyLong>
+        <BodyLong spacing>{t(tekster[bidragstype].beskrivelseDel2)}</BodyLong>
       </InfoCard.Content>
     </InfoCard>
   );
 }
+
+const beskrivelseDel1UtenInntekt = {
+  ettBarn: {
+    nb: (
+      <>
+        Basert på det du har lagt inn om bosted og samvær med{" "}
+        <span className="font-bold">barnet</span>, foreslår kalkulatoren at:
+      </>
+    ),
+    en: (
+      <>
+        Based on what you have entered about the residence and visitation with{" "}
+        <span className="font-bold">the child</span>, the calculator suggests
+        that:
+      </>
+    ),
+    nn: (
+      <>
+        Basert på det du har lagt inn om bustad og samvær med{" "}
+        <span className="font-bold">barnet</span>, føreslår kalkulatoren at:
+      </>
+    ),
+  },
+  flereBarn: {
+    nb: (
+      <>
+        Basert på det du har lagt inn om bosted og samvær med{" "}
+        <span className="font-bold">barna</span>, foreslår kalkulatoren at:
+      </>
+    ),
+    en: (
+      <>
+        Based on what you have entered about the residence and visitation with{" "}
+        <span className="font-bold">the children</span>, the calculator suggests
+        that:
+      </>
+    ),
+    nn: (
+      <>
+        Basert på det du har lagt inn om bustad og samvær med{" "}
+        <span className="font-bold">barna</span>, føreslår kalkulatoren at:
+      </>
+    ),
+  },
+};
 
 const tekster = definerTekster({
   header: {
@@ -43,53 +84,62 @@ const tekster = definerTekster({
     en: "Distribution",
     nn: "Fordeling",
   },
-  beskrivelseDel1: {
-    ettBarn: {
-      nb: (
-        <>
-          Basert på det du har lagt inn om bosted og samvær med{" "}
-          <span className="font-bold">barnet</span>, samt din og den andre
-          forelderen sin inntekt foreslår kalkulatoren at:
-        </>
-      ),
-      en: (
-        <>
-          Based on what you have entered about the residence and visitation with{" "}
-          <span className="font-bold">the child</span>, as well as your and the
-          other parent&apos;s income, the calculator suggests that:
-        </>
-      ),
-      nn: (
-        <>
-          Basert på det du har lagt inn om bustad og samvær med{" "}
-          <span className="font-bold">barnet</span>, samt din og den andre
-          forelderen sin inntekt føreslår kalkulatoren at:
-        </>
-      ),
+  DELT_FAST_BOSTED: {
+    beskrivelseDel1: {
+      ettBarn: {
+        nb: (
+          <>
+            Basert på det du har lagt inn om bosted og samvær med{" "}
+            <span className="font-bold">barnet</span>, samt din og den andre
+            forelderen sin inntekt foreslår kalkulatoren at:
+          </>
+        ),
+        en: (
+          <>
+            Based on what you have entered about the residence and visitation
+            with <span className="font-bold">the child</span>, as well as your
+            and the other parent&apos;s income, the calculator suggests that:
+          </>
+        ),
+        nn: (
+          <>
+            Basert på det du har lagt inn om bustad og samvær med{" "}
+            <span className="font-bold">barnet</span>, samt din og den andre
+            forelderen sin inntekt føreslår kalkulatoren at:
+          </>
+        ),
+      },
+      flereBarn: {
+        nb: (
+          <>
+            Basert på det du har lagt inn om bosted og samvær med{" "}
+            <span className="font-bold">barna</span>, samt din og den andre
+            forelderen sin inntekt foreslår kalkulatoren at:
+          </>
+        ),
+        en: (
+          <>
+            Based on what you have entered about the residence and visitation
+            with <span className="font-bold">the children</span>, as well as
+            your and the other parent&apos;s income, the calculator suggests
+            that:
+          </>
+        ),
+        nn: (
+          <>
+            Basert på det du har lagt inn om bustad og samvær med{" "}
+            <span className="font-bold">barna</span>, samt din og den andre
+            forelderen sin inntekt føreslår kalkulatoren at:
+          </>
+        ),
+      },
     },
-    flereBarn: {
-      nb: (
-        <>
-          Basert på det du har lagt inn om bosted og samvær med{" "}
-          <span className="font-bold">barna</span>, samt din og den andre
-          forelderen sin inntekt foreslår kalkulatoren at:
-        </>
-      ),
-      en: (
-        <>
-          Based on what you have entered about the residence and visitation with{" "}
-          <span className="font-bold">the children</span>, as well as your and
-          the other parent&apos;s income, the calculator suggests that:
-        </>
-      ),
-      nn: (
-        <>
-          Basert på det du har lagt inn om bustad og samvær med{" "}
-          <span className="font-bold">barna</span>, samt din og den andre
-          forelderen sin inntekt føreslår kalkulatoren at:
-        </>
-      ),
-    },
+  },
+  HOS_MEG: {
+    beskrivelseDel1: beskrivelseDel1UtenInntekt,
+  },
+  HOS_MEDFORELDER: {
+    beskrivelseDel1: beskrivelseDel1UtenInntekt,
   },
   MOTTAKER: {
     beskrivelseDel2: {
