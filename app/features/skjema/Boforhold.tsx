@@ -9,7 +9,6 @@ const BOFORHOLD_FIELDS = [
   "borMedAnnenVoksen",
   "borMedAndreBarn",
   "antallBarnBorFast",
-  "betalerBarnebidrageForAndreBarn",
   "borMedAnnenVoksenType",
   "borMedBarnOver18",
   "antallBarnOver18",

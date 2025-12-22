@@ -47,13 +47,10 @@ const BarnebidragSkjemaSchema = z.object({
     kapitalinntekt: z.string(),
     harKapitalinntektOver10k: z.enum(["true", ""]),
   }),
-  inntekt: z.object({
-    barnHarEgenInntekt: z.enum(["true", "false", ""]),
-  }),
+  barnHarEgenInntekt: z.enum(["true", "false", ""]),
   dittBoforhold: z.object({
     borMedAnnenVoksen: z.enum(["true", "false", "", "undefined"]),
     borMedAndreBarn: z.enum(["true", "false", "", "undefined"]),
-    betalerBarnebidrageForAndreBarn: z.enum(["true", "false", "", "undefined"]),
     antallBarnBorFast: z.string(),
     borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
     borMedBarnOver18: z.enum(["true", "false", "", "undefined"]),
@@ -63,7 +60,6 @@ const BarnebidragSkjemaSchema = z.object({
   medforelderBoforhold: z.object({
     borMedAnnenVoksen: z.enum(["true", "false", "", "undefined"]),
     borMedAndreBarn: z.enum(["true", "false", "", "undefined"]),
-    betalerBarnebidrageForAndreBarn: z.enum(["true", "false", "", "undefined"]),
     antallBarnBorFast: z.string(),
     borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
     borMedBarnOver18: z.enum(["true", "false", "", "undefined"]),
@@ -139,21 +135,6 @@ export const lagYtelserSkjema = (språk: Språk) => {
             tekster.feilmeldinger.ytelser.kontantstøtte.beløp.påkrevd,
           ),
           path: ["kontantstøtte", "beløp"],
-        });
-      }
-
-      // Utvidet barnetrygd
-      if (
-        values.mottarUtvidetBarnetrygd &&
-        values.delerUtvidetBarnetrygd === undefined
-      ) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.ytelser.utvidetBarnetrygd.deler.påkrevd,
-          ),
-          path: ["delerUtvidetBarnetrygd"],
         });
       }
     })
@@ -284,13 +265,7 @@ export const lagBoforholdSkjema = (språk: Språk) => {
         .transform((value) =>
           value === "" || value === "undefined" ? undefined : value === "true",
         ),
-      betalerBarnebidrageForAndreBarn: z
-        .enum(["true", "false", "", "undefined"])
-        .transform((value) =>
-          value === "" || value === "undefined" ? undefined : value === "true",
-        ),
       antallBarnBorFast: z.string(),
-      // antallBarnDeltBosted: z.string(),
       borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
       borMedBarnOver18: z
         .enum(["true", "false", "", "undefined"])
@@ -357,21 +332,6 @@ export const lagBoforholdSkjema = (språk: Språk) => {
           path: ["antallBarnOver18"],
         });
       }
-
-      if (
-        values.betalerBarnebidrageForAndreBarn === true &&
-        values.andreBarnebidragerPerMåned.trim() === ""
-      ) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.husstandsmedlemmer.andreBarnebidragerPerMåned
-              .påkrevd,
-          ),
-          path: ["andreBarnebidragerPerMåned"],
-        });
-      }
     })
     .transform((values) => {
       return {
@@ -407,54 +367,76 @@ export const lagBoforholdSkjema = (språk: Språk) => {
 };
 
 export const lagInntektSkjema = (språk: Språk) => {
-  return z.object({
-    inntekt: z
-      .string()
-      .refine((verdi) => verdi.trim() !== "", {
-        message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
-      })
-      .transform((verdi) => Number(verdi.trim()))
-      .refine((verdi) => verdi >= 0, {
-        message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
-      })
-      .refine((verdi) => Number.isInteger(verdi), {
-        message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
-      }),
-    kapitalinntekt: z
-      .string()
-      .refine((verdi) => verdi.trim() !== "", {
-        message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
-      })
-      .transform((verdi) => Number(verdi.trim()))
-      .refine((verdi) => verdi >= 0, {
-        message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
-      })
-      .refine((verdi) => Number.isInteger(verdi), {
-        message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
-      }),
-    harKapitalinntektOver10k: z
-      .enum(["true", ""])
-      .transform((value) => (value === "" ? undefined : value === "true")),
-  });
-};
-
-export const lagKapitalinntektSkjema = (språk: Språk) => {
   return z
     .object({
-      barnHarEgenInntekt: z
-        .enum(["true", "false", ""])
+      inntekt: z.string(),
+      kapitalinntekt: z.string(),
+      harKapitalinntektOver10k: z
+        .enum(["true", ""])
         .transform((value) => (value === "" ? undefined : value === "true")),
     })
-    .superRefine((values, ctx) => {
-      if (values.barnHarEgenInntekt === undefined) {
+    .superRefine((data, ctx) => {
+      // Valider inntekt - alltid påkrevd
+      if (data.inntekt.trim() === "") {
         ctx.addIssue({
           code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.barn.egenInntekt.påkrevd,
-          ),
-          path: ["barnHarEgenInntekt"],
+          message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
+          path: ["inntekt"],
         });
+      }
+
+      // Valider kapitalinntekt - kun påkrevd når harKapitalinntektOver10k er true
+      if (
+        data.harKapitalinntektOver10k === true &&
+        data.kapitalinntekt.trim() === ""
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
+          path: ["kapitalinntekt"],
+        });
+      }
+    })
+    .transform((data) => ({
+      ...data,
+      inntekt: Number(data.inntekt.trim() || 0),
+      kapitalinntekt: Number(data.kapitalinntekt.trim() || 0),
+    }))
+    .superRefine((data, ctx) => {
+      // Valider inntekt er positivt heltall
+      if (data.inntekt < 0) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
+          path: ["inntekt"],
+        });
+      }
+
+      if (!Number.isInteger(data.inntekt)) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
+          path: ["inntekt"],
+        });
+      }
+
+      // Valider kapitalinntekt er positivt heltall (kun hvis den er fylt ut)
+      if (data.harKapitalinntektOver10k === true) {
+        if (data.kapitalinntekt < 0) {
+          ctx.addIssue({
+            code: "custom",
+            message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
+            path: ["kapitalinntekt"],
+          });
+        }
+
+        if (!Number.isInteger(data.kapitalinntekt)) {
+          ctx.addIssue({
+            code: "custom",
+            message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
+            path: ["kapitalinntekt"],
+          });
+        }
       }
     });
 };
@@ -562,14 +544,6 @@ export const lagBarnSkjema = (språk: Språk) => {
           });
         }
       }
-
-      if (data.inntektPerMåned.trim() === "") {
-        ctx.addIssue({
-          path: ["inntektPerMåned"],
-          code: "custom",
-          message: oversett(språk, tekster.feilmeldinger.inntekt.beløp.påkrevd),
-        });
-      }
     })
     .transform((values) => ({
       ...values,
@@ -611,7 +585,9 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
         .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
       deg: lagInntektSkjema(språk),
       medforelder: lagInntektSkjema(språk),
-      inntekt: lagKapitalinntektSkjema(språk),
+      barnHarEgenInntekt: z
+        .enum(["true", "false", ""])
+        .transform((value) => (value === "" ? undefined : value === "true")),
       dittBoforhold: lagBoforholdSkjema(språk),
       medforelderBoforhold: lagBoforholdSkjema(språk),
       andreBarnUnder12: lagAndreBarnUnder12Skjema(språk),
@@ -619,6 +595,52 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
     })
     .superRefine((data, ctx) => {
       const { bidragstype, dittBoforhold, medforelderBoforhold } = data;
+
+      if (data.barnHarEgenInntekt === undefined) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.barn.egenInntekt.påkrevd,
+          ),
+          path: ["barnHarEgenInntekt"],
+        });
+      }
+
+      // Valider inntektPerMåned kun når barnHarEgenInntekt er true
+      if (data.barnHarEgenInntekt === true) {
+        data.barn.forEach((barn, index) => {
+          if (barn.inntektPerMåned.trim() === "") {
+            ctx.addIssue({
+              code: "custom",
+              message: oversett(
+                språk,
+                tekster.feilmeldinger.inntekt.beløp.påkrevd,
+              ),
+              path: ["barn", index, "inntektPerMåned"],
+            });
+          }
+        });
+      }
+
+      // Valider delerUtvidetBarnetrygd kun når minst et barn har DELT_FAST_BOSTED
+      const harBarnMedDeltBosted = data.barn.some(
+        (barn) => barn.bosted === "DELT_FAST_BOSTED",
+      );
+      if (
+        data.ytelser.mottarUtvidetBarnetrygd &&
+        harBarnMedDeltBosted &&
+        data.ytelser.delerUtvidetBarnetrygd === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.ytelser.utvidetBarnetrygd.deler.påkrevd,
+          ),
+          path: ["ytelser", "delerUtvidetBarnetrygd"],
+        });
+      }
 
       if (bidragstype === "MOTTAKER") {
         if (medforelderBoforhold.borMedAndreBarn === undefined) {
@@ -643,20 +665,6 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
             ),
           });
         }
-
-        if (
-          medforelderBoforhold.betalerBarnebidrageForAndreBarn === undefined
-        ) {
-          ctx.addIssue({
-            path: ["medforelderBoforhold", "betalerBarnebidrageForAndreBarn"],
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer
-                .betalerBarnebidragForAndreBarn.påkrevd,
-            ),
-          });
-        }
       }
 
       if (bidragstype === "PLIKTIG") {
@@ -678,18 +686,6 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
               språk,
               tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
                 .påkrevd,
-            ),
-          });
-        }
-
-        if (dittBoforhold.betalerBarnebidrageForAndreBarn === undefined) {
-          ctx.addIssue({
-            path: ["dittBoforhold", "betalerBarnebidrageForAndreBarn"],
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer
-                .betalerBarnebidragForAndreBarn.påkrevd,
             ),
           });
         }

@@ -113,13 +113,10 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
     kapitalinntekt: "",
     harKapitalinntektOver10k: "",
   },
-  inntekt: {
-    barnHarEgenInntekt: "",
-  },
+  barnHarEgenInntekt: "",
   dittBoforhold: {
     borMedAnnenVoksen: "",
     borMedAndreBarn: "",
-    betalerBarnebidrageForAndreBarn: "",
     antallBarnBorFast: "",
     borMedAnnenVoksenType: "",
     borMedBarnOver18: "",
@@ -129,7 +126,6 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
   medforelderBoforhold: {
     borMedAnnenVoksen: "",
     borMedAndreBarn: "",
-    betalerBarnebidrageForAndreBarn: "",
     antallBarnBorFast: "",
     borMedAnnenVoksenType: "",
     borMedBarnOver18: "",

@@ -31,10 +31,6 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
   const borMedBarnVgs =
     form.field(`${skjemagruppe}.borMedBarnOver18`).value() === "true";
 
-  const harAlleredeBarnebidrag =
-    form.field(`${skjemagruppe}.betalerBarnebidrageForAndreBarn`).value() ===
-    "true";
-
   const vedEndreBorMedAndreBarn = (value: string) => {
     if (value === "false") {
       form.resetField(`${skjemagruppe}.antallBarnBorFast`);
@@ -120,20 +116,6 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
             </>
           )}
         </>
-      )}
-
-      {harAlleredeBarnebidrag && (
-        <FormattertTallTextField
-          {...form
-            .field(`${skjemagruppe}.andreBarnebidragerPerMåned`)
-            .getControlProps()}
-          label={t(tekster[skjemagruppe].andreBarnebidragerPerMåned.label)}
-          error={form
-            .field(`${skjemagruppe}.andreBarnebidragerPerMåned`)
-            .error()}
-          htmlSize={10}
-          className="pl-8"
-        />
       )}
     </fieldset>
   );

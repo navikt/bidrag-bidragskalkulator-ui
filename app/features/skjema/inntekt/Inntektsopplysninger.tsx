@@ -14,7 +14,7 @@ export const Inntektsopplysninger = () => {
   const barn = form.value("barn");
   const barnArray = useFieldArray(form.scope("barn"));
   const barnHarEgenInntekt = useFormScope(
-    form.scope("inntekt.barnHarEgenInntekt"),
+    form.scope("barnHarEgenInntekt"),
   ).value();
   const harGyldigeBarn = barn.filter((b) => b.alder !== "").length > 0;
 
@@ -77,13 +77,13 @@ export const Inntektsopplysninger = () => {
         {harGyldigeBarn && (
           <>
             <JaNeiRadio
-              {...form.field("inntekt.barnHarEgenInntekt").getInputProps()}
+              {...form.field("barnHarEgenInntekt").getInputProps()}
               legend={t(
                 barnArray.length() > 1
                   ? tekster.barnHarEgenInntekt.plural
                   : tekster.barnHarEgenInntekt.singular,
               )}
-              error={form.field("inntekt.barnHarEgenInntekt").error()}
+              error={form.field("barnHarEgenInntekt").error()}
             />
 
             {barnHarEgenInntekt === "true" && (
