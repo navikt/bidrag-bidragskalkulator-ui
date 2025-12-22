@@ -2,6 +2,10 @@ import { z } from "zod";
 import { definerTekster, oversett, Språk } from "~/utils/i18n";
 
 export const MAKS_ALDER_BARNETILSYNSUTGIFT = 10;
+export const MAKS_ALDER_BARN_EGEN_INNTEKT = 13;
+export const MAKS_ALDER_SMÅBARNSTILLEGG = 3;
+export const MAKS_ALDER_UTVIDET_BARNETRYGD = 18;
+export const ALDER_KONTANTSTØTTE = 1;
 
 export type Bidragstype = "MOTTAKER" | "PLIKTIG";
 
@@ -11,54 +15,261 @@ export const FastBostedSchema = z.enum([
   "HOS_MEDFORELDER",
 ]);
 
+export const BorMedAnnenVoksenTypeSchema = z.enum([
+  "SAMBOER_ELLER_EKTEFELLE",
+  "EGNE_BARN_OVER_18",
+]);
+
+export const BarnepassSituasjonSchema = z.enum(["HELTID", "DELTID"]);
+export const HvemFårBarnetilleggSchema = z.enum(["MEG", "DEN_ANDRE_FORELDREN"]);
+
 const BarnSkjemaSchema = z.object({
   alder: z.string(),
   bosted: z.enum([...FastBostedSchema.options, ""]),
   samvær: z.string(),
+  harBarnetilsynsutgift: z.enum(["true", "false", "undefined"]),
+  mottarStønadTilBarnetilsyn: z.enum(["true", "false", "undefined"]),
   barnetilsynsutgift: z.string(),
+  barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
+  inntektPerMåned: z.string(),
 });
 
 const BarnebidragSkjemaSchema = z.object({
-  bidragstype: z.enum(["", "MOTTAKER", "PLIKTIG", "BEGGE"]),
+  bidragstype: z.enum(["", "MOTTAKER", "PLIKTIG"]),
   barn: z.array(BarnSkjemaSchema),
   deg: z.object({
     inntekt: z.string(),
+    kapitalinntekt: z.string(),
+    harKapitalinntektOver10k: z.enum(["true", "undefined"]),
   }),
   medforelder: z.object({
     inntekt: z.string(),
+    kapitalinntekt: z.string(),
+    harKapitalinntektOver10k: z.enum(["true", "undefined"]),
   }),
+  barnHarEgenInntekt: z.enum(["true", "false", "undefined"]),
   dittBoforhold: z.object({
-    borMedAnnenVoksen: z.enum(["true", "false", "", "undefined"]),
-    borMedAndreBarn: z.enum(["true", "false", "", "undefined"]),
+    borMedAnnenVoksen: z.enum(["true", "false", "undefined"]),
+    borMedAndreBarn: z.enum(["true", "false", "undefined"]),
     antallBarnBorFast: z.string(),
-    antallBarnDeltBosted: z.string(),
+    borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
+    borMedBarnOver18: z.enum(["true", "false", "undefined"]),
+    antallBarnOver18: z.string(),
+    andreBarnebidragerPerMåned: z.string(),
   }),
   medforelderBoforhold: z.object({
-    borMedAnnenVoksen: z.enum(["true", "false", "", "undefined"]),
-    borMedAndreBarn: z.enum(["true", "false", "", "undefined"]),
+    borMedAnnenVoksen: z.enum(["true", "false", "undefined"]),
+    borMedAndreBarn: z.enum(["true", "false", "undefined"]),
     antallBarnBorFast: z.string(),
-    antallBarnDeltBosted: z.string(),
+    borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
+    borMedBarnOver18: z.enum(["true", "false", "undefined"]),
+    antallBarnOver18: z.string(),
+    andreBarnebidragerPerMåned: z.string(),
+  }),
+  andreBarnUnder12: z.object({
+    antall: z.string(),
+    tilsynsutgifter: z.array(z.string()),
+  }),
+  ytelser: z.object({
+    kontantstøtte: z.object({
+      mottar: z.enum(["true", "undefined"]),
+      beløp: z.string(),
+      deler: z.enum(["true", "false", "undefined"]),
+    }),
+    mottarUtvidetBarnetrygd: z.enum(["true", "undefined"]),
+    delerUtvidetBarnetrygd: z.enum(["true", "false", "undefined"]),
+    mottarSmåbarnstillegg: z.enum(["true", "undefined"]),
   }),
 });
+
+export const lagYtelserSkjema = (språk: Språk) => {
+  return z
+    .object({
+      kontantstøtte: z.object({
+        mottar: z
+          .enum(["true", "undefined"])
+          .transform((value) => (value === "undefined" ? undefined : true)),
+        beløp: z.string(),
+        deler: z
+          .enum(["true", "false", "undefined"])
+          .transform((value) =>
+            value === "undefined" ? undefined : value === "true",
+          ),
+      }),
+      mottarUtvidetBarnetrygd: z
+        .enum(["true", "undefined"])
+        .transform((value) => (value === "undefined" ? undefined : true)),
+      delerUtvidetBarnetrygd: z
+        .enum(["true", "false", "undefined"])
+        .transform((value) =>
+          value === "undefined" ? undefined : value === "true",
+        ),
+      mottarSmåbarnstillegg: z
+        .enum(["true", "undefined"])
+        .transform((value) => (value === "undefined" ? undefined : true)),
+    })
+    .superRefine((values, ctx) => {
+      // Kontantstøtte: Validering av deler er flyttet til foreldre-skjema nivå
+      // der vi har tilgang til barn-data for å sjekke om noen har DELT_FAST_BOSTED
+
+      // Valider beløp når mottar er true og de ikke har svart "nei" på deling
+      if (
+        values.kontantstøtte.mottar === true &&
+        values.kontantstøtte.beløp.trim() === "" &&
+        values.kontantstøtte.deler !== false
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.ytelser.kontantstøtte.beløp.påkrevd,
+          ),
+          path: ["kontantstøtte", "beløp"],
+        });
+      }
+    })
+    .transform((values) => {
+      return {
+        ...values,
+        kontantstøtte: {
+          ...values.kontantstøtte,
+          beløp: Number(values.kontantstøtte.beløp.trim() ?? 0),
+        },
+      };
+    })
+    .superRefine((values, ctx) => {
+      if (values.kontantstøtte.beløp && isNaN(values.kontantstøtte.beløp)) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.ytelser.kontantstøtte.beløp.tall,
+          ),
+          path: ["kontantstøtte", "beløp"],
+        });
+      }
+
+      if (values.kontantstøtte.beløp && values.kontantstøtte.beløp < 0) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.ytelser.kontantstøtte.beløp.minimum,
+          ),
+          path: ["kontantstøtte", "beløp"],
+        });
+      }
+
+      if (values.kontantstøtte.beløp && values.kontantstøtte.beløp > 10000) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.ytelser.kontantstøtte.beløp.maksimum,
+          ),
+          path: ["kontantstøtte", "beløp"],
+        });
+      }
+    });
+};
+
+export const lagAndreBarnUnder12Skjema = (språk: Språk) => {
+  return z
+    .object({
+      antall: z.string(),
+      tilsynsutgifter: z.array(z.string()).catch([]),
+    })
+    .transform((values) => {
+      const antall = Number(values.antall.trim() || 0);
+
+      const tilsynsutgifter = values.tilsynsutgifter.map((utgift) =>
+        utgift === "" ? undefined : Number(utgift.trim()),
+      );
+
+      return {
+        antall,
+        tilsynsutgifter,
+      };
+    })
+    .superRefine((values, ctx) => {
+      if (values.antall < 0) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.andreBarnUnder12.antall.minimum,
+          ),
+          path: ["antall"],
+        });
+      }
+
+      if (values.antall > 10) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.andreBarnUnder12.antall.maksimum,
+          ),
+          path: ["antall"],
+        });
+      }
+
+      if (values.antall > 0 && values.tilsynsutgifter) {
+        values.tilsynsutgifter.forEach((utgift, index) => {
+          if (utgift && utgift < 0) {
+            ctx.addIssue({
+              code: "custom",
+              message: oversett(
+                språk,
+                tekster.feilmeldinger.andreBarnUnder12.tilsynsutgift.minimum,
+              ),
+              path: ["tilsynsutgifter", index],
+            });
+          }
+
+          if (utgift && utgift > 10000) {
+            ctx.addIssue({
+              code: "custom",
+              message: oversett(
+                språk,
+                tekster.feilmeldinger.andreBarnUnder12.tilsynsutgift.maksimum,
+              ),
+              path: ["tilsynsutgifter", index],
+            });
+          }
+        });
+      }
+    });
+};
 
 export const lagBoforholdSkjema = (språk: Språk) => {
   return z
     .object({
       borMedAnnenVoksen: z
-        .enum(["true", "false", "", "undefined"])
+        .enum(["true", "false", "undefined"])
         .transform((value) =>
-          value === "" || value === "undefined" ? undefined : value === "true",
+          value === "undefined" ? undefined : value === "true",
         ),
       borMedAndreBarn: z
-        .enum(["true", "false", "", "undefined"])
+        .enum(["true", "false", "undefined"])
         .transform((value) =>
-          value === "" || value === "undefined" ? undefined : value === "true",
+          value === "undefined" ? undefined : value === "true",
         ),
       antallBarnBorFast: z.string(),
-      antallBarnDeltBosted: z.string(),
+      borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
+      borMedBarnOver18: z
+        .enum(["true", "false", "undefined"])
+        .transform((value) =>
+          value === "undefined" ? undefined : value === "true",
+        ),
+      antallBarnOver18: z.string(),
+      andreBarnebidragerPerMåned: z.string(),
     })
     .superRefine((values, ctx) => {
-      if (values.borMedAndreBarn && values.antallBarnBorFast.trim() === "") {
+      if (
+        values.borMedAndreBarn === true &&
+        values.antallBarnBorFast.trim() === ""
+      ) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
@@ -69,24 +280,56 @@ export const lagBoforholdSkjema = (språk: Språk) => {
         });
       }
 
-      if (values.borMedAndreBarn && values.antallBarnDeltBosted.trim() === "") {
+      if (
+        values.borMedAnnenVoksen === true &&
+        values.borMedAnnenVoksenType.trim() === ""
+      ) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
+            tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksenType
               .påkrevd,
           ),
-          path: ["antallBarnDeltBosted"],
+          path: ["borMedAnnenVoksenType"],
+        });
+      }
+
+      if (
+        values.borMedAnnenVoksenType === "EGNE_BARN_OVER_18" &&
+        values.borMedBarnOver18 === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.husstandsmedlemmer.borMedBarnOver18.påkrevd,
+          ),
+          path: ["borMedBarnOver18"],
+        });
+      }
+
+      if (
+        values.borMedBarnOver18 === true &&
+        values.antallBarnOver18.trim() === ""
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.husstandsmedlemmer.antallBarnOver18.påkrevd,
+          ),
+          path: ["antallBarnOver18"],
         });
       }
     })
     .transform((values) => {
       return {
-        borMedAnnenVoksen: values.borMedAnnenVoksen,
-        borMedAndreBarn: values.borMedAndreBarn,
+        ...values,
         antallBarnBorFast: Number(values.antallBarnBorFast.trim() || 0),
-        antallBarnDeltBosted: Number(values.antallBarnDeltBosted.trim() || 0),
+        andreBarnebidragerPerMåned: Number(
+          values.andreBarnebidragerPerMåned.trim() || 0,
+        ),
       };
     })
     .superRefine((values, ctx) => {
@@ -109,45 +352,82 @@ export const lagBoforholdSkjema = (språk: Språk) => {
           path: ["antallBarnBorFast"],
         });
       }
-
-      if (isNaN(values.antallBarnDeltBosted)) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted.tall,
-          ),
-          path: ["antallBarnDeltBosted"],
-        });
-      } else if (values.antallBarnDeltBosted < 0) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnDeltBosted
-              .minimum,
-          ),
-          path: ["antallBarnDeltBosted"],
-        });
-      }
     });
 };
 
 export const lagInntektSkjema = (språk: Språk) => {
-  return z.object({
-    inntekt: z
-      .string()
-      .refine((verdi) => verdi.trim() !== "", {
-        message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
-      })
-      .transform((verdi) => Number(verdi.trim()))
-      .refine((verdi) => verdi >= 0, {
-        message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
-      })
-      .refine((verdi) => Number.isInteger(verdi), {
-        message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
-      }),
-  });
+  return z
+    .object({
+      inntekt: z.string(),
+      kapitalinntekt: z.string(),
+      harKapitalinntektOver10k: z
+        .enum(["true", "undefined"])
+        .transform((value) => (value === "undefined" ? undefined : true)),
+    })
+    .superRefine((data, ctx) => {
+      // Valider inntekt - alltid påkrevd
+      if (data.inntekt.trim() === "") {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
+          path: ["inntekt"],
+        });
+      }
+
+      // Valider kapitalinntekt - kun påkrevd når harKapitalinntektOver10k er true
+      if (
+        data.harKapitalinntektOver10k === true &&
+        data.kapitalinntekt.trim() === ""
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(språk, tekster.feilmeldinger.inntekt.påkrevd),
+          path: ["kapitalinntekt"],
+        });
+      }
+    })
+    .transform((data) => ({
+      ...data,
+      inntekt: Number(data.inntekt.trim() || 0),
+      kapitalinntekt: Number(data.kapitalinntekt.trim() || 0),
+    }))
+    .superRefine((data, ctx) => {
+      // Valider inntekt er positivt heltall
+      if (data.inntekt < 0) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
+          path: ["inntekt"],
+        });
+      }
+
+      if (!Number.isInteger(data.inntekt)) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
+          path: ["inntekt"],
+        });
+      }
+
+      // Valider kapitalinntekt er positivt heltall (kun hvis den er fylt ut)
+      if (data.harKapitalinntektOver10k === true) {
+        if (data.kapitalinntekt < 0) {
+          ctx.addIssue({
+            code: "custom",
+            message: oversett(språk, tekster.feilmeldinger.inntekt.positivt),
+            path: ["kapitalinntekt"],
+          });
+        }
+
+        if (!Number.isInteger(data.kapitalinntekt)) {
+          ctx.addIssue({
+            code: "custom",
+            message: oversett(språk, tekster.feilmeldinger.inntekt.heleKroner),
+            path: ["kapitalinntekt"],
+          });
+        }
+      }
+    });
 };
 
 export const lagBarnSkjema = (språk: Språk) => {
@@ -186,26 +466,82 @@ export const lagBarnSkjema = (språk: Språk) => {
         .refine((verdi) => verdi <= 30, {
           message: oversett(språk, tekster.feilmeldinger.samvær.maksimum),
         }),
+      // barnepass:
+      harBarnetilsynsutgift: z
+        .enum(["true", "false", "undefined"])
+        .transform((value) =>
+          value === "undefined" ? undefined : value === "true",
+        ),
+      mottarStønadTilBarnetilsyn: z
+        .enum(["true", "false", "undefined"])
+        .transform((value) =>
+          value === "undefined" ? undefined : value === "true",
+        ),
       barnetilsynsutgift: z.string(),
+      barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
+      inntektPerMåned: z.string(),
     })
     .superRefine((data, ctx) => {
-      if (
-        data.alder <= MAKS_ALDER_BARNETILSYNSUTGIFT &&
-        data.barnetilsynsutgift.trim() === ""
-      ) {
-        ctx.addIssue({
-          path: ["barnetilsynsutgift"],
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.barnetilsynsutgift.påkrevd,
-          ),
-        });
+      // Barnepass
+      if (data.alder <= MAKS_ALDER_BARNETILSYNSUTGIFT) {
+        if (data.harBarnetilsynsutgift === undefined) {
+          ctx.addIssue({
+            path: ["harBarnetilsynsutgift"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.barnepass.utgifter.påkrevd,
+            ),
+          });
+        }
+
+        if (
+          data.harBarnetilsynsutgift === true &&
+          data.mottarStønadTilBarnetilsyn === undefined
+        ) {
+          ctx.addIssue({
+            path: ["mottarStønadTilBarnetilsyn"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.barnepass.utgifter.påkrevd,
+            ),
+          });
+        }
+
+        if (
+          data.mottarStønadTilBarnetilsyn &&
+          data.barnepassSituasjon.trim() === ""
+        ) {
+          ctx.addIssue({
+            path: ["barnepassSituasjon"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.barnepass.utgifter.påkrevd,
+            ),
+          });
+        }
+
+        if (
+          data.mottarStønadTilBarnetilsyn === false &&
+          data.barnetilsynsutgift.trim() === ""
+        ) {
+          ctx.addIssue({
+            path: ["barnetilsynsutgift"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.barnepass.utgifter.beløp.påkrevd,
+            ),
+          });
+        }
       }
     })
     .transform((values) => ({
       ...values,
       barnetilsynsutgift: Number(values.barnetilsynsutgift.trim()),
+      harEgenInntekt: Number(values.inntektPerMåned.trim()),
     }))
     .superRefine((data, ctx) => {
       if (data.barnetilsynsutgift < 0) {
@@ -214,7 +550,7 @@ export const lagBarnSkjema = (språk: Språk) => {
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.barnetilsynsutgift.minimum,
+            tekster.feilmeldinger.barnepass.utgifter.beløp.minimum,
           ),
         });
       }
@@ -225,7 +561,7 @@ export const lagBarnSkjema = (språk: Språk) => {
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.barnetilsynsutgift.maksimum,
+            tekster.feilmeldinger.barnepass.utgifter.beløp.maksimum,
           ),
         });
       }
@@ -235,20 +571,100 @@ export const lagBarnSkjema = (språk: Språk) => {
 export const lagBarnebidragSkjema = (språk: Språk) => {
   return z
     .object({
-      bidragstype: z.enum(["MOTTAKER", "PLIKTIG", "BEGGE"]),
+      bidragstype: z.enum(["MOTTAKER", "PLIKTIG"]),
       barn: z
         .array(lagBarnSkjema(språk))
         .min(1, oversett(språk, tekster.feilmeldinger.barn.minimum))
         .max(10, oversett(språk, tekster.feilmeldinger.barn.maksimum)),
       deg: lagInntektSkjema(språk),
       medforelder: lagInntektSkjema(språk),
+      barnHarEgenInntekt: z
+        .enum(["true", "false", "undefined"])
+        .transform((value) =>
+          value === "undefined" ? undefined : value === "true",
+        ),
       dittBoforhold: lagBoforholdSkjema(språk),
       medforelderBoforhold: lagBoforholdSkjema(språk),
+      andreBarnUnder12: lagAndreBarnUnder12Skjema(språk),
+      ytelser: lagYtelserSkjema(språk),
     })
     .superRefine((data, ctx) => {
       const { bidragstype, dittBoforhold, medforelderBoforhold } = data;
 
+      if (data.barnHarEgenInntekt === undefined) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.barn.egenInntekt.påkrevd,
+          ),
+          path: ["barnHarEgenInntekt"],
+        });
+      }
+
+      // Valider inntektPerMåned kun når barnHarEgenInntekt er true
+      if (data.barnHarEgenInntekt === true) {
+        data.barn.forEach((barn, index) => {
+          if (barn.inntektPerMåned.trim() === "") {
+            ctx.addIssue({
+              code: "custom",
+              message: oversett(
+                språk,
+                tekster.feilmeldinger.inntekt.beløp.påkrevd,
+              ),
+              path: ["barn", index, "inntektPerMåned"],
+            });
+          }
+        });
+      }
+
+      // Valider delerUtvidetBarnetrygd kun når minst et barn har DELT_FAST_BOSTED
+      const harBarnMedDeltBosted = data.barn.some(
+        (barn) => barn.bosted === "DELT_FAST_BOSTED",
+      );
+      if (
+        data.ytelser.mottarUtvidetBarnetrygd &&
+        harBarnMedDeltBosted &&
+        data.ytelser.delerUtvidetBarnetrygd === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.ytelser.utvidetBarnetrygd.deler.påkrevd,
+          ),
+          path: ["ytelser", "delerUtvidetBarnetrygd"],
+        });
+      }
+
+      // Valider kontantstøtte.deler kun når mottar er true og minst et barn har DELT_FAST_BOSTED
+      if (
+        data.ytelser.kontantstøtte.mottar === true &&
+        harBarnMedDeltBosted &&
+        data.ytelser.kontantstøtte.deler === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.ytelser.kontantstøtte.deler.påkrevd,
+          ),
+          path: ["ytelser", "kontantstøtte", "deler"],
+        });
+      }
+
       if (bidragstype === "MOTTAKER") {
+        if (medforelderBoforhold.borMedAndreBarn === undefined) {
+          ctx.addIssue({
+            path: ["medforelderBoforhold", "borMedAndreBarn"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
+            ),
+          });
+        }
+
         if (medforelderBoforhold.borMedAnnenVoksen === undefined) {
           ctx.addIssue({
             path: ["medforelderBoforhold", "borMedAnnenVoksen"],
@@ -257,23 +673,22 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
               språk,
               tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
                 .påkrevd,
-            ),
-          });
-        }
-
-        if (medforelderBoforhold.borMedAndreBarn === undefined) {
-          ctx.addIssue({
-            path: ["medforelderBoforhold", "borMedAndreBarn"],
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
             ),
           });
         }
       }
 
       if (bidragstype === "PLIKTIG") {
+        if (dittBoforhold.borMedAndreBarn === undefined) {
+          ctx.addIssue({
+            path: ["dittBoforhold", "borMedAndreBarn"],
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
+            ),
+          });
+        }
         if (dittBoforhold.borMedAnnenVoksen === undefined) {
           ctx.addIssue({
             path: ["dittBoforhold", "borMedAnnenVoksen"],
@@ -282,66 +697,33 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
               språk,
               tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
                 .påkrevd,
-            ),
-          });
-        }
-
-        if (dittBoforhold.borMedAndreBarn === undefined) {
-          ctx.addIssue({
-            path: ["dittBoforhold", "borMedAndreBarn"],
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
             ),
           });
         }
       }
-      if (bidragstype === "BEGGE") {
-        if (medforelderBoforhold.borMedAnnenVoksen === undefined) {
-          ctx.addIssue({
-            path: ["medforelderBoforhold", "borMedAnnenVoksen"],
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
-                .påkrevd,
-            ),
-          });
-        }
 
-        if (medforelderBoforhold.borMedAndreBarn === undefined) {
-          ctx.addIssue({
-            path: ["medforelderBoforhold", "borMedAndreBarn"],
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
-            ),
-          });
-        }
+      const erBM = bidragstype === "MOTTAKER";
+      const harBarnepassutgifter = data.barn.some(
+        (b) => b.barnetilsynsutgift >= 0,
+      );
 
-        if (dittBoforhold.borMedAnnenVoksen === undefined) {
-          ctx.addIssue({
-            path: ["dittBoforhold", "borMedAnnenVoksen"],
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
-                .påkrevd,
-            ),
-          });
-        }
-
-        if (dittBoforhold.borMedAndreBarn === undefined) {
-          ctx.addIssue({
-            path: ["dittBoforhold", "borMedAndreBarn"],
-            code: "custom",
-            message: oversett(
-              språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
-            ),
-          });
+      if (erBM && harBarnepassutgifter) {
+        if (
+          data.andreBarnUnder12.antall > 0 &&
+          data.andreBarnUnder12.tilsynsutgifter
+        ) {
+          for (let i = 0; i < data.andreBarnUnder12.antall; i++) {
+            if (data.andreBarnUnder12.tilsynsutgifter[i] === undefined) {
+              ctx.addIssue({
+                path: ["andreBarnUnder12", "tilsynsutgifter", i],
+                code: "custom",
+                message: oversett(
+                  språk,
+                  tekster.feilmeldinger.andreBarnUnder12.tilsynsutgift.påkrevd,
+                ),
+              });
+            }
+          }
         }
       }
     });
@@ -400,21 +782,51 @@ const tekster = definerTekster({
         nn: "Barnet kan ikkje ha flest netter hos deg når barnet bur hos den andre forelderen.",
       },
     },
-    barnetilsynsutgift: {
-      påkrevd: {
-        nb: "Fyll inn kostnader til barnepass",
-        en: "Fill in costs for child care",
-        nn: "Fyll inn kostnadar til barnepass",
+    barnepass: {
+      situasjon: {
+        påkrevd: {
+          nb: "Fyll inn barnepass",
+          en: "Fill in child care",
+          nn: "Fyll inn barnepass",
+        },
       },
-      minimum: {
-        nb: "Kostnader til barnepass må være minst 0",
-        en: "Costs for child care must be at least 0",
-        nn: "Kostnader til barnepass må vere minst 0",
+      utgifter: {
+        påkrevd: {
+          nb: "Velg om du har utgifter til barnepass",
+          en: "Select if you have childcare expenses",
+          nn: "Vel om du har utgifter til barnepass",
+        },
+        beløp: {
+          påkrevd: {
+            nb: "Fyll inn kostnader til barnepass",
+            en: "Fill in costs for child care",
+            nn: "Fyll inn kostnadar til barnepass",
+          },
+          minimum: {
+            nb: "Kostnader til barnepass må være minst 0",
+            en: "Costs for child care must be at least 0",
+            nn: "Kostnader til barnepass må vere minst 0",
+          },
+          maksimum: {
+            nb: "Kostnader for barnepass kan ikke være mer enn 10 000 kr",
+            en: "Costs for child care cannot exceed 10,000 NOK",
+            nn: "Kostnader for barnepass kan ikkje vere meir enn 10 000 kr",
+          },
+        },
       },
-      maksimum: {
-        nb: "Kostnader for barnepass kan ikke være mer enn 10 000 kr",
-        en: "Costs for child care cannot exceed 10,000 NOK",
-        nn: "Kostnader for barnepass kan ikkje vere meir enn 10 000 kr",
+      stønad: {
+        påkrevd: {
+          nb: "Velg om du mottar stønad til barnetilsyn",
+          en: "Select if you receive childcare support",
+          nn: "Vel om du mottar stønad til barnetilsyn",
+        },
+        type: {
+          påkrevd: {
+            nb: "Velg type barnepass",
+            en: "Select childcare type",
+            nn: "Vel type barnepass",
+          },
+        },
       },
     },
     bostatus: {
@@ -462,12 +874,26 @@ const tekster = definerTekster({
         en: "Maximum 10 children can be added",
         nn: "Maksimum 10 barn kan leggjast til",
       },
+      egenInntekt: {
+        påkrevd: {
+          nb: "Velg om barnet har egen inntekt",
+          en: "Velg om barnet har egen inntekt",
+          nn: "Velg om barnet har egen inntekt",
+        },
+      },
     },
     inntekt: {
       påkrevd: {
         nb: "Fyll inn inntekt",
         en: "Fill in income",
         nn: "Fyll inn inntekt",
+      },
+      beløp: {
+        påkrevd: {
+          nb: "Fyll inn inntekt",
+          en: "Fill in income",
+          nn: "Fyll inn inntekt",
+        },
       },
       positivt: {
         nb: "Inntekt må være et positivt tall",
@@ -527,6 +953,119 @@ const tekster = definerTekster({
           nb: "Velg et alternativ",
           en: "Choose an option",
           nn: "Vel eit alternativ",
+        },
+      },
+      betalerBarnebidragForAndreBarn: {
+        påkrevd: {
+          nb: "Velg et alternativ",
+          en: "Choose an option",
+          nn: "Vel eit alternativ",
+        },
+      },
+      borMedAnnenVoksenType: {
+        påkrevd: {
+          nb: "Velg et alternativ",
+          en: "Choose an option",
+          nn: "Vel eit alternativ",
+        },
+      },
+      borMedBarnOver18: {
+        påkrevd: {
+          nb: "Velg et alternativ",
+          en: "Choose an option",
+          nn: "Vel eit alternativ",
+        },
+      },
+      antallBarnOver18: {
+        påkrevd: {
+          nb: "Fyll inn antall barn",
+          en: "Fill in the number of children",
+          nn: "Fyll inn antal barn",
+        },
+      },
+      andreBarnebidragerPerMåned: {
+        påkrevd: {
+          nb: "Fyll inn beløp for barnebidrag",
+          en: "Enter child support amount",
+          nn: "Fyll inn beløp for barnebidrag",
+        },
+      },
+    },
+    andreBarnUnder12: {
+      antall: {
+        påkrevd: {
+          nb: "Fyll inn antall barn",
+          en: "Fill in the number of children",
+          nn: "Fyll inn antal barn",
+        },
+        minimum: {
+          nb: "Antall barn må være minst 0",
+          en: "Number of children must be at least 0",
+          nn: "Antal barn må vere minst 0",
+        },
+        maksimum: {
+          nb: "Antall barn kan ikke være mer enn 10",
+          en: "Number of children cannot exceed 10",
+          nn: "Antal barn kan ikkje vere meir enn 10",
+        },
+      },
+      tilsynsutgift: {
+        påkrevd: {
+          nb: "Fyll inn tilsynsutgift",
+          en: "Fill in childcare cost",
+          nn: "Fyll inn tilsynsutgift",
+        },
+        minimum: {
+          nb: "Tilsynsutgift må være minst 0",
+          en: "Childcare cost must be at least 0",
+          nn: "Tilsynsutgift må vere minst 0",
+        },
+        maksimum: {
+          nb: "Tilsynsutgift kan ikke være mer enn 10 000 kr",
+          en: "Childcare cost cannot exceed 10,000 NOK",
+          nn: "Tilsynsutgift kan ikkje vere meir enn 10 000 kr",
+        },
+      },
+    },
+    ytelser: {
+      kontantstøtte: {
+        beløp: {
+          påkrevd: {
+            nb: "Fyll inn beløp for kontantstøtte",
+            en: "Fill in amount for cash-for-care benefit",
+            nn: "Fyll inn beløp for kontantstøtte",
+          },
+          tall: {
+            nb: "Beløp må være et tall",
+            en: "Amount must be a number",
+            nn: "Beløp må vere eit tal",
+          },
+          minimum: {
+            nb: "Beløp må være minst 0",
+            en: "Amount must be at least 0",
+            nn: "Beløp må vere minst 0",
+          },
+          maksimum: {
+            nb: "Beløp kan ikke være mer enn 10 000 kr",
+            en: "Amount cannot exceed 10,000 NOK",
+            nn: "Beløp kan ikkje vere meir enn 10 000 kr",
+          },
+        },
+        deler: {
+          påkrevd: {
+            nb: "Velg om dere deler kontantstøtten",
+            en: "Select if you share the cash-for-care benefit",
+            nn: "Vel om de deler kontantstøtta",
+          },
+        },
+      },
+      utvidetBarnetrygd: {
+        deler: {
+          påkrevd: {
+            nb: "Velg om dere deler utvidet barnetrygd",
+            en: "Select if you share extended child benefit",
+            nn: "Vel om de deler utvida barnetrygd",
+          },
         },
       },
     },
