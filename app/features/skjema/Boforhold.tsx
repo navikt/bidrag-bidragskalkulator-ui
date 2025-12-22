@@ -25,12 +25,14 @@ export const Bofohold = () => {
     if (bidragstype === "MOTTAKER") {
       // Kun medforelderBoforhold er påkrevd, resett dittBoforhold
       BOFORHOLD_FIELDS.forEach((field) => {
-        form.setValue(`dittBoforhold.${field}`, "");
+        const value = field.includes("antall") || field.includes("barnebidrag") || field === "borMedAnnenVoksenType" ? "" : "undefined";
+        form.setValue(`dittBoforhold.${field}`, value);
       });
     } else if (bidragstype === "PLIKTIG") {
       // Kun dittBoforhold er påkrevd, resett medforelderBoforhold
       BOFORHOLD_FIELDS.forEach((field) => {
-        form.setValue(`medforelderBoforhold.${field}`, "");
+        const value = field.includes("antall") || field.includes("barnebidrag") || field === "borMedAnnenVoksenType" ? "" : "undefined";
+        form.setValue(`medforelderBoforhold.${field}`, value);
       });
     }
   }, [bidragstype, form]);

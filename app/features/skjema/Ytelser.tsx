@@ -63,12 +63,12 @@ export const Ytelser = ({ bidragstype }: Props) => {
     ) {
       // Reset alle ytelse-verdier
       form.setValue("ytelser", {
-        mottarUtvidetBarnetrygd: "",
-        delerUtvidetBarnetrygd: "",
-        mottarSmåbarnstillegg: "",
+        mottarUtvidetBarnetrygd: "undefined",
+        delerUtvidetBarnetrygd: "undefined",
+        mottarSmåbarnstillegg: "undefined",
         kontantstøtte: {
-          mottar: "",
-          deler: "",
+          mottar: "undefined",
+          deler: "undefined",
           beløp: "",
         },
       });
@@ -106,29 +106,29 @@ export const Ytelser = ({ bidragstype }: Props) => {
     // Oppdater form-verdier
     form.setValue(
       "ytelser.mottarUtvidetBarnetrygd",
-      nyeValgteYtelser.includes("utvidet-barnetrygd") ? "true" : "",
+      nyeValgteYtelser.includes("utvidet-barnetrygd") ? "true" : "undefined",
     );
     form.setValue(
       "ytelser.mottarSmåbarnstillegg",
-      nyeValgteYtelser.includes("småbarnstillegg") ? "true" : "",
+      nyeValgteYtelser.includes("småbarnstillegg") ? "true" : "undefined",
     );
     form.setValue(
       "ytelser.kontantstøtte.mottar",
-      nyeValgteYtelser.includes("kontantstøtte") ? "true" : "",
+      nyeValgteYtelser.includes("kontantstøtte") ? "true" : "undefined",
     );
 
     // Nullstill kontantstøtte-beløp hvis kontantstøtte fjernes
     if (!nyeValgteYtelser.includes("kontantstøtte")) {
       form.setValue("ytelser.kontantstøtte", {
-        mottar: "",
-        deler: "",
+        mottar: "undefined",
+        deler: "undefined",
         beløp: "",
       });
     }
 
     // Nullstill deling hvis utvidet barnetrygd fjernes
     if (!nyeValgteYtelser.includes("utvidet-barnetrygd")) {
-      form.setValue("ytelser.delerUtvidetBarnetrygd", "");
+      form.setValue("ytelser.delerUtvidetBarnetrygd", "undefined");
     }
   };
 

@@ -24,7 +24,7 @@ export default function Kapitalinntekt({ part }: Props) {
         onChange={(e) =>
           form.setValue(
             `${part}.harKapitalinntektOver10k`,
-            e.target.checked ? "true" : "",
+            e.target.checked ? "true" : "undefined",
           )
         }
       >

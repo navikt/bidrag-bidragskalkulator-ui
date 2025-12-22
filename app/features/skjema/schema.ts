@@ -27,8 +27,8 @@ const BarnSkjemaSchema = z.object({
   alder: z.string(),
   bosted: z.enum([...FastBostedSchema.options, ""]),
   samvær: z.string(),
-  harBarnetilsynsutgift: z.enum(["true", "false", ""]),
-  mottarStønadTilBarnetilsyn: z.enum(["true", "false", ""]),
+  harBarnetilsynsutgift: z.enum(["true", "false", "undefined"]),
+  mottarStønadTilBarnetilsyn: z.enum(["true", "false", "undefined"]),
   barnetilsynsutgift: z.string(),
   barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
   inntektPerMåned: z.string(),
@@ -40,29 +40,29 @@ const BarnebidragSkjemaSchema = z.object({
   deg: z.object({
     inntekt: z.string(),
     kapitalinntekt: z.string(),
-    harKapitalinntektOver10k: z.enum(["true", ""]),
+    harKapitalinntektOver10k: z.enum(["true", "undefined"]),
   }),
   medforelder: z.object({
     inntekt: z.string(),
     kapitalinntekt: z.string(),
-    harKapitalinntektOver10k: z.enum(["true", ""]),
+    harKapitalinntektOver10k: z.enum(["true", "undefined"]),
   }),
-  barnHarEgenInntekt: z.enum(["true", "false", ""]),
+  barnHarEgenInntekt: z.enum(["true", "false", "undefined"]),
   dittBoforhold: z.object({
-    borMedAnnenVoksen: z.enum(["true", "false", "", "undefined"]),
-    borMedAndreBarn: z.enum(["true", "false", "", "undefined"]),
+    borMedAnnenVoksen: z.enum(["true", "false", "undefined"]),
+    borMedAndreBarn: z.enum(["true", "false", "undefined"]),
     antallBarnBorFast: z.string(),
     borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
-    borMedBarnOver18: z.enum(["true", "false", "", "undefined"]),
+    borMedBarnOver18: z.enum(["true", "false", "undefined"]),
     antallBarnOver18: z.string(),
     andreBarnebidragerPerMåned: z.string(),
   }),
   medforelderBoforhold: z.object({
-    borMedAnnenVoksen: z.enum(["true", "false", "", "undefined"]),
-    borMedAndreBarn: z.enum(["true", "false", "", "undefined"]),
+    borMedAnnenVoksen: z.enum(["true", "false", "undefined"]),
+    borMedAndreBarn: z.enum(["true", "false", "undefined"]),
     antallBarnBorFast: z.string(),
     borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
-    borMedBarnOver18: z.enum(["true", "false", "", "undefined"]),
+    borMedBarnOver18: z.enum(["true", "false", "undefined"]),
     antallBarnOver18: z.string(),
     andreBarnebidragerPerMåned: z.string(),
   }),
@@ -72,13 +72,13 @@ const BarnebidragSkjemaSchema = z.object({
   }),
   ytelser: z.object({
     kontantstøtte: z.object({
-      mottar: z.enum(["true", ""]),
+      mottar: z.enum(["true", "undefined"]),
       beløp: z.string(),
-      deler: z.enum(["true", "false", ""]),
+      deler: z.enum(["true", "false", "undefined"]),
     }),
-    mottarUtvidetBarnetrygd: z.enum(["true", ""]),
-    delerUtvidetBarnetrygd: z.enum(["true", "false", ""]),
-    mottarSmåbarnstillegg: z.enum(["true", ""]),
+    mottarUtvidetBarnetrygd: z.enum(["true", "undefined"]),
+    delerUtvidetBarnetrygd: z.enum(["true", "false", "undefined"]),
+    mottarSmåbarnstillegg: z.enum(["true", "undefined"]),
   }),
 });
 
@@ -87,46 +87,36 @@ export const lagYtelserSkjema = (språk: Språk) => {
     .object({
       kontantstøtte: z.object({
         mottar: z
-          .enum(["true", ""])
-          .transform((value) => (value === "" ? undefined : value === "true")),
+          .enum(["true", "undefined"])
+          .transform((value) => (value === "undefined" ? undefined : true)),
         beløp: z.string(),
         deler: z
-          .enum(["true", "false", ""])
-          .transform((value) => (value === "" ? undefined : value === "true")),
+          .enum(["true", "false", "undefined"])
+          .transform((value) =>
+            value === "undefined" ? undefined : value === "true",
+          ),
       }),
       mottarUtvidetBarnetrygd: z
-        .enum(["true", ""])
-        .transform((value) => (value === "" ? undefined : value === "true")),
+        .enum(["true", "undefined"])
+        .transform((value) => (value === "undefined" ? undefined : true)),
       delerUtvidetBarnetrygd: z
-        .enum(["true", "false", ""])
-        .transform((value) => (value === "" ? undefined : value === "true")),
+        .enum(["true", "false", "undefined"])
+        .transform((value) =>
+          value === "undefined" ? undefined : value === "true",
+        ),
       mottarSmåbarnstillegg: z
-        .enum(["true", ""])
-        .transform((value) => (value === "" ? undefined : value === "true")),
+        .enum(["true", "undefined"])
+        .transform((value) => (value === "undefined" ? undefined : true)),
     })
     .superRefine((values, ctx) => {
-      // Kontantstøtte: Når mottar er true, må beløp fylles ut hvis:
-      // 1. Barn ikke har delt bosted (deler-spørsmål stilles aldri), ELLER
-      // 2. Barn har delt bosted OG de deler kontantstøtten
+      // Kontantstøtte: Validering av deler er flyttet til foreldre-skjema nivå
+      // der vi har tilgang til barn-data for å sjekke om noen har DELT_FAST_BOSTED
 
-      if (
-        values.kontantstøtte.mottar === true &&
-        values.kontantstøtte.deler === undefined
-      ) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.ytelser.kontantstøtte.deler.påkrevd,
-          ),
-          path: ["kontantstøtte", "deler"],
-        });
-      }
-
+      // Valider beløp når mottar er true og de ikke har svart "nei" på deling
       if (
         values.kontantstøtte.mottar === true &&
         values.kontantstøtte.beløp.trim() === "" &&
-        values.kontantstøtte.deler !== false // Beløp kreves hvis de ikke har svart "nei" på deling
+        values.kontantstøtte.deler !== false
       ) {
         ctx.addIssue({
           code: "custom",
@@ -256,21 +246,21 @@ export const lagBoforholdSkjema = (språk: Språk) => {
   return z
     .object({
       borMedAnnenVoksen: z
-        .enum(["true", "false", "", "undefined"])
+        .enum(["true", "false", "undefined"])
         .transform((value) =>
-          value === "" || value === "undefined" ? undefined : value === "true",
+          value === "undefined" ? undefined : value === "true",
         ),
       borMedAndreBarn: z
-        .enum(["true", "false", "", "undefined"])
+        .enum(["true", "false", "undefined"])
         .transform((value) =>
-          value === "" || value === "undefined" ? undefined : value === "true",
+          value === "undefined" ? undefined : value === "true",
         ),
       antallBarnBorFast: z.string(),
       borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
       borMedBarnOver18: z
-        .enum(["true", "false", "", "undefined"])
+        .enum(["true", "false", "undefined"])
         .transform((value) =>
-          value === "" || value === "undefined" ? undefined : value === "true",
+          value === "undefined" ? undefined : value === "true",
         ),
       antallBarnOver18: z.string(),
       andreBarnebidragerPerMåned: z.string(),
@@ -336,7 +326,6 @@ export const lagBoforholdSkjema = (språk: Språk) => {
     .transform((values) => {
       return {
         ...values,
-        anantallBarnOver18: Number(values.antallBarnOver18.trim() || 0),
         antallBarnBorFast: Number(values.antallBarnBorFast.trim() || 0),
         andreBarnebidragerPerMåned: Number(
           values.andreBarnebidragerPerMåned.trim() || 0,
@@ -372,8 +361,8 @@ export const lagInntektSkjema = (språk: Språk) => {
       inntekt: z.string(),
       kapitalinntekt: z.string(),
       harKapitalinntektOver10k: z
-        .enum(["true", ""])
-        .transform((value) => (value === "" ? undefined : value === "true")),
+        .enum(["true", "undefined"])
+        .transform((value) => (value === "undefined" ? undefined : true)),
     })
     .superRefine((data, ctx) => {
       // Valider inntekt - alltid påkrevd
@@ -479,11 +468,15 @@ export const lagBarnSkjema = (språk: Språk) => {
         }),
       // barnepass:
       harBarnetilsynsutgift: z
-        .enum(["true", "false", ""])
-        .transform((value) => (value === "" ? undefined : value === "true")),
+        .enum(["true", "false", "undefined"])
+        .transform((value) =>
+          value === "undefined" ? undefined : value === "true",
+        ),
       mottarStønadTilBarnetilsyn: z
-        .enum(["true", "false", ""])
-        .transform((value) => (value === "" ? undefined : value === "true")),
+        .enum(["true", "false", "undefined"])
+        .transform((value) =>
+          value === "undefined" ? undefined : value === "true",
+        ),
       barnetilsynsutgift: z.string(),
       barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
       inntektPerMåned: z.string(),
@@ -586,8 +579,10 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
       deg: lagInntektSkjema(språk),
       medforelder: lagInntektSkjema(språk),
       barnHarEgenInntekt: z
-        .enum(["true", "false", ""])
-        .transform((value) => (value === "" ? undefined : value === "true")),
+        .enum(["true", "false", "undefined"])
+        .transform((value) =>
+          value === "undefined" ? undefined : value === "true",
+        ),
       dittBoforhold: lagBoforholdSkjema(språk),
       medforelderBoforhold: lagBoforholdSkjema(språk),
       andreBarnUnder12: lagAndreBarnUnder12Skjema(språk),
@@ -639,6 +634,22 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
             tekster.feilmeldinger.ytelser.utvidetBarnetrygd.deler.påkrevd,
           ),
           path: ["ytelser", "delerUtvidetBarnetrygd"],
+        });
+      }
+
+      // Valider kontantstøtte.deler kun når mottar er true og minst et barn har DELT_FAST_BOSTED
+      if (
+        data.ytelser.kontantstøtte.mottar === true &&
+        harBarnMedDeltBosted &&
+        data.ytelser.kontantstøtte.deler === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.ytelser.kontantstøtte.deler.påkrevd,
+          ),
+          path: ["ytelser", "kontantstøtte", "deler"],
         });
       }
 
