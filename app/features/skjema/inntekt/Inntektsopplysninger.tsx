@@ -109,9 +109,9 @@ const tekster = definerTekster({
     nn: "Inntekt",
   },
   dinInntekt: {
-    nb: "Hva har du hatt i inntekt de siste 12 månedene?",
-    en: "What has your income been in the last 12 months?",
-    nn: "Kva har du hatt i inntekt dei siste 12 månadane?",
+    nb: "Hva har du hatt i brutto inntekt de siste 12 månedene?",
+    en: "What have you had in gross income in the last 12 months?",
+    nn: "Kva har du hatt i brutto inntekt dei siste 12 månadane?",
   },
   inntektsinformasjon: {
     overskrift: {
@@ -136,9 +136,9 @@ const tekster = definerTekster({
     },
   },
   hvaErInntektenTilDenAndreForelderen: {
-    nb: "Hva har den andre forelderen hatt i inntekt de siste 12 månedene?",
-    en: "What has the other parent's income been in the last 12 months?",
-    nn: "Kva har den andre forelderen hatt i inntekt dei siste 12 månadane?",
+    nb: "Hva har den andre forelderen hatt i brutto inntekt de siste 12 månedene?",
+    en: "What has the other parent had in gross income in the last 12 months?",
+    nn: "Kva har den andre forelderen hatt i brutto inntekt dei siste 12 månadane?",
   },
   barnHarEgenInntekt: {
     singular: {
