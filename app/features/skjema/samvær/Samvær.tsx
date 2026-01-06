@@ -3,7 +3,7 @@ import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { FastBostedSchema, type BarnebidragSkjema } from "../schema";
+import type { BarnebidragSkjema } from "../schema";
 import { SAMVÆR_STANDARDVERDI, sporKalkulatorSpørsmålBesvart } from "../utils";
 import { SamværOgFerierInfo } from "./SamværOgFerierInfo";
 import { Samværsfradraginfo } from "./Samværsfradraginfo";
@@ -56,69 +56,88 @@ export function Samvær({ barnIndex }: SamværProps) {
         legend={t(tekster.bosted.label)}
         description={t(tekster.bosted.valg.beskrivelse)}
       >
-        {FastBostedSchema.options.map((bosted) => {
-          return (
-            <Radio
-              value={bosted}
-              key={bosted}
-              onChange={sporKalkulatorSpørsmålBesvart(
-                "barn-fast-bosted",
-                t(tekster.bosted.label),
-              )}
-            >
-              {t(tekster.bosted.valg[bosted])}
-            </Radio>
-          );
-        })}
+        <Radio
+          value="DELT_FAST_BOSTED"
+          onChange={sporKalkulatorSpørsmålBesvart(
+            "barn-fast-bosted",
+            t(tekster.bosted.label),
+          )}
+        >
+          {t(tekster.bosted.valg.DELT_FAST_BOSTED)}
+        </Radio>
+
+        <Radio
+          value="HOS_MEG"
+          onChange={sporKalkulatorSpørsmålBesvart(
+            "barn-fast-bosted",
+            t(tekster.bosted.label),
+          )}
+        >
+          {t(tekster.bosted.valg.HOS_MEG)}
+        </Radio>
+
+        {borHosMeg && (
+          <div className="pl-8 mt-4 bg-blue-100 rounded-md pr-4 py-2">
+            <Slider
+              {...barnField.field("samvær").getControlProps({
+                onChange: sporSamvær,
+              })}
+              label={t(tekster.samvær.label)}
+              error={barnField.field("samvær").error()}
+              min={15}
+              max={30}
+              step={1}
+              list={[
+                {
+                  label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosMeg),
+                  value: 15,
+                },
+                {
+                  label: t(tekster.samvær.beskrivelser.alleNetterSamvær),
+                  value: 30,
+                },
+              ]}
+              valueDescription={samværsgradBeskrivelse}
+            />
+          </div>
+        )}
+
+        <Radio
+          value="HOS_MEDFORELDER"
+          onChange={sporKalkulatorSpørsmålBesvart(
+            "barn-fast-bosted",
+            t(tekster.bosted.label),
+          )}
+        >
+          {t(tekster.bosted.valg.HOS_MEDFORELDER)}
+        </Radio>
+
+        {borHosMedforelder && (
+          <div className="pl-8 mt-4 bg-blue-100 rounded-md pr-4 py-2">
+            <Slider
+              {...barnField.field("samvær").getControlProps({
+                onChange: sporSamvær,
+              })}
+              label={t(tekster.samvær.label)}
+              error={barnField.field("samvær").error()}
+              min={0}
+              max={15}
+              step={1}
+              list={[
+                {
+                  label: t(tekster.samvær.beskrivelser.ingenSamvær),
+                  value: 0,
+                },
+                {
+                  label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosMeg),
+                  value: 15,
+                },
+              ]}
+              valueDescription={samværsgradBeskrivelse}
+            />
+          </div>
+        )}
       </RadioGroup>
-
-      {borHosMeg && (
-        <Slider
-          {...barnField.field("samvær").getControlProps({
-            onChange: sporSamvær,
-          })}
-          label={t(tekster.samvær.label)}
-          error={barnField.field("samvær").error()}
-          min={15}
-          max={30}
-          step={1}
-          list={[
-            {
-              label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosMeg),
-              value: 15,
-            },
-            {
-              label: t(tekster.samvær.beskrivelser.alleNetterSamvær),
-              value: 30,
-            },
-          ]}
-          valueDescription={samværsgradBeskrivelse}
-        />
-      )}
-
-      {borHosMedforelder && (
-        <Slider
-          {...barnField.field("samvær").getControlProps({
-            onChange: sporSamvær,
-          })}
-          label={t(tekster.samvær.label)}
-          error={barnField.field("samvær").error()}
-          min={0}
-          max={15}
-          step={1}
-          list={[
-            {
-              label: t(tekster.samvær.beskrivelser.ingenSamvær),
-              value: 0,
-            },
-            {
-              label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosMeg),
-              value: 15,
-            },
-          ]}
-          valueDescription={samværsgradBeskrivelse}
-        />
-      )}
 
       <Samværsfradraginfo />
       <SamværOgFerierInfo />
@@ -128,31 +147,30 @@ export function Samvær({ barnIndex }: SamværProps) {
 const tekster = definerTekster({
   tittel: {
     nb: "Barnets faste bosted og samvær",
-    en: "",
-    nn: "",
+    en: "The child's permanent residence and visitation",
+    nn: "Barnet sin faste bustad og samvær",
   },
   bosted: {
     label: {
       nb: "Har dere avtale om delt fast bosted for dette barnet?",
-      // TODO: oppdatert teksten
       en: "Do you have an agreement on shared permanent residence for this child?",
       nn: "Har de avtale om delt fast bustad for dette barnet?",
     },
     valg: {
       velg: {
         nb: "Har dere avtale om delt fast bosted for dette barnet?",
-        en: "",
-        nn: "",
+        en: "Do you have an agreement on shared permanent residence for this child?",
+        nn: "Har de avtale om delt fast bustad for dette barnet?",
       },
       beskrivelse: {
         nb: "Delt fast bosted er en avtale etter barnelovens §36 om at barnet skal bo fast hos begge foreldrene. Avtalen går ut fra at foreldrene deler likt både på samvær og kostnader. Hvis den ene tjener mer enn den andre, kan det bli aktuelt med barnebidrag.",
-        en: "",
-        nn: "",
+        en: "Shared permanent residence is an agreement under Section 36 of the Children's Act that the child shall live permanently with both parents. The agreement assumes that the parents share both visitation and costs equally. If one earns more than the other, child support may be relevant.",
+        nn: "Delt fast bustad er ein avtale etter barnelova §36 om at barnet skal bu fast hjå begge foreldra. Avtalen går ut frå at foreldra deler likt både på samvær og kostnader. Dersom den eine tener meir enn den andre, kan det bli aktuelt med barnebidrag.",
       },
       DELT_FAST_BOSTED: {
         nb: "Ja, vi har signert avtale om delt fast bosted ",
-        en: "",
-        nn: "",
+        en: "Yes, we have a signed agreement on shared permanent residence ",
+        nn: "Ja, vi har signert avtale om delt fast bustad ",
       },
       HOS_MEG: {
         nb: (
@@ -211,18 +229,16 @@ const tekster = definerTekster({
   samvær: {
     label: {
       nb: "Hvor mange netter er barnet hos deg i måneden?",
-      en: "",
-      nn: "",
+      en: "How many nights does the child stay with you per month?",
+      nn: "Kor mange netter er barnet hjå deg i månaden?",
     },
     netter: (antall) => ({
       nb: `Barnet bor ${antall} netter hos meg`,
-      //TODO: sjekk teksten
       en: `The child lives ${antall} nights with me`,
       nn: `Barnet bur ${antall} netter hos meg`,
     }),
     enNatt: {
       nb: "Barnet bor 1 natt hos meg",
-      //TODO: sjekk teksten
       en: "1 night with me",
       nn: "1 natt hos meg",
     },
