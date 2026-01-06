@@ -59,6 +59,7 @@ export const Inntektsopplysninger = () => {
           )}
           htmlSize={18}
         />
+        <Kapitalinntekt part="deg" />
 
         <FormattertTallTextField
           {...form.field("medforelder.inntekt").getControlProps()}
@@ -70,11 +71,7 @@ export const Inntektsopplysninger = () => {
           )}
           htmlSize={18}
         />
-
-        <div>
-          <Kapitalinntekt part="deg" />
-          <Kapitalinntekt part="medforelder" />
-        </div>
+        <Kapitalinntekt part="medforelder" />
 
         {harGyldigeBarn && (
           <>
