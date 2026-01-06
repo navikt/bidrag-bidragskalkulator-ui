@@ -1,4 +1,4 @@
-import { BodyLong, BodyShort } from "@navikt/ds-react";
+import { BodyLong, BodyShort, Heading } from "@navikt/ds-react";
 import { useField, useFormContext } from "@rvf/react";
 import { Fragment } from "react/jsx-runtime";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
@@ -63,9 +63,11 @@ export const Barnepass = () => {
 
   return (
     <div className="border p-6 rounded-lg bg-white space-y-6">
-      <h2 className="sr-only">{t(tekster.overskrift)}</h2>
+      <Heading level="2" size="small" spacing>
+        {t(tekster.overskrift)}
+      </Heading>
       <fieldset className="p-0">
-        <legend className="text-xl mb-2">{t(tekster.overskrift)}</legend>
+        <legend className="sr-only">{t(tekster.overskrift)}</legend>
         <BodyLong spacing size="medium" textColor="subtle">
           {t(tekster.beskrivelse)}
         </BodyLong>

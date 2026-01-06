@@ -1,4 +1,4 @@
-import { BodyShort, Checkbox, CheckboxGroup } from "@navikt/ds-react";
+import { BodyShort, Checkbox, CheckboxGroup, Heading } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
 import { useEffect, useRef, useState } from "react";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
@@ -144,8 +144,11 @@ export const Ytelser = ({ bidragstype }: Props) => {
 
   return (
     <div className="border p-4 rounded-md">
+      <Heading level="2" size="small" spacing>
+        {t(tekster.felles.overskrift)}
+      </Heading>
       <fieldset className="p-0 flex flex-col gap-4">
-        <legend className="text-xl mb-2">{t(tekster.felles.overskrift)}</legend>
+        <legend className="sr-only">{t(tekster.felles.overskrift)}</legend>
         <BodyShort>{t(tekster[bidragstype].beskrivelse)}</BodyShort>
 
         {/* Kontantstøtte - kun for barn som er 1 år */}

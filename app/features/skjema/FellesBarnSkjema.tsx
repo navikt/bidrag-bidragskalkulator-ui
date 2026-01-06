@@ -1,5 +1,5 @@
 import { PlusIcon } from "@navikt/aksel-icons";
-import { BodyShort, Button } from "@navikt/ds-react";
+import { BodyShort, Button, Heading } from "@navikt/ds-react";
 import { useFieldArray, useFormContext } from "@rvf/react";
 import React, { useEffect, useMemo } from "react";
 import { sporHendelse } from "~/utils/analytics";
@@ -80,9 +80,11 @@ export const FellesBarnSkjema = () => {
 
   return (
     <div className="border p-4 rounded-md space-y-4">
-      <h2 className="sr-only">{t(tekster.overskrift)}</h2>
+      <Heading level="2" size="small">
+        {t(tekster.overskrift)}
+      </Heading>
       <fieldset className="p-0" aria-describedby="barn-skjema-desc">
-        <legend className="text-xl">{t(tekster.overskrift)}</legend>
+        <legend className="sr-only">{t(tekster.overskrift)}</legend>
         <BodyShort
           id="barn-skjema-desc"
           size="medium"

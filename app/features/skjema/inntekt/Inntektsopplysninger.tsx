@@ -1,4 +1,4 @@
-import { BodyLong, BodyShort, ReadMore } from "@navikt/ds-react";
+import { BodyLong, BodyShort, Heading, ReadMore } from "@navikt/ds-react";
 import { useFieldArray, useFormContext, useFormScope } from "@rvf/react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
@@ -22,9 +22,11 @@ export const Inntektsopplysninger = () => {
 
   return (
     <div className="border p-4 rounded-md">
-      <h2 className="sr-only">{t(tekster.tittel)}</h2>
+      <Heading level="2" size="small" spacing>
+        {t(tekster.tittel)}
+      </Heading>
       <fieldset className="p-0 flex flex-col gap-4">
-        <legend className="text-xl mb-5">{t(tekster.tittel)}</legend>
+        <legend className="sr-only">{t(tekster.tittel)}</legend>
 
         <ReadMore
           header={t(tekster.inntektsinformasjon.overskrift)}

@@ -1,4 +1,4 @@
-import { BodyShort, Radio, RadioGroup } from "@navikt/ds-react";
+import { Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { sporHendelse } from "~/utils/analytics";
@@ -39,9 +39,9 @@ export function Samvær({ barnIndex }: SamværProps) {
 
   return (
     <>
-      <BodyShort weight="semibold" className="mt-7" spacing>
+      <Heading level="3" size="small">
         {t(tekster.tittel)}
-      </BodyShort>
+      </Heading>
       <RadioGroup
         {...barnField.getControlProps("bosted", {
           onChange: (verdi) => {

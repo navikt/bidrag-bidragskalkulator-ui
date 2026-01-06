@@ -1,4 +1,4 @@
-import { BodyShort } from "@navikt/ds-react";
+import { BodyShort, Heading } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
 import { useEffect } from "react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
@@ -25,13 +25,23 @@ export const Bofohold = () => {
     if (bidragstype === "MOTTAKER") {
       // Kun medforelderBoforhold er påkrevd, resett dittBoforhold
       BOFORHOLD_FIELDS.forEach((field) => {
-        const value = field.includes("antall") || field.includes("barnebidrag") || field === "borMedAnnenVoksenType" ? "" : "undefined";
+        const value =
+          field.includes("antall") ||
+          field.includes("barnebidrag") ||
+          field === "borMedAnnenVoksenType"
+            ? ""
+            : "undefined";
         form.setValue(`dittBoforhold.${field}`, value);
       });
     } else if (bidragstype === "PLIKTIG") {
       // Kun dittBoforhold er påkrevd, resett medforelderBoforhold
       BOFORHOLD_FIELDS.forEach((field) => {
-        const value = field.includes("antall") || field.includes("barnebidrag") || field === "borMedAnnenVoksenType" ? "" : "undefined";
+        const value =
+          field.includes("antall") ||
+          field.includes("barnebidrag") ||
+          field === "borMedAnnenVoksenType"
+            ? ""
+            : "undefined";
         form.setValue(`medforelderBoforhold.${field}`, value);
       });
     }
@@ -43,9 +53,11 @@ export const Bofohold = () => {
 
   return (
     <div className="border p-4 rounded-md">
-      <h2 className="sr-only">{t(tekster[bidragstype].overskrift)}</h2>
+      <Heading level="2" size="small" spacing>
+        {t(tekster[bidragstype].overskrift)}
+      </Heading>
       <fieldset className="p-0 flex flex-col gap-4">
-        <legend className="text-xl mb-2">
+        <legend className="sr-only">
           {t(tekster[bidragstype].overskrift)}
         </legend>
         <BodyShort size="medium" textColor="subtle">
