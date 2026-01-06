@@ -39,7 +39,7 @@ export function Samvær({ barnIndex }: SamværProps) {
 
   return (
     <>
-      <Heading level="3" size="small">
+      <Heading level="3" size="small" className="pt-4">
         {t(tekster.tittel)}
       </Heading>
       <RadioGroup
@@ -168,9 +168,26 @@ const tekster = definerTekster({
         nn: "Delt fast bustad er ein avtale etter barnelova §36 om at barnet skal bu fast hjå begge foreldra. Avtalen går ut frå at foreldra deler likt både på samvær og kostnader. Dersom den eine tener meir enn den andre, kan det bli aktuelt med barnebidrag.",
       },
       DELT_FAST_BOSTED: {
-        nb: "Ja, vi har signert avtale om delt fast bosted ",
-        en: "Yes, we have a signed agreement on shared permanent residence ",
-        nn: "Ja, vi har signert avtale om delt fast bustad ",
+        nb: (
+          <>
+            Ja, vi har signert avtale om{" "}
+            <span style={{ fontWeight: "bold" }}>delt fast bosted</span>
+          </>
+        ),
+        en: (
+          <>
+            Yes, we have signed an agreement on{" "}
+            <span style={{ fontWeight: "bold" }}>
+              shared permanent residence
+            </span>
+          </>
+        ),
+        nn: (
+          <>
+            Ja, vi har signert avtale om{" "}
+            <span style={{ fontWeight: "bold" }}>delt fast bustad</span>
+          </>
+        ),
       },
       HOS_MEG: {
         nb: (
@@ -228,9 +245,9 @@ const tekster = definerTekster({
   },
   samvær: {
     label: {
-      nb: "Hvor mange netter er barnet hos deg i måneden?",
+      nb: "Hvor mange netter bor barnet hos deg i måneden?",
       en: "How many nights does the child stay with you per month?",
-      nn: "Kor mange netter er barnet hjå deg i månaden?",
+      nn: "Kor mange netter bur barnet hjå deg i månaden?",
     },
     netter: (antall) => ({
       nb: `Barnet bor ${antall} netter hos meg`,

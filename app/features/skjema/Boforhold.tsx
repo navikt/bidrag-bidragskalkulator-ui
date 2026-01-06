@@ -53,7 +53,7 @@ export const Bofohold = () => {
 
   return (
     <div className="border p-4 rounded-md">
-      <Heading level="2" size="small" spacing>
+      <Heading level="2" size="medium" className="pb-4">
         {t(tekster[bidragstype].overskrift)}
       </Heading>
       <fieldset className="p-0 flex flex-col gap-4">

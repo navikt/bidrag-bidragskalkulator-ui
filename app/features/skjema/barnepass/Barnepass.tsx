@@ -55,7 +55,7 @@ export const Barnepass = () => {
 
   return (
     <div className="border p-6 rounded-lg bg-white space-y-6">
-      <Heading level="2" size="small" spacing>
+      <Heading level="2" size="medium" className="mb-4">
         {t(tekster.overskrift)}
       </Heading>
       <fieldset className="p-0">
@@ -72,7 +72,7 @@ export const Barnepass = () => {
                 bidragstype="MOTTAKER"
               />
               {index !== barnDuErMottakerFor.length - 1 && (
-                <hr className="my-8 border-gray-300" />
+                <hr className="my-4 border-gray-300" />
               )}
             </Fragment>
           );

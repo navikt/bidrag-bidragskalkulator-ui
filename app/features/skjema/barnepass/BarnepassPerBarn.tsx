@@ -38,47 +38,49 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
         {t(tekster.barnAlder(alder))}
       </BodyShort>
 
-      <JaNeiRadio
-        legend={t(tekster[bidragstype].barnepassUtgifter)}
-        {...barnField.getControlProps("harBarnetilsynsutgift")}
-        error={barnField.error("harBarnetilsynsutgift")}
-      />
-
-      {barnField.value("harBarnetilsynsutgift") === "true" && (
+      <div className="space-y-4">
         <JaNeiRadio
-          {...barnField.getControlProps("mottarStønadTilBarnetilsyn")}
-          legend={t(tekster[bidragstype].mottarStønadTilBarnetilsyn)}
-          error={barnField.error("mottarStønadTilBarnetilsyn")}
-          className="pl-8"
+          legend={t(tekster[bidragstype].barnepassUtgifter)}
+          {...barnField.getControlProps("harBarnetilsynsutgift")}
+          error={barnField.error("harBarnetilsynsutgift")}
         />
-      )}
 
-      {barnField.value("mottarStønadTilBarnetilsyn") === "true" && (
-        <RadioGroup
-          legend={t(tekster.barnepassType.spørsmål)}
-          {...barnField.getControlProps("barnepassSituasjon")}
-          error={barnField.error("barnepassSituasjon")}
-          className="pl-8"
-        >
-          <Stack
-            gap="space-0 space-24"
-            direction={{ xs: "column", sm: "row" }}
-            wrap={false}
+        {barnField.value("harBarnetilsynsutgift") === "true" && (
+          <JaNeiRadio
+            {...barnField.getControlProps("mottarStønadTilBarnetilsyn")}
+            legend={t(tekster[bidragstype].mottarStønadTilBarnetilsyn)}
+            error={barnField.error("mottarStønadTilBarnetilsyn")}
+            className="pl-8"
+          />
+        )}
+
+        {barnField.value("mottarStønadTilBarnetilsyn") === "true" && (
+          <RadioGroup
+            legend={t(tekster.barnepassType.spørsmål)}
+            {...barnField.getControlProps("barnepassSituasjon")}
+            error={barnField.error("barnepassSituasjon")}
+            className="pl-8"
           >
-            <Radio value="HELTID">{t(tekster.barnepassType.heltid)}</Radio>
-            <Radio value="DELTID">{t(tekster.barnepassType.deltid)}</Radio>
-          </Stack>
-        </RadioGroup>
-      )}
+            <Stack
+              gap="space-0 space-24"
+              direction={{ xs: "column", sm: "row" }}
+              wrap={false}
+            >
+              <Radio value="HELTID">{t(tekster.barnepassType.heltid)}</Radio>
+              <Radio value="DELTID">{t(tekster.barnepassType.deltid)}</Radio>
+            </Stack>
+          </RadioGroup>
+        )}
 
-      {barnField.value("mottarStønadTilBarnetilsyn") === "false" && (
-        <FormattertTallTextField
-          {...barnField.getControlProps("barnetilsynsutgift")}
-          label={t(tekster[bidragstype].barnepassUtgifterBeløp)}
-          error={barnField.field("barnetilsynsutgift").error()}
-          htmlSize={10}
-        />
-      )}
+        {barnField.value("mottarStønadTilBarnetilsyn") === "false" && (
+          <FormattertTallTextField
+            {...barnField.getControlProps("barnetilsynsutgift")}
+            label={t(tekster[bidragstype].barnepassUtgifterBeløp)}
+            error={barnField.field("barnetilsynsutgift").error()}
+            htmlSize={10}
+          />
+        )}
+      </div>
     </>
   );
 };

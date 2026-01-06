@@ -80,7 +80,7 @@ export const FellesBarnSkjema = () => {
 
   return (
     <div className="border p-4 rounded-md space-y-4">
-      <Heading level="2" size="small">
+      <Heading level="2" size="medium" spacing>
         {t(tekster.overskrift)}
       </Heading>
       <fieldset className="p-0" aria-describedby="barn-skjema-desc">

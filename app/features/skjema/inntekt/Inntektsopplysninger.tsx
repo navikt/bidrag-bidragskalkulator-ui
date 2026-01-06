@@ -22,7 +22,7 @@ export const Inntektsopplysninger = () => {
 
   return (
     <div className="border p-4 rounded-md">
-      <Heading level="2" size="small" spacing>
+      <Heading level="2" size="medium" className="pb-4">
         {t(tekster.tittel)}
       </Heading>
       <fieldset className="p-0 flex flex-col gap-4">
@@ -49,29 +49,33 @@ export const Inntektsopplysninger = () => {
           <BodyLong>{t(tekster.inntektsinformasjon.beskrivelseDel3)}</BodyLong>
         </ReadMore>
 
-        <FormattertTallTextField
-          {...form.field("deg.inntekt").getControlProps()}
-          label={t(tekster.dinInntekt)}
-          error={form.field("deg.inntekt").error()}
-          onBlur={sporKalkulatorSpørsmålBesvart(
-            "deg-inntekt",
-            t(tekster.dinInntekt),
-          )}
-          htmlSize={18}
-        />
-        <Kapitalinntekt part="deg" />
+        <div>
+          <FormattertTallTextField
+            {...form.field("deg.inntekt").getControlProps()}
+            label={t(tekster.dinInntekt)}
+            error={form.field("deg.inntekt").error()}
+            onBlur={sporKalkulatorSpørsmålBesvart(
+              "deg-inntekt",
+              t(tekster.dinInntekt),
+            )}
+            htmlSize={18}
+          />
+          <Kapitalinntekt part="deg" />
+        </div>
 
-        <FormattertTallTextField
-          {...form.field("medforelder.inntekt").getControlProps()}
-          label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
-          error={form.field("medforelder.inntekt").error()}
-          onBlur={sporKalkulatorSpørsmålBesvart(
-            "medforelder-inntekt",
-            t(tekster.hvaErInntektenTilDenAndreForelderen),
-          )}
-          htmlSize={18}
-        />
-        <Kapitalinntekt part="medforelder" />
+        <div>
+          <FormattertTallTextField
+            {...form.field("medforelder.inntekt").getControlProps()}
+            label={t(tekster.hvaErInntektenTilDenAndreForelderen)}
+            error={form.field("medforelder.inntekt").error()}
+            onBlur={sporKalkulatorSpørsmålBesvart(
+              "medforelder-inntekt",
+              t(tekster.hvaErInntektenTilDenAndreForelderen),
+            )}
+            htmlSize={18}
+          />
+          <Kapitalinntekt part="medforelder" />
+        </div>
 
         {harGyldigeBarn && (
           <>
@@ -152,9 +156,9 @@ const tekster = definerTekster({
       nn: "Har barna eigen inntekt?",
     },
     beskrivelse: {
-      nb: "Hvis barnet har en årsinntekt over 60 300 kroner, vil det påvirke beregningen i kalkulatoren. Ved inntekt over 201 000 regnes barnet som selvforsørget. Skriv 0 hvis barnet ikke har inntekt.",
-      en: "If the child has an annual income over 60,300 kroner, it will affect the calculation in the calculator. With an income over 201,000, the child is considered self-sufficient. Enter 0 if the child has no income.",
-      nn: "Dersom barnet har ein årsinntekt over 60 300 kroner, vil det påverke berekninga i kalkulatoren. Ved inntekt over 201 000 reknast barnet som sjølvforsørga. Skriv 0 viss barnet ikkje har inntekt.",
+      nb: "Hvis barnet har en årsinntekt over 60 300 kroner, vil det påvirke beregningen i kalkulatoren. Ved inntekt over 201 000 regnes barnet som selvforsørget.",
+      en: "If the child has an annual income over 60,300 kroner, it will affect the calculation in the calculator. With an income over 201,000, the child is considered self-sufficient.",
+      nn: "Dersom barnet har ein årsinntekt over 60 300 kroner, vil det påverke berekninga i kalkulatoren. Ved inntekt over 201 000 reknast barnet som sjølvforsørga.",
     },
   },
 });
