@@ -132,10 +132,6 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
     antallBarnOver18: "",
     andreBarnebidragerPerMåned: "",
   },
-  andreBarnUnder12: {
-    antall: "0",
-    tilsynsutgifter: [],
-  },
   ytelser: {
     mottarUtvidetBarnetrygd: "undefined",
     delerUtvidetBarnetrygd: "undefined",

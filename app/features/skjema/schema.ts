@@ -68,10 +68,6 @@ const BarnebidragSkjemaSchema = z.object({
     antallBarnOver18: z.string(),
     andreBarnebidragerPerMåned: z.string(),
   }),
-  andreBarnUnder12: z.object({
-    antall: z.string(),
-    tilsynsutgifter: z.array(z.string()),
-  }),
   ytelser: z.object({
     kontantstøtte: z.object({
       mottar: z.enum(["true", "undefined"]),
@@ -170,75 +166,6 @@ export const lagYtelserSkjema = (språk: Språk) => {
             tekster.feilmeldinger.ytelser.kontantstøtte.beløp.maksimum,
           ),
           path: ["kontantstøtte", "beløp"],
-        });
-      }
-    });
-};
-
-export const lagAndreBarnUnder12Skjema = (språk: Språk) => {
-  return z
-    .object({
-      antall: z.string(),
-      tilsynsutgifter: z.array(z.string()).catch([]),
-    })
-    .transform((values) => {
-      const antall = Number(values.antall.trim() || 0);
-
-      const tilsynsutgifter = values.tilsynsutgifter.map((utgift) =>
-        utgift === "" ? undefined : Number(utgift.trim()),
-      );
-
-      return {
-        antall,
-        tilsynsutgifter,
-      };
-    })
-    .superRefine((values, ctx) => {
-      if (values.antall < 0) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.andreBarnUnder12.antall.minimum,
-          ),
-          path: ["antall"],
-        });
-      }
-
-      if (values.antall > 10) {
-        ctx.addIssue({
-          code: "custom",
-          message: oversett(
-            språk,
-            tekster.feilmeldinger.andreBarnUnder12.antall.maksimum,
-          ),
-          path: ["antall"],
-        });
-      }
-
-      if (values.antall > 0 && values.tilsynsutgifter) {
-        values.tilsynsutgifter.forEach((utgift, index) => {
-          if (utgift && utgift < 0) {
-            ctx.addIssue({
-              code: "custom",
-              message: oversett(
-                språk,
-                tekster.feilmeldinger.andreBarnUnder12.tilsynsutgift.minimum,
-              ),
-              path: ["tilsynsutgifter", index],
-            });
-          }
-
-          if (utgift && utgift > 10000) {
-            ctx.addIssue({
-              code: "custom",
-              message: oversett(
-                språk,
-                tekster.feilmeldinger.andreBarnUnder12.tilsynsutgift.maksimum,
-              ),
-              path: ["tilsynsutgifter", index],
-            });
-          }
         });
       }
     });
@@ -587,7 +514,6 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
         ),
       dittBoforhold: lagBoforholdSkjema(språk),
       medforelderBoforhold: lagBoforholdSkjema(språk),
-      andreBarnUnder12: lagAndreBarnUnder12Skjema(språk),
       ytelser: lagYtelserSkjema(språk),
     })
     .superRefine((data, ctx) => {
@@ -701,31 +627,6 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
                 .påkrevd,
             ),
           });
-        }
-      }
-
-      const erBM = bidragstype === "MOTTAKER";
-      const harBarnepassutgifter = data.barn.some(
-        (b) => b.barnetilsynsutgift >= 0,
-      );
-
-      if (erBM && harBarnepassutgifter) {
-        if (
-          data.andreBarnUnder12.antall > 0 &&
-          data.andreBarnUnder12.tilsynsutgifter
-        ) {
-          for (let i = 0; i < data.andreBarnUnder12.antall; i++) {
-            if (data.andreBarnUnder12.tilsynsutgifter[i] === undefined) {
-              ctx.addIssue({
-                path: ["andreBarnUnder12", "tilsynsutgifter", i],
-                code: "custom",
-                message: oversett(
-                  språk,
-                  tekster.feilmeldinger.andreBarnUnder12.tilsynsutgift.påkrevd,
-                ),
-              });
-            }
-          }
         }
       }
     });
