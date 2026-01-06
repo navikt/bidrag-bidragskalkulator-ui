@@ -20,6 +20,8 @@ export const BorMedAnnenVoksenTypeSchema = z.enum([
   "EGNE_BARN_OVER_18",
 ]);
 
+export type BorMedAnnenVoksenType = z.infer<typeof BorMedAnnenVoksenTypeSchema>;
+
 export const BarnepassSituasjonSchema = z.enum(["HELTID", "DELTID"]);
 export const HvemFårBarnetilleggSchema = z.enum(["MEG", "DEN_ANDRE_FORELDREN"]);
 
@@ -52,7 +54,7 @@ const BarnebidragSkjemaSchema = z.object({
     borMedAnnenVoksen: z.enum(["true", "false", "undefined"]),
     borMedAndreBarn: z.enum(["true", "false", "undefined"]),
     antallBarnBorFast: z.string(),
-    borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
+    borMedAnnenVoksenType: z.array(BorMedAnnenVoksenTypeSchema),
     borMedBarnOver18: z.enum(["true", "false", "undefined"]),
     antallBarnOver18: z.string(),
     andreBarnebidragerPerMåned: z.string(),
@@ -61,7 +63,7 @@ const BarnebidragSkjemaSchema = z.object({
     borMedAnnenVoksen: z.enum(["true", "false", "undefined"]),
     borMedAndreBarn: z.enum(["true", "false", "undefined"]),
     antallBarnBorFast: z.string(),
-    borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
+    borMedAnnenVoksenType: z.array(BorMedAnnenVoksenTypeSchema),
     borMedBarnOver18: z.enum(["true", "false", "undefined"]),
     antallBarnOver18: z.string(),
     andreBarnebidragerPerMåned: z.string(),
@@ -256,7 +258,7 @@ export const lagBoforholdSkjema = (språk: Språk) => {
           value === "undefined" ? undefined : value === "true",
         ),
       antallBarnBorFast: z.string(),
-      borMedAnnenVoksenType: BorMedAnnenVoksenTypeSchema.or(z.literal("")),
+      borMedAnnenVoksenType: z.array(BorMedAnnenVoksenTypeSchema),
       borMedBarnOver18: z
         .enum(["true", "false", "undefined"])
         .transform((value) =>
@@ -282,7 +284,7 @@ export const lagBoforholdSkjema = (språk: Språk) => {
 
       if (
         values.borMedAnnenVoksen === true &&
-        values.borMedAnnenVoksenType.trim() === ""
+        values.borMedAnnenVoksenType.length === 0
       ) {
         ctx.addIssue({
           code: "custom",
@@ -296,7 +298,7 @@ export const lagBoforholdSkjema = (språk: Språk) => {
       }
 
       if (
-        values.borMedAnnenVoksenType === "EGNE_BARN_OVER_18" &&
+        values.borMedAnnenVoksenType.includes("EGNE_BARN_OVER_18") &&
         values.borMedBarnOver18 === undefined
       ) {
         ctx.addIssue({

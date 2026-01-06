@@ -2,7 +2,7 @@ import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { FormattertTallTextField } from "../../components/ui/FormattertTallTextField";
 
-import { Radio, RadioGroup } from "@navikt/ds-react";
+import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
 import { BorMedAnnenVoksenTypeSchema, type BarnebidragSkjema } from "./schema";
 import { sporKalkulatorSpørsmålBesvart } from "./utils";
@@ -24,9 +24,9 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
   const borMedAnnenVoksen =
     form.field(`${skjemagruppe}.borMedAnnenVoksen`).value() === "true";
 
-  const borMedEgneBarnOver18 =
-    form.field(`${skjemagruppe}.borMedAnnenVoksenType`).value() ===
-    "EGNE_BARN_OVER_18";
+  const borMedAnnenVoksenType = form.field(`${skjemagruppe}.borMedAnnenVoksenType`).value();
+
+  const borMedEgneBarnOver18 = borMedAnnenVoksenType.includes("EGNE_BARN_OVER_18");
 
   const borMedBarnVgs =
     form.field(`${skjemagruppe}.borMedBarnOver18`).value() === "true";
@@ -74,7 +74,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
 
       {borMedAnnenVoksen && (
         <>
-          <RadioGroup
+          <CheckboxGroup
             {...form
               .field(`${skjemagruppe}.borMedAnnenVoksenType`)
               .getInputProps()}
@@ -84,12 +84,12 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
           >
             {BorMedAnnenVoksenTypeSchema.options.map((alternativ) => {
               return (
-                <Radio value={alternativ} key={alternativ}>
+                <Checkbox value={alternativ} key={alternativ}>
                   {t(tekster[skjemagruppe].borMedAnnenVoksenType[alternativ])}
-                </Radio>
+                </Checkbox>
               );
             })}
-          </RadioGroup>
+          </CheckboxGroup>
 
           {borMedEgneBarnOver18 && (
             <>

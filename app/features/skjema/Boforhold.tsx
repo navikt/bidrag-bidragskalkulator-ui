@@ -26,22 +26,22 @@ export const Bofohold = () => {
       // Kun medforelderBoforhold er påkrevd, resett dittBoforhold
       BOFORHOLD_FIELDS.forEach((field) => {
         const value =
-          field.includes("antall") ||
-          field.includes("barnebidrag") ||
-          field === "borMedAnnenVoksenType"
+          field.includes("antall") || field.includes("barnebidrag")
             ? ""
-            : "undefined";
+            : field === "borMedAnnenVoksenType"
+              ? []
+              : "undefined";
         form.setValue(`dittBoforhold.${field}`, value);
       });
     } else if (bidragstype === "PLIKTIG") {
       // Kun dittBoforhold er påkrevd, resett medforelderBoforhold
       BOFORHOLD_FIELDS.forEach((field) => {
         const value =
-          field.includes("antall") ||
-          field.includes("barnebidrag") ||
-          field === "borMedAnnenVoksenType"
+          field.includes("antall") || field.includes("barnebidrag")
             ? ""
-            : "undefined";
+            : field === "borMedAnnenVoksenType"
+              ? []
+              : "undefined";
         form.setValue(`medforelderBoforhold.${field}`, value);
       });
     }
