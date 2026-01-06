@@ -24,9 +24,12 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
   const borMedAnnenVoksen =
     form.field(`${skjemagruppe}.borMedAnnenVoksen`).value() === "true";
 
-  const borMedAnnenVoksenType = form.field(`${skjemagruppe}.borMedAnnenVoksenType`).value();
+  const borMedAnnenVoksenType = form
+    .field(`${skjemagruppe}.borMedAnnenVoksenType`)
+    .value();
 
-  const borMedEgneBarnOver18 = borMedAnnenVoksenType.includes("EGNE_BARN_OVER_18");
+  const borMedEgneBarnOver18 =
+    borMedAnnenVoksenType.includes("EGNE_BARN_OVER_18");
 
   const borMedBarnVgs =
     form.field(`${skjemagruppe}.borMedBarnOver18`).value() === "true";
