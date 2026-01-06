@@ -152,33 +152,9 @@ const tekster = definerTekster({
       nn: "Har barna eigen inntekt?",
     },
     beskrivelse: {
-      nb: (
-        <>
-          Hvis barnet har en årsinntekt over{" "}
-          <span style={{ color: "#C30000" }}>60 300 kroner</span>, vil det
-          påvirke beregningen i kalkulatoren. Ved inntekt over{" "}
-          <span style={{ color: "#C30000" }}>201 000</span> regnes barnet som
-          selvforsørget. Skriv 0 hvis barnet ikke har inntekt.
-        </>
-      ),
-      en: (
-        <>
-          If the child has an annual income over{" "}
-          <span style={{ color: "#C30000" }}>60 300 kroner</span>, it will
-          affect the calculation. With an income over{" "}
-          <span style={{ color: "#C30000" }}>201 000</span>, the child is
-          considered self-sufficient. Write 0 if the child has no income.
-        </>
-      ),
-      nn: (
-        <>
-          Dersom barnet har ei årsinntekt over{" "}
-          <span style={{ color: "#C30000" }}>60 300 kroner</span>, vil det
-          påverke berekninga i kalkulatoren. Ved inntekt over{" "}
-          <span style={{ color: "#C30000" }}>201 000</span> blir barnet rekna
-          som sjølvforsørga. Skriv 0 dersom barnet ikkje har inntekt.
-        </>
-      ),
+      nb: "Hvis barnet har en årsinntekt over 60 300 kroner, vil det påvirke beregningen i kalkulatoren. Ved inntekt over 201 000 regnes barnet som selvforsørget. Skriv 0 hvis barnet ikke har inntekt.",
+      en: "If the child has an annual income over 60,300 kroner, it will affect the calculation in the calculator. With an income over 201,000, the child is considered self-sufficient. Enter 0 if the child has no income.",
+      nn: "Dersom barnet har ein årsinntekt over 60 300 kroner, vil det påverke berekninga i kalkulatoren. Ved inntekt over 201 000 reknast barnet som sjølvforsørga. Skriv 0 viss barnet ikkje har inntekt.",
     },
   },
 });
