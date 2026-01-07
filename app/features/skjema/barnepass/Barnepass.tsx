@@ -86,7 +86,7 @@ export const Barnepass = () => {
                 bidragstype="PLIKTIG"
               />
               {index !== barnDuErPliktigFor.length - 1 && (
-                <hr className="my-8 border-gray-300" />
+                <hr className="my-4 border-gray-300" />
               )}
             </Fragment>
           );

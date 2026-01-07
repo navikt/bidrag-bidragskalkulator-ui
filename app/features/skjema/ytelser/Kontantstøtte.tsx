@@ -3,7 +3,7 @@ import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import type { BarnebidragSkjema, Bidragstype } from "../schema";
-import type { NavYtelse } from "../Ytelser";
+import type { NavYtelse } from "./Ytelser";
 
 type Props = {
   valgteYtelser: NavYtelse[];

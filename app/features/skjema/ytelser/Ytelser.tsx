@@ -9,8 +9,8 @@ import {
   MAKS_ALDER_UTVIDET_BARNETRYGD,
   type BarnebidragSkjema,
   type Bidragstype,
-} from "./schema";
-import Kontantstøtte from "./ytelser/Kontantstøtte";
+} from "../schema";
+import Kontantstøtte from "./Kontantstøtte";
 
 export type NavYtelse =
   | "utvidet-barnetrygd"
@@ -62,16 +62,7 @@ export const Ytelser = ({ bidragstype }: Props) => {
       barnSignatur !== forrigeBarnSignatur.current
     ) {
       // Reset alle ytelse-verdier
-      form.setValue("ytelser", {
-        mottarUtvidetBarnetrygd: "undefined",
-        delerUtvidetBarnetrygd: "undefined",
-        mottarSmåbarnstillegg: "undefined",
-        kontantstøtte: {
-          mottar: "undefined",
-          deler: "undefined",
-          beløp: "",
-        },
-      });
+      form.resetField("ytelser");
 
       // Reset state
       setValgteYtelser([]);

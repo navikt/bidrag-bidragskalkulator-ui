@@ -6,7 +6,8 @@ import { Bofohold } from "./Boforhold";
 import { FellesBarnSkjema } from "./FellesBarnSkjema";
 import { Inntektsopplysninger } from "./inntekt/Inntektsopplysninger";
 import { type BarnebidragSkjema } from "./schema";
-import { Ytelser } from "./Ytelser";
+import { useTilbakestillVedBidragstypeEndring } from "./useTilbakestillVedBidragstypeEndring";
+import { Ytelser } from "./ytelser/Ytelser";
 
 type Props = {
   form: FormApi<BarnebidragSkjema>;
@@ -19,6 +20,9 @@ export function Barnebidragsskjema({ form }: Props) {
   const gyldigeBarn = barn.filter((b) => b.alder !== "");
   const harGyldigeBarn = gyldigeBarn.length > 0;
   const harValgtBidragstype = bidragstype !== "";
+
+  // Reset alle felter bortsett fra barn alder og samvær når bidragstype endres
+  useTilbakestillVedBidragstypeEndring(form, bidragstype, barn);
 
   const skalViseBarnepass = harValgtBidragstype && harGyldigeBarn;
   const skalViseYtelser =
