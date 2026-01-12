@@ -7,6 +7,7 @@ import {
   MAKS_ALDER_BARNETILSYNSUTGIFT,
   type BarnebidragSkjema,
 } from "../schema";
+import { useTilbakestillBarnepassFelter } from "./useTilbakestillBarnepassFelter";
 
 type Props = {
   barnIndex: number;
@@ -19,6 +20,16 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
 
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
   const alder = barnField.value().alder;
+  const harBarnetilsynsutgift = barnField.value().harBarnetilsynsutgift;
+  const mottarStønadTilBarnetilsyn =
+    barnField.value().mottarStønadTilBarnetilsyn;
+
+  // Reset barnepass-felter basert på svar
+  useTilbakestillBarnepassFelter(
+    barnField,
+    harBarnetilsynsutgift,
+    mottarStønadTilBarnetilsyn,
+  );
 
   if (alder === "") {
     return null;
@@ -45,7 +56,7 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
           error={barnField.error("harBarnetilsynsutgift")}
         />
 
-        {barnField.value("harBarnetilsynsutgift") === "true" && (
+        {harBarnetilsynsutgift === "true" && (
           <JaNeiRadio
             {...barnField.getControlProps("mottarStønadTilBarnetilsyn")}
             legend={t(tekster[bidragstype].mottarStønadTilBarnetilsyn)}
@@ -54,7 +65,7 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
           />
         )}
 
-        {barnField.value("mottarStønadTilBarnetilsyn") === "true" && (
+        {mottarStønadTilBarnetilsyn === "true" && (
           <RadioGroup
             legend={t(tekster.barnepassType.spørsmål)}
             {...barnField.getControlProps("barnepassSituasjon")}
@@ -72,7 +83,7 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
           </RadioGroup>
         )}
 
-        {barnField.value("mottarStønadTilBarnetilsyn") === "false" && (
+        {mottarStønadTilBarnetilsyn === "false" && (
           <FormattertTallTextField
             {...barnField.getControlProps("barnetilsynsutgift")}
             label={t(tekster[bidragstype].barnepassUtgifterBeløp)}
