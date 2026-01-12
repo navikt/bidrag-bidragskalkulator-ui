@@ -217,8 +217,7 @@ export const lagBoforholdSkjema = (språk: Språk) => {
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.husstandsmedlemmer.voksneOver18Type
-              .påkrevd,
+            tekster.feilmeldinger.husstandsmedlemmer.voksneOver18Type.påkrevd,
           ),
           path: ["voksneOver18Type"],
         });
@@ -246,7 +245,8 @@ export const lagBoforholdSkjema = (språk: Språk) => {
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnOver18Vgs.påkrevd,
+            tekster.feilmeldinger.husstandsmedlemmer.antallBarnOver18Vgs
+              .påkrevd,
           ),
           path: ["antallBarnOver18Vgs"],
         });
@@ -599,8 +599,7 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
             code: "custom",
             message: oversett(
               språk,
-              tekster.feilmeldinger.husstandsmedlemmer.harVoksneOver18
-                .påkrevd,
+              tekster.feilmeldinger.husstandsmedlemmer.harVoksneOver18.påkrevd,
             ),
           });
         }
@@ -623,8 +622,7 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
             code: "custom",
             message: oversett(
               språk,
-              tekster.feilmeldinger.husstandsmedlemmer.harVoksneOver18
-                .påkrevd,
+              tekster.feilmeldinger.husstandsmedlemmer.harVoksneOver18.påkrevd,
             ),
           });
         }

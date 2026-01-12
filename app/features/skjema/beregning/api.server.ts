@@ -104,8 +104,7 @@ export const hentBarnebidragsutregning = async (request: Request) => {
       skjemaData.medforelderBoforhold.harBarnUnder18 !== undefined &&
       skjemaData.medforelderBoforhold.harVoksneOver18 !== undefined
         ? {
-            borMedAnnenVoksen:
-              skjemaData.medforelderBoforhold.harVoksneOver18,
+            borMedAnnenVoksen: skjemaData.medforelderBoforhold.harVoksneOver18,
             antallBarnBorFast:
               skjemaData.medforelderBoforhold.antallBarnUnder18,
             antallBarnDeltBosted: 0,
