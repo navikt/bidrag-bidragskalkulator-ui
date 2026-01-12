@@ -1,5 +1,6 @@
 import { BodyLong, BodyShort, Heading, ReadMore } from "@navikt/ds-react";
 import { useFieldArray, useFormContext, useFormScope } from "@rvf/react";
+import { useEffect } from "react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
 import { sporHendelse } from "~/utils/analytics";
@@ -19,6 +20,15 @@ export const Inntektsopplysninger = () => {
   const harGyldigeBarn = barn.filter((b) => b.alder !== "").length > 0;
 
   const { t } = useOversettelse();
+
+  useEffect(() => {
+    if (barnHarEgenInntekt === "false") {
+      // Nullstill barnas inntekt dersom "barnHarEgenInntekt" er "nei"
+      barn.forEach((_, index) => {
+        form.resetField(`barn[${index}].inntektPerMåned`);
+      });
+    }
+  }, [barnHarEgenInntekt, barn, form]);
 
   return (
     <div className="border p-4 rounded-md">

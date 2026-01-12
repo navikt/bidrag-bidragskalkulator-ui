@@ -1,5 +1,6 @@
 import { Checkbox } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
+import { useEffect } from "react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import type { BarnebidragSkjema } from "../schema";
@@ -15,6 +16,13 @@ export default function Kapitalinntekt({ part }: Props) {
   const harKapitalinntektOver10k = form.value(
     `${part}.harKapitalinntektOver10k`,
   );
+
+  useEffect(() => {
+    // Hvis brukeren endrer valget til "nei", nullstill kapitalinntekt-feltet
+    if (harKapitalinntektOver10k !== "true") {
+      form.resetField(`${part}.kapitalinntekt`);
+    }
+  }, [harKapitalinntektOver10k, form, part]);
 
   return (
     <div>
