@@ -92,22 +92,22 @@ export const hentBarnebidragsutregning = async (request: Request) => {
     inntektForelder1,
     inntektForelder2,
     dittBoforhold:
-      skjemaData.dittBoforhold.borMedAndreBarn !== undefined &&
-      skjemaData.dittBoforhold.borMedAnnenVoksen !== undefined
+      skjemaData.dittBoforhold.harBarnUnder18 !== undefined &&
+      skjemaData.dittBoforhold.harVoksneOver18 !== undefined
         ? {
-            borMedAnnenVoksen: skjemaData.dittBoforhold.borMedAnnenVoksen,
-            antallBarnBorFast: skjemaData.dittBoforhold.antallBarnBorFast,
+            borMedAnnenVoksen: skjemaData.dittBoforhold.harVoksneOver18,
+            antallBarnBorFast: skjemaData.dittBoforhold.antallBarnUnder18,
             antallBarnDeltBosted: 0,
           }
         : null,
     medforelderBoforhold:
-      skjemaData.medforelderBoforhold.borMedAndreBarn !== undefined &&
-      skjemaData.medforelderBoforhold.borMedAnnenVoksen !== undefined
+      skjemaData.medforelderBoforhold.harBarnUnder18 !== undefined &&
+      skjemaData.medforelderBoforhold.harVoksneOver18 !== undefined
         ? {
             borMedAnnenVoksen:
-              skjemaData.medforelderBoforhold.borMedAnnenVoksen,
+              skjemaData.medforelderBoforhold.harVoksneOver18,
             antallBarnBorFast:
-              skjemaData.medforelderBoforhold.antallBarnBorFast,
+              skjemaData.medforelderBoforhold.antallBarnUnder18,
             antallBarnDeltBosted: 0,
           }
         : null,

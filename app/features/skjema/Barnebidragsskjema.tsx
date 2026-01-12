@@ -2,7 +2,7 @@ import { Button, InfoCard } from "@navikt/ds-react";
 import { type FormApi } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { Barnepass } from "./barnepass/Barnepass";
-import { Bofohold } from "./Boforhold";
+import { Bofohold } from "./boforhold/Boforhold";
 import { FellesBarnSkjema } from "./FellesBarnSkjema";
 import { Inntektsopplysninger } from "./inntekt/Inntektsopplysninger";
 import { type BarnebidragSkjema } from "./schema";

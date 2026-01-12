@@ -51,21 +51,21 @@ const BarnebidragSkjemaSchema = z.object({
   }),
   barnHarEgenInntekt: z.enum(["true", "false", "undefined"]),
   dittBoforhold: z.object({
-    borMedAnnenVoksen: z.enum(["true", "false", "undefined"]),
-    borMedAndreBarn: z.enum(["true", "false", "undefined"]),
-    antallBarnBorFast: z.string(),
-    borMedAnnenVoksenType: z.array(BorMedAnnenVoksenTypeSchema),
-    borMedBarnOver18: z.enum(["true", "false", "undefined"]),
-    antallBarnOver18: z.string(),
+    harVoksneOver18: z.enum(["true", "false", "undefined"]),
+    harBarnUnder18: z.enum(["true", "false", "undefined"]),
+    antallBarnUnder18: z.string(),
+    voksneOver18Type: z.array(BorMedAnnenVoksenTypeSchema),
+    harBarnOver18Vgs: z.enum(["true", "false", "undefined"]),
+    antallBarnOver18Vgs: z.string(),
     andreBarnebidragerPerMåned: z.string(),
   }),
   medforelderBoforhold: z.object({
-    borMedAnnenVoksen: z.enum(["true", "false", "undefined"]),
-    borMedAndreBarn: z.enum(["true", "false", "undefined"]),
-    antallBarnBorFast: z.string(),
-    borMedAnnenVoksenType: z.array(BorMedAnnenVoksenTypeSchema),
-    borMedBarnOver18: z.enum(["true", "false", "undefined"]),
-    antallBarnOver18: z.string(),
+    harVoksneOver18: z.enum(["true", "false", "undefined"]),
+    harBarnUnder18: z.enum(["true", "false", "undefined"]),
+    antallBarnUnder18: z.string(),
+    voksneOver18Type: z.array(BorMedAnnenVoksenTypeSchema),
+    harBarnOver18Vgs: z.enum(["true", "false", "undefined"]),
+    antallBarnOver18Vgs: z.string(),
     andreBarnebidragerPerMåned: z.string(),
   }),
   ytelser: z.object({
@@ -174,111 +174,111 @@ export const lagYtelserSkjema = (språk: Språk) => {
 export const lagBoforholdSkjema = (språk: Språk) => {
   return z
     .object({
-      borMedAnnenVoksen: z
+      harVoksneOver18: z
         .enum(["true", "false", "undefined"])
         .transform((value) =>
           value === "undefined" ? undefined : value === "true",
         ),
-      borMedAndreBarn: z
+      harBarnUnder18: z
         .enum(["true", "false", "undefined"])
         .transform((value) =>
           value === "undefined" ? undefined : value === "true",
         ),
-      antallBarnBorFast: z.string(),
-      borMedAnnenVoksenType: z.array(BorMedAnnenVoksenTypeSchema),
-      borMedBarnOver18: z
+      antallBarnUnder18: z.string(),
+      voksneOver18Type: z.array(BorMedAnnenVoksenTypeSchema),
+      harBarnOver18Vgs: z
         .enum(["true", "false", "undefined"])
         .transform((value) =>
           value === "undefined" ? undefined : value === "true",
         ),
-      antallBarnOver18: z.string(),
+      antallBarnOver18Vgs: z.string(),
       andreBarnebidragerPerMåned: z.string(),
     })
     .superRefine((values, ctx) => {
       if (
-        values.borMedAndreBarn === true &&
-        values.antallBarnBorFast.trim() === ""
+        values.harBarnUnder18 === true &&
+        values.antallBarnUnder18.trim() === ""
       ) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.påkrevd,
+            tekster.feilmeldinger.husstandsmedlemmer.antallBarnUnder18.påkrevd,
           ),
-          path: ["antallBarnBorFast"],
+          path: ["antallBarnUnder18"],
         });
       }
 
       if (
-        values.borMedAnnenVoksen === true &&
-        values.borMedAnnenVoksenType.length === 0
+        values.harVoksneOver18 === true &&
+        values.voksneOver18Type.length === 0
       ) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksenType
+            tekster.feilmeldinger.husstandsmedlemmer.voksneOver18Type
               .påkrevd,
           ),
-          path: ["borMedAnnenVoksenType"],
+          path: ["voksneOver18Type"],
         });
       }
 
       if (
-        values.borMedAnnenVoksenType.includes("EGNE_BARN_OVER_18") &&
-        values.borMedBarnOver18 === undefined
+        values.voksneOver18Type.includes("EGNE_BARN_OVER_18") &&
+        values.harBarnOver18Vgs === undefined
       ) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.husstandsmedlemmer.borMedBarnOver18.påkrevd,
+            tekster.feilmeldinger.husstandsmedlemmer.harBarnOver18Vgs.påkrevd,
           ),
-          path: ["borMedBarnOver18"],
+          path: ["harBarnOver18Vgs"],
         });
       }
 
       if (
-        values.borMedBarnOver18 === true &&
-        values.antallBarnOver18.trim() === ""
+        values.harBarnOver18Vgs === true &&
+        values.antallBarnOver18Vgs.trim() === ""
       ) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnOver18.påkrevd,
+            tekster.feilmeldinger.husstandsmedlemmer.antallBarnOver18Vgs.påkrevd,
           ),
-          path: ["antallBarnOver18"],
+          path: ["antallBarnOver18Vgs"],
         });
       }
     })
     .transform((values) => {
       return {
         ...values,
-        antallBarnBorFast: Number(values.antallBarnBorFast.trim() || 0),
+        antallBarnUnder18: Number(values.antallBarnUnder18.trim() || 0),
         andreBarnebidragerPerMåned: Number(
           values.andreBarnebidragerPerMåned.trim() || 0,
         ),
       };
     })
     .superRefine((values, ctx) => {
-      if (isNaN(values.antallBarnBorFast)) {
+      if (isNaN(values.antallBarnUnder18)) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.tall,
+            tekster.feilmeldinger.husstandsmedlemmer.antallBarnUnder18.tall,
           ),
-          path: ["antallBarnBorFast"],
+          path: ["antallBarnUnder18"],
         });
-      } else if (values.antallBarnBorFast < 0) {
+      } else if (values.antallBarnUnder18 < 0) {
         ctx.addIssue({
           code: "custom",
           message: oversett(
             språk,
-            tekster.feilmeldinger.husstandsmedlemmer.antallBarnBorFast.minimum,
+            tekster.feilmeldinger.husstandsmedlemmer.antallBarnUnder18.minimum,
           ),
-          path: ["antallBarnBorFast"],
+          path: ["antallBarnUnder18"],
         });
       }
     });
@@ -582,24 +582,24 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
       }
 
       if (bidragstype === "MOTTAKER") {
-        if (medforelderBoforhold.borMedAndreBarn === undefined) {
+        if (medforelderBoforhold.harBarnUnder18 === undefined) {
           ctx.addIssue({
-            path: ["medforelderBoforhold", "borMedAndreBarn"],
+            path: ["medforelderBoforhold", "harBarnUnder18"],
             code: "custom",
             message: oversett(
               språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
+              tekster.feilmeldinger.husstandsmedlemmer.harBarnUnder18.påkrevd,
             ),
           });
         }
 
-        if (medforelderBoforhold.borMedAnnenVoksen === undefined) {
+        if (medforelderBoforhold.harVoksneOver18 === undefined) {
           ctx.addIssue({
-            path: ["medforelderBoforhold", "borMedAnnenVoksen"],
+            path: ["medforelderBoforhold", "harVoksneOver18"],
             code: "custom",
             message: oversett(
               språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
+              tekster.feilmeldinger.husstandsmedlemmer.harVoksneOver18
                 .påkrevd,
             ),
           });
@@ -607,23 +607,23 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
       }
 
       if (bidragstype === "PLIKTIG") {
-        if (dittBoforhold.borMedAndreBarn === undefined) {
+        if (dittBoforhold.harBarnUnder18 === undefined) {
           ctx.addIssue({
-            path: ["dittBoforhold", "borMedAndreBarn"],
+            path: ["dittBoforhold", "harBarnUnder18"],
             code: "custom",
             message: oversett(
               språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAndreBarn.påkrevd,
+              tekster.feilmeldinger.husstandsmedlemmer.harBarnUnder18.påkrevd,
             ),
           });
         }
-        if (dittBoforhold.borMedAnnenVoksen === undefined) {
+        if (dittBoforhold.harVoksneOver18 === undefined) {
           ctx.addIssue({
-            path: ["dittBoforhold", "borMedAnnenVoksen"],
+            path: ["dittBoforhold", "harVoksneOver18"],
             code: "custom",
             message: oversett(
               språk,
-              tekster.feilmeldinger.husstandsmedlemmer.borMedAnnenVoksen
+              tekster.feilmeldinger.husstandsmedlemmer.harVoksneOver18
                 .påkrevd,
             ),
           });
@@ -810,7 +810,7 @@ const tekster = definerTekster({
       },
     },
     husstandsmedlemmer: {
-      antallBarnBorFast: {
+      antallBarnUnder18: {
         påkrevd: {
           nb: "Fyll inn antall barn",
           en: "Fill in the number of children",
@@ -844,14 +844,14 @@ const tekster = definerTekster({
           nn: "Fyll inn eit positivt tal",
         },
       },
-      borMedAnnenVoksen: {
+      harVoksneOver18: {
         påkrevd: {
           nb: "Velg et alternativ",
           en: "Choose an option",
           nn: "Vel eit alternativ",
         },
       },
-      borMedAndreBarn: {
+      harBarnUnder18: {
         påkrevd: {
           nb: "Velg et alternativ",
           en: "Choose an option",
@@ -865,21 +865,21 @@ const tekster = definerTekster({
           nn: "Vel eit alternativ",
         },
       },
-      borMedAnnenVoksenType: {
+      voksneOver18Type: {
         påkrevd: {
           nb: "Velg et alternativ",
           en: "Choose an option",
           nn: "Vel eit alternativ",
         },
       },
-      borMedBarnOver18: {
+      harBarnOver18Vgs: {
         påkrevd: {
           nb: "Velg et alternativ",
           en: "Choose an option",
           nn: "Vel eit alternativ",
         },
       },
-      antallBarnOver18: {
+      antallBarnOver18Vgs: {
         påkrevd: {
           nb: "Fyll inn antall barn",
           en: "Fill in the number of children",

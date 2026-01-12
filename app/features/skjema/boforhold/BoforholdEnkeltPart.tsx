@@ -1,11 +1,12 @@
 import { useFormContext } from "@rvf/react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { FormattertTallTextField } from "../../components/ui/FormattertTallTextField";
+import { FormattertTallTextField } from "../../../components/ui/FormattertTallTextField";
 
 import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
-import { BorMedAnnenVoksenTypeSchema, type BarnebidragSkjema } from "./schema";
-import { sporKalkulatorSpørsmålBesvart } from "./utils";
+import { BorMedAnnenVoksenTypeSchema, type BarnebidragSkjema } from "../schema";
+import { sporKalkulatorSpørsmålBesvart } from "../utils";
+import { useTilbakestillBoforholdFelter } from "./useTilbakestillBoforholdFelter";
 
 type Props = {
   part: "deg" | "medforelder";
@@ -18,50 +19,58 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
   const skjemagruppe =
     part === "deg" ? "dittBoforhold" : "medforelderBoforhold";
 
-  const borMedAndreBarn =
-    form.field(`${skjemagruppe}.borMedAndreBarn`).value() === "true";
+  const harBarnUnder18 =
+    form.field(`${skjemagruppe}.harBarnUnder18`).value() === "true";
 
-  const borMedAnnenVoksen =
-    form.field(`${skjemagruppe}.borMedAnnenVoksen`).value() === "true";
+  const harVoksneOver18 =
+    form.field(`${skjemagruppe}.harVoksneOver18`).value() === "true";
 
-  const borMedAnnenVoksenType = form
-    .field(`${skjemagruppe}.borMedAnnenVoksenType`)
+  const voksneOver18Type = form
+    .field(`${skjemagruppe}.voksneOver18Type`)
     .value();
 
-  const borMedEgneBarnOver18 =
-    borMedAnnenVoksenType.includes("EGNE_BARN_OVER_18");
+  const harEgneBarnOver18 = voksneOver18Type.includes("EGNE_BARN_OVER_18");
 
-  const borMedBarnVgs =
-    form.field(`${skjemagruppe}.borMedBarnOver18`).value() === "true";
+  const harBarnOver18Vgs =
+    form.field(`${skjemagruppe}.harBarnOver18Vgs`).value() === "true";
 
-  const vedEndreBorMedAndreBarn = (value: string) => {
+  // Reset avhengige felt basert på boforhold-valg
+  useTilbakestillBoforholdFelter(
+    form,
+    skjemagruppe,
+    harVoksneOver18,
+    harEgneBarnOver18,
+    harBarnOver18Vgs,
+  );
+
+  const vedEndreHarBarnUnder18 = (value: string) => {
     if (value === "false") {
-      form.resetField(`${skjemagruppe}.antallBarnBorFast`);
+      form.resetField(`${skjemagruppe}.antallBarnUnder18`);
     }
   };
 
   return (
     <fieldset className="p-0 flex flex-col gap-4">
       <JaNeiRadio
-        {...form.field(`${skjemagruppe}.borMedAndreBarn`).getInputProps({
-          onChange: vedEndreBorMedAndreBarn,
-          legend: t(tekster[skjemagruppe].borMedAndreBarn.label),
-          error: form.field(`${skjemagruppe}.borMedAndreBarn`).error(),
+        {...form.field(`${skjemagruppe}.harBarnUnder18`).getInputProps({
+          onChange: vedEndreHarBarnUnder18,
+          legend: t(tekster[skjemagruppe].harBarnUnder18.label),
+          error: form.field(`${skjemagruppe}.harBarnUnder18`).error(),
         })}
       />
 
-      {borMedAndreBarn && (
+      {harBarnUnder18 && (
         <>
           <FormattertTallTextField
             {...form
-              .field(`${skjemagruppe}.antallBarnBorFast`)
+              .field(`${skjemagruppe}.antallBarnUnder18`)
               .getControlProps()}
-            label={t(tekster[skjemagruppe].antallBarnBorFast.label)}
-            error={form.field(`${skjemagruppe}.antallBarnBorFast`).error()}
-            description={t(tekster[skjemagruppe].antallBarnBorFast.beskrivelse)}
+            label={t(tekster[skjemagruppe].antallBarnUnder18.label)}
+            error={form.field(`${skjemagruppe}.antallBarnUnder18`).error()}
+            description={t(tekster[skjemagruppe].antallBarnUnder18.beskrivelse)}
             onBlur={sporKalkulatorSpørsmålBesvart(
               `${part}-antall-barn-bor-fast`,
-              t(tekster[skjemagruppe].antallBarnBorFast.label),
+              t(tekster[skjemagruppe].antallBarnUnder18.label),
             )}
             htmlSize={8}
             className="pl-8"
@@ -70,48 +79,48 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
       )}
 
       <JaNeiRadio
-        {...form.field(`${skjemagruppe}.borMedAnnenVoksen`).getInputProps()}
-        error={form.field(`${skjemagruppe}.borMedAnnenVoksen`).error()}
-        legend={t(tekster[skjemagruppe].borMedAnnenVoksen.label)}
+        {...form.field(`${skjemagruppe}.harVoksneOver18`).getInputProps()}
+        error={form.field(`${skjemagruppe}.harVoksneOver18`).error()}
+        legend={t(tekster[skjemagruppe].harVoksneOver18.label)}
       />
 
-      {borMedAnnenVoksen && (
+      {harVoksneOver18 && (
         <>
           <CheckboxGroup
-            {...form
-              .field(`${skjemagruppe}.borMedAnnenVoksenType`)
-              .getInputProps()}
-            error={form.field(`${skjemagruppe}.borMedAnnenVoksenType`).error()}
+            {...form.field(`${skjemagruppe}.voksneOver18Type`).getInputProps()}
+            error={form.field(`${skjemagruppe}.voksneOver18Type`).error()}
             legend={t(tekster[skjemagruppe].borSammenMed.label)}
             className="pl-8"
           >
             {BorMedAnnenVoksenTypeSchema.options.map((alternativ) => {
               return (
                 <Checkbox value={alternativ} key={alternativ}>
-                  {t(tekster[skjemagruppe].borMedAnnenVoksenType[alternativ])}
+                  {t(tekster[skjemagruppe].voksneOver18Type[alternativ])}
                 </Checkbox>
               );
             })}
           </CheckboxGroup>
 
-          {borMedEgneBarnOver18 && (
+          {harEgneBarnOver18 && (
             <>
               <JaNeiRadio
                 {...form
-                  .field(`${skjemagruppe}.borMedBarnOver18`)
+                  .field(`${skjemagruppe}.harBarnOver18Vgs`)
                   .getInputProps()}
-                error={form.field(`${skjemagruppe}.borMedBarnOver18`).error()}
-                legend={t(tekster[skjemagruppe].borMedBarnOver18.label)}
+                error={form.field(`${skjemagruppe}.harBarnOver18Vgs`).error()}
+                legend={t(tekster[skjemagruppe].harBarnOver18Vgs.label)}
                 className="pl-8"
               />
 
-              {borMedBarnVgs && (
+              {harBarnOver18Vgs && (
                 <FormattertTallTextField
                   {...form
-                    .field(`${skjemagruppe}.antallBarnOver18`)
+                    .field(`${skjemagruppe}.antallBarnOver18Vgs`)
                     .getControlProps()}
-                  label={t(tekster[skjemagruppe].antallBarnOver18.label)}
-                  error={form.field(`${skjemagruppe}.antallBarnOver18`).error()}
+                  label={t(tekster[skjemagruppe].antallBarnOver18Vgs.label)}
+                  error={form
+                    .field(`${skjemagruppe}.antallBarnOver18Vgs`)
+                    .error()}
                   htmlSize={8}
                   className="pl-8"
                 />
@@ -126,7 +135,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
 
 const tekster = definerTekster({
   dittBoforhold: {
-    antallBarnBorFast: {
+    antallBarnUnder18: {
       label: {
         nb: "Hvor mange andre egne barn bor fast hos deg?",
         nn: "Kor mange andre eigne barn bur fast hos deg?",
@@ -138,21 +147,21 @@ const tekster = definerTekster({
         en: "Children you have previously entered in the calculator should not be included here.",
       },
     },
-    borMedAnnenVoksen: {
+    harVoksneOver18: {
       label: {
         nb: "Bor du sammen med voksne over 18 år?",
         nn: "Bur du saman med vaksne over 18 år?",
         en: "Do you live with adults over 18 years?",
       },
     },
-    borMedAndreBarn: {
+    harBarnUnder18: {
       label: {
         nb: "Har du andre egne barn under 18 år som bor fast hos deg",
         nn: "Har du andre eigne barn under 18 år som bur fast hos deg",
         en: "Do you have other own children under 18 years who live permanently with you",
       },
     },
-    borMedAnnenVoksenType: {
+    voksneOver18Type: {
       SAMBOER_ELLER_EKTEFELLE: {
         nb: "Samboer eller ektefelle",
         nn: "Sambuar eller ektefelle",
@@ -171,14 +180,14 @@ const tekster = definerTekster({
         en: "Who do you live with?",
       },
     },
-    borMedBarnOver18: {
+    harBarnOver18Vgs: {
       label: {
         nb: "Bor du sammen med egne barn som går på videregående skole?",
         nn: "Bur du saman med eigne barn som går på vidaregåande skule?",
         en: "Do you live with own children who are in upper secondary school?",
       },
     },
-    antallBarnOver18: {
+    antallBarnOver18Vgs: {
       label: {
         nb: "Antall barn som går på videregående skole",
         nn: "Antall barn som går på vidaregåande skule",
@@ -194,7 +203,7 @@ const tekster = definerTekster({
     },
   },
   medforelderBoforhold: {
-    antallBarnBorFast: {
+    antallBarnUnder18: {
       label: {
         nb: "Hvor mange andre egne barn bor fast hos den andre forelderen?",
         nn: "Kor mange andre eigne barn bur fast hos den andre forelderen?",
@@ -206,21 +215,21 @@ const tekster = definerTekster({
         en: "Children you have previously entered in the calculator should not be included here.",
       },
     },
-    borMedAnnenVoksen: {
+    harVoksneOver18: {
       label: {
         nb: "Bor den andre forelderen sammen med voksne over 18 år?",
         nn: "Bur den andre forelderen saman med vaksne over 18 år?",
         en: "Does the other parent live with adults over 18 years?",
       },
     },
-    borMedAndreBarn: {
+    harBarnUnder18: {
       label: {
         nb: "Har den andre forelderen andre egne barn under 18 år som bor fast hos seg?",
         nn: "Har den andre forelderen andre eigne barn under 18 år som bur fast hos seg?",
         en: "Does the other parent have other own children under 18 years who live permanently with them?",
       },
     },
-    borMedAnnenVoksenType: {
+    voksneOver18Type: {
       SAMBOER_ELLER_EKTEFELLE: {
         nb: "Samboer eller ektefelle",
         nn: "Sambuar eller ektefelle",
@@ -239,14 +248,14 @@ const tekster = definerTekster({
         en: "Who does the other parent live with?",
       },
     },
-    borMedBarnOver18: {
+    harBarnOver18Vgs: {
       label: {
         nb: "Bor den andre forelderen sammen med egne barn som går på videregående skole?",
         nn: "Bur den andre forelderen saman med eigne barn som går på vidaregåande skule?",
         en: "Does the other parent live with own children who are in upper secondary school?",
       },
     },
-    antallBarnOver18: {
+    antallBarnOver18Vgs: {
       label: {
         nb: "Antall barn som går på videregående skole",
         nn: "Antall barn som går på vidaregåande skule",

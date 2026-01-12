@@ -2,16 +2,16 @@ import { BodyShort, Heading } from "@navikt/ds-react";
 import { useFormContext } from "@rvf/react";
 import { useEffect } from "react";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { type BarnebidragSkjema } from "../schema";
 import { BoforholdEnkeltPart } from "./BoforholdEnkeltPart";
-import { type BarnebidragSkjema } from "./schema";
 
 const BOFORHOLD_FIELDS = [
-  "borMedAnnenVoksen",
-  "borMedAndreBarn",
-  "antallBarnBorFast",
-  "borMedAnnenVoksenType",
-  "borMedBarnOver18",
-  "antallBarnOver18",
+  "harVoksneOver18",
+  "harBarnUnder18",
+  "antallBarnUnder18",
+  "voksneOver18Type",
+  "harBarnOver18Vgs",
+  "antallBarnOver18Vgs",
   "andreBarnebidragerPerMåned",
 ] as const;
 
@@ -28,7 +28,7 @@ export const Bofohold = () => {
         const value =
           field.includes("antall") || field.includes("barnebidrag")
             ? ""
-            : field === "borMedAnnenVoksenType"
+            : field === "voksneOver18Type"
               ? []
               : "undefined";
         form.setValue(`dittBoforhold.${field}`, value);
@@ -39,7 +39,7 @@ export const Bofohold = () => {
         const value =
           field.includes("antall") || field.includes("barnebidrag")
             ? ""
-            : field === "borMedAnnenVoksenType"
+            : field === "voksneOver18Type"
               ? []
               : "undefined";
         form.setValue(`medforelderBoforhold.${field}`, value);
