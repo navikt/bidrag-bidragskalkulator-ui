@@ -18,14 +18,7 @@ export default function JaNeiRadio(props: Props) {
       <Stack gap="0 6" direction={{ xs: "column", sm: "row" }} wrap={false}>
         {JA_NEI_ALTERNATIVER.map((alternativ) => {
           return (
-            <Radio
-              value={alternativ}
-              key={alternativ}
-              //   onChange={sporKalkulatorSpørsmålBesvart(
-              //     `${part}-bor-med-voksen`,
-              //     t(tekster[skjemagruppe].borMedAnnenVoksen.label),
-              //   )}
-            >
+            <Radio value={alternativ} key={alternativ}>
               {t(tekster[alternativ])}
             </Radio>
           );

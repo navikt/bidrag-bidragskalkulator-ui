@@ -32,8 +32,8 @@ const tekster = definerTekster({
   egenInntekt: {
     beløp: (år) => ({
       nb: `Hva er Barn ${år} år sin årsinntekt?`,
-      en: ``,
-      nn: ``,
+      en: `What is the annual income of the child aged ${år}?`,
+      nn: `Kva er Barn ${år} år sin årsinntekt?`,
     }),
   },
 });
