@@ -14,13 +14,19 @@ COPY . .
 COPY --from=dependencies /app/node_modules ./node_modules
 RUN npm run build
 
-FROM node:25-alpine
+FROM node:25-alpine AS runtime
 WORKDIR /app
-COPY package*.json ./
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=builder /app/build ./build
 
+# Fjern npm/npx for å unngå at sårbarheter i npm sine interne deps blir funnet i runtime-imaget
+RUN rm -rf /usr/local/lib/node_modules/npm \
+    /usr/local/bin/npm \
+    /usr/local/bin/npx || true
+
 ENV NODE_ENV=production
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+ENV HOSTNAME=0.0.0.0
+
+CMD ["./node_modules/.bin/react-router-serve", "./build/server/index.js"]
 

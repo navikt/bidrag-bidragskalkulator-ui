@@ -78,7 +78,7 @@ npm run token -- -i personident -m miljø
 For eksempel
 
 ```bash
-npm run token --ident 11528433741 --miljø dev
+npm run token --ident <some ident> --miljø dev
 ```
 
 Om hvilken testperson du bruker ikke er så viktig, kan du bruke disse to scriptene for å generere tokens mot henholdsvis lokal server og dev-miljøet:

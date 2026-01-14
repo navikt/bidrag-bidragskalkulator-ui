@@ -1,5 +1,6 @@
 name: Deploy release til prod
 on:
+  workflow_dispatch:
   release:
     types: [published]
 

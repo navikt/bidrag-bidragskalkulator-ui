@@ -11,7 +11,8 @@ import { kombinerEventHandlers } from "~/utils/kombinerEventHandlers";
 import { kopierTilUtklippstavle } from "~/utils/kopierTilUtklippstavle";
 
 export interface CopyButtonProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children">,
+  extends
+    Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children">,
     Pick<ButtonProps, "iconPosition" | "size"> {
   /**
    * @default "primary"
