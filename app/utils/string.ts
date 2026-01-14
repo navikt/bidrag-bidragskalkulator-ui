@@ -3,7 +3,7 @@
  *
  * @example
  * ```tsx
- * formatterFødselsnummer("12345678901")
+ * formatterFødselsnummer("XXXXXX")
  * // -> "123456 78901"
  */
 export const formatterFødselsnummer = (fnr?: string) => {

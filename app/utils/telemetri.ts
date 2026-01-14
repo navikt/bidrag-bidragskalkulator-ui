@@ -1,47 +1,47 @@
 import {
-  type Faro,
+  createReactRouterV6DataOptions,
   getWebInstrumentations,
   initializeFaro,
   ReactIntegration,
+  type Faro,
 } from "@grafana/faro-react";
-import { TracingInstrumentation } from "@grafana/faro-web-tracing";
+import { useEffect } from "react";
+import { matchRoutes, unstable_useRoute } from "react-router";
 
-let faro: Faro;
+export function useFaro() {
+  const { loaderData } = unstable_useRoute("root");
+  const erProd = loaderData?.telemetriUrl.includes("telemetry.nav.no");
+  const faroUrl = loaderData?.telemetriUrl;
 
-/**
- * Singleton for Faro-instans.
- *
- * Faro brukes til instrumentering og telemetri og den typen ting i appen.
- */
-export function getFaro(telemetriUrl: string): Faro | null {
-  if (faro) {
-    return faro;
-  }
-  if (!telemetriUrl) {
-    throw new Error("Telemetri URL er ikke satt. Sett TELEMETRY_URL i .env");
-  }
-  const erProd = telemetriUrl.includes("telemetry.nav.no");
-  const erLokalt = location.hostname.includes("localhost");
+  useEffect(() => {
+    if (erProd && faroUrl) {
+      initFaro(faroUrl);
+    }
+  }, [erProd, faroUrl]);
+}
 
-  if (erLokalt) {
-    console.info("Faro er slått av for lokal utvikling");
-    return null;
+let faro: Faro | null = null;
+
+function initFaro(url: string) {
+  if (typeof document === "undefined" || faro !== null) {
+    return;
   }
 
   faro = initializeFaro({
-    url: telemetriUrl,
+    url,
     app: {
       name: "bidrag-barnebidragskalkulator",
       namespace: "bidrag",
-      environment: erProd ? "prod-gcp-loki" : "dev-gcp-loki",
     },
     instrumentations: [
       ...getWebInstrumentations({
-        captureConsole: false,
+        captureConsole: true,
       }),
-      new TracingInstrumentation(),
-      new ReactIntegration(),
+      new ReactIntegration({
+        router: createReactRouterV6DataOptions({
+          matchRoutes,
+        }),
+      }),
     ],
   });
-  return faro;
 }
