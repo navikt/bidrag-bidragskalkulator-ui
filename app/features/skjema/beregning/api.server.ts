@@ -129,8 +129,6 @@ export const hentBarnebidragsutregning = async (request: Request) => {
     }),
   };
 
-  console.log("🚀 ~ hentBarnebidragsutregning ~ requestData:", requestData);
-
   return hentBarnebidragsutregningFraApi({
     requestData,
     språk,
