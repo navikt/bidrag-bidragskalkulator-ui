@@ -25,6 +25,9 @@ export type BorMedAnnenVoksenType = z.infer<typeof BorMedAnnenVoksenTypeSchema>;
 export const BarnepassSituasjonSchema = z.enum(["HELTID", "DELTID"]);
 export const HvemFårBarnetilleggSchema = z.enum(["MEG", "DEN_ANDRE_FORELDREN"]);
 
+export type Tilsynstype = z.infer<typeof BarnepassSituasjonSchema>;
+export type VoksneOver18Type = z.infer<typeof BorMedAnnenVoksenTypeSchema>;
+
 const BarnSkjemaSchema = z.object({
   alder: z.string(),
   bosted: z.enum([...FastBostedSchema.options, ""]),
@@ -132,6 +135,10 @@ export const lagYtelserSkjema = (språk: Språk) => {
         kontantstøtte: {
           ...values.kontantstøtte,
           beløp: Number(values.kontantstøtte.beløp.trim() ?? 0),
+          deler:
+            values.kontantstøtte.mottar === true
+              ? Boolean(values.kontantstøtte.deler)
+              : false,
         },
       };
     })
@@ -185,7 +192,15 @@ export const lagBoforholdSkjema = (språk: Språk) => {
           value === "undefined" ? undefined : value === "true",
         ),
       antallBarnUnder18: z.string(),
-      voksneOver18Type: z.array(BorMedAnnenVoksenTypeSchema),
+      voksneOver18Type: z.preprocess(
+        (val) => {
+          if (!Array.isArray(val)) return [];
+          return val.filter(
+            (v) => v === "SAMBOER_ELLER_EKTEFELLE" || v === "EGNE_BARN_OVER_18",
+          );
+        },
+        z.array(BorMedAnnenVoksenTypeSchema),
+      ),
       harBarnOver18Vgs: z
         .enum(["true", "false", "undefined"])
         .transform((value) =>
@@ -259,6 +274,7 @@ export const lagBoforholdSkjema = (språk: Språk) => {
         andreBarnebidragerPerMåned: Number(
           values.andreBarnebidragerPerMåned.trim() || 0,
         ),
+        antallBarnOver18Vgs: Number(values.antallBarnOver18Vgs.trim() || 0),
       };
     })
     .superRefine((values, ctx) => {
@@ -407,7 +423,13 @@ export const lagBarnSkjema = (språk: Språk) => {
           value === "undefined" ? undefined : value === "true",
         ),
       barnetilsynsutgift: z.string(),
-      barnepassSituasjon: BarnepassSituasjonSchema.or(z.literal("")),
+      barnepassSituasjon: z.preprocess(
+        (val) =>
+          BarnepassSituasjonSchema.options.includes(val as Tilsynstype)
+            ? val
+            : "",
+        BarnepassSituasjonSchema.or(z.literal("")),
+      ),
       inntektPerMåned: z.string(),
     })
     .superRefine((data, ctx) => {
@@ -469,8 +491,14 @@ export const lagBarnSkjema = (språk: Språk) => {
     })
     .transform((values) => ({
       ...values,
+      harBarnetilsynsutgift: Boolean(values.harBarnetilsynsutgift),
+      mottarStønadTilBarnetilsyn: Boolean(values.mottarStønadTilBarnetilsyn),
       barnetilsynsutgift: Number(values.barnetilsynsutgift.trim()),
-      harEgenInntekt: Number(values.inntektPerMåned.trim()),
+      barnepassSituasjon:
+        values.barnepassSituasjon === ""
+          ? null
+          : (values.barnepassSituasjon as Tilsynstype),
+      inntektPerMåned: Number(values.inntektPerMåned.trim()),
     }))
     .superRefine((data, ctx) => {
       if (data.barnetilsynsutgift < 0) {
@@ -533,7 +561,7 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
       // Valider inntektPerMåned kun når barnHarEgenInntekt er true
       if (data.barnHarEgenInntekt === true) {
         data.barn.forEach((barn, index) => {
-          if (barn.inntektPerMåned.trim() === "") {
+          if (isNaN(barn.inntektPerMåned) || barn.inntektPerMåned < 0) {
             ctx.addIssue({
               code: "custom",
               message: oversett(
@@ -627,7 +655,11 @@ export const lagBarnebidragSkjema = (språk: Språk) => {
           });
         }
       }
-    });
+    })
+    .transform((data) => ({
+      ...data,
+      barnHarEgenInntekt: data.barnHarEgenInntekt === true,
+    }));
 };
 
 export type BarnebidragSkjema = z.infer<typeof BarnebidragSkjemaSchema>;

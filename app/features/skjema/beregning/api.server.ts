@@ -7,13 +7,35 @@ import {
   oversett,
   Språk,
 } from "~/utils/i18n";
-import { lagBarnebidragSkjema } from "../schema";
-import { kalkulerBidragstype, kalkulerSamværsklasse } from "../utils";
+import {
+  lagBarnebidragSkjema,
+  type BarnebidragSkjemaValidert,
+} from "../schema";
+import { kalkulerSamværsklasse } from "../utils";
 import {
   BarnebidragsutregningSchema,
   type Barnebidragsutregning,
   type Barnebidragsutregningsgrunnlag,
+  type Boforhold,
 } from "./schema";
+
+type InntektSkjema = BarnebidragSkjemaValidert["deg"];
+type BoforholdSkjema = BarnebidragSkjemaValidert["dittBoforhold"];
+
+const lagInntektGrunnlag = (inntekt: InntektSkjema) => ({
+  inntekt: inntekt.inntekt,
+  nettoPositivKapitalinntekt: inntekt.harKapitalinntektOver10k
+    ? inntekt.kapitalinntekt
+    : 0,
+});
+
+const lagBoforholdGrunnlag = (boforhold: BoforholdSkjema): Boforhold | null => {
+  return {
+    antallBarnUnder18BorFast: boforhold.antallBarnUnder18,
+    voksneOver18Type: boforhold.voksneOver18Type,
+    antallBarnOver18Vgs: boforhold.antallBarnOver18Vgs,
+  };
+};
 
 export const hentBarnebidragsutregningFraApi = async ({
   requestData,
@@ -27,34 +49,27 @@ export const hentBarnebidragsutregningFraApi = async ({
       `${env.SERVER_URL}/api/v1/beregning/barnebidrag/åpen`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),
       },
     );
 
     if (!response.ok) {
       console.error(await response.text());
-      return {
-        error: oversett(språk, tekster.feil.beregning),
-      };
+      return { error: oversett(språk, tekster.feil.beregning) };
     }
+
     const json = await response.json();
     const parsed = BarnebidragsutregningSchema.safeParse(json);
 
     if (!parsed.success) {
-      return {
-        error: oversett(språk, tekster.feil.ugyldigSvar),
-      };
+      return { error: oversett(språk, tekster.feil.ugyldigSvar) };
     }
 
     return parsed.data;
   } catch (error) {
     console.error(error);
-    return {
-      error: oversett(språk, tekster.feil.beregning),
-    };
+    return { error: oversett(språk, tekster.feil.beregning) };
   }
 };
 
@@ -83,52 +98,54 @@ export const hentBarnebidragsutregning = async (request: Request) => {
     return validationError(parsedFormData.error, parsedFormData.submittedData);
   }
 
-  const skjemaData = parsedFormData.data;
+  const {
+    bidragstype,
+    deg,
+    medforelder,
+    dittBoforhold,
+    medforelderBoforhold,
+    ytelser,
+    barn,
+    barnHarEgenInntekt,
+  } = parsedFormData.data;
 
-  const { inntekt: inntektForelder1 } = skjemaData.deg;
-  const { inntekt: inntektForelder2 } = skjemaData.medforelder;
+  const erMottaker = bidragstype === "MOTTAKER";
 
   const requestData: Barnebidragsutregningsgrunnlag = {
-    inntektForelder1,
-    inntektForelder2,
-    dittBoforhold:
-      skjemaData.dittBoforhold.harBarnUnder18 !== undefined &&
-      skjemaData.dittBoforhold.harVoksneOver18 !== undefined
+    bidragstype,
+    bidragsmottakerInntekt: lagInntektGrunnlag(erMottaker ? deg : medforelder),
+    bidragspliktigInntekt: lagInntektGrunnlag(erMottaker ? medforelder : deg),
+    dittBoforhold: erMottaker ? null : lagBoforholdGrunnlag(dittBoforhold),
+    medforelderBoforhold: erMottaker
+      ? lagBoforholdGrunnlag(medforelderBoforhold)
+      : null,
+    småbarnstillegg: ytelser.mottarSmåbarnstillegg === true,
+    utvidetBarnetrygd: {
+      harUtvidetBarnetrygd: ytelser.mottarUtvidetBarnetrygd === true,
+      delerMedMedforelder: ytelser.delerUtvidetBarnetrygd === true,
+    },
+    barn: barn.map((b) => ({
+      alder: b.alder,
+      samværsklasse: kalkulerSamværsklasse(b.samvær, b.bosted),
+      barnetilsyn: {
+        plassType:
+          b.harBarnetilsynsutgift && b.mottarStønadTilBarnetilsyn
+            ? b.barnepassSituasjon
+            : null,
+        månedligUtgift:
+          b.harBarnetilsynsutgift && !b.mottarStønadTilBarnetilsyn
+            ? b.barnetilsynsutgift
+            : null,
+      },
+      inntekt: barnHarEgenInntekt ? b.inntektPerMåned : 0,
+      kontantstøtte: ytelser.kontantstøtte.mottar
         ? {
-            borMedAnnenVoksen: skjemaData.dittBoforhold.harVoksneOver18,
-            antallBarnBorFast: skjemaData.dittBoforhold.antallBarnUnder18,
-            antallBarnDeltBosted: 0,
+            beløp: ytelser.kontantstøtte.beløp,
+            deles: ytelser.kontantstøtte.deler,
           }
         : null,
-    medforelderBoforhold:
-      skjemaData.medforelderBoforhold.harBarnUnder18 !== undefined &&
-      skjemaData.medforelderBoforhold.harVoksneOver18 !== undefined
-        ? {
-            borMedAnnenVoksen: skjemaData.medforelderBoforhold.harVoksneOver18,
-            antallBarnBorFast:
-              skjemaData.medforelderBoforhold.antallBarnUnder18,
-            antallBarnDeltBosted: 0,
-          }
-        : null,
-    barn: skjemaData.barn.map((barn) => {
-      const samværsklasse = kalkulerSamværsklasse(barn.samvær, barn.bosted);
-      const bidragstype = kalkulerBidragstype(
-        barn.bosted,
-        inntektForelder1,
-        inntektForelder2,
-      );
-
-      return {
-        alder: barn.alder,
-        samværsklasse,
-        bidragstype,
-        barnetilsynsutgift: barn.barnetilsynsutgift,
-      };
-    }),
+    })),
   };
 
-  return hentBarnebidragsutregningFraApi({
-    requestData,
-    språk,
-  });
+  return hentBarnebidragsutregningFraApi({ requestData, språk });
 };
