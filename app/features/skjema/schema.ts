@@ -192,15 +192,12 @@ export const lagBoforholdSkjema = (språk: Språk) => {
           value === "undefined" ? undefined : value === "true",
         ),
       antallBarnUnder18: z.string(),
-      voksneOver18Type: z.preprocess(
-        (val) => {
-          if (!Array.isArray(val)) return [];
-          return val.filter(
-            (v) => v === "SAMBOER_ELLER_EKTEFELLE" || v === "EGNE_BARN_OVER_18",
-          );
-        },
-        z.array(BorMedAnnenVoksenTypeSchema),
-      ),
+      voksneOver18Type: z.preprocess((val) => {
+        if (!Array.isArray(val)) return [];
+        return val.filter(
+          (v) => v === "SAMBOER_ELLER_EKTEFELLE" || v === "EGNE_BARN_OVER_18",
+        );
+      }, z.array(BorMedAnnenVoksenTypeSchema)),
       harBarnOver18Vgs: z
         .enum(["true", "false", "undefined"])
         .transform((value) =>
