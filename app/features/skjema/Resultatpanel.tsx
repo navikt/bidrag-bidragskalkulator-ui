@@ -30,6 +30,7 @@ export const Resultatpanel = ({ data, ref }: Props) => {
   const { t } = useOversettelse();
   const form = useFormContext<BarnebidragSkjema>();
   const bidragstype = form.field("bidragstype").value();
+  console.log("🚀 ~ Resultatpanel ~ bidragstype:", bidragstype);
 
   if (bidragstype === "") {
     return;
@@ -50,6 +51,8 @@ export const Resultatpanel = ({ data, ref }: Props) => {
     return sum + neste.sum;
   }, 0);
 
+  const erMottaker = bidragstype === "MOTTAKER";
+
   return (
     <div className="border p-4 rounded-md mt-8 lg:mt-12 flex flex-col gap-7">
       <Alert variant="success">
@@ -61,8 +64,10 @@ export const Resultatpanel = ({ data, ref }: Props) => {
           className="focus:outline-0"
         >
           {totalSum > 0
-            ? t(tekster.overskrift.betale(Math.abs(totalSum)))
-            : t(tekster.overskrift.motta(Math.abs(totalSum)))}
+            ? erMottaker
+              ? t(tekster.overskrift.motta(Math.abs(totalSum)))
+              : t(tekster.overskrift.betale(Math.abs(totalSum)))
+            : ""}
         </Heading>
         {totalSum === 0 && <BodyLong>{t(tekster.nullBidrag)}</BodyLong>}
       </Alert>
