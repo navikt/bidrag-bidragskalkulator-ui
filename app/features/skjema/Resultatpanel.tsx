@@ -30,7 +30,6 @@ export const Resultatpanel = ({ data, ref }: Props) => {
   const { t } = useOversettelse();
   const form = useFormContext<BarnebidragSkjema>();
   const bidragstype = form.field("bidragstype").value();
-  console.log("🚀 ~ Resultatpanel ~ bidragstype:", bidragstype);
 
   if (bidragstype === "") {
     return;
