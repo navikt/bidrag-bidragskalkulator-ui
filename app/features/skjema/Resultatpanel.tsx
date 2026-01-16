@@ -29,6 +29,11 @@ type Props = {
 export const Resultatpanel = ({ data, ref }: Props) => {
   const { t } = useOversettelse();
   const form = useFormContext<BarnebidragSkjema>();
+  const bidragstype = form.field("bidragstype").value();
+
+  if (bidragstype === "") {
+    return;
+  }
 
   if ("error" in data) {
     return (
@@ -42,24 +47,8 @@ export const Resultatpanel = ({ data, ref }: Props) => {
   }
 
   const totalSum = data.resultater.reduce((sum, neste) => {
-    if (neste.bidragstype === "PLIKTIG") {
-      return sum + neste.sum;
-    }
-    return sum - neste.sum;
+    return sum + neste.sum;
   }, 0);
-
-  const bidragstyper = data.resultater.map((resultat) => resultat.bidragstype);
-  const isMottaker = bidragstyper.includes("MOTTAKER");
-  const isPliktig = bidragstyper.includes("PLIKTIG");
-
-  const bidragstype =
-    isMottaker && isPliktig
-      ? "MOTTAKER_OG_PLIKTIG"
-      : isMottaker
-        ? "MOTTAKER"
-        : isPliktig
-          ? "PLIKTIG"
-          : "INGEN";
 
   return (
     <div className="border p-4 rounded-md mt-8 lg:mt-12 flex flex-col gap-7">
@@ -127,7 +116,7 @@ export const Resultatpanel = ({ data, ref }: Props) => {
                 const barn = form.field(`barn[${index}]`);
                 return (
                   <ListItem key={index}>
-                    {resultat.bidragstype === "MOTTAKER"
+                    {bidragstype === "MOTTAKER"
                       ? t(
                           tekster.detaljer.motta(
                             barn.value().alder,
