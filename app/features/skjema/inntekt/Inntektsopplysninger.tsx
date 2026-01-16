@@ -13,6 +13,7 @@ import Kapitalinntekt from "./Kapitalinntekt";
 export const Inntektsopplysninger = () => {
   const form = useFormContext<BarnebidragSkjema>();
   const barn = form.value("barn");
+  const bidragstype = form.value("bidragstype");
   const barnArray = useFieldArray(form.scope("barn"));
   const barnHarEgenInntekt = useFormScope(
     form.scope("barnHarEgenInntekt"),
@@ -90,6 +91,7 @@ export const Inntektsopplysninger = () => {
         {harGyldigeBarn && (
           <>
             <JaNeiRadio
+              key={`barnHarEgenInntekt-${bidragstype}`}
               {...form.field("barnHarEgenInntekt").getInputProps()}
               legend={t(
                 barnArray.length() > 1
