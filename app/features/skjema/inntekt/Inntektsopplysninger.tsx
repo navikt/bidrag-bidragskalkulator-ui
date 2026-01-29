@@ -3,14 +3,18 @@ import { useFieldArray, useFormContext, useFormScope } from "@rvf/react";
 import { useEffect } from "react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
+import { useKalkulatorgrunnlagsdata } from "~/routes/kalkulator";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
+import { formatterSum } from "~/utils/tall";
 import BarnEgenInntekt from "../BarnEgenInntekt";
 import type { BarnebidragSkjema } from "../schema";
 import { sporKalkulatorSpørsmålBesvart } from "../utils";
 import Kapitalinntekt from "./Kapitalinntekt";
 
 export const Inntektsopplysninger = () => {
+  const { kalkulatorGrunnlagsdata } = useKalkulatorgrunnlagsdata();
+
   const form = useFormContext<BarnebidragSkjema>();
   const barn = form.value("barn");
   const bidragstype = form.value("bidragstype");
@@ -104,7 +108,12 @@ export const Inntektsopplysninger = () => {
             {barnHarEgenInntekt === "true" && (
               <>
                 <BodyShort className="navds-form-field__description">
-                  {t(tekster.barnHarEgenInntekt.beskrivelse)}
+                  {t(
+                    tekster.barnHarEgenInntekt.beskrivelse(
+                      kalkulatorGrunnlagsdata.barnInntektsgrense,
+                      kalkulatorGrunnlagsdata.selvforsørgetBarnInntektsgrense,
+                    ),
+                  )}
                 </BodyShort>
                 {barnArray.map((key, _, index) => (
                   <BarnEgenInntekt key={key} barnIndex={index} />
@@ -167,10 +176,10 @@ const tekster = definerTekster({
       en: "Do children have their own income?",
       nn: "Har barna eigen inntekt?",
     },
-    beskrivelse: {
-      nb: "Hvis barnet har en årsinntekt over 60 300 kroner, vil det påvirke beregningen i kalkulatoren. Ved inntekt over 201 000 regnes barnet som selvforsørget.",
-      en: "If the child has an annual income over 60,300 kroner, it will affect the calculation in the calculator. With an income over 201,000, the child is considered self-sufficient.",
-      nn: "Dersom barnet har ein årsinntekt over 60 300 kroner, vil det påverke berekninga i kalkulatoren. Ved inntekt over 201 000 reknast barnet som sjølvforsørga.",
-    },
+    beskrivelse: (barnInntektsgrense, selvforsørgetBarnInntektsgrense) => ({
+      nb: `Hvis barnet har en årsinntekt over ${formatterSum(barnInntektsgrense as number)}, vil det påvirke beregningen i kalkulatoren. Ved inntekt over ${formatterSum(selvforsørgetBarnInntektsgrense as number)} regnes barnet som selvforsørget.`,
+      en: `If the child has an annual income over ${formatterSum(barnInntektsgrense as number)}, it will affect the calculation in the calculator. With an income over ${formatterSum(selvforsørgetBarnInntektsgrense as number)}, the child is considered self-sufficient.`,
+      nn: `Dersom barnet har ein årsinntekt over ${formatterSum(barnInntektsgrense as number)}, vil det påverke berekninga i kalkulatoren. Ved inntekt over ${formatterSum(selvforsørgetBarnInntektsgrense as number)} reknast barnet som sjølvforsørga.`,
+    }),
   },
 });
