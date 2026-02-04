@@ -405,6 +405,17 @@ export const lagInntektSkjema = (språk: Språk) => {
             path: ["kapitalinntekt"],
           });
         }
+
+        if (data.kapitalinntekt < 10000) {
+          ctx.addIssue({
+            code: "custom",
+            message: oversett(
+              språk,
+              tekster.feilmeldinger.inntekt.kapitalinntekt.minimum,
+            ),
+            path: ["kapitalinntekt"],
+          });
+        }
       }
     });
 };
@@ -849,6 +860,13 @@ const tekster = definerTekster({
         nb: "Fyll inn inntekt i hele kroner",
         en: "Fill in income in whole kroner",
         nn: "Fyll inn inntekt i heile kroner",
+      },
+      kapitalinntekt: {
+        minimum: {
+          nb: "Kapitalinntekt må være minst 10 000 kr",
+          en: "Capital income must be at least 10,000 NOK",
+          nn: "Kapitalinntekt må vere minst 10 000 kr",
+        },
       },
     },
     husstandsmedlemmer: {
