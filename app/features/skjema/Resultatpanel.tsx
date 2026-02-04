@@ -123,13 +123,13 @@ export const Resultatpanel = ({ data, ref }: Props) => {
                     {bidragstype === "MOTTAKER"
                       ? t(
                           tekster.detaljer.motta(
-                            barn.value().alder,
+                            barn.value().fødselsår,
                             resultat.sum,
                           ),
                         )
                       : t(
                           tekster.detaljer.betale(
-                            barn.value().alder,
+                            barn.value().fødselsår,
                             resultat.sum,
                           ),
                         )}
@@ -322,47 +322,47 @@ const tekster = definerTekster({
       en: "The amount above is the calculator’s suggested estimate of how much you can pay or receive in total per month. For each child, the calculation looks like this:",
       nn: "Beløpet over er eit forslag frå kalkulatoren om kor mykje du til saman skal betale eller motta per månad. For kvart barn ser berekninga slik ut:",
     },
-    motta: (alder, kostnad) => ({
+    motta: (fødselsår, kostnad) => ({
       nb: (
         <>
-          For {alder}-åringen foreslår kalkulatoren at du mottar{" "}
+          For barnet født {fødselsår} foreslår kalkulatoren at du mottar{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
       en: (
         <>
-          For the {alder} year old, the calculator suggests that you receive{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> in child support
-          per month.
+          For the child born {fødselsår}, the calculator suggests that you
+          receive <strong>{formatterSum(kostnad as number)}</strong> in child
+          support per month.
         </>
       ),
       nn: (
         <>
-          For {alder}-åringen foreslår kalkulatoren at du mottar{" "}
+          For barnet fødd {fødselsår} foreslår kalkulatoren at du mottar{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           månad.
         </>
       ),
     }),
-    betale: (alder, kostnad) => ({
+    betale: (fødselsår, kostnad) => ({
       nb: (
         <>
-          For {alder}-åringen foreslår kalkulatoren at du betaler{" "}
+          For barnet født {fødselsår} foreslår kalkulatoren at du betaler{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
       en: (
         <>
-          For the {alder} year old, the calculator suggests that you pay{" "}
+          For the child born {fødselsår}, the calculator suggests that you pay{" "}
           <strong>{formatterSum(kostnad as number)}</strong> in child support
           per month.
         </>
       ),
       nn: (
         <>
-          For {alder}-åringen foreslår kalkulatoren at du betaler{" "}
+          For barnet fødd {fødselsår} foreslår kalkulatoren at du betaler{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           månad.
         </>

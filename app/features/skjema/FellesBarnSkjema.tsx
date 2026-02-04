@@ -39,7 +39,7 @@ export const FellesBarnSkjema = () => {
     ) as BarnebidragSkjema["barn"][number];
 
     barnArray.push({
-      alder: "",
+      fødselsår: "",
       bosted: sisteBarn.bosted,
       samvær: sisteBarn.samvær,
       harBarnetilsynsutgift: "undefined",
@@ -125,8 +125,8 @@ export const FellesBarnSkjema = () => {
 // react-validated-form
 const finnFokuserbartInputPåBarn = (index: number) => {
   return document.querySelector(
-    `input[name="barn[${index}].alder"]`,
-  ) as HTMLInputElement;
+    `select[name="barn[${index}].fødselsår"]`,
+  ) as HTMLSelectElement;
 };
 
 const tekster = definerTekster({

@@ -2,7 +2,13 @@ import { useFormContext } from "@rvf/react";
 import { FormattertTallTextField } from "~/components/ui/FormattertTallTextField";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import type { BarnebidragSkjema, Bidragstype } from "../schema";
+import {
+  beregnAntallMånederFraFødselsår,
+  MAX_MÅNED_KONTANTSTØTTE,
+  MIN_MÅNED_KONTANTSTØTTE,
+  type BarnebidragSkjema,
+  type Bidragstype,
+} from "../schema";
 import type { NavYtelse } from "./Ytelser";
 
 type Props = {
@@ -21,7 +27,14 @@ export default function Kontantstøtte({
 
   const barn = form.value("barn");
 
-  const barnMedKontantstøtte = barn.filter((b) => Number(b.alder) === 1);
+  const barnMedKontantstøtte = barn.filter(
+    (b) =>
+      b.fødselsår !== "" &&
+      beregnAntallMånederFraFødselsår(Number(b.fødselsår)) >=
+        MIN_MÅNED_KONTANTSTØTTE &&
+      beregnAntallMånederFraFødselsår(Number(b.fødselsår)) <=
+        MAX_MÅNED_KONTANTSTØTTE,
+  );
 
   // Kontantstøtte
   const mottarKontantstøtte = valgteYtelser.includes("kontantstøtte");

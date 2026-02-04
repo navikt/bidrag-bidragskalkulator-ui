@@ -4,12 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import JaNeiRadio from "~/components/ui/JaNeiRadio";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import {
-  ALDER_KONTANTSTØTTE,
+  beregnAntallMånederFraFødselsår,
   MAKS_ALDER_SMÅBARNSTILLEGG,
   MAKS_ALDER_UTVIDET_BARNETRYGD,
+  MAX_MÅNED_KONTANTSTØTTE,
+  MIN_MÅNED_KONTANTSTØTTE,
   type BarnebidragSkjema,
   type Bidragstype,
 } from "../schema";
+import { beregnAlderFraFødselsår } from "../utils";
 import Kontantstøtte from "./Kontantstøtte";
 
 export type NavYtelse =
@@ -27,17 +30,28 @@ export const Ytelser = ({ bidragstype }: Props) => {
 
   const barn = form.value("barn");
 
-  // Sjekk aldersgrupper
+  // Sjekk aldersgrupper basert på fødselsår
   const harBarnUnderUtvidetBarnetrygdAlder = barn.some(
-    (b) => Number(b.alder) < MAKS_ALDER_UTVIDET_BARNETRYGD,
+    (b) =>
+      b.fødselsår !== "" &&
+      beregnAlderFraFødselsår(Number(b.fødselsår)) <
+        MAKS_ALDER_UTVIDET_BARNETRYGD,
   );
   const harBarnUnderSmåbarnstilleggAlder = barn.some(
-    (b) => Number(b.alder) <= MAKS_ALDER_SMÅBARNSTILLEGG,
+    (b) =>
+      b.fødselsår !== "" &&
+      beregnAlderFraFødselsår(Number(b.fødselsår)) <=
+        MAKS_ALDER_SMÅBARNSTILLEGG,
   );
 
-  // Kontantstøtte er KUN for barn som er nøyaktig 1 år
+  // Kontantstøtte er KUN for barn mellom 13 og 19 måneder
   const harBarnIKontantstøtteAlder = barn.some(
-    (b) => Number(b.alder) === ALDER_KONTANTSTØTTE,
+    (b) =>
+      b.fødselsår !== "" &&
+      beregnAntallMånederFraFødselsår(Number(b.fødselsår)) >=
+        MIN_MÅNED_KONTANTSTØTTE &&
+      beregnAntallMånederFraFødselsår(Number(b.fødselsår)) <=
+        MAX_MÅNED_KONTANTSTØTTE,
   );
 
   // Sjekk om noe barn har delt bosted
@@ -49,10 +63,10 @@ export const Ytelser = ({ bidragstype }: Props) => {
   // Ref for å tracke forrige barn-signatur
   const forrigeBarnSignatur = useRef<string>("");
 
-  // Reset ytelser når barn-data endres (alder, antall, bosted)
+  // Reset ytelser når barn-data endres (fødselsår, antall, bosted)
   useEffect(() => {
     const barnSignatur = barn
-      .map((b) => `${b.alder}-${b.bosted}`)
+      .map((b) => `${b.fødselsår}-${b.bosted}`)
       .sort()
       .join("|");
 
@@ -144,7 +158,7 @@ export const Ytelser = ({ bidragstype }: Props) => {
           {t(tekster[bidragstype].beskrivelse)}
         </BodyShort>
 
-        {/* Kontantstøtte - kun for barn som er 1 år */}
+        {/* Kontantstøtte - kun for barn som er mellom 13 og 19 måneder */}
         {harBarnIKontantstøtteAlder && (
           <>
             <CheckboxGroup
@@ -281,7 +295,7 @@ const tekster = definerTekster({
     utvidetBarnetrygd: {
       delingSpørsmål: {
         nb: "Deler du og den andre forelderen den utvidede barnetrygden?",
-        en: "",
+        en: "Do you and the other parent share the extended child benefit?",
         nn: "Deler du og den andre forelderen den utvidede barnetrygden?",
       },
     },

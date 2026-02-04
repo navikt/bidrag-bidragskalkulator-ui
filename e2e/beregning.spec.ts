@@ -8,7 +8,9 @@ test.describe.skip("Beregningstest", () => {
 
     await sjekkTilgjengelighet(page);
 
-    await page.getByLabel("Hvor gammelt er barnet?").fill("4");
+    await page
+      .getByLabel("Hvilket år er barnet født?")
+      .selectOption("2022");
 
     await page
       .getByLabel("Hva har du hatt i inntekt de siste 12 månedene?")

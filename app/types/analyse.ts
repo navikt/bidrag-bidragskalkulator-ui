@@ -32,7 +32,7 @@ export type PrivatAvtaleSpørsmålId =
   | "deg-ident"
   | "har-vedlegg";
 export type KalkulatorSpørsmålId =
-  | "barn-alder"
+  | "barn-fødselsår"
   | "barn-fast-bosted"
   | "barn-samvær"
   | "barn-barnepass"
@@ -75,7 +75,7 @@ export type LesMerUtvidet = {
   tekst: string;
   id:
     | "kalkulator-personopplysninger"
-    | "kalkulator-barnets-alder"
+    | "kalkulator-barnets-fødselsår"
     | "kalkulator-fast-bosted"
     | "kalkulator-bosted-og-samvær"
     | "kalkulator-ferie-og-samvær"

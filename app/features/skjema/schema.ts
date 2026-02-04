@@ -1,11 +1,48 @@
 import { z } from "zod";
 import { definerTekster, oversett, Språk } from "~/utils/i18n";
 
+/**
+ * Beregner alder basert på fødselsår.
+ * Bruker 1. juli som fødselsdato.
+ */
+export const beregnAlderFraFødselsår = (fødselsår: number): number => {
+  const fødselsdato = new Date(fødselsår, 6, 1);
+  const iDag = new Date();
+  let alder = iDag.getFullYear() - fødselsdato.getFullYear();
+  const månedDiff = iDag.getMonth() - fødselsdato.getMonth();
+  if (
+    månedDiff < 0 ||
+    (månedDiff === 0 && iDag.getDate() < fødselsdato.getDate())
+  ) {
+    alder--;
+  }
+  return alder;
+};
+
+/** Beregner antall måneder siden fødselsår.
+ * Bruker 1. juli som fødselsdato.
+ * Returnerer antall hele måneder.
+ * Eksempel: Fødselsår 2022 og dagens dato er 1. september 2024 → returnerer 26 måneder.
+ * Eksempel: Fødselsår 2023 og dagens dato er 15. august 2024 → returnerer 13 måneder.
+ * Eksempel: Fødselsår 2023 og dagens dato er 30. juni 2024 → returnerer 11 måneder.
+ * */
+export const beregnAntallMånederFraFødselsår = (fødselsår: number): number => {
+  const fødselsdato = new Date(fødselsår, 6, 1);
+  const iDag = new Date();
+  let måneder = (iDag.getFullYear() - fødselsdato.getFullYear()) * 12;
+  måneder += iDag.getMonth() - fødselsdato.getMonth();
+  if (iDag.getDate() < fødselsdato.getDate()) {
+    måneder--;
+  }
+  return måneder;
+};
+
 export const MAKS_ALDER_BARNETILSYNSUTGIFT = 10;
 export const MAKS_ALDER_BARN_EGEN_INNTEKT = 13;
 export const MAKS_ALDER_SMÅBARNSTILLEGG = 3;
 export const MAKS_ALDER_UTVIDET_BARNETRYGD = 18;
-export const ALDER_KONTANTSTØTTE = 1;
+export const MIN_MÅNED_KONTANTSTØTTE = 13;
+export const MAX_MÅNED_KONTANTSTØTTE = 19;
 
 export type Bidragstype = "MOTTAKER" | "PLIKTIG";
 
@@ -29,7 +66,7 @@ export type Tilsynstype = z.infer<typeof BarnepassSituasjonSchema>;
 export type VoksneOver18Type = z.infer<typeof BorMedAnnenVoksenTypeSchema>;
 
 const BarnSkjemaSchema = z.object({
-  alder: z.string(),
+  fødselsår: z.string(),
   bosted: z.enum([...FastBostedSchema.options, ""]),
   samvær: z.string(),
   harBarnetilsynsutgift: z.enum(["true", "false", "undefined"]),
@@ -110,9 +147,6 @@ export const lagYtelserSkjema = (språk: Språk) => {
         .transform((value) => (value === "undefined" ? undefined : true)),
     })
     .superRefine((values, ctx) => {
-      // Kontantstøtte: Validering av deler er flyttet til foreldre-skjema nivå
-      // der vi har tilgang til barn-data for å sjekke om noen har DELT_FAST_BOSTED
-
       // Valider beløp når mottar er true og de ikke har svart "nei" på deling
       if (
         values.kontantstøtte.mottar === true &&
@@ -378,23 +412,20 @@ export const lagInntektSkjema = (språk: Språk) => {
 export const lagBarnSkjema = (språk: Språk) => {
   return z
     .object({
-      alder: z
+      fødselsår: z
         .string()
         .refine((verdi) => verdi.trim() !== "", {
-          message: oversett(språk, tekster.feilmeldinger.barn.alder.påkrevd),
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.barn.fødselsår.påkrevd,
+          ),
         })
         .transform((verdi) => Number(verdi.trim()))
         .refine((verdi) => !isNaN(verdi), {
-          message: oversett(språk, tekster.feilmeldinger.barn.alder.tall),
-        })
-        .refine((verdi) => Number.isInteger(verdi), {
-          message: oversett(språk, tekster.feilmeldinger.barn.alder.heltall),
-        })
-        .refine((verdi) => verdi >= 0, {
-          message: oversett(språk, tekster.feilmeldinger.barn.alder.minimum),
-        })
-        .refine((verdi) => verdi <= 25, {
-          message: oversett(språk, tekster.feilmeldinger.barn.alder.maksimum),
+          message: oversett(
+            språk,
+            tekster.feilmeldinger.barn.fødselsår.ugyldig,
+          ),
         }),
       bosted: z.enum(FastBostedSchema.options, {
         message: oversett(språk, tekster.feilmeldinger.bostatus.påkrevd),
@@ -428,7 +459,8 @@ export const lagBarnSkjema = (språk: Språk) => {
     })
     .superRefine((data, ctx) => {
       // Barnepass
-      if (data.alder <= MAKS_ALDER_BARNETILSYNSUTGIFT) {
+      const alder = beregnAlderFraFødselsår(data.fødselsår);
+      if (alder <= MAKS_ALDER_BARNETILSYNSUTGIFT) {
         if (data.harBarnetilsynsutgift === undefined) {
           ctx.addIssue({
             path: ["harBarnetilsynsutgift"],
@@ -485,6 +517,7 @@ export const lagBarnSkjema = (språk: Språk) => {
     })
     .transform((values) => ({
       ...values,
+      fødselsdato: `${values.fødselsår}-07-01`,
       harBarnetilsynsutgift: Boolean(values.harBarnetilsynsutgift),
       mottarStønadTilBarnetilsyn: Boolean(values.mottarStønadTilBarnetilsyn),
       barnetilsynsutgift: Number(values.barnetilsynsutgift.trim()),
@@ -764,31 +797,16 @@ const tekster = definerTekster({
       },
     },
     barn: {
-      alder: {
+      fødselsår: {
         påkrevd: {
-          nb: "Fyll inn alder",
-          en: "Fill in age",
-          nn: "Fyll inn alder",
+          nb: "Velg fødselsår",
+          en: "Select birth year",
+          nn: "Vel fødselsår",
         },
-        minimum: {
-          nb: "Barnet må være minst 0 år",
-          en: "The child must be at least 0 years old",
-          nn: "Barnet må vere minst 0 år",
-        },
-        maksimum: {
-          nb: "Barnet kan ikke være eldre enn 25 år",
-          en: "The child cannot be older than 25 years",
-          nn: "Barnet kan ikkje vere eldre enn 25 år",
-        },
-        tall: {
-          nb: "Alder må være et tall",
-          en: "Age must be a number",
-          nn: "Alder må vere eit tal",
-        },
-        heltall: {
-          nb: "Alder må være et heltall",
-          en: "Age must be a whole number",
-          nn: "Alder må vere eit heiltal",
+        ugyldig: {
+          nb: "Ugyldig fødselsår",
+          en: "Invalid birth year",
+          nn: "Ugyldig fødselsår",
         },
       },
       minimum: {

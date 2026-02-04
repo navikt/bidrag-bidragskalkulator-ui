@@ -17,11 +17,11 @@ export function Barnebidragsskjema({ form }: Props) {
   const { t } = useOversettelse();
   const bidragstype = form.value("bidragstype");
   const barn = form.value("barn");
-  const gyldigeBarn = barn.filter((b) => b.alder !== "");
+  const gyldigeBarn = barn.filter((b) => b.fødselsår !== "");
   const harGyldigeBarn = gyldigeBarn.length > 0;
   const harValgtBidragstype = bidragstype !== "";
 
-  // Reset alle felter bortsett fra barn alder og samvær når bidragstype endres
+  // Reset alle felter bortsett fra barn fødselsår og samvær når bidragstype endres
   useTilbakestillVedBidragstypeEndring(form, bidragstype, barn);
 
   const skalViseBarnepass = harValgtBidragstype && harGyldigeBarn;

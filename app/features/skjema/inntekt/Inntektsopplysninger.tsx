@@ -22,7 +22,7 @@ export const Inntektsopplysninger = () => {
   const barnHarEgenInntekt = useFormScope(
     form.scope("barnHarEgenInntekt"),
   ).value();
-  const harGyldigeBarn = barn.filter((b) => b.alder !== "").length > 0;
+  const harGyldigeBarn = barn.filter((b) => b.fødselsår !== "").length > 0;
 
   const { t } = useOversettelse();
 

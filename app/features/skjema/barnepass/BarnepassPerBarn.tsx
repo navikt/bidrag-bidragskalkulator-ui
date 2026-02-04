@@ -7,6 +7,7 @@ import {
   MAKS_ALDER_BARNETILSYNSUTGIFT,
   type BarnebidragSkjema,
 } from "../schema";
+import { beregnAlderFraFødselsår } from "../utils";
 import { useTilbakestillBarnepassFelter } from "./useTilbakestillBarnepassFelter";
 
 type Props = {
@@ -19,7 +20,7 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
   const { t } = useOversettelse();
 
   const barnField = useFormScope(form.scope(`barn[${barnIndex}]`));
-  const alder = barnField.value().alder;
+  const fødselsår = barnField.value().fødselsår;
   const harBarnetilsynsutgift = barnField.value().harBarnetilsynsutgift;
   const mottarStønadTilBarnetilsyn =
     barnField.value().mottarStønadTilBarnetilsyn;
@@ -31,13 +32,15 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
     mottarStønadTilBarnetilsyn,
   );
 
-  if (alder === "") {
+  if (fødselsår === "") {
     return null;
   }
 
+  const alder = beregnAlderFraFødselsår(Number(fødselsår));
+
   const visSpørsmålOmBarnetilsynsutgift =
-    barnField.field("alder").touched() &&
-    Number(alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT;
+    barnField.field("fødselsår").touched() &&
+    alder <= MAKS_ALDER_BARNETILSYNSUTGIFT;
 
   if (!visSpørsmålOmBarnetilsynsutgift) {
     return null;
@@ -46,7 +49,7 @@ export const BarnepassPerBarn = ({ barnIndex, bidragstype }: Props) => {
   return (
     <>
       <BodyShort className="font-bold" spacing>
-        {t(tekster.barnAlder(alder))}
+        {t(tekster.barnFødselsår(fødselsår))}
       </BodyShort>
 
       <div className="space-y-4">
@@ -148,9 +151,9 @@ const tekster = definerTekster({
       nn: "Deltid",
     },
   },
-  barnAlder: (alder) => ({
-    nb: `Barn ${alder} år`,
-    en: `Child ${alder} years`,
-    nn: `Barn ${alder} år`,
+  barnFødselsår: (fødselsår) => ({
+    nb: `Barn født ${fødselsår}`,
+    en: `Child born ${fødselsår}`,
+    nn: `Barn fødd ${fødselsår}`,
   }),
 });

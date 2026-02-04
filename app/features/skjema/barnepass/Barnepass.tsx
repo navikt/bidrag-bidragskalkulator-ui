@@ -6,7 +6,7 @@ import {
   MAKS_ALDER_BARNETILSYNSUTGIFT,
   type BarnebidragSkjema,
 } from "../schema";
-import { kalkulerBidragstype } from "../utils";
+import { beregnAlderFraFødselsår } from "../utils";
 import { BarnepassPerBarn } from "./BarnepassPerBarn";
 
 export const Barnepass = () => {
@@ -17,39 +17,19 @@ export const Barnepass = () => {
 
   const bidragstype = form.value("bidragstype");
 
-  const dinInntekt = form.value("deg.inntekt");
-  const medforelderInntekt = form.value("medforelder.inntekt");
-
-  const barnDuErMottakerFor = barn.filter(
+  const barnetilsynsutgiftBarn = barn.filter(
     (enkeltBarn) =>
       enkeltBarn.bosted !== "" &&
-      kalkulerBidragstype(
-        enkeltBarn.bosted,
-        Number(dinInntekt),
-        Number(medforelderInntekt),
-      ) === "MOTTAKER" &&
-      Number(enkeltBarn.alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT,
+      enkeltBarn.fødselsår !== "" &&
+      beregnAlderFraFødselsår(Number(enkeltBarn.fødselsår)) <=
+        MAKS_ALDER_BARNETILSYNSUTGIFT,
   );
 
-  const barnDuErPliktigFor = barn.filter(
-    (enkeltBarn) =>
-      enkeltBarn.bosted !== "" &&
-      kalkulerBidragstype(
-        enkeltBarn.bosted,
-        Number(dinInntekt),
-        Number(medforelderInntekt),
-      ) === "PLIKTIG" &&
-      Number(enkeltBarn.alder) <= MAKS_ALDER_BARNETILSYNSUTGIFT,
-  );
-
-  const finnBarnIndex = (alder: string) => {
-    return barn.findIndex((b) => b.alder === alder);
+  const finnBarnIndex = (fødselsår: string) => {
+    return barn.findIndex((b) => b.fødselsår === fødselsår);
   };
 
-  if (
-    (barnDuErMottakerFor.length === 0 && barnDuErPliktigFor.length === 0) ||
-    bidragstype === ""
-  ) {
+  if (barnetilsynsutgiftBarn.length === 0 || bidragstype === "") {
     return null;
   }
 
@@ -64,28 +44,14 @@ export const Barnepass = () => {
           {t(tekster.beskrivelse)}
         </BodyLong>
 
-        {barnDuErMottakerFor.map((enkeltBarn, index) => {
+        {barnetilsynsutgiftBarn.map((enkeltBarn, index) => {
           return (
             <Fragment key={index}>
               <BarnepassPerBarn
-                barnIndex={finnBarnIndex(enkeltBarn.alder)}
-                bidragstype="MOTTAKER"
+                barnIndex={finnBarnIndex(enkeltBarn.fødselsår)}
+                bidragstype={bidragstype}
               />
-              {index !== barnDuErMottakerFor.length - 1 && (
-                <hr className="my-4 border-gray-300" />
-              )}
-            </Fragment>
-          );
-        })}
-
-        {barnDuErPliktigFor.map((enkeltBarn, index) => {
-          return (
-            <Fragment key={index}>
-              <BarnepassPerBarn
-                barnIndex={finnBarnIndex(enkeltBarn.alder)}
-                bidragstype="PLIKTIG"
-              />
-              {index !== barnDuErPliktigFor.length - 1 && (
+              {index !== barnetilsynsutgiftBarn.length - 1 && (
                 <hr className="my-4 border-gray-300" />
               )}
             </Fragment>

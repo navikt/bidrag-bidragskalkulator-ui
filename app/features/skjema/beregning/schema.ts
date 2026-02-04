@@ -39,7 +39,7 @@ type UtvidetBarnetrygd = {
 
 export type Barnebidragsutregningsgrunnlag = {
   barn: {
-    alder: number;
+    fødselsdato: string;
     samværsklasse: Samværsklasse;
     barnetilsyn: Barnetilsyn;
     inntekt: number;

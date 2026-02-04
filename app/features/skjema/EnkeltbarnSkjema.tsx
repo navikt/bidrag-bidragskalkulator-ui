@@ -1,6 +1,7 @@
 import { PersonCrossIcon } from "@navikt/aksel-icons";
-import { Button, TextField } from "@navikt/ds-react";
+import { Box, Button } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
+import { Årstallvelger } from "~/components/ui/Årstallvelger";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { Samvær } from "./samvær/Samvær";
 import { type BarnebidragSkjema } from "./schema";
@@ -22,19 +23,19 @@ export const EnkeltbarnSkjema = ({ barnIndex, onFjernBarn }: Props) => {
   return (
     <fieldset className="p-0 space-y-4">
       <legend className="sr-only">{overskrift}</legend>
-      <TextField
-        {...barnField.field("alder").getInputProps({
-          label: t(tekster.alder.label),
-          onBlur: sporKalkulatorSpørsmålBesvart(
-            "barn-alder",
-            t(tekster.alder.label),
-          ),
-        })}
-        error={barnField.field("alder").error()}
-        htmlSize={8}
-        inputMode="numeric"
-        autoComplete="off"
-      />
+      <Box width="13rem">
+        <Årstallvelger
+          {...barnField.field("fødselsår").getInputProps({
+            label: t(tekster.fødselsår.label),
+            defaultOptionTekst: t(tekster.fødselsår.velgÅrstall),
+            onBlur: sporKalkulatorSpørsmålBesvart(
+              "barn-fødselsår",
+              t(tekster.fødselsår.label),
+            ),
+          })}
+          error={barnField.field("fødselsår").error()}
+        />
+      </Box>
 
       <Samvær barnIndex={barnIndex} />
 
@@ -61,40 +62,16 @@ const tekster = definerTekster({
       nn: `Barn ${nummer}`,
     }),
   },
-  alder: {
+  fødselsår: {
     label: {
-      nb: `Hvor gammelt er barnet?`,
-      en: `How old is the child?`,
-      nn: `Kor gammalt er barnet?`,
+      nb: "Hvilket år er barnet født?",
+      en: "What year was the child born?",
+      nn: "Kva år er barnet fødd?",
     },
-    lesMer: {
-      tittel: {
-        nb: "Hvorfor vi spør om alder",
-        en: "Why we ask about age",
-        nn: "Kvifor spør vi om alder",
-      },
-      beskrivelse: {
-        nb: "Vi spør om alderen til barnet for å vise hvor mye det gjennomsnittlig koster å forsørge et barn. Kalkulatoren bruker faste satser basert på SIFOs referansebudsjett for bo- og forbruksutgifter. Den ordinære barnetrygden trekkes fra, fordi dette er penger som skal bidra til å forsørge barnet. Bo- og forbruksutgiftene oppdateres den 1. juli hvert år, og øker med barnets alder. Satsen for den ordinære barnetrygden oppdateres regelmessig.",
-        nn: "Vi spør om alderen til barnet for å vise kor mykje det i gjennomsnitt kostar å forsørge eit barn. Kalkulatoren bruker faste satsar basert på referansebudsjettet til SIFO for bu- og forbrukstutgifter. Den ordinære barnetrygda blir trekt frå, fordi dette er pengar som bidrar til å forsørge barnet. Bu- og forbruksutgiftene blir oppdaterte 1. juli kvart år, og dei aukar med alderen til barnet. Satsen for den ordinære barnetrygda blir oppdatert jamnleg.",
-        en: "We ask about the childs age to show how much it costs on average to support a child. The calculator uses fixed rates based on SIFO's reference budget for living and consumption expenses. The ordinary child benefit is deducted, because this is money that is ment to contribute to supporting the child. The living and consumption expenses are updated on July 1st of each year, and increase with the child's age. The rate for the ordinary child benefit is updated regularly.",
-      },
-      beskrivelse2: {
-        nb: "Satsen for bo- og forbruksutgifter, minus ordinær barnetrygd er per i dag:",
-        en: "The rate for living and consumption expenses, minus the ordinary child benefit, is currently:",
-        nn: "Satsen for bu- og forbruksutgifter, utanom ordinær barnetrygd, er per i dag:",
-      },
-    },
-  },
-  år: {
-    entall: {
-      nb: "år",
-      en: "year",
-      nn: "år",
-    },
-    flertall: {
-      nb: "år",
-      en: "years",
-      nn: "år",
+    velgÅrstall: {
+      nb: "Velg årstall",
+      en: "Select year",
+      nn: "Vel årstal",
     },
   },
   fjernBarn: {

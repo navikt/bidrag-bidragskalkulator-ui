@@ -7,12 +7,15 @@ import {
 import { Språk } from "~/utils/i18n";
 import type { Samværsklasse } from "./beregning/schema";
 import {
+  beregnAlderFraFødselsår,
   lagBarnSkjema,
   lagBoforholdSkjema,
   lagInntektSkjema,
   type BarnebidragSkjema,
   type FastBostedSchema,
 } from "./schema";
+
+export { beregnAlderFraFødselsår };
 
 export const SAMVÆR_STANDARDVERDI = "15";
 
@@ -93,7 +96,7 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
   bidragstype: "",
   barn: [
     {
-      alder: "",
+      fødselsår: "",
       bosted: "",
       samvær: SAMVÆR_STANDARDVERDI,
       harBarnetilsynsutgift: "undefined",
@@ -251,7 +254,8 @@ export const sporKalkulatorSpørsmålBesvart =
     event:
       | React.FocusEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>,
+      | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLSelectElement>,
   ) => {
     if (!!event.target.value) {
       sporHendelse({

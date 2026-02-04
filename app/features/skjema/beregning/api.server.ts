@@ -125,7 +125,7 @@ export const hentBarnebidragsutregning = async (request: Request) => {
       delerMedMedforelder: ytelser.delerUtvidetBarnetrygd === true,
     },
     barn: barn.map((b) => ({
-      alder: b.alder,
+      fødselsdato: b.fødselsdato,
       samværsklasse: kalkulerSamværsklasse(b.samvær, b.bosted),
       barnetilsyn: {
         plassType:
