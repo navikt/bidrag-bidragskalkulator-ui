@@ -1,11 +1,12 @@
 import { PlusIcon } from "@navikt/aksel-icons";
-import { Button } from "@navikt/ds-react";
+import { BodyShort, Button, Heading } from "@navikt/ds-react";
 import { useFieldArray, useFormContext } from "@rvf/react";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
 import { EnkeltbarnSkjema } from "./EnkeltbarnSkjema";
 import type { BarnebidragSkjema } from "./schema";
+import { beregnBidragstypeForAlleBarn } from "./utils";
 
 export const FellesBarnSkjema = () => {
   const { t } = useOversettelse();
@@ -14,6 +15,23 @@ export const FellesBarnSkjema = () => {
   const barnArray = useFieldArray(form.scope("barn"));
   const antallBarn = barnArray.length();
 
+  const barn = form.value("barn");
+  const degInntekt = Number(form.value("deg.inntekt"));
+  const medforelderInntekt = Number(form.value("medforelder.inntekt"));
+
+  const bidragstype = useMemo(
+    () => beregnBidragstypeForAlleBarn(barn, degInntekt, medforelderInntekt),
+    [barn, degInntekt, medforelderInntekt],
+  );
+
+  useEffect(() => {
+    const forrigeBidragstype = form.value("bidragstype");
+
+    if (forrigeBidragstype !== bidragstype) {
+      form.setValue("bidragstype", bidragstype);
+    }
+  }, [bidragstype, form]);
+
   const handleLeggTilBarn = () => {
     const sisteIndex = barnArray.length() - 1;
     const sisteBarn = form.transient.value(
@@ -21,10 +39,14 @@ export const FellesBarnSkjema = () => {
     ) as BarnebidragSkjema["barn"][number];
 
     barnArray.push({
-      alder: "",
+      fødselsår: "",
       bosted: sisteBarn.bosted,
       samvær: sisteBarn.samvær,
+      harBarnetilsynsutgift: "undefined",
+      mottarStønadTilBarnetilsyn: "undefined",
       barnetilsynsutgift: "",
+      barnepassSituasjon: "",
+      inntektPerMåned: "",
     });
     sporHendelse({
       hendelsetype: "barn lagt til",
@@ -58,9 +80,18 @@ export const FellesBarnSkjema = () => {
 
   return (
     <div className="border p-4 rounded-md space-y-4">
-      <h2 className="sr-only">{t(tekster.overskrift)}</h2>
-      <fieldset className="p-0">
-        <legend className="text-xl mb-5">{t(tekster.overskrift)}</legend>
+      <Heading level="2" size="medium" spacing>
+        {t(tekster.overskrift)}
+      </Heading>
+      <fieldset className="p-0" aria-describedby="barn-skjema-desc">
+        <legend className="sr-only">{t(tekster.overskrift)}</legend>
+        <BodyShort
+          id="barn-skjema-desc"
+          size="medium"
+          className="navds-fieldset__description mb-5"
+        >
+          {t(tekster.beskrivelse)}
+        </BodyShort>
         {barnArray.map((key, _, index) => {
           return (
             <React.Fragment key={key}>
@@ -77,7 +108,7 @@ export const FellesBarnSkjema = () => {
 
         <Button
           type="button"
-          variant="secondary"
+          variant="primary"
           size="small"
           onClick={handleLeggTilBarn}
           icon={<PlusIcon aria-hidden />}
@@ -94,15 +125,20 @@ export const FellesBarnSkjema = () => {
 // react-validated-form
 const finnFokuserbartInputPåBarn = (index: number) => {
   return document.querySelector(
-    `input[name="barn[${index}].alder"]`,
-  ) as HTMLInputElement;
+    `select[name="barn[${index}].fødselsår"]`,
+  ) as HTMLSelectElement;
 };
 
 const tekster = definerTekster({
   overskrift: {
-    nb: "Felles barn med den du ønsker å avtale barnebidrag med",
-    en: "Shared children with the parent you want to agree on child support with",
-    nn: "Felles barn med den du ønsker å avtale barnebidrag med",
+    nb: "Barn du ønsker å avtale barnebidrag for",
+    en: "Children you wish to arrange child support for",
+    nn: "Barn du ønskjer å avtale barnebidrag for",
+  },
+  beskrivelse: {
+    nb: "Hvis dere har flere felles barn dere skal avtale barnebidrag for, kan du legge til flere barn ved å klikke på «Legg til barn» under",
+    en: "If you have several children for whom you need to agree on child support, you can add more children by clicking “Add child” below",
+    nn: "Viss de har fleire felles barn de skal avtale barnebidrag for, kan du legge til fleire barn ved å klikke på «Legg til barn» nedanfor.",
   },
   leggTilBarn: {
     nb: "Legg til barn",

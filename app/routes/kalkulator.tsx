@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react";
 import type { ActionFunctionArgs, MetaArgs } from "react-router";
 import { redirect, useActionData, useRouteLoaderData } from "react-router";
 import { env } from "~/config/env.server";
-import { BetaNotis } from "~/features/BetaNotis";
 import { Barnebidragsskjema } from "~/features/skjema/Barnebidragsskjema";
 import { hentBarnebidragsutregning } from "~/features/skjema/beregning/api.server";
 import { hentKalkulatorgrunnlagsdata } from "~/features/skjema/grunnlagsdata/api.server";
@@ -155,7 +154,6 @@ export default function Barnebidragskalkulator() {
   return (
     <>
       <FormProvider scope={form.scope()}>
-        <BetaNotis />
         <div className="max-w-xl mx-auto mt-8 flex flex-col gap-4 mb-16">
           <Heading size="xlarge" level="1" spacing align="center">
             {t(tekster.overskrift)}

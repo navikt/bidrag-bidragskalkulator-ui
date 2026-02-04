@@ -278,9 +278,9 @@ const tekster = definerTekster({
       },
       listepunkter: {
         alder: {
-          nb: "alderen til barnet ditt",
-          en: "the age of your child",
-          nn: "alderen til barnet ditt",
+          nb: "fødselsåret til barnet ditt",
+          en: "the birth year of your child",
+          nn: "fødselsåret til barnet ditt",
         },
         bosituasjon: {
           nb: "barnets bosituasjon",
