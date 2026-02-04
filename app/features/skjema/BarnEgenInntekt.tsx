@@ -20,9 +20,7 @@ export default function BarnEgenInntekt({ barnIndex }: Props) {
     <div className="space-y-2">
       <FormattertTallTextField
         {...barnField.field("inntektPerMåned").getControlProps()}
-        label={t(
-          tekster.egenInntekt.beløp(barnField.value().fødselsår),
-        )}
+        label={t(tekster.egenInntekt.beløp(barnField.value().fødselsår))}
         error={barnField.field("inntektPerMåned").error()}
         htmlSize={10}
       />
