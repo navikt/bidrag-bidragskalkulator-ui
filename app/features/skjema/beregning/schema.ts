@@ -55,7 +55,7 @@ export type Barnebidragsutregningsgrunnlag = {
 };
 
 const BarnebidragsutregningBarnSchema = z.object({
-  alder: z.number(),
+  fødselsdato: z.string(),
   sum: z.number(),
 });
 

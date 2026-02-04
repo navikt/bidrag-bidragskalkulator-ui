@@ -292,26 +292,6 @@ const tekster = definerTekster({
       en: "How the child support is calculated",
       nn: "Korleis barnebidraget er rekna ut",
     },
-    underholdskostnadPerBarn: (alder, kostnad) => ({
-      nb: (
-        <>
-          {alder}-åringen koster{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> kroner i måneden.
-        </>
-      ),
-      en: (
-        <>
-          The {alder} year old costs{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> per month.
-        </>
-      ),
-      nn: (
-        <>
-          {alder}-åringen kostar{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> kroner i månaden.
-        </>
-      ),
-    }),
     underholdskostnadSplitt: {
       nb: "Dette er summen som skal deles mellom deg og den andre forelderen. Hvordan det splittes opp, avhenger av inntekt og samvær, i tillegg til en rekke andre forhold.",
       en: "This is the amount that should be divided between you and the other parent. How it is split depends on income and custody, in addition to a number of other factors.",
