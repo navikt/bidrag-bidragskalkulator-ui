@@ -1,15 +1,10 @@
-import { Radio, RadioGroup } from "@navikt/ds-react";
+import { Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { useFormContext, useFormScope } from "@rvf/react";
 import { Slider } from "~/components/ui/slider";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { FastBostedSchema, type BarnebidragSkjema } from "../schema";
-import {
-  kalkulerSamværsklasse,
-  SAMVÆR_STANDARDVERDI,
-  sporKalkulatorSpørsmålBesvart,
-} from "../utils";
-import { FastBostedInfo } from "./FastBostedInfo";
+import type { BarnebidragSkjema } from "../schema";
+import { SAMVÆR_STANDARDVERDI, sporKalkulatorSpørsmålBesvart } from "../utils";
 import { SamværOgFerierInfo } from "./SamværOgFerierInfo";
 import { Samværsfradraginfo } from "./Samværsfradraginfo";
 
@@ -30,7 +25,6 @@ export function Samvær({ barnIndex }: SamværProps) {
   const bosted = barnField.value("bosted");
   const borHosMeg = bosted === "HOS_MEG";
   const borHosMedforelder = bosted === "HOS_MEDFORELDER";
-  const alder = barnField.value("alder");
 
   const sporSamvær = (verdi: string) => {
     if (verdi) {
@@ -45,160 +39,241 @@ export function Samvær({ barnIndex }: SamværProps) {
 
   return (
     <>
+      <Heading level="3" size="small" className="pt-4">
+        {t(tekster.tittel)}
+      </Heading>
       <RadioGroup
         {...barnField.getControlProps("bosted", {
-          onChange: () => {
-            barnField.field("samvær").setValue(SAMVÆR_STANDARDVERDI);
+          onChange: (verdi) => {
+            barnField
+              .field("samvær")
+              .setValue(
+                verdi === "HOS_MEG" ? SAMVÆR_STANDARDVERDI : String("0"),
+              );
           },
         })}
         error={barnField.field("bosted").error()}
         legend={t(tekster.bosted.label)}
+        description={t(tekster.bosted.valg.beskrivelse)}
       >
-        {FastBostedSchema.options.map((bosted) => {
-          return (
-            <Radio
-              value={bosted}
-              key={bosted}
-              onChange={sporKalkulatorSpørsmålBesvart(
-                "barn-fast-bosted",
-                t(tekster.bosted.label),
-              )}
-            >
-              {t(tekster.bosted.valg[bosted])}
-            </Radio>
-          );
-        })}
+        <Radio
+          value="DELT_FAST_BOSTED"
+          onChange={sporKalkulatorSpørsmålBesvart(
+            "barn-fast-bosted",
+            t(tekster.bosted.label),
+          )}
+        >
+          {t(tekster.bosted.valg.DELT_FAST_BOSTED)}
+        </Radio>
+
+        <Radio
+          value="HOS_MEG"
+          onChange={sporKalkulatorSpørsmålBesvart(
+            "barn-fast-bosted",
+            t(tekster.bosted.label),
+          )}
+        >
+          {t(tekster.bosted.valg.HOS_MEG)}
+        </Radio>
+
+        {borHosMeg && (
+          <div className="pl-8 mt-4 bg-blue-100 rounded-md pr-4 py-2">
+            <Slider
+              {...barnField.field("samvær").getControlProps({
+                onChange: sporSamvær,
+              })}
+              label={t(tekster.samvær.label)}
+              error={barnField.field("samvær").error()}
+              min={15}
+              max={30}
+              step={1}
+              list={[
+                {
+                  label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosMeg),
+                  value: 15,
+                },
+                {
+                  label: t(tekster.samvær.beskrivelser.alleNetterSamvær),
+                  value: 30,
+                },
+              ]}
+              valueDescription={samværsgradBeskrivelse}
+            />
+          </div>
+        )}
+
+        <Radio
+          value="HOS_MEDFORELDER"
+          onChange={sporKalkulatorSpørsmålBesvart(
+            "barn-fast-bosted",
+            t(tekster.bosted.label),
+          )}
+        >
+          {t(tekster.bosted.valg.HOS_MEDFORELDER)}
+        </Radio>
+
+        {borHosMedforelder && (
+          <div className="pl-8 mt-4 bg-blue-100 rounded-md pr-4 py-2">
+            <Slider
+              {...barnField.field("samvær").getControlProps({
+                onChange: sporSamvær,
+              })}
+              label={t(tekster.samvær.label)}
+              error={barnField.field("samvær").error()}
+              min={0}
+              max={15}
+              step={1}
+              list={[
+                {
+                  label: t(tekster.samvær.beskrivelser.ingenSamvær),
+                  value: 0,
+                },
+                {
+                  label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosMeg),
+                  value: 15,
+                },
+              ]}
+              valueDescription={samværsgradBeskrivelse}
+            />
+          </div>
+        )}
       </RadioGroup>
 
-      {borHosMeg && (
-        <Slider
-          {...barnField.field("samvær").getControlProps({
-            onChange: sporSamvær,
-          })}
-          label={t(tekster.samvær.label)}
-          description={t(tekster.samvær.beskrivelse)}
-          error={barnField.field("samvær").error()}
-          min={15}
-          max={30}
-          step={1}
-          list={[
-            {
-              label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosDeg),
-              value: 15,
-            },
-            {
-              label: t(tekster.samvær.beskrivelser.alleNetterHosDeg),
-              value: 30,
-            },
-          ]}
-          valueDescription={samværsgradBeskrivelse}
-        />
-      )}
-      {borHosMedforelder && (
-        <Slider
-          {...barnField.field("samvær").getControlProps({
-            onChange: sporSamvær,
-          })}
-          label={t(tekster.samvær.label)}
-          description={t(tekster.samvær.beskrivelse)}
-          error={barnField.field("samvær").error()}
-          min={0}
-          max={15}
-          step={1}
-          list={[
-            {
-              label: t(tekster.samvær.beskrivelser.ingenNetterHosDeg),
-              value: 0,
-            },
-            {
-              label: t(tekster.samvær.beskrivelser.halvpartenAvTidenHosDeg),
-              value: 15,
-            },
-          ]}
-          valueDescription={samværsgradBeskrivelse}
-        />
-      )}
-
-      <FastBostedInfo />
-
-      <Samværsfradraginfo
-        alder={alder ? Number(alder) : undefined}
-        samværsklasse={
-          bosted ? kalkulerSamværsklasse(Number(samvær), bosted) : undefined
-        }
-      />
-
+      <Samværsfradraginfo />
       <SamværOgFerierInfo />
     </>
   );
 }
-
 const tekster = definerTekster({
+  tittel: {
+    nb: "Barnets faste bosted og samvær",
+    en: "The child's permanent residence and visitation",
+    nn: "Barnet sin faste bustad og samvær",
+  },
   bosted: {
     label: {
-      nb: "Hvor bor barnet?",
-      en: "Where is the child living?",
-      nn: "Kor bur barnet?",
+      nb: "Har dere avtale om delt fast bosted for dette barnet?",
+      en: "Do you have an agreement on shared permanent residence for this child?",
+      nn: "Har de avtale om delt fast bustad for dette barnet?",
     },
     valg: {
       velg: {
-        nb: "Velg hvor barnet skal bo",
-        en: "Select where the child will live",
-        nn: "Velg kvar barnet skal bu",
+        nb: "Har dere avtale om delt fast bosted for dette barnet?",
+        en: "Do you have an agreement on shared permanent residence for this child?",
+        nn: "Har de avtale om delt fast bustad for dette barnet?",
+      },
+      beskrivelse: {
+        nb: "Delt fast bosted er en avtale etter barnelovens §36 om at barnet skal bo fast hos begge foreldrene. Avtalen går ut fra at foreldrene deler likt både på samvær og kostnader. Hvis den ene tjener mer enn den andre, kan det bli aktuelt med barnebidrag.",
+        en: "Shared permanent residence is an agreement under Section 36 of the Children's Act that the child shall live permanently with both parents. The agreement assumes that the parents share both visitation and costs equally. If one earns more than the other, child support may be relevant.",
+        nn: "Delt fast bustad er ein avtale etter barnelova §36 om at barnet skal bu fast hjå begge foreldra. Avtalen går ut frå at foreldra deler likt både på samvær og kostnader. Dersom den eine tener meir enn den andre, kan det bli aktuelt med barnebidrag.",
       },
       DELT_FAST_BOSTED: {
-        nb: "Vi har en juridisk bindende avtale om delt fast bosted",
-        en: "We have a legally binding agreement on shared permanent residence",
-        nn: "Vi har ein juridisk bindande avtale om delt fast bustad",
+        nb: (
+          <>
+            Ja, vi har signert avtale om{" "}
+            <span style={{ fontWeight: "bold" }}>delt fast bosted</span>
+          </>
+        ),
+        en: (
+          <>
+            Yes, we have signed an agreement on{" "}
+            <span style={{ fontWeight: "bold" }}>
+              shared permanent residence
+            </span>
+          </>
+        ),
+        nn: (
+          <>
+            Ja, vi har signert avtale om{" "}
+            <span style={{ fontWeight: "bold" }}>delt fast bustad</span>
+          </>
+        ),
       },
       HOS_MEG: {
-        nb: "Barnet bor fast hos meg, og har samvær med den andre forelderen",
-        en: "The child has permanent residence with me and has visitation with their other parent",
-        nn: "Barnet bur fast hos meg, og har samvær med den andre forelderen",
+        nb: (
+          <>
+            Nei, vi har vanlig samværsavtale hvor{" "}
+            <span style={{ fontWeight: "bold" }}>barnet bor fast hos meg </span>
+            og har samvær med den andre forelderen
+          </>
+        ),
+        en: (
+          <>
+            No, we have a regular custody arrangement where{" "}
+            <span style={{ fontWeight: "bold" }}>the child lives with me </span>
+            and has visitation with the other parent
+          </>
+        ),
+        nn: (
+          <>
+            Nei, vi har vanleg samværsavtale der{" "}
+            <span style={{ fontWeight: "bold" }}>barnet bur hjå meg </span> og
+            har samvær med den andre forelderen
+          </>
+        ),
       },
       HOS_MEDFORELDER: {
-        nb: "Barnet bor fast hos den andre forelderen, og har samvær med meg",
-        en: "The child has permanent residence with their other parent and has visitation with me",
-        nn: "Barnet bur fast hos den andre forelderen, og har samvær med meg",
+        nb: (
+          <>
+            Nei, vi har vanlig samværsavtale hvor{" "}
+            <span style={{ fontWeight: "bold" }}>
+              barnet bor fast hos den andre forelderen{" "}
+            </span>
+            og har samvær med meg
+          </>
+        ),
+        en: (
+          <>
+            No, we have a regular custody arrangement where{" "}
+            <span style={{ fontWeight: "bold" }}>
+              the child lives with the other parent{" "}
+            </span>
+            and has visitation with me
+          </>
+        ),
+        nn: (
+          <>
+            Nei, vi har vanleg samværsavtale der{" "}
+            <span style={{ fontWeight: "bold" }}>
+              barnet bur hjå den andre forelderen{" "}
+            </span>
+            og har samvær med meg
+          </>
+        ),
       },
     },
   },
   samvær: {
     label: {
-      nb: "Hvor mye bor barnet hos deg?",
-      en: "How many nights is the child spending with you?",
-      nn: "Kor mykje bur barnet hos deg?",
-    },
-    beskrivelse: {
-      nb: "Estimer hvor mange netter barnet bor hos deg i snitt per måned.",
-      en: "Estimate how many nights the child will stay with you on average per month",
-      nn: "Estimer kor mange netter barnet vil vere hos deg i snitt per månad",
+      nb: "Hvor mange netter bor barnet hos deg i måneden?",
+      en: "How many nights does the child stay with you per month?",
+      nn: "Kor mange netter bur barnet hjå deg i månaden?",
     },
     netter: (antall) => ({
-      nb: `${antall} netter hos deg`,
-      en: `${antall} nights with you`,
-      nn: `${antall} netter hos deg`,
+      nb: `Barnet bor ${antall} netter hos meg`,
+      en: `The child lives ${antall} nights with me`,
+      nn: `Barnet bur ${antall} netter hos meg`,
     }),
     enNatt: {
-      nb: "1 natt hos deg",
-      en: "1 night with you",
-      nn: "1 natt hos deg",
+      nb: "Barnet bor 1 natt hos meg",
+      en: "1 night with me",
+      nn: "1 natt hos meg",
     },
     beskrivelser: {
-      ingenNetterHosDeg: {
-        nb: "Ingen netter hos deg",
-        en: "No nights with you",
-        nn: "Ingen netter hos deg",
+      ingenSamvær: {
+        nb: "0 netter hos meg",
+        en: "0 nights with me",
+        nn: "0 netter hos meg",
       },
-      halvpartenAvTidenHosDeg: {
-        nb: "Halvparten av nettene hos deg",
-        en: "Half the nights with you",
-        nn: "Halvparten av nettene hos deg",
+      halvpartenAvTidenHosMeg: {
+        nb: "15 netter hos meg",
+        en: "15 nights with me",
+        nn: "15 netter hos meg",
       },
-      alleNetterHosDeg: {
-        nb: "Alle netter hos deg",
-        en: "All the nights with you",
-        nn: "Alle netter hos deg",
+      alleNetterSamvær: {
+        nb: "30 netter hos meg",
+        en: "30 nights with me",
+        nn: "30 netter hos meg",
       },
     },
   },

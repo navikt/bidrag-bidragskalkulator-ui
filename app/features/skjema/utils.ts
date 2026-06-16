@@ -7,12 +7,15 @@ import {
 import { Språk } from "~/utils/i18n";
 import type { Samværsklasse } from "./beregning/schema";
 import {
+  beregnAlderFraFødselsår,
   lagBarnSkjema,
   lagBoforholdSkjema,
   lagInntektSkjema,
   type BarnebidragSkjema,
   type FastBostedSchema,
 } from "./schema";
+
+export { beregnAlderFraFødselsår };
 
 export const SAMVÆR_STANDARDVERDI = "15";
 
@@ -93,29 +96,54 @@ export const BARNEBIDRAG_SKJEMA_STANDARDVERDI: BarnebidragSkjema = {
   bidragstype: "",
   barn: [
     {
-      alder: "",
+      fødselsår: "",
       bosted: "",
       samvær: SAMVÆR_STANDARDVERDI,
+      harBarnetilsynsutgift: "undefined",
+      mottarStønadTilBarnetilsyn: "undefined",
       barnetilsynsutgift: "",
+      barnepassSituasjon: "",
+      inntektPerMåned: "",
     },
   ],
   deg: {
     inntekt: "",
+    kapitalinntekt: "",
+    harKapitalinntektOver10k: "undefined",
   },
   medforelder: {
     inntekt: "",
+    kapitalinntekt: "",
+    harKapitalinntektOver10k: "undefined",
   },
+  barnHarEgenInntekt: "undefined",
   dittBoforhold: {
-    borMedAnnenVoksen: "",
-    borMedAndreBarn: "",
-    antallBarnBorFast: "",
-    antallBarnDeltBosted: "",
+    harVoksneOver18: "undefined",
+    harBarnUnder18: "undefined",
+    antallBarnUnder18: "",
+    voksneOver18Type: [],
+    harBarnOver18Vgs: "undefined",
+    antallBarnOver18Vgs: "",
+    andreBarnebidragerPerMåned: "",
   },
   medforelderBoforhold: {
-    borMedAnnenVoksen: "",
-    borMedAndreBarn: "",
-    antallBarnBorFast: "",
-    antallBarnDeltBosted: "",
+    harVoksneOver18: "undefined",
+    harBarnUnder18: "undefined",
+    antallBarnUnder18: "",
+    voksneOver18Type: [],
+    harBarnOver18Vgs: "undefined",
+    antallBarnOver18Vgs: "",
+    andreBarnebidragerPerMåned: "",
+  },
+  ytelser: {
+    mottarUtvidetBarnetrygd: "undefined",
+    delerUtvidetBarnetrygd: "undefined",
+    mottarSmåbarnstillegg: "undefined",
+    kontantstøtte: {
+      mottar: "undefined",
+      deler: "undefined",
+      beløp: "",
+    },
   },
 };
 
@@ -178,14 +206,47 @@ export const kalkulerSamværsklasse = (
  */
 export function kalkulerBidragstype(
   bostatus: z.infer<typeof FastBostedSchema>,
-  inntektForelder1: number,
-  inntektForelder2: number,
+  inntektMeg: number,
+  inntektMedforelder: number,
 ): "MOTTAKER" | "PLIKTIG" {
   if (bostatus === "DELT_FAST_BOSTED") {
-    return inntektForelder1 > inntektForelder2 ? "PLIKTIG" : "MOTTAKER";
+    return inntektMeg > inntektMedforelder ? "PLIKTIG" : "MOTTAKER";
   }
+
   return bostatus === "HOS_MEG" ? "MOTTAKER" : "PLIKTIG";
 }
+
+export const beregnBidragstypeForAlleBarn = (
+  barn: BarnebidragSkjema["barn"],
+  degInntekt?: number,
+  medforelderInntekt?: number,
+): "MOTTAKER" | "PLIKTIG" | "" => {
+  if (barn.length === 0 || !barn[0]?.bosted) {
+    return "";
+  }
+
+  const bidragstyper = barn.map((b) => {
+    if (b.bosted === "DELT_FAST_BOSTED") {
+      if (degInntekt && medforelderInntekt) {
+        return kalkulerBidragstype(b.bosted, degInntekt, medforelderInntekt);
+      }
+      return "";
+    }
+
+    return b.bosted === "HOS_MEG" ? "MOTTAKER" : "PLIKTIG";
+  });
+
+  const harMottaker = bidragstyper.includes("MOTTAKER");
+  const harPliktig = bidragstyper.includes("PLIKTIG");
+
+  // Hvis begge typer finnes, returner den første som ikke er tom
+  // Dette tvinger brukeren til å velge én kategori
+  if (harMottaker && harPliktig) {
+    return bidragstyper.find((t) => t === "MOTTAKER" || t === "PLIKTIG") || "";
+  }
+
+  return bidragstyper[0] || "";
+};
 
 export const sporKalkulatorSpørsmålBesvart =
   (spørsmålId: KalkulatorSpørsmålId, spørsmål: string) =>
@@ -193,7 +254,8 @@ export const sporKalkulatorSpørsmålBesvart =
     event:
       | React.FocusEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>,
+      | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLSelectElement>,
   ) => {
     if (!!event.target.value) {
       sporHendelse({
