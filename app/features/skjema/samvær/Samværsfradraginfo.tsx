@@ -1,34 +1,11 @@
-import { BodyLong, BodyShort, List } from "@navikt/ds-react";
+import { BodyLong, List } from "@navikt/ds-react";
 import { ListItem } from "@navikt/ds-react/List";
 import { ReadMore } from "@navikt/ds-react/ReadMore";
 import { useKalkulatorgrunnlagsdata } from "~/routes/kalkulator";
 import { sporHendelse } from "~/utils/analytics";
 import { definerTekster, useOversettelse } from "~/utils/i18n";
-import { formatterSum } from "~/utils/tall";
-import type { Samværsklasse } from "../beregning/schema";
-import { SAMVÆRSKLASSE_GRENSER } from "../utils";
 
-type SamværsfradraginfoProps = {
-  alder: number | undefined;
-  samværsklasse: Samværsklasse | undefined;
-};
-
-const samværsklassenumre = Object.values(SAMVÆRSKLASSE_GRENSER).map(
-  (klasse) => klasse.klassenummer,
-);
-
-const getSamværsklasseNetterPeriode = (
-  klassenummer: (typeof samværsklassenumre)[number],
-) => {
-  const { min, max } = SAMVÆRSKLASSE_GRENSER[`SAMVÆRSKLASSE_${klassenummer}`];
-
-  return `${min}–${max}`;
-};
-
-export const Samværsfradraginfo = ({
-  alder,
-  samværsklasse,
-}: SamværsfradraginfoProps) => {
+export const Samværsfradraginfo = () => {
   const {
     kalkulatorGrunnlagsdata: { samværsfradrag },
     miljø,
@@ -39,13 +16,6 @@ export const Samværsfradraginfo = ({
   if (!["local", "dev"].includes(miljø) || !samværsfradrag) {
     return null;
   }
-
-  const samværsfradragForAlder =
-    alder === undefined
-      ? undefined
-      : samværsfradrag.find(
-          (fradrag) => alder >= fradrag.alderFra && alder <= fradrag.alderTil,
-        );
 
   return (
     <ReadMore
@@ -62,72 +32,33 @@ export const Samværsfradraginfo = ({
     >
       <BodyLong className="mb-4">{t(tekster.beskrivelse)}</BodyLong>
 
-      {alder === undefined && <BodyShort>{t(tekster.manglerAlder)}</BodyShort>}
-
-      {samværsfradragForAlder && alder !== undefined && (
-        <>
-          <BodyShort className="mb-2">
-            {t(tekster.fradragslistetittel(alder))}
-          </BodyShort>
-
-          <List>
-            {samværsklassenumre.map((klasse) => {
-              const erValgtSamværsklasse =
-                samværsklasse === `SAMVÆRSKLASSE_${klasse}`;
-
-              const beløpFradrag =
-                klasse === 0
-                  ? 0
-                  : samværsfradragForAlder.beløpFradrag[
-                      `SAMVÆRSKLASSE_${klasse}`
-                    ];
-
-              return (
-                <ListItem key={klasse}>
-                  <span
-                    className={erValgtSamværsklasse ? "font-bold" : undefined}
-                  >
-                    {t(
-                      tekster.fradragNetter(
-                        getSamværsklasseNetterPeriode(klasse),
-                        formatterSum(beløpFradrag),
-                      ),
-                    )}
-                  </span>
-                </ListItem>
-              );
-            })}
-          </List>
-        </>
-      )}
+      <List>
+        <ListItem>{t(tekster.beskrivelseKalkulator)}</ListItem>
+        <ListItem>{t(tekster.beskrivelseFradraget)}</ListItem>
+      </List>
     </ReadMore>
   );
 };
 
 const tekster = definerTekster({
   overskrift: {
-    nb: "Hvorfor vi spør om bosted og samvær",
+    nb: "Hvorfor spør vi om fast bosted og samvær?",
     en: "Why we ask about residence and visitation",
     nn: "Kvifor vi spør om bustad og samvær",
   },
   beskrivelse: {
-    nb: "Når barnet bor fast hos én forelder og har samvær med den andre, kan den andre forelderen få fradrag i barnebidraget. Fradraget er avhengig av hvor gammelt barnet er, og hvor mye tid barnet tilbringer med hver forelder.",
-    en: "When the child has a permanent residence with one parent and visitation with the other, the other parent can receive a deduction in child support. The deduction depends on the age of the child and how much time the child spends with each parent.",
-    nn: "Når barnet bur fast hos éin forelder og har samvær med den andre, kan den andre forelderen få frådrag i barnebidrag. Frådraget er avhengig av kor gammalt barnet er, og kor mykje tid barnet er saman med kvar forelder.",
+    nb: "Vi spør om fast bosted og samvær fordi det påvirker hvordan kalkulatoren beregner barnebidraget.",
+    en: "We ask about permanent residence and visitation because it affects how the calculator determines the child support amount.",
+    nn: "Vi spør om fast bustad og samvær fordi det påverkar korleis kalkulatoren reknar ut barnebidraget.",
   },
-  manglerAlder: {
-    nb: "Fyll inn alderen på barnet for å se fradraget for samvær.",
-    en: "Fill in the child's age to see the deduction for visitation.",
-    nn: "Fyll inn alderen på barnet for å sjå frådraget for samvær.",
+  beskrivelseKalkulator: {
+    nb: "Hvis barnet har delt fast bosted går kalkulatoren ut fra at dere deler likt på samvær og kostnader.",
+    en: "If the child has shared residence, the calculator assumes that both parents share contact time and expenses equally.",
+    nn: "Viss barnet har delt fast bustad, går kalkulatoren ut frå at de deler likt på samvær og kostnader.",
   },
-  fradragslistetittel: (alder) => ({
-    nb: `Fradrag per måned for samvær med barn på ${alder} år:`,
-    en: `Deductions per month for visitation with child ${alder} years old:`,
-    nn: `Fradrag per månad for samvær med barn på ${alder} år:`,
-  }),
-  fradragNetter: (netter, beløp) => ({
-    nb: `${netter} netter: ${beløp}`,
-    en: `${netter} nights: ${beløp}`,
-    nn: `${netter} netter: ${beløp}`,
-  }),
+  beskrivelseFradraget: {
+    nb: "Hvis barnet bor fast hos én forelder og har samvær med den andre, kan samværsforelderen få fradrag i barnebidraget. Fradraget kommer an på alder på barnet, og hvor mye samvær barnet har med den som skal betale bidraget.",
+    en: "If the child lives permanently with one parent and has visitation with the other, the parent with visitation may receive a deduction in the child support payment. The deduction depends on the child’s age and how much time the child spends with the parent who is required to pay support.",
+    nn: "Viss barnet bur fast hos éin forelder og har samvær med den andre, kan samværsforelderen få frådrag i barnebidraget. Frådraget kjem an på kor gammalt barnet er, og kor mykje samvær barnet har med den som skal betale bidraget.",
+  },
 });

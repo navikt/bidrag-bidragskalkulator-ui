@@ -109,7 +109,7 @@ function Slider({
       )}
 
       {valueDescription && (
-        <BodyShort aria-live="polite" className="font-bold mt-1">
+        <BodyShort aria-live="polite" className="font-bold mt-1 text-center">
           {valueDescription}
         </BodyShort>
       )}

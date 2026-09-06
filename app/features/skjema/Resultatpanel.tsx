@@ -29,6 +29,11 @@ type Props = {
 export const Resultatpanel = ({ data, ref }: Props) => {
   const { t } = useOversettelse();
   const form = useFormContext<BarnebidragSkjema>();
+  const bidragstype = form.field("bidragstype").value();
+
+  if (bidragstype === "") {
+    return;
+  }
 
   if ("error" in data) {
     return (
@@ -42,24 +47,10 @@ export const Resultatpanel = ({ data, ref }: Props) => {
   }
 
   const totalSum = data.resultater.reduce((sum, neste) => {
-    if (neste.bidragstype === "PLIKTIG") {
-      return sum + neste.sum;
-    }
-    return sum - neste.sum;
+    return sum + neste.sum;
   }, 0);
 
-  const bidragstyper = data.resultater.map((resultat) => resultat.bidragstype);
-  const isMottaker = bidragstyper.includes("MOTTAKER");
-  const isPliktig = bidragstyper.includes("PLIKTIG");
-
-  const bidragstype =
-    isMottaker && isPliktig
-      ? "MOTTAKER_OG_PLIKTIG"
-      : isMottaker
-        ? "MOTTAKER"
-        : isPliktig
-          ? "PLIKTIG"
-          : "INGEN";
+  const erMottaker = bidragstype === "MOTTAKER";
 
   return (
     <div className="border p-4 rounded-md mt-8 lg:mt-12 flex flex-col gap-7">
@@ -72,8 +63,10 @@ export const Resultatpanel = ({ data, ref }: Props) => {
           className="focus:outline-0"
         >
           {totalSum > 0
-            ? t(tekster.overskrift.betale(Math.abs(totalSum)))
-            : t(tekster.overskrift.motta(Math.abs(totalSum)))}
+            ? erMottaker
+              ? t(tekster.overskrift.motta(Math.abs(totalSum)))
+              : t(tekster.overskrift.betale(Math.abs(totalSum)))
+            : ""}
         </Heading>
         {totalSum === 0 && <BodyLong>{t(tekster.nullBidrag)}</BodyLong>}
       </Alert>
@@ -127,16 +120,16 @@ export const Resultatpanel = ({ data, ref }: Props) => {
                 const barn = form.field(`barn[${index}]`);
                 return (
                   <ListItem key={index}>
-                    {resultat.bidragstype === "MOTTAKER"
+                    {bidragstype === "MOTTAKER"
                       ? t(
                           tekster.detaljer.motta(
-                            barn.value().alder,
+                            barn.value().fødselsår,
                             resultat.sum,
                           ),
                         )
                       : t(
                           tekster.detaljer.betale(
-                            barn.value().alder,
+                            barn.value().fødselsår,
                             resultat.sum,
                           ),
                         )}
@@ -299,26 +292,6 @@ const tekster = definerTekster({
       en: "How the child support is calculated",
       nn: "Korleis barnebidraget er rekna ut",
     },
-    underholdskostnadPerBarn: (alder, kostnad) => ({
-      nb: (
-        <>
-          {alder}-åringen koster{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> kroner i måneden.
-        </>
-      ),
-      en: (
-        <>
-          The {alder} year old costs{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> per month.
-        </>
-      ),
-      nn: (
-        <>
-          {alder}-åringen kostar{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> kroner i månaden.
-        </>
-      ),
-    }),
     underholdskostnadSplitt: {
       nb: "Dette er summen som skal deles mellom deg og den andre forelderen. Hvordan det splittes opp, avhenger av inntekt og samvær, i tillegg til en rekke andre forhold.",
       en: "This is the amount that should be divided between you and the other parent. How it is split depends on income and custody, in addition to a number of other factors.",
@@ -329,47 +302,47 @@ const tekster = definerTekster({
       en: "The amount above is the calculator’s suggested estimate of how much you can pay or receive in total per month. For each child, the calculation looks like this:",
       nn: "Beløpet over er eit forslag frå kalkulatoren om kor mykje du til saman skal betale eller motta per månad. For kvart barn ser berekninga slik ut:",
     },
-    motta: (alder, kostnad) => ({
+    motta: (fødselsår, kostnad) => ({
       nb: (
         <>
-          For {alder}-åringen foreslår kalkulatoren at du mottar{" "}
+          For barnet født {fødselsår} foreslår kalkulatoren at du mottar{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
       en: (
         <>
-          For the {alder} year old, the calculator suggests that you receive{" "}
-          <strong>{formatterSum(kostnad as number)}</strong> in child support
-          per month.
+          For the child born {fødselsår}, the calculator suggests that you
+          receive <strong>{formatterSum(kostnad as number)}</strong> in child
+          support per month.
         </>
       ),
       nn: (
         <>
-          For {alder}-åringen foreslår kalkulatoren at du mottar{" "}
+          For barnet fødd {fødselsår} foreslår kalkulatoren at du mottar{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           månad.
         </>
       ),
     }),
-    betale: (alder, kostnad) => ({
+    betale: (fødselsår, kostnad) => ({
       nb: (
         <>
-          For {alder}-åringen foreslår kalkulatoren at du betaler{" "}
+          For barnet født {fødselsår} foreslår kalkulatoren at du betaler{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           måned.
         </>
       ),
       en: (
         <>
-          For the {alder} year old, the calculator suggests that you pay{" "}
+          For the child born {fødselsår}, the calculator suggests that you pay{" "}
           <strong>{formatterSum(kostnad as number)}</strong> in child support
           per month.
         </>
       ),
       nn: (
         <>
-          For {alder}-åringen foreslår kalkulatoren at du betaler{" "}
+          For barnet fødd {fødselsår} foreslår kalkulatoren at du betaler{" "}
           <strong>{formatterSum(kostnad as number)}</strong> i barnebidrag per
           månad.
         </>

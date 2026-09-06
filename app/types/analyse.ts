@@ -32,7 +32,7 @@ export type PrivatAvtaleSpørsmålId =
   | "deg-ident"
   | "har-vedlegg";
 export type KalkulatorSpørsmålId =
-  | "barn-alder"
+  | "barn-fødselsår"
   | "barn-fast-bosted"
   | "barn-samvær"
   | "barn-barnepass"
@@ -41,11 +41,13 @@ export type KalkulatorSpørsmålId =
   | "deg-antall-barn-bor-fast"
   | "deg-antall-barn-bor-delt-bosted"
   | "deg-inntekt"
+  | "deg-kapitalinntekt"
   | "medforelder-bor-med-voksen"
   | "medforelder-bor-med-andre-barn"
   | "medforelder-antall-barn-bor-fast"
   | "medforelder-antall-barn-bor-delt-bosted"
-  | "medforelder-inntekt";
+  | "medforelder-inntekt"
+  | "medforelder-kapitalinntekt";
 
 type SkjemaValideringFeilet = {
   hendelsetype: "skjema validering feilet";
@@ -73,7 +75,7 @@ export type LesMerUtvidet = {
   tekst: string;
   id:
     | "kalkulator-personopplysninger"
-    | "kalkulator-barnets-alder"
+    | "kalkulator-barnets-fødselsår"
     | "kalkulator-fast-bosted"
     | "kalkulator-bosted-og-samvær"
     | "kalkulator-ferie-og-samvær"

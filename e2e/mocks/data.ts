@@ -93,9 +93,8 @@ export const kalkulatorGrunnlagsdata = {
 export const defaultBidragsutregning: Barnebidragsutregning = {
   resultater: [
     {
-      alder: 4,
+      fødselsdato: "2015-06-15",
       sum: 760,
-      bidragstype: "MOTTAKER",
     },
   ],
 };
