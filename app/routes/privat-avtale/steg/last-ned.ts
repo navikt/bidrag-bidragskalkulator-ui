@@ -1,4 +1,4 @@
-import archiver from "archiver";
+import { ZipArchive } from "archiver";
 import { PassThrough, Readable } from "node:stream";
 import type { ActionFunctionArgs } from "react-router";
 import { hentSesjonsdata } from "~/config/session.server";
@@ -52,7 +52,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
   }
 
-  const arkiv = archiver("zip", { zlib: { level: 9 } });
+  const arkiv = new ZipArchive({ zlib: { level: 9 } });
   const passThrough = new PassThrough();
   arkiv.pipe(passThrough);
 

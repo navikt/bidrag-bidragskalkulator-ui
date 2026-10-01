@@ -13,7 +13,7 @@ type InternalServerErrorProps = {
 };
 export function InternalServerError({ stack }: InternalServerErrorProps) {
   return (
-    <Box paddingBlock="20 16">
+    <Box paddingBlock="space-20 space-16">
       <HGrid columns="minmax(auto,600px)" data-aksel-template="500-v2">
         <div className="flex flex-col gap-16">
           <div className="flex flex-col gap-12 items-start">

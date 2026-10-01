@@ -49,7 +49,7 @@ export const MineDokumenter: React.FC = () => {
               <Box
                 as="li"
                 key={journalpost.journalpostId}
-                background="surface-neutral-subtle"
+                background="neutral-soft"
                 padding="space-16"
                 borderRadius={`${borderRadiusTopp} ${borderRadiusBunn}`}
               >

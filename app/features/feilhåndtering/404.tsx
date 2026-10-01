@@ -7,7 +7,7 @@ import { definerTekster, useOversettelse } from "~/utils/i18n";
 export function NotFound() {
   const { t } = useOversettelse();
   return (
-    <Box paddingBlock="20 16" data-aksel-template="404-v2">
+    <Box paddingBlock="space-20 space-16" data-aksel-template="404-v2">
       <div className="flex flex-col gap-12 items-start">
         <div>
           <Heading level="1" size="large" spacing>

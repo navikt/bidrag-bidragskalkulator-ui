@@ -48,7 +48,7 @@ export const sporHendelse = (hendelse: Sporingshendelse) => {
   }
 
   const logger = getAnalyticsInstance("barnebidragskalkulator");
-  logger(hendelsetype, data);
+  logger.custom(hendelsetype, data);
 };
 
 const erSkjemahendelse = (

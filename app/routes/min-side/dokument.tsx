@@ -69,11 +69,7 @@ export default function Dokument() {
       </Heading>
 
       {dokumenter.length > 0 && (
-        <Box
-          background="surface-neutral-subtle"
-          padding="space-16"
-          borderRadius="12"
-        >
+        <Box background="neutral-soft" padding="space-16" borderRadius="12">
           <Link
             href={RouteConfig.OVERSIKT.DOKUMENTER.HENT_DOKUMENT.link({
               journalpostId: journalpost.journalpostId,

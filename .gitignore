@@ -13,3 +13,7 @@ node_modules
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/.idea/vcs.xml
+/.idea/prettier.xml
+/.idea/workspace.xml
+/.idea/inspectionProfiles/Project_Default.xml

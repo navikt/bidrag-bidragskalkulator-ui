@@ -1,6 +1,5 @@
 export type Skjemanavn =
-  | "Kalkulator barnebidrag under 18 år"
-  | "Privat avtale under 18 år";
+  "Kalkulator barnebidrag under 18 år" | "Privat avtale under 18 år";
 
 export type SkjemaIdKalkulator = "barnebidragskalkulator-under-18";
 export type SkjemaIdPrivatAvtale = "barnebidrag-privat-avtale-under-18";
