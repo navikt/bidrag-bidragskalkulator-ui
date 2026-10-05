@@ -36,10 +36,9 @@ const envSchema = z.discriminatedUnion("ENVIRONMENT", [
 const envParse = envSchema.safeParse(process.env);
 
 if (!envParse.success) {
-  serverLogger.error("Manglende eller ugyldige miljøvariabler");
-  throw new Error(
-    "Ugyldige miljøvariabler: " + envParse.error.format().toString(),
-  );
+  const detaljer = JSON.stringify(envParse.error.format());
+  serverLogger.error(`Manglende eller ugyldige miljøvariabler: ${detaljer}`);
+  throw new Error(`Ugyldige miljøvariabler: ${detaljer}`);
 }
 
 export const env = envParse.data;
