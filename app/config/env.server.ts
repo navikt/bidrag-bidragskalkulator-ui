@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { serverLogger } from "~/utils/logger.server";
 
 const baseSchema = z.object({
   SERVER_URL: z.url().describe("URL til APIet vårt"),
@@ -35,10 +36,7 @@ const envSchema = z.discriminatedUnion("ENVIRONMENT", [
 const envParse = envSchema.safeParse(process.env);
 
 if (!envParse.success) {
-  console.error(
-    "❌ Manglende eller ugyldige miljøvariabler:",
-    envParse.error.format(),
-  );
+  serverLogger.error("Manglende eller ugyldige miljøvariabler");
   throw new Error(
     "Ugyldige miljøvariabler: " + envParse.error.format().toString(),
   );

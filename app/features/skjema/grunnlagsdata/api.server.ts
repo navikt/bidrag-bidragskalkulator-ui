@@ -1,4 +1,5 @@
 import { env } from "~/config/env.server";
+import { serverLogger } from "~/utils/logger.server";
 import { KalkulatorgrunnlagsdataSchema } from "./schema";
 
 export const hentKalkulatorgrunnlagsdata = async () => {
@@ -7,18 +8,25 @@ export const hentKalkulatorgrunnlagsdata = async () => {
     {
       method: "GET",
     },
-  );
-
-  const data = await response.json();
+  ).catch(() => {
+    serverLogger.error("Kunne ikke kontakte API for kalkulatorgrunnlag");
+    throw new Error("Kunne ikke hente grunnlagsdata");
+  });
 
   if (!response.ok) {
-    throw Error(`Kunne ikke hente grunnlagsdata: ${data?.error}`);
+    serverLogger.error("Feil ved henting av grunnlagsdata", response.status);
+    throw new Error("Kunne ikke hente grunnlagsdata");
   }
 
+  const data = await response.json().catch(() => {
+    serverLogger.error("Ugyldig JSON fra API for kalkulatorgrunnlag");
+    throw new Error("Ugyldig svar ved henting av grunnlagsdata");
+  });
   const parsed = KalkulatorgrunnlagsdataSchema.safeParse(data);
 
   if (!parsed.success) {
-    throw parsed.error;
+    serverLogger.error("Ugyldig svar fra API for kalkulatorgrunnlag");
+    throw new Error("Ugyldig svar ved henting av grunnlagsdata");
   }
 
   return parsed.data;

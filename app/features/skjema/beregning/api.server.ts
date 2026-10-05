@@ -7,6 +7,7 @@ import {
   oversett,
   Språk,
 } from "~/utils/i18n";
+import { serverLogger } from "~/utils/logger.server";
 import { lagBarnebidragSkjema } from "../schema";
 import { kalkulerBidragstype, kalkulerSamværsklasse } from "../utils";
 import {
@@ -22,8 +23,9 @@ export const hentBarnebidragsutregningFraApi = async ({
   requestData: Barnebidragsutregningsgrunnlag;
   språk: Språk;
 }): Promise<Barnebidragsutregning | { error: string }> => {
+  let response: Response;
   try {
-    const response = await fetch(
+    response = await fetch(
       `${env.SERVER_URL}/api/v1/beregning/barnebidrag/åpen`,
       {
         method: "POST",
@@ -33,29 +35,39 @@ export const hentBarnebidragsutregningFraApi = async ({
         body: JSON.stringify(requestData),
       },
     );
-
-    if (!response.ok) {
-      console.error(await response.text());
-      return {
-        error: oversett(språk, tekster.feil.beregning),
-      };
-    }
-    const json = await response.json();
-    const parsed = BarnebidragsutregningSchema.safeParse(json);
-
-    if (!parsed.success) {
-      return {
-        error: oversett(språk, tekster.feil.ugyldigSvar),
-      };
-    }
-
-    return parsed.data;
-  } catch (error) {
-    console.error(error);
+  } catch {
+    serverLogger.error("Kunne ikke kontakte beregnings-API");
     return {
       error: oversett(språk, tekster.feil.beregning),
     };
   }
+
+  if (!response.ok) {
+    serverLogger.error("Feil ved beregning av barnebidrag", response.status);
+    return {
+      error: oversett(språk, tekster.feil.beregning),
+    };
+  }
+
+  let json: unknown;
+  try {
+    json = await response.json();
+  } catch {
+    serverLogger.error("Ugyldig JSON fra beregnings-API");
+    return {
+      error: oversett(språk, tekster.feil.beregning),
+    };
+  }
+
+  const parsed = BarnebidragsutregningSchema.safeParse(json);
+  if (!parsed.success) {
+    serverLogger.error("Ugyldig svar fra beregnings-API");
+    return {
+      error: oversett(språk, tekster.feil.ugyldigSvar),
+    };
+  }
+
+  return parsed.data;
 };
 
 const tekster = definerTekster({
