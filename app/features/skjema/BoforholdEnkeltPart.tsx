@@ -39,7 +39,11 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
         error={form.field(`${skjemagruppe}.borMedAnnenVoksen`).error()}
         legend={t(tekster[skjemagruppe].borMedAnnenVoksen.label)}
       >
-        <Stack gap="0 6" direction={{ xs: "column", sm: "row" }} wrap={false}>
+        <Stack
+          gap="space-0 space-6"
+          direction={{ xs: "column", sm: "row" }}
+          wrap={false}
+        >
           {BOR_MED_ANNEN_VOKSEN_ALTERNATIVER.map((alternativ) => {
             return (
               <Radio
@@ -64,7 +68,7 @@ export const BoforholdEnkeltPart = ({ part }: Props) => {
           error: form.field(`${skjemagruppe}.borMedAndreBarn`).error(),
           children: (
             <Stack
-              gap="0 6"
+              gap="space-0 space-6"
               direction={{ xs: "column", sm: "row" }}
               wrap={false}
             >

@@ -1,6 +1,7 @@
 import { getToken, requestOboToken, validateToken } from "@navikt/oasis";
 import { redirect } from "react-router";
 import { env } from "~/config/env.server";
+import { serverLogger } from "~/utils/logger.server";
 
 const innloggingsurlbase = `${env.INGRESS}/oauth2/login`;
 const audience = `${env.ENVIRONMENT}-gcp:bidrag:bidrag-bidragskalkulator-api`;
@@ -18,19 +19,19 @@ const hentAutentiseringstoken = async ({
 
   const token = getToken(request);
   if (!token) {
-    console.info("Ingen token funnet, omdirigerer til innlogging");
+    serverLogger.info("Ingen token funnet, omdirigerer til innlogging");
     return redirect(innloggingsurl);
   }
 
   const validation = await validateToken(token);
   if (!validation.ok) {
-    console.info("Token er ikke gyldig, omdirigerer til innlogging");
+    serverLogger.info("Token er ikke gyldig, omdirigerer til innlogging");
     return redirect(innloggingsurl);
   }
 
   const obo = await requestOboToken(token, audience);
   if (!obo.ok) {
-    console.info("Ingen OBO token funnet, omdirigerer til innlogging");
+    serverLogger.info("Ingen OBO token funnet, omdirigerer til innlogging");
     return redirect(innloggingsurl);
   }
 

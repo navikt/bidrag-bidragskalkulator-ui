@@ -12,10 +12,14 @@ import { RouteConfig } from "~/config/routeConfig";
 import { hentSideMetadata } from "~/features/privatAvtale/pageMeta";
 import { stegdata } from "~/features/privatAvtale/privatAvtaleSteg";
 import { UtregningNavigasjonsdataSchema } from "~/features/skjema/beregning/schema";
-import { definerTekster, Språk, useOversettelse } from "~/utils/i18n";
+import {
+  definerTekster,
+  hentSpråkFraCookie,
+  useOversettelse,
+} from "~/utils/i18n";
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  const metadata = data?.metadata;
+export const meta: MetaFunction<typeof loader> = ({ loaderData }) => {
+  const metadata = loaderData?.metadata;
 
   return [
     { title: metadata?.tittel ?? "Barnebidrag – lag privat avtale" },
@@ -26,13 +30,10 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
-export async function loader({
-  request,
-  context,
-}: LoaderFunctionArgs): Promise<{
+export async function loader({ request }: LoaderFunctionArgs): Promise<{
   metadata: Awaited<ReturnType<typeof hentSideMetadata>>;
 }> {
-  const språk = context.språk ?? Språk.NorwegianBokmål;
+  const språk = hentSpråkFraCookie(request.headers.get("Cookie"));
   const url = new URL(request.url);
 
   return {

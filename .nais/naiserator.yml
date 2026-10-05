@@ -13,6 +13,10 @@ spec:
       
   image: {{ image }}
   port: 3000
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: nodejs
   env:
     - name: SERVER_URL
       value: {{SERVER_URL}}
@@ -33,6 +37,8 @@ spec:
   accessPolicy:
     outbound:
       rules:
+      - application: logging
+        namespace: nais-system
       - application: nav-dekoratoren
         namespace: personbruker
       - application: bidrag-bidragskalkulator-api

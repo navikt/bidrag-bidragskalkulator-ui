@@ -1,4 +1,4 @@
-FROM node:26-alpine AS dependencies
+FROM node:24-alpine AS dependencies
 WORKDIR /app
 COPY package*.json ./
 
@@ -8,13 +8,13 @@ RUN --mount=type=secret,id=NODE_AUTH_TOKEN sh -c \
   npm config set @navikt:registry=https://npm.pkg.github.com && \
   npm ci'
 
-FROM node:26-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 COPY . .
 COPY --from=dependencies /app/node_modules ./node_modules
 RUN npm run build
 
-FROM node:26-alpine AS runtime
+FROM node:24-alpine AS runtime
 WORKDIR /app
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=builder /app/build ./build
@@ -29,4 +29,3 @@ EXPOSE 3000
 ENV HOSTNAME=0.0.0.0
 
 CMD ["./node_modules/.bin/react-router-serve", "./build/server/index.js"]
-

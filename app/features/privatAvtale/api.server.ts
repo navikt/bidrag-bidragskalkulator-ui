@@ -8,6 +8,7 @@ import {
   Språk,
   språkTilApiSpråk,
 } from "~/utils/i18n";
+import { serverLogger } from "~/utils/logger.server";
 import {
   PrivatAvtalePersoninformasjonSchema,
   type HentPersoninformasjonForPrivatAvtaleRespons,
@@ -32,7 +33,10 @@ export const hentPrivatAvtaleFraApi = async ({
       },
       body: JSON.stringify(requestData),
     },
-  );
+  ).catch(() => {
+    serverLogger.error("Kunne ikke kontakte API for privat avtale");
+    throw new Error("Kunne ikke generere privat avtale");
+  });
 
   if (!response.ok) {
     const status = response.status;
@@ -46,10 +50,7 @@ export const hentPrivatAvtaleFraApi = async ({
       feilmelding = oversett(språk, tekster.feil.genererePdf);
     }
 
-    console.error(
-      `Feil ved generering av privat avtale: ${status} ${response.statusText}`,
-    );
-    console.error("Response body:", await response.text());
+    serverLogger.error("Feil ved generering av privat avtale", status);
 
     return new Response(feilmelding, {
       status,
@@ -75,7 +76,7 @@ export const hentPrivatAvtaledokument = async (
   const isPliktig = bidragstyper.includes("PLIKTIG");
 
   if (isMottaker && isPliktig) {
-    console.error("Pliktig og mottaker i samme privat avtale skjema");
+    serverLogger.error("Pliktig og mottaker i samme privat avtale skjema");
     return Promise.reject(oversett(språk, tekster.feil.mottakerOgPliktig));
   }
 
@@ -141,18 +142,28 @@ export const hentPersoninformasjonForPrivatAvtale = async (
         Authorization: `Bearer ${token}`,
       },
     },
-  );
-
-  const data = await response.json();
+  ).catch(() => {
+    serverLogger.error("Kunne ikke kontakte API for personinformasjon");
+    throw new Error("Kunne ikke hente personinformasjon");
+  });
 
   if (!response.ok) {
-    throw data;
+    serverLogger.error(
+      "Feil ved henting av personinformasjon",
+      response.status,
+    );
+    throw new Error("Kunne ikke hente personinformasjon");
   }
 
+  const data = await response.json().catch(() => {
+    serverLogger.error("Ugyldig JSON fra API for personinformasjon");
+    throw new Error("Ugyldig svar ved henting av personinformasjon");
+  });
   const parsed = PrivatAvtalePersoninformasjonSchema.safeParse(data);
 
   if (!parsed.success) {
-    throw parsed.error;
+    serverLogger.error("Ugyldig svar fra API for personinformasjon");
+    throw new Error("Ugyldig svar ved henting av personinformasjon");
   }
 
   return parsed.data;

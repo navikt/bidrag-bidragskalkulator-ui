@@ -117,14 +117,14 @@ export const CopyButton = ({
         <CheckmarkIcon
           aria-hidden={!!text}
           title={text ? undefined : activeText}
-          className={cn("navds-copybutton__icon")}
+          className="aksel-copybutton__icon"
         />
       ))
     : (icon ?? (
         <FilesIcon
           aria-hidden={!!text}
           title={text ? undefined : title || activeText}
-          className={cn("navds-copybutton__icon")}
+          className="aksel-copybutton__icon"
         />
       ));
 
@@ -132,7 +132,7 @@ export const CopyButton = ({
     <Button
       ref={ref}
       type="button"
-      className={className}
+      className={cn("aksel-copybutton", className)}
       {...rest}
       variant={variant}
       onClick={kombinerEventHandlers(onClick, handleClick)}

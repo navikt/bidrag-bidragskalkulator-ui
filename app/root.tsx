@@ -77,6 +77,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   useEffect(() => {
     injectDecoratorClientSide({
       env: location.hostname.includes("www.nav.no") ? "prod" : "dev",
+      params: { teamName: "bidrag-bidragskalkulator-v2.bidrag" },
     });
   }, []);
 

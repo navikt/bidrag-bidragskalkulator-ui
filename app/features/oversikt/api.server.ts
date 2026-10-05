@@ -1,5 +1,6 @@
 import { env } from "~/config/env.server";
 import { definerTekster, hentSpråkFraCookie, oversett } from "~/utils/i18n";
+import { serverLogger } from "~/utils/logger.server";
 import { MineDokumenterReponsSchema } from "./apiSchema";
 
 export const hentBidragsdokumenterFraApi = async (token: string) => {
@@ -8,18 +9,25 @@ export const hentBidragsdokumenterFraApi = async (token: string) => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+  }).catch(() => {
+    serverLogger.error("Kunne ikke kontakte dokument-API");
+    throw new Error("Kunne ikke hente dokumenter");
   });
 
-  const data = await response.json();
-
   if (!response.ok) {
-    throw data;
+    serverLogger.error("Feil ved henting av dokumenter", response.status);
+    throw new Error("Kunne ikke hente dokumenter");
   }
 
+  const data = await response.json().catch(() => {
+    serverLogger.error("Ugyldig JSON fra dokument-API");
+    throw new Error("Ugyldig svar ved henting av dokumenter");
+  });
   const parsed = MineDokumenterReponsSchema.safeParse(data);
 
   if (!parsed.success) {
-    throw parsed.error;
+    serverLogger.error("Ugyldig svar fra dokument-API");
+    throw new Error("Ugyldig svar ved henting av dokumenter");
   }
 
   return parsed.data;
@@ -42,12 +50,13 @@ export const hentDokument = async (
         Authorization: `Bearer ${token}`,
       },
     },
-  );
+  ).catch(() => {
+    serverLogger.error("Kunne ikke kontakte dokument-API");
+    throw new Error("Kunne ikke hente dokument");
+  });
 
   if (!response.ok) {
-    console.error(
-      `Feil ved henting av dokument: ${response.status} ${response.statusText}`,
-    );
+    serverLogger.error("Feil ved henting av dokument", response.status);
     return Promise.reject(oversett(språk, tekster.feil.hentDokument));
   }
 
