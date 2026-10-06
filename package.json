@@ -64,7 +64,7 @@
     "@typescript-eslint/parser": "^8.71.0",
     "arg": "^5.0.2",
     "axe-core": "^4.13.0",
-    "eslint": "^9.39.5",
+    "eslint": "^10.12.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "playwright": "^1.63.0",
