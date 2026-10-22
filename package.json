@@ -73,8 +73,13 @@
     "react-router-devtools": "^6.2.3",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
-    "vite": "^7.3.6",
+    "vite": "8.3.2",
     "vite-tsconfig-paths": "^6.1.1"
+  },
+  "overrides": {
+    "react-router-devtools": {
+      "@tanstack/devtools-vite": "0.6.1"
+    }
   },
   "engines": {
     "node": "24.x"
