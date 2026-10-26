@@ -41,7 +41,7 @@
     "csp-header": "^6.4.0",
     "html-react-parser": "^6.1.8",
     "isbot": "^5.2.2",
-    "lucide-react": "^1.59.0",
+    "lucide-react": "^1.60.0",
     "pino": "^10.4.0",
     "react": "19.3.0",
     "react-dom": "^19.3.0",
