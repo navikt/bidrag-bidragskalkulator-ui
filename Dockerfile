@@ -1,4 +1,4 @@
-FROM node:24-alpine AS dependencies
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:26-slim AS dependencies
 WORKDIR /app
 COPY package*.json ./
 
@@ -8,13 +8,13 @@ RUN --mount=type=secret,id=NODE_AUTH_TOKEN sh -c \
   npm config set @navikt:registry=https://npm.pkg.github.com && \
   npm ci'
 
-FROM node:24-alpine AS builder
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:26-slim AS builder
 WORKDIR /app
 COPY . .
 COPY --from=dependencies /app/node_modules ./node_modules
 RUN npm run build
 
-FROM node:24-alpine AS runtime
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:26-slim AS runtime
 WORKDIR /app
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=builder /app/build ./build
