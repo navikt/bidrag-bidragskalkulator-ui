@@ -23,7 +23,7 @@
   "dependencies": {
     "@grafana/faro-react": "^2.12.1",
     "@navikt/aksel-icons": "^8.18.0",
-    "@navikt/ds-css": "^8.18.0",
+    "@navikt/ds-css": "^8.20.0",
     "@navikt/ds-react": "^8.18.0",
     "@navikt/ds-tailwind": "^8.20.1",
     "@navikt/nav-dekoratoren-moduler": "^4.5.0",
