@@ -21,7 +21,7 @@
     "test:e2e:mock": "SERVER_URL=\"http://localhost:3001\" MOCK_BACKEND=true npx playwright test"
   },
   "dependencies": {
-    "@grafana/faro-react": "^2.12.1",
+    "@grafana/faro-react": "^2.13.0",
     "@navikt/aksel-icons": "^8.18.0",
     "@navikt/ds-css": "^8.20.0",
     "@navikt/ds-react": "^8.18.0",
